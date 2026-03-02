@@ -9,7 +9,7 @@ Jekyll::Hooks.register :site, :post_write do |site|
     # Create category index page
     category_index = File.join(category_dir, "index.html")
     
-    # Generate proper Jekyll front matter with post references
+    # Generate HTML directly with post data
     content = <<~HTML
     ---
     layout: category
@@ -17,16 +17,21 @@ Jekyll::Hooks.register :site, :post_write do |site|
     ---
     
     <ul class="post-list">
-      {% for post in site.categories['#{category}'] %}
+    HTML
+    
+    # Add each post to the list
+    posts.each do |post|
+      content << <<~POST
       <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+        <span class="post-meta">#{post.date.strftime('%b %-d, %Y')}</span>
         <h2>
-          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          <a class="post-link" href="#{post.url}">#{post.data['title']}</a>
         </h2>
       </li>
-      {% endfor %}
-    </ul>
-    HTML
+      POST
+    end
+    
+    content << "</ul>"
     
     File.write(category_index, content)
   end
@@ -39,7 +44,7 @@ Jekyll::Hooks.register :site, :post_write do |site|
     # Create tag index page
     tag_index = File.join(tag_dir, "index.html")
     
-    # Generate proper Jekyll front matter with post references
+    # Generate HTML directly with post data
     content = <<~HTML
     ---
     layout: tag
@@ -47,16 +52,21 @@ Jekyll::Hooks.register :site, :post_write do |site|
     ---
     
     <ul class="post-list">
-      {% for post in site.tags['#{tag}'] %}
+    HTML
+    
+    # Add each post to the list
+    posts.each do |post|
+      content << <<~POST
       <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+        <span class="post-meta">#{post.date.strftime('%b %-d, %Y')}</span>
         <h2>
-          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          <a class="post-link" href="#{post.url}">#{post.data['title']}</a>
         </h2>
       </li>
-      {% endfor %}
-    </ul>
-    HTML
+      POST
+    end
+    
+    content << "</ul>"
     
     File.write(tag_index, content)
   end
