@@ -27,7 +27,7 @@ defaults:
       path: ""
       type: posts
     values:
-      layout: post
+      layout: single
       author: 卷王小组
 
 # 排除文件
