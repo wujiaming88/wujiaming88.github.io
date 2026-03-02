@@ -8,7 +8,7 @@ repository: "wujiaming88/wujiaming88.github.io"
 lang: "zh-CN"
 
 # Minimal Mistakes Theme
-remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+theme: minimal-mistakes
 
 # Site Author
 author:
@@ -75,18 +75,7 @@ asciidoc:
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
-  - jekyll-gist
   - jekyll-feed
-  - jemoji
-  - jekyll-include-cache
-
-# mimic GitHub Pages with --safe
-whitelist:
-  - jekyll-paginate
-  - jekyll-sitemap
-  - jekyll-gist
-  - jekyll-feed
-  - jemoji
   - jekyll-include-cache
 
 # Pagination
