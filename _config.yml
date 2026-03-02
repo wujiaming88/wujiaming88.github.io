@@ -1,38 +1,160 @@
 ---
-# 站点配置
-title: 卷王小组技术研究
-description: 卷王小组的深度技术研究博客
-lang: zh-CN
+# Site Settings
+title: "卷王小组技术研究"
+name: "卷王小组"
+description: "深度技术研究与AI科技资讯"
+url: "https://wujiaming88.github.io"
+baseurl: ""
+repository: "wujiaming88/wujiaming88.github.io"
+lang: "zh-CN"
 
-# 主题配置
-theme: minima
+# Minimal Mistakes Theme
+remote_theme: "mmistakes/minimal-mistakes@4.24.0"
 
-# 插件配置
-plugins:
-  - jekyll-paginate
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
+# Site Author
+author:
+  name: "卷王小组"
+  avatar: "/assets/images/avatar.png"
+  bio: "专注于深度学习、AI技术研究与科技资讯整理"
+  location: "中国"
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/wujiaming88"
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope"
+      url: "mailto:contact@example.com"
 
-# 分页配置
-paginate: 10
-paginate_path: "/page/:num/"
+# Site Footer
+footer:
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/wujiaming88"
 
-# Markdown设置
-markdown: kramdown
-
-# 默认值
-defaults:
-  - scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: "post"
-      author: "卷王小组"
-
-# 排除文件
+# Reading Files
+include:
+  - _pages
 exclude:
+  - "*.sublime-project"
+  - "*.sublime-workspace"
+  - vendor
+  - .asset-cache
+  - .bundle-cache
+  - .jekyll-assets-cache
+  - .jekyll-cache
   - Gemfile
   - Gemfile.lock
   - node_modules
-  - vendor
+  - .gitignore
+
+# Conversion
+markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
+
+# Markdown Processing
+kramdown:
+  input: GFM
+  hard_wrap: false
+  auto_ids: true
+  toc_levels: 1..6
+  enable_coderay: false
+  syntax_highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-include-cache
+
+# Pagination
+paginate: 10
+paginate_path: "/page/:num/"
+
+# Archives
+category_archive:
+  type: liquid
+  path: /categories/
+tag_archive:
+  type: liquid
+  path: /tags/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
+  - scope:
+      path: "_pages"
+      type: pages
+    values:
+      layout: archive
+      author_profile: true
+
+# HTML Compression
+compress_html:
+  clippings: all
+  ignore:
+    envs:
+      - development
+
+# Sass/SCSS
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# Images
+image: /assets/images/site-logo.png
+
+# SEO
+twitter:
+  username: ""
+facebook:
+  app_id: ""
+  publisher: ""
+og_image: /assets/images/site-logo.png
+
+# Analytics
+analytics:
+  provider: false
+  google:
+    tracking_id: ""
+
+# Site Search
+search: true
+search_full_content: true
+search_provider: lunr
+lunr:
+  search_index_full: true
+
+# Atom Feed
+feed:
+  path: "/feed.xml"
+
+# Encoding
+encoding: "utf-8"
+
+# Locale
+locale: "zh-CN"
+
+# Navigation
+navigation:
+  - title: "首页"
+    url: /
+  - title: "关于"
+    url: /about/
+  - title: "分类"
+    url: /categories/
+  - title: "标签"
+    url: /tags/

@@ -1,13 +1,14 @@
 source "https://rubygems.org"
 
 gem "jekyll", "~> 4.3"
-gem "minima", "~> 2.5"
+gem "minimal-mistakes-jekyll", "~> 4.24"
 
 group :jekyll_plugins do
   gem "jekyll-paginate"
   gem "jekyll-feed"
   gem "jekyll-seo-tag"
   gem "jekyll-sitemap"
+  gem "jekyll-include-cache"
 end
 
 platforms :mingw, :x64_mingw, :mswin do
