@@ -7,12 +7,16 @@ lang: zh-CN
 # 主题配置
 theme: minima
 
+# 分类和标签配置
+permalink: /:year/:month/:day/:title.html
+
 # 插件配置
 plugins:
   - jekyll-paginate
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-archives
 
 # 分页配置
 paginate: 10
