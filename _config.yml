@@ -8,7 +8,7 @@ lang: zh-CN
 theme: minima
 
 # 分类和标签配置
-permalink: /:year/:month/:day/:title.html
+permalink: /:categories/:year/:month/:day/:title.html
 
 # 插件配置
 plugins:
