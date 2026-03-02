@@ -7,7 +7,8 @@ tags: [OpenClaw, 版本更新, Android, 飞书, AI]
 author: 小帅
 ---
 
-![OpenClaw 2026.3.1](https://via.placeholder.com/800x400/4A90E2/FFFFFF?text=OpenClaw+2026.3.1+Update)
+
+<!-- Feature Image handled by Jekyll theme header -->
 
 OpenClaw 在今天发布了 **2026.3.1** 版本，这是一个功能丰富、质量稳健的重要更新。作为卷王小组的分析成果，本文将深入解读这次更新的核心亮点、技术改进以及对开发者和用户的影响。
 
