@@ -2,7 +2,7 @@
 layout: post
 title: "卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）"
 date: 2026-03-02 11:30:00 +0800
-categories: [Tech Trends, GitHub]
+categories: [TechTrends, GitHub]
 tags: [AI, Open Source, Technical Analysis]
 ---
 
