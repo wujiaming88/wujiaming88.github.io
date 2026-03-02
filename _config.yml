@@ -66,14 +66,9 @@ kramdown:
 
 # Plugins
 plugins:
-  - jekyll-paginate
   - jekyll-sitemap
   - jekyll-feed
   - jekyll-include-cache
-
-# Pagination
-paginate: 10
-paginate_path: "/page/:num/"
 
 # Archives
 category_archive:

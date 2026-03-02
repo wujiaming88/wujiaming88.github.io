@@ -6,14 +6,13 @@ header:
   overlay_image: https://images.unsplash.com/photo-1558494949-ef010cbdc31e?w=1200&h=400&fit=crop
   overlay_filter: 0.5
   caption: "深度技术研究与AI科技资讯"
-"
 ---
 
 <div class="feature__wrapper">
   <div class="feature__item">
     <div class="archive__item">
       <h3 class="archive__item-title" itemprop="headline">
-        <a href="/categories/ai/" rel="permalink">🤖 AI技术研究</a>
+        <a href="/categories/AI/" rel="permalink">🤖 AI技术研究</a>
       </h3>
       <p class="archive__item-excerpt">深度学习、大模型、AI应用研究</p>
     </div>
@@ -22,7 +21,7 @@ header:
   <div class="feature__item">
     <div class="archive__item">
       <h3 class="archive__item-title" itemprop="headline">
-        <a href="/categories/tech/" rel="permalink">💻 技术架构</a>
+        <a href="/categories/技术/" rel="permalink">💻 技术架构</a>
       </h3>
       <p class="archive__item-excerpt">系统架构、技术方案、最佳实践</p>
     </div>
@@ -31,7 +30,7 @@ header:
   <div class="feature__item">
     <div class="archive__item">
       <h3 class="archive__item-title" itemprop="headline">
-        <a href="/categories/news/" rel="permalink">📰 科技资讯</a>
+        <a href="/categories/新闻/" rel="permalink">📰 科技资讯</a>
       </h3>
       <p class="archive__item-excerpt">最新科技动态、行业趋势分析</p>
     </div>
