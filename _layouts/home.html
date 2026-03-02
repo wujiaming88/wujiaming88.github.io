@@ -1,0 +1,141 @@
+---
+layout: default
+---
+
+<style>
+  .hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+  }
+  
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  
+  .post-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .post-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .post-card-content {
+    padding: 1rem;
+  }
+  
+  .post-card-title {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    font-weight: bold;
+  }
+  
+  .post-card-date {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .post-card-title a {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .post-card-title a:hover {
+    color: #667eea;
+  }
+  
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 2rem 0;
+  }
+  
+  .category-tag {
+    background: #f0f0f0;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #333;
+    transition: background 0.3s;
+  }
+  
+  .category-tag:hover {
+    background: #667eea;
+    color: white;
+  }
+</style>
+
+<div class="hero">
+  <h1>🎯 卷王小组技术研究</h1>
+  <p>深度学习、AI技术研究与科技资讯整理</p>
+</div>
+
+## 📰 最新文章
+
+{% assign posts = site.posts | sort: 'date' | reverse %}
+<div class="post-grid">
+  {% for post in posts limit: 6 %}
+    <div class="post-card">
+      {% if post.image %}
+        <img src="{{ post.image }}" alt="{{ post.title }}">
+      {% else %}
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=200&fit=crop" alt="默认图片">
+      {% endif %}
+      <div class="post-card-content">
+        <h3 class="post-card-title">
+          <a href="{{ post.url }}">{{ post.title }}</a>
+        </h3>
+        <p class="post-card-date">{{ post.date | date: "%Y-%m-%d" }}</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+## 📂 分类导航
+
+<div class="categories">
+  <a href="/categories/AI/" class="category-tag">🤖 AI技术</a>
+  <a href="/categories/科技/" class="category-tag">💻 科技资讯</a>
+  <a href="/categories/技术/" class="category-tag">🔧 技术深度</a>
+  <a href="/categories/新闻/" class="category-tag">📰 新闻</a>
+  <a href="/categories/时政/" class="category-tag">🏛️ 时政</a>
+  <a href="/categories/国际/" class="category-tag">🌍 国际</a>
+  <a href="/categories/周报/" class="category-tag">📊 周报</a>
+</div>
+
+## 关于我们
+
+卷王小组是一个专注于深度学习和高效研究的团队。我们致力于：
+
+- 🔬 深度技术研究与探索
+- 📊 科技资讯整理与分析
+- 📝 技术文档与教程编写
+- 🤝 技术交流与知识分享
