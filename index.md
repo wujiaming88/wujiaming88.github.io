@@ -1,16 +1,30 @@
-# 首页
+---
+layout: home
+title: "卷王小组技术研究"
+---
 
-欢迎来到我的AI学习博客！这里是我分享AI学习成果、心得、教程和资料的地方。
+欢迎来到卷王小组的技术研究博客！这里分享深度学习、AI技术研究和科技资讯。
 
-## 最新内容
+## 最新文章
 
-- [第一篇博客文章](blog/first-post.md)
-- [AI基础教程](tutorials/ai-basics.md)
-- [学习资源推荐](resources/recommended.md)
+{% assign posts = site.posts | sort: 'date' | reverse %}
+{% for post in posts limit: 5 %}
+### [{{ post.title }}]({{ post.url }})
+{{ post.date | date: "%Y-%m-%d" }}
+{% endfor %}
 
-## 导航
+## 分类导航
 
-- [关于我](about/)
-- [AI教程](tutorials/)
-- [学习资源](resources/)
-- [博客文章](blog/)
+- [AI技术](/categories/AI/)
+- [科技资讯](/categories/科技/)
+- [技术深度](/categories/技术/)
+- [新闻](/categories/新闻/)
+
+## 关于我们
+
+卷王的团队是一个专注于深度学习和高效研究的团队。我们致力于：
+
+- 🔬 深度技术研究与探索
+- 📊 科技资讯整理与分析
+- 📝 技术文档与教程编写
+- 🤝 技术交流与知识分享

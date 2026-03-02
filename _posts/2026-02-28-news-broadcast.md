@@ -4,13 +4,9 @@ title: "2026年2月28日新闻联播主要内容"
 date: 2026-02-28 19:00:00 +0000
 categories: [新闻, 时政]
 tags: [新闻联播, 时政]
-author: 卷王小组
-image: https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=630&fit=cover
-header:
-  overlay_image: https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=400&fit=cover
-  overlay_filter: 0.5
-  caption: "新闻联播"
 ---
+
+![新闻联播](https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=400&fit=crop)
 
 # 2026年2月28日新闻联播主要内容
 
@@ -25,4 +21,13 @@ header:
 
 ## 二、"十五五"开好局起好步
 
-[文章内容继续...]
+### 发展目标
+- 经济保持中高速增长
+- 创新驱动发展战略深入实施
+- 产业基础高级化、产业链现代化水平明显提高
+- 乡村振兴战略全面推进
+- 区域协调发展新格局基本形成
+- 对外开放水平进一步提高
+- 生态文明建设取得新成效
+- 民生福祉达到新水平
+- 国家治理体系和治理能力现代化取得重大进展
