@@ -28,7 +28,7 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-     作者: "卷王小组"
+      author: "卷王小组"
 
 # 排除文件
 exclude:
