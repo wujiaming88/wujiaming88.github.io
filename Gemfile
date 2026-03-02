@@ -14,6 +14,6 @@ platforms :mingw, :x64_mingw, :mswin do
   gem "tzinfo-data"
 end
 
-gem "wdm", "~> 0.1", platforms :[:mingw, :x64_mingw, :mswin]
+gem "wdm", "~> 0.1", platforms: [:mingw, :x64_mingw, :mswin]
 gem "httpclient", "~> 2.8"
 gem "webrick", "~> 1.8"
