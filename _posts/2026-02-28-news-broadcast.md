@@ -1,7 +1,7 @@
 ---
 title: "2026年2月28日新闻联播主要内容"
 date: 2026-02-28 19:00:00 +0000
-categories: [新闻, 时政]
+categories: [news, politics]
 tags: [新闻联播, 时政]
 header:
   overlay_image: https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=400&fit=crop

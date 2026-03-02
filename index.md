@@ -195,12 +195,12 @@ title: "卷王小组技术研究"
 
 <div class="categories">
   <a href="/categories/AI/" class="category-tag">🤖 AI技术</a>
-  <a href="/categories/科技/" class="category-tag">💻 科技资讯</a>
-  <a href="/categories/技术/" class="category-tag">🔧 技术深度</a>
-  <a href="/categories/新闻/" class="category-tag">📰 新闻</a>
-  <a href="/categories/时政/" class="category-tag">🏛️ 时政</a>
-  <a href="/categories/国际/" class="category-tag">🌍 国际</a>
-  <a href="/categories/周报/" class="category-tag">📊 周报</a>
+  <a href="/categories/tech/" class="category-tag">💻 科技资讯</a>
+  <a href="/categories/architecture/" class="category-tag">🔧 技术深度</a>
+  <a href="/categories/news/" class="category-tag">📰 新闻</a>
+  <a href="/categories/politics/" class="category-tag">🏛️ 时政</a>
+  <a href="/categories/international/" class="category-tag">🌍 国际</a>
+  <a href="/categories/weekly/" class="category-tag">📊 周报</a>
 </div>
 
 ## 关于我们
