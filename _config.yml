@@ -16,7 +16,6 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
-  - jekyll-archives
 
 # 分页配置
 paginate: 10
