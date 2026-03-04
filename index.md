@@ -1,13 +1,24 @@
 ---
-layout: page
+layout: default
 title: "W.ai"
 ---
 
 <style>
+  /* Reset default page margins */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .page-content {
+    margin: 0;
+    padding: 0;
+  }
+  
   .container {
     display: flex;
     gap: 2rem;
-    max-width: 100%;
+    width: 100%;
     margin: 2rem 0;
     padding: 0 0.5rem;
   }
