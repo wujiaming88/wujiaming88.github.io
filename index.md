@@ -65,13 +65,14 @@ title: "W.ai"
   
   .post-horizontal-card {
     display: flex;
-    gap: 1.5rem;
+    gap: 2rem;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     overflow: hidden;
     transition: all 0.3s ease;
     background: white;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    min-height: 200px;
   }
   
   .post-horizontal-card:hover {
@@ -90,10 +91,11 @@ title: "W.ai"
   
   .post-horizontal-content {
     flex: 1;
-    padding: 1.5rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 0;
   }
   
   .post-horizontal-title {
@@ -101,9 +103,6 @@ title: "W.ai"
     margin: 0 0 0.75rem 0;
     font-weight: bold;
     line-height: 1.4;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   
   .post-horizontal-title a {
@@ -131,10 +130,6 @@ title: "W.ai"
     line-height: 1.6;
     flex: 1;
     margin-bottom: 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
   
   .post-horizontal-readmore {
@@ -235,35 +230,7 @@ title: "W.ai"
     box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
   }
   
-  @media (max-width: 1200px) {
-    .container {
-      flex-direction: column;
-    }
-    
-    .sidebar {
-      width: 100%;
-      position: static;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .hero {
-      padding: 3rem 1.5rem;
-    }
-    
-    .hero h1 {
-      font-size: 2rem;
-    }
-    
-    .post-horizontal-card {
-      flex-direction: column;
-    }
-    
-    .post-horizontal-image {
-      width: 100%;
-      height: 200px;
-    }
-  }
+  /* 移除移动端适配，仅适配桌面端 */
 </style>
 
 <div class="hero">
