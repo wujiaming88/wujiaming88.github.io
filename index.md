@@ -7,8 +7,8 @@ title: "W.ai"
   .container {
     display: flex;
     gap: 2rem;
-    max-width: 1800px;
-    margin: 2rem auto;
+    max-width: 100%;
+    margin: 2rem 0;
     padding: 0 2rem;
   }
   
@@ -73,6 +73,7 @@ title: "W.ai"
     background: white;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     min-height: 200px;
+    width: 100%;
   }
   
   .post-horizontal-card:hover {
@@ -96,6 +97,7 @@ title: "W.ai"
     flex-direction: column;
     justify-content: space-between;
     min-width: 0;
+    width: 100%;
   }
   
   .post-horizontal-title {
