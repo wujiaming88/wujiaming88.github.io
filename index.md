@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: "W.ai"
 ---
 
@@ -7,7 +7,7 @@ title: "W.ai"
   .container {
     display: flex;
     gap: 2rem;
-    max-width: 1800px;
+    max-width: 1600px;
     margin: 2rem auto;
     padding: 0 2rem;
   }
@@ -18,7 +18,7 @@ title: "W.ai"
   }
   
   .sidebar {
-    width: 380px;
+    width: 350px;
     position: sticky;
     top: 2rem;
     height: fit-content;
@@ -28,7 +28,7 @@ title: "W.ai"
   .hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 3rem 2rem;
+    padding: 4rem 2rem;
     text-align: center;
     border-radius: 12px;
     margin-bottom: 3rem;
@@ -230,20 +230,7 @@ title: "W.ai"
     box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
   }
   
-  /* Footer styles */
-  footer {
-    background: #f5f5f5;
-    padding: 1.5rem 2rem;
-    text-align: center;
-    border-top: 1px solid #e0e0e0;
-    margin-top: 3rem;
-  }
-  
-  footer p {
-    margin: 0;
-    color: #666;
-    font-size: 1rem;
-  }
+  /* 移除移动端适配，仅适配桌面端 */
 </style>
 
 <div class="hero">
@@ -256,41 +243,8 @@ title: "W.ai"
     <h2 class="section-title">📰 最新文章</h2>
     
     <div class="post-horizontal-list" id="post-list">
-      {% assign posts = site.posts | sort: 'date' | reverse %}
-      {% for post in posts limit: 5 %}
-        <div class="post-horizontal-card">
-          {% if post.header.overlay_image %}
-            <img class="post-horizontal-image" src="{{ post.header.overlay_image }}" alt="{{ post.title }}">
-          {% else %}
-            <img class="post-horizontal-image" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=200&fit=crop" alt="默认图片">
-          {% endif %}
-          <div class="post-horizontal-content">
-            <div>
-              <h3 class="post-horizontal-title">
-                <a href="{{ post.url }}">{{ post.title }}</a>
-              </h3>
-              <div class="post-horizontal-meta">
-                <span>{{ post.date | date: "%Y年%m月%d日" }}</span>
-                {% if post.categories %}
-                  <span>•</span>
-                  <span>{{ post.categories | first }}</span>
-                {% endif %}
-              </div>
-              {% if post.excerpt %}
-              <p class="post-horizontal-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
-              {% endif %}
-            </div>
-            <a href="{{ post.url }}" class="post-horizontal-readmore">阅读更多 →</a>
-          </div>
-        </div>
-      {% endfor %}
+      <!-- 文章列表将通过Jekyll动态生成 -->
     </div>
-    
-    {% if posts.size > 5 %}
-    <div class="load-more">
-      <button class="load-more-btn" id="load-more-btn">加载更多文章</button>
-    </div>
-    {% endif %}
   </div>
   
   <div class="sidebar">
@@ -302,57 +256,13 @@ title: "W.ai"
     <div class="sidebar-section">
       <h3 class="sidebar-title">📂 文章分类</h3>
       <ul class="category-list">
-        {% assign categories = site.categories | sort %}
-        {% for category in categories %}
-        <li class="category-list-item">
-          <a href="/categories/{{ category[0] }}/">
-            <span>{{ category[0] }}</span>
-            <span class="category-count">{{ category[1].size }}</span>
-          </a>
-        </li>
-        {% endfor %}
+        <!-- 分类列表将通过Jekyll动态生成 -->
       </ul>
     </div>
   </div>
 </div>
 
 <script>
-// 无限滚动加载
-let currentPage = 1;
-const loadMoreBtn = document.getElementById('load-more-btn');
-const postList = document.getElementById('post-list');
-
-if (loadMoreBtn) {
-  loadMoreBtn.addEventListener('click', async () => {
-    currentPage++;
-    loadMoreBtn.textContent = '加载中...';
-    loadMoreBtn.disabled = true;
-    
-    try {
-      const response = await fetch(`/page/${currentPage}/`);
-      const html = await response.text();
-      
-      // 解析HTML并提取文章卡片
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const newPosts = doc.querySelectorAll('.post-horizontal-card');
-      
-      if (newPosts.length > 0) {
-        newPosts.forEach(post => {
-          postList.appendChild(post);
-        });
-      } else {
-        loadMoreBtn.textContent = '没有更多文章了';
-        loadMoreBtn.disabled = true;
-      }
-    } catch (error) {
-      console.error('加载失败:', error);
-      loadMoreBtn.textContent = '加载失败，请重试';
-      loadMoreBtn.disabled = false;
-    }
-  });
-}
-
 // 搜索功能
 const searchInput = document.getElementById('search-input');
 if (searchInput) {
@@ -373,7 +283,3 @@ if (searchInput) {
   });
 }
 </script>
-
-<footer>
-    <p>W.ai的深度技术研究博客</p>
-</footer>
