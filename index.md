@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: "W.ai"
 ---
 
@@ -17,17 +17,17 @@ title: "W.ai"
   
   /* Override any container styles from theme */
   .container {
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    max-width: 1800px !important;
+    margin: 2rem auto !important;
+    padding: 0 2rem !important;
   }
   
   .container {
     display: flex;
     gap: 2rem;
-    width: 100%;
-    margin: 2rem 0;
-    padding: 0 0.5rem;
+    max-width: 1800px;
+    margin: 2rem auto;
+    padding: 0 2rem;
   }
   
   .main-content {
@@ -36,7 +36,7 @@ title: "W.ai"
   }
   
   .sidebar {
-    width: 250px;
+    width: 350px;
     position: sticky;
     top: 2rem;
     height: fit-content;
@@ -46,7 +46,7 @@ title: "W.ai"
   .hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
     text-align: center;
     border-radius: 12px;
     margin-bottom: 3rem;
@@ -250,7 +250,20 @@ title: "W.ai"
     box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
   }
   
-  /* 移除移动端适配，仅适配桌面端 */
+  /* Footer styles */
+  footer {
+    background: #f5f5f5;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 3rem;
+  }
+  
+  footer p {
+    margin: 0;
+    color: #666;
+    font-size: 1rem;
+  }
 </style>
 
 <div class="hero">
@@ -380,3 +393,7 @@ if (searchInput) {
   });
 }
 </script>
+
+<footer>
+    <p>W.ai的深度技术研究博客</p>
+</footer>
