@@ -15,6 +15,13 @@ title: "W.ai"
     padding: 0;
   }
   
+  /* Override any container styles from theme */
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
   .container {
     display: flex;
     gap: 2rem;
