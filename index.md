@@ -1,27 +1,9 @@
 ---
-layout: page
+layout: default
 title: "W.ai"
 ---
 
 <style>
-  /* Reset default page margins */
-  body {
-    margin: 0;
-    padding: 0;
-  }
-  
-  .page-content {
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Override any container styles from theme */
-  .container {
-    max-width: 1800px !important;
-    margin: 2rem auto !important;
-    padding: 0 2rem !important;
-  }
-  
   .container {
     display: flex;
     gap: 2rem;
@@ -36,7 +18,7 @@ title: "W.ai"
   }
   
   .sidebar {
-    width: 350px;
+    width: 380px;
     position: sticky;
     top: 2rem;
     height: fit-content;
@@ -91,7 +73,6 @@ title: "W.ai"
     background: white;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     min-height: 200px;
-    width: 100%;
   }
   
   .post-horizontal-card:hover {
@@ -101,7 +82,7 @@ title: "W.ai"
   }
   
   .post-horizontal-image {
-    width: 250px;
+    width: 300px;
     height: 200px;
     object-fit: cover;
     background: #f5f5f5;
@@ -115,7 +96,6 @@ title: "W.ai"
     flex-direction: column;
     justify-content: space-between;
     min-width: 0;
-    width: 100%;
   }
   
   .post-horizontal-title {
