@@ -7,7 +7,7 @@ title: "W.ai"
   .container {
     display: flex;
     gap: 2rem;
-    max-width: 1600px;
+    max-width: 1800px;
     margin: 2rem auto;
     padding: 0 2rem;
   }
@@ -18,7 +18,7 @@ title: "W.ai"
   }
   
   .sidebar {
-    width: 350px;
+    width: 300px;
     position: sticky;
     top: 2rem;
     height: fit-content;
@@ -82,7 +82,7 @@ title: "W.ai"
   }
   
   .post-horizontal-image {
-    width: 300px;
+    width: 250px;
     height: 200px;
     object-fit: cover;
     background: #f5f5f5;
