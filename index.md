@@ -9,7 +9,7 @@ title: "W.ai"
     gap: 2rem;
     max-width: 100%;
     margin: 2rem 0;
-    padding: 0 2rem;
+    padding: 0 0.5rem;
   }
   
   .main-content {
@@ -18,7 +18,7 @@ title: "W.ai"
   }
   
   .sidebar {
-    width: 300px;
+    width: 250px;
     position: sticky;
     top: 2rem;
     height: fit-content;
