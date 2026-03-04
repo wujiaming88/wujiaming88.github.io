@@ -7,18 +7,22 @@ title: "W.ai"
   .container {
     display: flex;
     gap: 2rem;
-    margin: 2rem 0;
+    max-width: 1600px;
+    margin: 2rem auto;
+    padding: 0 2rem;
   }
   
   .main-content {
     flex: 1;
+    min-width: 0;
   }
   
   .sidebar {
-    width: 300px;
+    width: 350px;
     position: sticky;
     top: 2rem;
     height: fit-content;
+    flex-shrink: 0;
   }
   
   .hero {
@@ -77,8 +81,8 @@ title: "W.ai"
   }
   
   .post-horizontal-image {
-    width: 250px;
-    height: 180px;
+    width: 300px;
+    height: 200px;
     object-fit: cover;
     background: #f5f5f5;
     flex-shrink: 0;
@@ -93,10 +97,13 @@ title: "W.ai"
   }
   
   .post-horizontal-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     margin: 0 0 0.75rem 0;
     font-weight: bold;
     line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .post-horizontal-title a {
@@ -120,10 +127,14 @@ title: "W.ai"
   
   .post-horizontal-excerpt {
     color: #666;
-    font-size: 0.95rem;
+    font-size: 1rem;
     line-height: 1.6;
     flex: 1;
     margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   
   .post-horizontal-readmore {
@@ -224,7 +235,7 @@ title: "W.ai"
     box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
   }
   
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .container {
       flex-direction: column;
     }
