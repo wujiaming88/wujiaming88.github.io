@@ -3,7 +3,7 @@
 title: 卷王小组技术研究
 description: 卷王小组的深度技术研究博客
 lang: zh-CN
-url: "https://blog.yourdomain.com" # 替换为你的自定义域名
+url: "https://blog.juanwang.tech" # 卷王小组博客自定义域名
 baseurl: "" # 如果博客不在根目录，设置为子目录路径
 
 # 主题配置
