@@ -1,0 +1,69 @@
+{
+  "team_name": "博客研发小组",
+  "team_description": "负责GitHub Pages的发布、研发、运维",
+  "roles": [
+    {
+      "role_name": "orchestrator",
+      "description": "任务路由、状态跟踪、优先级管理、内容规划",
+      "model": "seed-1-8-251228",
+      "workdir": "/root/.openclaw/workspace/orchestrator"
+    },
+    {
+      "role_name": "builder",
+      "description": "内容创作、Markdown生成、Jekyll front matter、博客文章撰写",
+      "model": "deepseek-v3-2",
+      "workdir": "/root/.openclaw/workspace/builder"
+    },
+    {
+      "role_name": "reviewer",
+      "description": "内容审查、链接检查、SEO优化、质量保证",
+      "model": "seed-2-0-mini",
+      "workdir": "/root/.openclaw/workspace/reviewer"
+    },
+    {
+      "role_name": "ops",
+      "description": "Git操作、部署、CI/CD监控、健康检查",
+      "model": "seed-2-0-mini",
+      "workdir": "/root/.openclaw/workspace/ops"
+    },
+    {
+      "role_name": "ui_designer",
+      "description": "博客视觉设计、用户体验设计、界面交互设计、样式规范制定",
+      "model": "seed-1-8-251228",
+      "workdir": "/root/.openclaw/workspace/ui_designer"
+    }
+  ],
+  "workflow": [
+    {
+      "step": 1,
+      "role": "orchestrator",
+      "task": "接收需求，制定任务计划"
+    },
+    {
+      "step": 2,
+      "role": "ui_designer",
+      "task": "根据需求进行视觉和体验设计，输出设计方案和样式规范"
+    },
+    {
+      "step": 3,
+      "role": "builder",
+      "task": "根据设计方案实现代码"
+    },
+    {
+      "step": 4,
+      "role": "reviewer",
+      "task": "审查代码实现是否符合设计要求"
+    },
+    {
+      "step": 5,
+      "role": "ops",
+      "task": "部署到GitHub Pages"
+    },
+    {
+      "step": 6,
+      "role": "orchestrator",
+      "task": "验收结果，完成任务"
+    }
+  ],
+  "communication_dir": "/root/.openclaw/workspace/team_communication"
+}
