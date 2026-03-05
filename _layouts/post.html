@@ -24,7 +24,11 @@ layout: default
       </div>
       {% endif %}
 
-      <header class="post-header">
+      <div class="post-content e-content" itemprop="articleBody">
+        {{ content }}
+      </div>
+
+      <footer class="post-footer">
         <div class="post-meta">
           <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
             {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
@@ -36,11 +40,7 @@ layout: default
             </span>
           {% endif %}
         </div>
-      </header>
-
-      <div class="post-content e-content" itemprop="articleBody">
-        {{ content }}
-      </div>
+      </footer>
 
       {% if site.disqus and page.comments %}
         <div id="disqus_thread"></div>
