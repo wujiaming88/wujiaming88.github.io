@@ -94,7 +94,7 @@ def generate_index_html():
             if category == 'OpenClaw版本更新':
                 post_path = f'openclaw/版本更新/{date_path}/openclaw-2026.3.2-update.html'
             elif category == 'OpenClaw技术研究':
-                post_path = f'openclaw/技术研究/{date_path}/{filename[:-3]}.html'
+                post_path = f'openclaw/技术研究/{date_path}/openclaw-env-vars-research.html'
             elif category == 'TechTrends':
                 post_path = f'techtrends/{date_path}/{filename[:-3]}.html'
             elif category == 'Technology':
