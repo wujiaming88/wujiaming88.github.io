@@ -98,7 +98,7 @@ def generate_index_html():
             elif category == 'TechTrends':
                 post_path = f'techtrends/github/{date_path}/github-trend-analysis.html'
             elif category == 'Technology':
-                post_path = f'technology/{date_path}/{filename[:-3]}.html'
+                post_path = f'technology/openclaw/{date_path}/openclaw-2026-3-1-update-analysis.html'
             elif category == 'AI':
                 post_path = f'ai/{date_path}/{filename[:-3]}.html'
             elif category == 'news':
