@@ -12,6 +12,19 @@ layout: default
         <h2 class="section-title">📰 最新文章</h2>
         
         <div class="post-list" id="post-list">                <div class="post-card">
+                    <img class="post-card-image" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=200&fit=crop" alt="OpenClaw Agent System Prompt 架构详解报告">
+                    <div class="post-card-content">
+                        <h3 class="post-card-title">
+                            <a href="openclaw/技术研究/2026/03/05/OpenClaw-Agent-System-Prompt-架构详解报告.html">OpenClaw Agent System Prompt 架构详解报告</a>
+                        </h3>
+                        <div class="post-card-meta">
+                            <span>2026年03月05日</span>
+                            <span>•</span>
+                            <span>OpenClaw技术研究</span>
+                        </div>
+                        <p class="post-card-excerpt">本文详细拆解了OpenClaw Agent发送给LLM的完整System Prompt组成结构（版本v2.1，更新时间2026-03-05），将其分为9层架构，重点说明了用户可控的Layer 7（Workspace Files）和Layer 8（Bootstrap Hook System），其他层为框架自动生成。通过分层设计实现了"一致性"与"灵活性"的平衡，为OpenClaw Agent的定制化开发提供了清晰的指南...</p>
+                    </div>
+                </div>                <div class="post-card">
                     <img class="post-card-image" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=200&fit=crop" alt="OpenClaw 2026.3.2 版本更新详解">
                     <div class="post-card-content">
                         <h3 class="post-card-title">
