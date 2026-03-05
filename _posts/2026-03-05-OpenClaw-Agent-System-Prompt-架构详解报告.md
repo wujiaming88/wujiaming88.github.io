@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "OpenClaw Agent System Prompt 架构详解报告"
+date:   2026-03-05 14:43:00 +0800
+categories: openclaw 技术研究
+---
+
 # OpenClaw Agent System Prompt 架构详解报告
 
 ## 一、文章概述
