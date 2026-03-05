@@ -2,6 +2,7 @@
 import os
 import re
 from datetime import datetime
+import markdown
 
 def extract_front_matter(markdown_content):
     front_matter = {}
@@ -17,6 +18,29 @@ def extract_front_matter(markdown_content):
                     value = value.strip().strip('"').strip("'")
                     front_matter[key] = value
     return front_matter
+
+def clean_markdown_excerpt(markdown_content):
+    # 移除markdown标题符号
+    cleaned = re.sub(r'^#{1,6}\s+', '', markdown_content, flags=re.MULTILINE)
+    # 移除粗体、斜体等格式符号
+    cleaned = re.sub(r'(\*\*|__|\*|_)', '', cleaned)
+    # 移除链接格式
+    cleaned = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', cleaned)
+    # 移除代码块标记
+    cleaned = re.sub(r'```.*?```', '', cleaned, flags=re.DOTALL)
+    # 移除行内代码标记
+    cleaned = re.sub(r'`(.*?)`', r'\1', cleaned)
+    # 移除列表符号
+    cleaned = re.sub(r'^(\*|-|\d+\.)\s+', '', cleaned, flags=re.MULTILINE)
+    # 移除图片标记
+    cleaned = re.sub(r'!\[.*?\]\(.*?\)', '', cleaned)
+    # 移除HTML标签
+    cleaned = re.sub(r'<.*?>', '', cleaned)
+    # 移除多余空行
+    cleaned = re.sub(r'\n\s*\n', '\n', cleaned)
+    # 移除特殊字符
+    cleaned = re.sub(r'[^\w\s\u4e00-\u9fff，。！？；：、（）【】《》“”‘’]', '', cleaned)
+    return cleaned.strip()
 
 def generate_index_html():
     posts_dir = '_posts'
@@ -35,13 +59,16 @@ def generate_index_html():
             # 提取摘要
             if '---' in content:
                 content_after_front_matter = content.split('---', 2)[2].strip()
-                # 提取前300个字符作为摘要
-                excerpt = content_after_front_matter[:300].replace('\n', ' ').replace('\r', '')
-                if len(content_after_front_matter) > 300:
+                # 提取前500个字符作为摘要
+                raw_excerpt = content_after_front_matter[:500]
+                # 清理markdown格式
+                excerpt = clean_markdown_excerpt(raw_excerpt)
+                if len(content_after_front_matter) > 500:
                     excerpt += '...'
             else:
-                excerpt = content[:300].replace('\n', ' ').replace('\r', '')
-                if len(content) > 300:
+                raw_excerpt = content[:500]
+                excerpt = clean_markdown_excerpt(raw_excerpt)
+                if len(content) > 500:
                     excerpt += '...'
             
             # 处理日期
@@ -49,19 +76,38 @@ def generate_index_html():
             try:
                 date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S %z')
                 date_display = date.strftime('%Y年%m月%d日')
+                date_path = date.strftime('%Y/%m/%d')
             except:
                 try:
                     date = datetime.strptime(date_str, '%Y-%m-%d')
                     date_display = date.strftime('%Y年%m月%d日')
+                    date_path = date.strftime('%Y/%m/%d')
                 except:
                     date_display = date_str
+                    date_path = '2026/03/03'  # 默认路径
             
             # 处理分类
             categories = front_matter.get('categories', '').strip('[]').replace(' ', '').split(',')
             category = categories[0].strip() if categories else '未分类'
             
+            # 生成正确的文章路径
+            if category == 'OpenClaw版本更新':
+                post_path = f'openclaw/版本更新/{date_path}/{filename[:-3]}.html'
+            elif category == 'OpenClaw技术研究':
+                post_path = f'openclaw/技术研究/{date_path}/{filename[:-3]}.html'
+            elif category == 'TechTrends':
+                post_path = f'techtrends/{date_path}/{filename[:-3]}.html'
+            elif category == 'Technology':
+                post_path = f'technology/{date_path}/{filename[:-3]}.html'
+            elif category == 'AI':
+                post_path = f'ai/{date_path}/{filename[:-3]}.html'
+            elif category == 'news':
+                post_path = f'news/{date_path}/{filename[:-3]}.html'
+            else:
+                post_path = f'posts/{date_path}/{filename[:-3]}.html'
+            
             posts.append({
-'filename': filename[:-3] + '.html',
+                'filename': post_path,
                 'title': front_matter.get('title', filename[11:-3].replace('-', ' ')),
                 'date': date,
                 'date_display': date_display,
@@ -298,18 +344,16 @@ def generate_index_html():
     <div class="hero">
         <h1>🎯 W.ai</h1>
         <p>深度学习、AI技术研究与科技资讯整理</p>
-    </divdiv>
+    </div>
     
     <div class="container">
         <div class="main-content">
             <h2 class="section-title">📰 最新文章</h2>
             
-            <div class="post-list" id="post-list">'''
-    
+            <div class="post-list" id="post-list">'''    
     # 添加文章卡片
     for post in posts:
-        html += f'''
-                <div class="post-card">
+        html += f'''                <div class="post-card">
                     <img class="post-card-image" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=200&fit=crop" alt="{post['title']}">
                     <div class="post-card-content">
                         <h3 class="post-card-title">
@@ -324,8 +368,7 @@ def generate_index_html():
                     </div>
                 </div>'''
     
-    html += '''
-            </div>
+    html += '''            </div>
         </div>
         
         <div class="sidebar">
@@ -336,20 +379,17 @@ def generate_index_html():
             
             <div class="sidebar-section">
                 <h3 class="sidebar-title">📂 文章分类</h3>
-                <ul class="category-list">'''
-    
+                <ul class="category-list">'''    
     # 添加分类
     for category, count in sorted(categories.items()):
-        html += f'''
-                    <li class="category-list-item">
+        html += f'''                    <li class="category-list-item">
                         <a href="#">
                             <span>{category}</span>
                             <span class="category-count">{count}</span>
                         </a>
                     </li>'''
     
-    html += '''
-                </ul>
+    html += '''                </ul>
             </div>
         </div>
     </div>
@@ -386,120 +426,7 @@ def generate_index_html():
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html)
     
-    # 生成单篇文章页面
-    for post in posts:
-        filepath = os.path.join(posts_dir, post['filename'][:-3] + '.md')
-        if os.path.exists(filepath):
-            with open(filepath, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # 生成文章页面HTML
-            post_html = f'''<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{post['title']} - W.ai</title>
-    <style>
-        * {{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }}
-        
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #fafafa;
-            color: #333;
-        }}
-        
-        .container {{
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }}
-        
-        .post-header {{
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }}
-        
-        .post-title {{
-            font-size: 2.5rem;
-            margin: 0 0 1rem 0;
-            font-weight: bold;
-        }}
-        
-        .post-meta {{
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }}
-        
-        .post-content {{
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            line-height: 1.8;
-        }}
-        
-        .post-content h2 {{
-            font-size: 1.8rem;
-            margin: 1.5rem 0 1rem 0;
-        }}
-        
-        .post-content p {{
-            margin-bottom: 1rem;
-        }}
-        
-        .post-content pre {{
-            background: #f5f5f5;
-            padding: 1rem;
-            border-radius: 8px;
-            overflow-x: auto;
-        }}
-        
-        .back-link {{
-            display: inline-block;
-            margin-top: 2rem;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-        }}
-        
-        .back-link:hover {{
-            text-decoration: underline;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="post-header">
-            <h1 class="post-title">{post['title']}</h1>
-            <div class="post-meta">
-                <span>{post['date_display']}</span>
-                <span> • </span>
-                <span>{post['category']}</span>
-            </div>
-        </div>
-        
-        <div class="post-content">
-            {content}
-        </div>
-        
-        <a href="index.html" class="back-link">← 返回首页</a>
-    </div>
-</body>
-</html>'''
-            
-            with open(post['filename'], 'w', encoding='utf-8') as f:
-                f.write(post_html)
-    
-    print(f"Generated {len(posts)} posts and {len(posts)} post pages")
+    print(f"Generated {len(posts)} posts index page")
 
 if __name__ == '__main__':
     generate_index_html()
