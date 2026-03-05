@@ -89,6 +89,9 @@ def generate_index_html():
             # 处理分类
             categories = front_matter.get('categories', '').strip('[]').replace(' ', '').split(',')
             category = categories[0].strip() if categories else '未分类'
+            # 统一分类名称
+            if category == 'AI技术研究':
+                category = 'AI'
             
             # 生成正确的文章路径
             if category == 'OpenClaw版本更新':
