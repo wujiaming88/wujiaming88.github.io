@@ -104,7 +104,7 @@ def generate_index_html():
             elif category == 'news' and 'us-iran' in filename:
                 post_path = f'news/international/{date_path}/us-iran-news.html'
             elif category == 'news' and 'news-broadcast' in filename:
-                post_path = f'news/domestic/{date_path}/news-broadcast.html'
+                post_path = f'news/politics/{date_path}/news-broadcast.html'
             else:
                 post_path = f'posts/{date_path}/{filename[:-3]}.html'
             
