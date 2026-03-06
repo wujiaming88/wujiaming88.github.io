@@ -10,7 +10,7 @@ baseurl: "" # 如果博客不在根目录，设置为子目录路径
 theme: minima
 
 # 分类和标签配置
-permalink: /:categories/:year/:month/:day/:title.html
+permalink: /:year/:month/:day/:title.html
 
 # 插件配置
 plugins:
