@@ -10,26 +10,30 @@
 /* 颜色系统 */
 :root {
     /* 深色主题 - 优化阅读体验 */
-    --bg-primary: #1e1e1e;
-    --text-primary: #ffffff;
-    --text-secondary: #b0b0b0;
-    --link-color: #42a5f5;
-    --code-bg: #1e1e1e;
+    --bg-primary: #1a1a1a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #909090;
+    --link-color: #64b5f6;
+    --link-hover-color: #42a5f5;
+    --code-bg: #2d2d2d;
     --code-text: #d4d4d4;
     --border-color: #333333;
     
     /* 语法高亮颜色 */
-    --keyword-color: #569cd6;
-    --string-color: #ce9178;
-    --comment-color: #6a9955;
-    --function-color: #dcdcaa;
-    --variable-color: #9cdcfe;
+    --keyword-color: #61afef;
+    --string-color: #e5c07b;
+    --comment-color: #98c379;
+    --function-color: #e6c07b;
+    --variable-color: #56b6c2;
+    --type-color: #c678dd;
+    --constant-color: #d19a66;
     
     /* 浅色主题 - 优化阅读体验 */
-    --light-bg-primary: #ffffff;
-    --light-text-primary: #121212;
+    --light-bg-primary: #fafafa;
+    --light-text-primary: #2d2d2d;
     --light-text-secondary: #666666;
-    --light-link-color: #1a73e8;
+    --light-link-color: #2196f3;
+    --light-link-hover-color: #1976d2;
     --light-code-bg: #f5f5f5;
     --light-code-text: #333333;
     --light-border-color: #e0e0e0;
@@ -56,6 +60,10 @@ body.light-theme .text-secondary {
 
 body.light-theme a {
     color: var(--light-link-color);
+}
+
+body.light-theme a:hover {
+    color: var(--light-link-hover-color);
 }
 
 body.light-theme pre {
@@ -105,7 +113,7 @@ a {
 }
 
 a:hover {
-    color: #64b5f6;
+    color: var(--link-hover-color);
 }
 
 /* 容器 */
@@ -332,6 +340,14 @@ body.light-theme code {
 
 .variable {
     color: var(--variable-color);
+}
+
+.type {
+    color: var(--type-color);
+}
+
+.constant {
+    color: var(--constant-color);
 }
 
 /* 侧边栏 */

@@ -1,10 +1,10 @@
 /* 首页样式 */
 .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--link-color) 0%, #764ba2 100%);
     color: white;
     padding: 3rem 2rem;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 30px rgba(100, 181, 246, 0.3);
 }
 
 .hero h1 {
@@ -41,9 +41,9 @@
 .section-title {
     font-size: 1.8rem;
     margin: 2rem 0 1.5rem 0;
-    color: #333;
+    color: var(--text-primary);
     font-weight: bold;
-    border-bottom: 3px solid #667eea;
+    border-bottom: 3px solid var(--link-color);
     padding-bottom: 0.5rem;
 }
 
