@@ -2,63 +2,24 @@
 layout: default
 ---
 
-{% if page.header.overlay_image %}
-<style>
-  .page-header-image {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    background-image: url('{{ page.header.overlay_image }}');
-    background-size: cover;
-    background-position: center;
-    position: relative;
-  }
-  
-  .page-header-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, {{ page.header.overlay_filter | default: 0.5 }});
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-  }
-  
-  .page-header-caption {
-    color: white;
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    padding: 1rem;
-  }
-</style>
-<div class="page-header-image">
-  {% if page.header.caption or page.header.overlay_filter %}
-  <div class="page-header-overlay">
-    <div class="page-header-caption">{{ page.header.caption | default: page.title }}</div>
-  </div>
-  {% endif %}
-</div>
-{% endif %}
-
-<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting" style="max-width: 800px; margin: 0 auto;">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
-    <div class="post-meta">
+    <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem;">{{ page.title | escape }}</h1>
+    <div class="post-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        {{ page.date | date: date_format }}
+        📅 {{ page.date | date: '%Y年%m月%d日' }}
       </time>
       {% if page.author %}
         • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <span class="p-author h-card" itemprop="name">{{ page.author }}</span>
+          <span class="p-author h-card" itemprop="name">👤 {{ page.author }}</span>
         </span>
+      {% endif %}
+      {% if page.categories %}
+        • <span>📂 {{ page.categories | join: ', ' }}</span>
+      {% endif %}
+      {% if page.tags %}
+        • <span>#️⃣ {{ page.tags | join: ', ' }}</span>
       {% endif %}
     </div>
   </header>
@@ -67,8 +28,45 @@ layout: default
     {{ content }}
   </div>
 
+  <!-- 文章导航 -->
+  <div style="margin-top: 3rem; padding: 1.5rem; background-color: rgba(30, 30, 30, 0.5); border: 1px solid var(--border-color); border-radius: 8px;">
+    <div style="display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+      {% if page.previous %}
+      <div style="flex: 1; min-width: 300px;">
+        <h4 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem;">← 上一篇</h4>
+        <a href="{{ page.previous.url | relative_url }}" style="color: var(--link-color); font-weight: 500;">{{ page.previous.title }}</a>
+      </div>
+      {% endif %}
+      {% if page.next %}
+      <div style="flex: 1; min-width: 300px; text-align: right;">
+        <h4 style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem;">下一篇 →</h4>
+        <a href="{{ page.next.url | relative_url }}" style="color: var(--link-color); font-weight: 500;">{{ page.next.title }}</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- 分享按钮 -->
+  <div style="margin-top: 2rem; text-align: center;">
+    <p style="color: var(--text-secondary); margin-bottom: 1rem;">分享这篇文章：</p>
+    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <a href="https://twitter.com/intent/tweet?url={{ site.url }}{{ page.url }}&text={{ page.title | url_encode }}" target="_blank" rel="noopener noreferrer" style="padding: 0.75rem 1.5rem; background-color: #1da1f2; color: white; border-radius: 8px; text-decoration: none; transition: background-color 0.2s ease;">
+        🐦 Twitter
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}&title={{ page.title | url_encode }}" target="_blank" rel="noopener noreferrer" style="padding: 0.75rem 1.5rem; background-color: #3b5998; color: white; border-radius: 8px; text-decoration: none; transition: background-color 0.2s ease;">
+        📘 Facebook
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title | url_encode }}&summary={{ page.excerpt | strip_html | truncate: 100 | url_encode }}" target="_blank" rel="noopener noreferrer" style="padding: 0.75rem 1.5rem; background-color: #0077b5; color: white; border-radius: 8px; text-decoration: none; transition: background-color 0.2s ease;">
+        💼 LinkedIn
+      </a>
+      <button onclick="copyToClipboard('{{ site.url }}{{ page.url }}')" style="padding: 0.75rem 1.5rem; background-color: var(--link-color); color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease;">
+        📋 复制链接
+      </button>
+    </div>
+  </div>
+
   {% if site.disqus and page.comments %}
-    <div id="disqus_thread"></div>
+    <div id="disqus_thread" style="margin-top: 3rem;"></div>
     <script type="text/javascript">
       var disqus_shortname = '{{ site.disqus }}';
       (function() {
@@ -81,3 +79,105 @@ layout: default
   {% endif %}
 
 </article>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    alert('链接已复制到剪贴板！');
+  }, function(err) {
+    console.error('无法复制文本: ', err);
+    alert('复制失败，请手动复制链接: ' + text);
+  });
+}
+
+// 代码块高亮和复制功能
+document.addEventListener('DOMContentLoaded', () => {
+  // 为代码块添加复制按钮
+  document.querySelectorAll('pre').forEach((pre, index) => {
+    const copyButton = document.createElement('button');
+    copyButton.textContent = '📋 复制代码';
+    copyButton.style.cssText = `
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(66, 165, 245, 0.9);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+    `;
+    
+    pre.style.position = 'relative';
+    pre.appendChild(copyButton);
+    
+    // 鼠标悬停时显示复制按钮
+    pre.addEventListener('mouseenter', () => {
+      copyButton.style.opacity = '1';
+    });
+    
+    pre.addEventListener('mouseleave', () => {
+      copyButton.style.opacity = '0';
+    });
+    
+    // 复制功能
+    copyButton.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        copyButton.textContent = '✅ 已复制';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      }).catch(err => {
+        console.error('无法复制代码: ', err);
+        copyButton.textContent = '❌ 复制失败';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      });
+    });
+  });
+  
+  // 代码折叠功能（超过20行自动折叠）
+  document.querySelectorAll('pre code').forEach((code) => {
+    const lines = code.textContent.split('\n').length;
+    if (lines > 20) {
+      code.style.maxHeight = '300px';
+      code.style.overflow = 'hidden';
+      code.style.position = 'relative';
+      
+      const expandButton = document.createElement('button');
+      expandButton.textContent = '🔽 展开全部代码';
+      expandButton.style.cssText = `
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(30, 30, 30, 0.9), transparent);
+        color: white;
+        border: none;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+      `;
+      
+      code.appendChild(expandButton);
+      
+      expandButton.addEventListener('click', () => {
+        if (code.style.maxHeight === '300px') {
+          code.style.maxHeight = 'none';
+          expandButton.textContent = '🔼 收起代码';
+        } else {
+          code.style.maxHeight = '300px';
+          expandButton.textContent = '🔽 展开全部代码';
+        }
+      });
+    }
+  });
+});
+</script>

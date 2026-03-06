@@ -1,19 +1,47 @@
 ---
-layout: page
-title: Categories
+layout: default
+title: 文章分类
 permalink: /categories/
 ---
 
-# 文章分类
-
-{% for category in site.categories %}
-  <h2 id="{{ category[0] | slugify }}">{{ category[0] }}</h2>
-  <ul>
-    {% for post in category[1] %}
-      <li>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        <span class="post-date">{{ post.date | date: "%b %-d, %Y" }}</span>
-      </li>
-    {% endfor %}
-  </ul>
-{% endfor %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 2rem;">📂 文章分类</h1>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        {% for category in site.categories %}
+        <div class="fade-in" style="background-color: rgba(30, 30, 30, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; transition: all 0.3s ease;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--link-color);">
+                # {{ category[0] }}
+                <span style="background-color: rgba(66, 165, 245, 0.2); color: var(--link-color); padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.9rem; margin-left: 1rem;">
+                    {{ category[1].size }} 篇文章
+                </span>
+            </h2>
+            
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                {% for post in category[1] %}
+                <li style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                    <a href="{{ post.url | relative_url }}" style="color: var(--text-primary); text-decoration: none; font-weight: 500; transition: color 0.2s ease;">
+                        {{ post.title }}
+                    </a>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        📅 {{ post.date | date: '%Y年%m月%d日' }}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- 分类导航 -->
+    <div style="margin-top: 3rem; background-color: rgba(30, 30, 30, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--text-primary);">快速导航</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+            {% for category in site.categories %}
+            <a href="#{{ category[0] | slugify }}" style="color: var(--text-secondary); text-decoration: none; padding: 0.5rem 1rem; background-color: rgba(66, 165, 245, 0.1); border: 1px solid var(--border-color); border-radius: 20px; font-size: 0.9rem; transition: all 0.2s ease;">
+                {{ category[0] }} ({{ category[1].size }})
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>

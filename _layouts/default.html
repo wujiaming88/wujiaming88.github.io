@@ -2,22 +2,171 @@
 ---
 
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+<html lang="{{ page.lang | default: site.lang | default: "zh-CN" }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | default: site.title }}</title>
+    <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace }}">
+    
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- 引入主样式 -->
+    <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+    
+    <!-- SEO标签 -->
+    {% seo %}
+    
+    <!-- 站点图标 -->
+    <link rel="icon" type="image/x-icon" href="{{ '/assets/favicon.ico' | relative_url }}">
+</head>
+<body class="dark-theme">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="{{ '/' | relative_url }}" class="navbar-brand">
+                {{ site.title }}
+            </a>
+            
+            <ul class="navbar-nav">
+                <li><a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' %}active{% endif %}">首页</a></li>
+                <li><a href="{{ '/categories.html' | relative_url }}" class="nav-link {% if page.url contains 'categories' %}active{% endif %}">分类</a></li>
+                <li><a href="{{ '/tags.html' | relative_url }}" class="nav-link {% if page.url contains 'tags' %}active{% endif %}">标签</a></li>
+                <li><a href="{{ '/about.markdown' | relative_url }}" class="nav-link {% if page.url contains 'about' %}active{% endif %}">关于</a></li>
+                <li>
+                    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                        🌙
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-  {% include head.html %}
-
-  <body class="site">
-
-    {% include header.html %}
-
-    <main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        {{ content }}
-      </div>
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container">
+            {{ content }}
+        </div>
     </main>
 
-    {% include footer.html %}
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. 保留所有权利。</p>
+            <p class="text-secondary" style="font-size: 0.9rem; margin-top: 0.5rem;">
+                基于 Jekyll 构建 | 视觉设计：2026版极简深色主题
+            </p>
+        </div>
+    </footer>
 
-  </body>
-
+    <!-- JavaScript -->
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // 检查本地存储的主题偏好
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+            themeToggle.textContent = '☀️';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                themeToggle.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                themeToggle.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
+        // 图片懒加载
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img.lazyload');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            image.src = image.dataset.src;
+                            image.classList.remove('lazyload');
+                            image.classList.add('lazyloaded');
+                            imageObserver.unobserve(image);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(image => {
+                    imageObserver.observe(image);
+                });
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 返回顶部按钮
+        const backToTop = document.createElement('button');
+        backToTop.textContent = '↑';
+        backToTop.style.cssText = `
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: rgba(66, 165, 245, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        `;
+        
+        document.body.appendChild(backToTop);
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.style.opacity = '1';
+                backToTop.style.visibility = 'visible';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.visibility = 'hidden';
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
 </html>
