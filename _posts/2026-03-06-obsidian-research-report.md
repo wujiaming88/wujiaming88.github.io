@@ -66,6 +66,7 @@ categories: 工具评测 知识管理
 
 ## 四、与其他笔记工具的对比
 ### Obsidian vs Notion
+
 | 特性 | Obsidian | Notion |
 |------|----------|--------|
 | 存储方式 | 本地优先 | 云端优先 |
@@ -76,6 +77,7 @@ categories: 工具评测 知识管理
 | 学习门槛 | 高 | 中 |
 
 ### Obsidian vs Logseq
+
 | 特性 | Obsidian | Logseq |
 |------|----------|--------|
 | 编辑模式 | WYSIWYG+Markdown | 大纲式编辑 |
@@ -85,6 +87,7 @@ categories: 工具评测 知识管理
 | 学习门槛 | 高 | 中 |
 
 ### Obsidian vs 印象笔记
+
 | 特性 | Obsidian | 印象笔记 |
 |------|----------|----------|
 | 存储方式 | 本地 | 云端 |
