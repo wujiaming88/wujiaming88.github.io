@@ -158,7 +158,7 @@ code {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
 }
 
 /* 导航栏 */
@@ -224,8 +224,8 @@ code {
 /* 主内容区 */
 .main-content {
     margin-top: 80px;
-    padding: 2rem 0;
-    min-height: calc(100vh - 200px);
+    padding: 1.5rem 0;
+    min-height: calc(100vh - 120px);
 }
 
 /* 文章列表 */
