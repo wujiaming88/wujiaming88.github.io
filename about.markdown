@@ -1,164 +1,284 @@
 ---
 layout: default
-title: 关于我们
+title: 解谜 Contact
 permalink: /about/
 ---
 
 <style>
-/* 关于页面专属样式 */
-.about-section {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+.puzzle-container {
+    max-width: 600px;
+    margin: 3rem auto;
     padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-.about-section h2 {
-    color: #6366f1;
-    border-bottom: 2px solid #e0e7ff;
-    padding-bottom: 0.75rem;
-    margin-bottom: 1.5rem;
-}
-
-/* 联系邮箱 - 醒目样式 */
-.contact-email-box {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
     text-align: center;
-    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
 }
 
-.contact-email-box h3 {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 1.2rem;
+.puzzle-title {
+    font-size: 2.5rem;
     margin-bottom: 1rem;
+    color: #1f2937;
 }
 
-.contact-email-link {
+.puzzle-subtitle {
+    color: #6b7280;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+}
+
+/* 数字网格 */
+.number-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 0.75rem;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+}
+
+.number-cell {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.number-cell:hover {
+    transform: scale(1.05);
+}
+
+/* 输入框 */
+.answer-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 50px;
+    outline: none;
+    transition: all 0.3s ease;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.answer-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+/* 结果展示 - 仪式感动画 */
+.result-container {
+    display: none;
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-radius: 20px;
+    border: 2px solid #22c55e;
+    animation: reveal 0.8s ease-out;
+}
+
+@keyframes reveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    50% {
+        transform: scale(1.05) translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.result-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.result-title {
+    font-size: 1.5rem;
+    color: #166534;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.email-display {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    background: rgba(255, 255, 255, 0.95);
+    background: white;
     color: #6366f1 !important;
-    padding: 1rem 2rem;
+    padding: 1.25rem 2rem;
     border-radius: 50px;
     font-size: 1.3rem;
     font-weight: 600;
     text-decoration: none !important;
-    transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: glow 2s ease-in-out infinite;
 }
 
-.contact-email-link:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    text-decoration: none !important;
+@keyframes glow {
+    0%, 100% { box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); }
+    50% { box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4); }
 }
 
-.contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
+.error-message {
+    color: #ef4444;
+    margin-top: 1rem;
+    display: none;
+    animation: shake 0.5s ease;
 }
 
-.contact-link-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #6366f1;
-    text-decoration: none;
-    padding: 0.75rem 1.5rem;
-    background: #f5f3ff;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
 }
 
-.contact-link-item:hover {
-    background: #ede9fe;
-    transform: translateY(-2px);
+/* 提示 */
+.hint {
+    margin-top: 2rem;
+    color: #9ca3af;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.hint:hover {
+    color: #6b7280;
 }
 </style>
 
-<div style="max-width: 800px; margin: 0 auto;">
-    <h1 style="font-size: 2.5rem; margin-bottom: 2rem; color: #1f2937;">👋 关于 W.ai</h1>
+<div class="puzzle-container">
+    <h1 class="puzzle-title">🔐 数字谜阵</h1>
+    <p class="puzzle-subtitle">每个数字对应一个字母，破解序列获取联系方式</p>
     
-    <div class="about-section fade-in">
-        <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
-            W.ai是一个专注于深度学习、AI技术研究与科技资讯整理的博客平台。我们致力于分享前沿的AI技术、深度的研究成果和实用的技术教程，帮助开发者和AI爱好者跟上技术发展的步伐。
-        </p>
+    <!-- 数字序列展示 -->
+    <div class="number-grid">
+        <div class="number-cell">7</div>
+        <div class="number-cell">1</div>
+        <div class="number-cell">18</div>
+        <div class="number-cell">13</div>
+        <div class="number-cell">9</div>
+        <div class="number-cell">14</div>
+        <div class="number-cell">7</div>
+    </div>
+    <div class="number-grid">
+        <div class="number-cell">23</div>
+        <div class="number-cell">21</div>
+    </div>
+    <div class="number-grid">
+        <div class="number-cell">7</div>
+        <div class="number-cell">13</div>
+        <div class="number-cell">1</div>
+        <div class="number-cell">9</div>
+        <div class="number-cell">12</div>
+        <div class="number-cell">=</div>
+        <div class="number-cell">3</div>
+        <div class="number-cell">15</div>
+        <div class="number-cell">13</div>
+    </div>
+    <div class="number-grid">
+        <div class="number-cell">@</div>
+    </div>
+    <div class="number-grid">
+        <div class="number-cell">7</div>
+        <div class="number-cell">13</div>
+        <div class="number-cell">1</div>
+        <div class="number-cell">9</div>
+        <div class="number-cell">12</div>
+        <div class="number-cell">3</div>
+        <div class="number-cell">15</div>
+        <div class="number-cell">13</div>
     </div>
     
-    <div class="about-section fade-in">
-        <h2 style="font-size: 1.8rem;">🎯 我们的使命</h2>
-        <p style="font-size: 1.1rem; line-height: 1.8;">
-            致力于分享最新的AI技术动态、深度研究成果和实用技术教程，帮助开发者和AI爱好者跟上技术发展的步伐。我们相信，通过开放和共享知识，可以推动AI技术的普及和创新。
-        </p>
+    <input type="text" id="answer" class="answer-input" placeholder="输入破解的答案..." autocomplete="off">
+    
+    <br>
+    
+    <button class="submit-btn" onclick="checkAnswer()">🔓 解锁答案</button>
+    
+    <p class="error-message" id="error">❌ 再试一次，字母顺序很重要！</p>
+    
+    <!-- 正确答案展示 -->
+    <div class="result-container" id="result">
+        <div class="result-icon">🎉</div>
+        <div class="result-title">✨ 恭喜破解！✨</div>
+        <a href="mailto:garming.wu@gmail.com" class="email-display">
+            <span>✉️</span>
+            <span>garming.wu@gmail.com</span>
+        </a>
     </div>
     
-    <div class="about-section fade-in">
-        <h2 style="font-size: 1.8rem;">📚 内容方向</h2>
-        <ul style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-            <li style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="font-size: 1.5rem; margin-top: 0.2rem;">🤖</span>
-                <div>
-                    <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #1f2937;">AI技术研究与解读</h3>
-                    <p style="color: #6b7280; font-size: 0.95rem;">深入解析最新AI技术论文、算法模型和研究成果</p>
-                </div>
-            </li>
-            <li style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="font-size: 1.5rem; margin-top: 0.2rem;">🔧</span>
-                <div>
-                    <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #1f2937;">OpenClaw平台使用指南</h3>
-                    <p style="color: #6b7280; font-size: 0.95rem;">分享OpenClaw AI Agent平台的使用技巧和最佳实践</p>
-                </div>
-            </li>
-            <li style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="font-size: 1.5rem; margin-top: 0.2rem;">🧠</span>
-                <div>
-                    <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #1f2937;">深度学习算法与应用</h3>
-                    <p style="color: #6b7280; font-size: 0.95rem;">讲解深度学习算法原理和实际应用案例</p>
-                </div>
-            </li>
-            <li style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="font-size: 1.5rem; margin-top: 0.2rem;">📰</span>
-                <div>
-                    <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #1f2937;">科技资讯与行业动态</h3>
-                    <p style="color: #6b7280; font-size: 0.95rem;">追踪全球AI科技发展趋势和行业动态</p>
-                </div>
-            </li>
-            <li style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="font-size: 1.5rem; margin-top: 0.2rem;">💻</span>
-                <div>
-                    <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #1f2937;">编程技巧与开发工具</h3>
-                    <p style="color: #6b7280; font-size: 0.95rem;">分享实用的编程技巧和高效的开发工具</p>
-                </div>
-            </li>
-        </ul>
-    </div>
-    
-    <div class="about-section fade-in">
-        <h2 style="font-size: 1.8rem;">📞 联系方式</h2>
-        
-        <!-- 醒目的联系邮箱 -->
-        <div class="contact-email-box">
-            <h3>📧 联系我们</h3>
-            <a href="mailto:garming.wu@gmail.com" class="contact-email-link">
-                <span>✉️</span>
-                <span>garming.wu@gmail.com</span>
-            </a>
-        </div>
-        
-        <!-- 其他联系方式 -->
-        <div class="contact-links">
-            <a href="https://github.com/wujiaming88" target="_blank" rel="noopener noreferrer" class="contact-link-item">
-                <span>🐙</span>
-                <span>GitHub</span>
-            </a>
-        </div>
-    </div>
+    <p class="hint" onclick="toggleHint()">💡 提示：26个英文字母对应1-26</p>
+    <p id="hint-text" style="display:none; color: #9ca3af; margin-top: 0.5rem;">A=1, B=2, ..., Z=26</p>
 </div>
+
+<script>
+function checkAnswer() {
+    const answer = document.getElementById('answer').value.toLowerCase().trim();
+    const correctAnswers = [
+        'garming.wu@gmail.com',
+        'garming.wu@gmail.com',
+        'garming.wu@gmail.com',
+        'garmingwu@gmail.com'
+    ];
+    
+    if (correctAnswers.includes(answer)) {
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('error').style.display = 'none';
+        document.getElementById('answer').style.display = 'none';
+        document.querySelector('.submit-btn').style.display = 'none';
+        document.querySelector('.hint').style.display = 'none';
+        document.getElementById('hint-text').style.display = 'none';
+        
+        // 添加庆祝音效（可选）
+        playCelebration();
+    } else {
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('result').style.display = 'none';
+    }
+}
+
+function toggleHint() {
+    const hintText = document.getElementById('hint-text');
+    hintText.style.display = hintText.style.display === 'none' ? 'block' : 'none';
+}
+
+// 支持回车提交
+document.getElementById('answer').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkAnswer();
+    }
+});
+
+function playCelebration() {
+    // 可以添加音效，这里暂时用视觉动画替代
+    console.log('🎉 恭喜找到联系方式！');
+}
+</script>
