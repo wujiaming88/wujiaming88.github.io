@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Claude Code 深度研究：从终端到企业级AI开发平台"
 date: 2026-03-07 18:00:00 +0000
 categories: AI 编程
