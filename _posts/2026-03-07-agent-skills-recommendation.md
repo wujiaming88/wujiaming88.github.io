@@ -1,5 +1,5 @@
 ---
-title: "500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的"外挂"，让你的 AI 助手原地起飞！"
+title: '500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的"外挂"，让你的 AI 助手原地起飞！'
 date: 2026-03-07 17:45:00 +0800
 categories: [AI技术]
 tags: [Agent, Claude, GPT, AI, Skills, 开源]
