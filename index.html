@@ -3,126 +3,424 @@ layout: default
 title: W.ai - 深度技术研究博客
 ---
 
-<!-- 英雄区 -->
-<div class="hero" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem;">
-    <h1 style="font-size: 2.5rem; margin-bottom: 1rem; font-weight: bold;">🎯 W.ai</h1>
-    <p style="font-size: 1.2rem; opacity: 0.95; margin-bottom: 0;">深度学习、AI技术研究与科技资讯整理</p>
+<!-- 全新 Hero 区 - 极客 Terminal 风格 -->
+<div class="hero-terminal">
+    <div class="terminal-header">
+        <div class="terminal-buttons">
+            <span class="terminal-btn close"></span>
+            <span class="terminal-btn minimize"></span>
+            <span class="terminal-btn maximize"></span>
+        </div>
+        <span class="terminal-title">wai@blog:~$ ./run.sh</span>
+    </div>
+    <div class="terminal-body">
+        <div class="terminal-line">
+            <span class="prompt">❯</span>
+            <span class="command">whoami</span>
+        </div>
+        <div class="terminal-output">W.ai - 深度技术研究与科技博客</div>
+        <div class="terminal-line">
+            <span class="prompt">❯</span>
+            <span class="command">cat ./topics.txt</span>
+        </div>
+        <div class="terminal-output topics">
+            <span class="topic-tag">AI</span>
+            <span class="topic-tag">深度学习</span>
+            <span class="topic-tag">算法</span>
+            <span class="topic-tag">工程实践</span>
+            <span class="topic-tag">工具</span>
+        </div>
+        <div class="terminal-line cursor-line">
+            <span class="prompt">❯</span>
+            <span class="cursor">▋</span>
+        </div>
+    </div>
 </div>
 
-<div class="container" style="display: flex; gap: 2rem; max-width: 1800px; margin: 0 auto; padding: 0 2rem;">
-    <!-- 主内容区 -->
-    <div class="main-content" style="flex: 1;">
-        <h2 class="section-title" style="font-size: 1.8rem; margin: 0 0 1.5rem 0; color: var(--text-primary); font-weight: bold; border-bottom: 3px solid #667eea; padding-bottom: 0.5rem;">📰 最新文章</h2>
+<!-- 主内容区 - 紧凑布局 -->
+<div class="content-wrapper">
+    <section class="posts-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="title-icon">📝</span>
+                最新文章
+            </h2>
+            <span class="post-count">{{ site.posts.size }} 篇</span>
+        </div>
         
         <div class="post-list">
             {% for post in site.posts %}
-            <article class="post-card fade-in">
-                <div style="display: flex; gap: 2rem; background-color: rgba(30, 30, 30, 0.5); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.3s ease;">
-                    <img class="lazyload" data-src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=200&fit=crop" alt="{{ post.title }}" style="width: 300px; height: 200px; object-fit: cover; background: #f5f5f5; flex-shrink: 0;">
-                    <div style="flex: 1; padding: 2rem;">
-                        <h3 class="post-card-title" style="font-size: 1.5rem; margin: 0 0 0.75rem 0; font-weight: bold; line-height: 1.4;">
-                            <a href="{{ post.url | relative_url }}" style="color: var(--text-primary); text-decoration: none;">{{ post.title }}</a>
-                        </h3>
-                        <div class="post-card-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem; display: flex; gap: 1rem; align-items: center;">
-                            <span>{{ post.date | date: '%Y年%m月%d日' }}</span>
-                            <span>•</span>
-                            <span>{{ post.categories | first }}</span>
+            <article class="post-card">
+                <a href="{{ post.url | relative_url }}" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        {% if post.image %}
+                        <img src="{{ post.image }}" alt="{{ post.title }}" class="post-image" loading="lazy">
+                        {% else %}
+                        <div class="post-image-placeholder">
+                            <span>{% if post.categories %}{{ post.categories | first }}{% else %}技术{% endif %}</span>
                         </div>
-                        <p class="post-card-excerpt" style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">
-                            {{ post.excerpt | strip_html | truncate: 200 }}
-                        </p>
+                        {% endif %}
                     </div>
-                </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%Y.%m.%d' }}</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">{% if post.categories %}{{ post.categories | first }}{% else %}技术{% endif %}</span>
+                        </div>
+                        <h3 class="post-title">{{ post.title }}</h3>
+                        <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            {% if post.tags %}
+                            <div class="post-tags-mini">
+                                {% for tag in post.tags limit:2 %}
+                                <span class="tag-mini">#{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
             </article>
             {% endfor %}
         </div>
         
         <!-- 分页 -->
         {% if paginator.total_pages > 1 %}
-        <div style="margin-top: 3rem; text-align: center;">
-            <nav class="pagination" style="display: inline-flex; gap: 0.5rem; background-color: rgba(30, 30, 30, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem;">
-                {% if paginator.previous_page %}
-                <a href="{{ paginator.previous_page_path | relative_url }}" style="padding: 0.5rem 1rem; border-radius: 4px; color: var(--text-primary); text-decoration: none; transition: background-color 0.2s ease;">← 上一页</a>
-                {% else %}
-                <span style="padding: 0.5rem 1rem; border-radius: 4px; color: var(--text-secondary); cursor: not-allowed;">← 上一页</span>
-                {% endif %}
-                
-                {% for page in (1..paginator.total_pages) %}
-                    {% if page == paginator.page %}
-                    <span style="padding: 0.5rem 1rem; border-radius: 4px; background-color: var(--link-color); color: white; font-weight: 500;">{{ page }}</span>
-                    {% elsif page == 1 %}
-                    <a href="{{ '/' | relative_url }}" style="padding: 0.5rem 1rem; border-radius: 4px; color: var(--text-primary); text-decoration: none; transition: background-color 0.2s ease;">{{ page }}</a>
-                    {% else %}
-                    <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}" style="padding: 0.5rem 1rem; border-radius: 4px; color: var(--text-primary); text-decoration: none; transition: background-color 0.2s ease;">{{ page }}</a>
-                    {% endif %}
-                {% endfor %}
-                
-                {% if paginator.next_page %}
-                <a href="{{ paginator.next_page_path | relative_url }}" style="padding: 0.5rem 1rem; border-radius: 4px; color: var(--text-primary); text-decoration: none; transition: background-color 0.2s ease;">下一页 →</a>
-                {% else %}
-                <span style="padding: 0.5rem 1rem; border-radius: 4px; color: var(--text-secondary); cursor: not-allowed;">下一页 →</span>
-                {% endif %}
-            </nav>
-        </div>
+        <nav class="pagination">
+            {% if paginator.previous_page %}
+            <a href="{{ paginator.previous_page_path | relative_url }}" class="page-btn">← 上一页</a>
+            {% endif %}
+            
+            <span class="page-info">{{ paginator.page }} / {{ paginator.total_pages }}</span>
+            
+            {% if paginator.next_page %}
+            <a href="{{ paginator.next_page_path | relative_url }}" class="page-btn">下一页 →</a>
+            {% endif %}
+        </nav>
         {% endif %}
-    </div>
+    </section>
     
-    <!-- 侧边栏 -->
-    <div class="sidebar" style="width: 380px; position: sticky; top: 2rem; height: fit-content;">
-        <div class="sidebar-section" style="background-color: rgba(30, 30, 30, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-            <h3 class="sidebar-title" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid #667eea; padding-bottom: 0.5rem;">🔍 搜索</h3>
-            <input type="text" class="search-box" placeholder="搜索文章..." id="search-input" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; background-color: var(--bg-primary); color: var(--text-primary); margin-bottom: 1rem;">
-        </div>
-        
-        <div class="sidebar-section" style="background-color: rgba(30, 30, 30, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-            <h3 class="sidebar-title" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid #667eea; padding-bottom: 0.5rem;">📂 文章分类</h3>
-            {% assign categories = site.categories | sort %}
-            <ul class="category-list" style="list-style: none; padding: 0; margin: 0;">
-                {% for category in categories %}
-                <li class="category-list-item" style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
-                    <a href="{{ category[0] | slugify | prepend: '/categories/' | append: '.html' | relative_url }}" style="color: var(--text-secondary); text-decoration: none; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s ease;">
-                        <span>{{ category[0] }}</span>
-                        <span style="background: #667eea; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 500;">{{ category[1].size }}</span>
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        
-        <div class="sidebar-section" style="background-color: rgba(30, 30, 30, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-            <h3 class="sidebar-title" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid #667eea; padding-bottom: 0.5rem;">#️⃣ 热门标签</h3>
-            {% assign tags = site.tags | sort %}
-            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                {% for tag in tags %}
-                <a href="{{ tag[0] | slugify | prepend: '/tags/' | append: '.html' | relative_url }}" style="color: var(--text-secondary); text-decoration: none; padding: 0.4rem 0.8rem; background-color: rgba(66, 165, 245, 0.1); border: 1px solid var(--border-color); border-radius: 20px; font-size: 0.9rem; transition: all 0.2s ease;">
-                    #{{ tag[0] }} ({{ tag[1].size }})
-                </a>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+    <!-- 底部信息 -->
+    <footer class="site-footer">
+        <p>基于 <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> 构建 · © {{ site.time | date: '%Y' }} {{ site.title }}</p>
+    </footer>
 </div>
 
-<script>
-// 搜索功能
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const posts = document.querySelectorAll('.post-card');
-            
-            posts.forEach(post => {
-                const title = post.querySelector('.post-card-title a').textContent.toLowerCase();
-                const excerpt = post.querySelector('.post-card-excerpt')?.textContent.toLowerCase() || '';
-                
-                if (title.includes(searchTerm) || excerpt.includes(searchTerm)) {
-                    post.style.display = 'block';
-                } else {
-                    post.style.display = 'none';
-                }
-            });
-        });
+<style>
+/* Hero Terminal 样式 */
+.hero-terminal {
+    background: #0d1117;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.terminal-header {
+    background: #161b22;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid #30363d;
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.terminal-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.terminal-btn.close { background: #ff5f56; }
+.terminal-btn.minimize { background: #ffbd2e; }
+.terminal-btn.maximize { background: #27ca40; }
+
+.terminal-title {
+    color: #8b949e;
+    font-size: 0.85rem;
+}
+
+.terminal-body {
+    padding: 1.5rem;
+    color: #c9d1d9;
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+.terminal-line {
+    margin-bottom: 0.25rem;
+}
+
+.prompt {
+    color: #58a6ff;
+    margin-right: 0.75rem;
+}
+
+.command {
+    color: #c9d1d9;
+}
+
+.terminal-output {
+    color: #7ee787;
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.topops {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.topic-tag {
+    background: #21262d;
+    color: #58a6ff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid #30363d;
+}
+
+.cursor {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* 内容区域 - 紧凑布局 */
+.content-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #30363d;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #f0f6fc;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.title-icon {
+    font-size: 1.25rem;
+}
+
+.post-count {
+    color: #8b949e;
+    font-size: 0.9rem;
+}
+
+/* 文章卡片 - 垂直布局 */
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.post-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.post-card:hover {
+    border-color: #58a6ff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.post-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-image-wrapper {
+    height: 200px;
+    overflow: hidden;
+    background: #21262d;
+}
+
+.post-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.post-card:hover .post-image {
+    transform: scale(1.05);
+}
+
+.post-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #21262d 0%, #30363d 100%);
+    color: #8b949e;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.post-content {
+    padding: 1.5rem;
+}
+
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #8b949e;
+    margin-bottom: 0.75rem;
+}
+
+.meta-sep {
+    color: #484f58;
+}
+
+.post-category {
+    color: #58a6ff;
+    font-weight: 500;
+}
+
+.post-title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #f0f6fc;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.4;
+    border: none;
+    padding: 0;
+}
+
+.post-excerpt {
+    color: #8b949e;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
+}
+
+.post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.read-more {
+    color: #58a6ff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.post-card:hover .read-more {
+    color: #79c0ff;
+}
+
+.post-tags-mini {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tag-mini {
+    color: #8b949e;
+    font-size: 0.8rem;
+    background: #21262d;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+}
+
+/* 分页 */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #30363d;
+}
+
+.page-btn {
+    color: #58a6ff;
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover {
+    background: #21262d;
+}
+
+.page-info {
+    color: #8b949e;
+    font-size: 0.9rem;
+}
+
+/* 页脚 */
+.site-footer {
+    text-align: center;
+    padding: 3rem 0;
+    color: #8b949e;
+    font-size: 0.9rem;
+}
+
+.site-footer a {
+    color: #58a6ff;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .terminal-body {
+        padding: 1rem;
+        font-size: 0.85rem;
     }
-});
-</script>
+    
+    .content-wrapper {
+        padding: 0 1rem;
+    }
+    
+    .post-image-wrapper {
+        height: 180px;
+    }
+    
+    .post-content {
+        padding: 1.25rem;
+    }
+    
+    .post-title {
+        font-size: 1.2rem;
+    }
+}
+</style>
