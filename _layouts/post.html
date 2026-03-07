@@ -7,6 +7,16 @@ layout: default
 <main class="page-content" aria-label="Content">
   <div class="wrapper">
     <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+      <!-- 文章封面图 -->
+      {% if page.cover_image %}
+      <div class="post-cover">
+        <img src="{{ page.cover_image | relative_url }}" alt="{{ page.title }}" class="cover-image">
+        {% if page.cover_caption %}
+        <p class="cover-caption">{{ page.cover_caption }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
+
       <!-- 文章标题区 -->
       <div class="post-header">
         <h1 class="post-title p-name" itemprop="name headline">
@@ -49,6 +59,31 @@ layout: default
         <!-- 分享按钮 -->
         {% include share_buttons.html %}
       </footer>
+
+      <!-- 上下篇导航 -->
+      <div class="post-nav-container">
+        {% if page.previous %}
+        <div class="post-nav-item left">
+          <a href="{{ page.previous.url | relative_url }}">
+            <span class="post-nav-label">👈 上一篇</span>
+            <span class="post-nav-title">{{ page.previous.title }}</span>
+          </a>
+        </div>
+        {% endif %}
+        
+        {% if page.previous and page.next %}
+        <div class="post-nav-divider"></div>
+        {% endif %}
+        
+        {% if page.next %}
+        <div class="post-nav-item right">
+          <a href="{{ page.next.url | relative_url }}">
+            <span class="post-nav-label">下一篇 👉</span>
+            <span class="post-nav-title">{{ page.next.title }}</span>
+          </a>
+        </div>
+        {% endif %}
+      </div>
 
       <!-- 相似文章推荐 -->
       {% if page.categories or page.tags %}
@@ -122,7 +157,9 @@ layout: default
         <div class="related-posts-grid">
           {% for post in sorted_posts limit: 4 %}
           <a href="{{ post.url | relative_url }}" class="related-post-card">
-            {% if post.header.overlay_image %}
+            {% if post.cover_image %}
+            <div class="related-post-image" style="background-image: url('{{ post.cover_image | relative_url }}')"></div>
+            {% elsif post.header.overlay_image %}
             <div class="related-post-image" style="background-image: url('{{ post.header.overlay_image }}')"></div>
             {% else %}
             <div class="related-post-image related-post-image-placeholder"></div>
@@ -154,4 +191,3 @@ layout: default
     </article>
   </div>
 </main>
-
