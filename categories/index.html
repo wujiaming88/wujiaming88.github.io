@@ -1,0 +1,100 @@
+---
+layout: default
+title: 分类
+permalink: /categories/
+---
+
+<!-- 分类页面样式 -->
+<style>
+    .page-header {
+        text-align: center;
+        padding: 2rem 0 3rem;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        border: none;
+    }
+
+    .page-header p {
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+
+    /* 分类卡片网格 */
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+        padding: 1rem 0;
+    }
+
+    .category-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .category-card:hover {
+        border-color: var(--link-color);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-3px);
+    }
+
+    .category-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .category-count {
+        background: linear-gradient(135deg, var(--link-color) 0%, var(--link-hover) 100%);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    /* 空状态 */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-secondary);
+    }
+
+    .empty-state h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="page-header">
+    <h1>文章分类</h1>
+    <p>按主题浏览所有文章</p>
+</div>
+
+{% if site.categories.size > 0 %}
+    <div class="category-grid">
+        {% assign sorted_categories = site.categories | sort %}
+        {% for category in sorted_categories %}
+            <a href="{{ '/categories/' | append: category[0] | relative_url }}" class="category-card">
+                <span class="category-name">{{ category[0] }}</span>
+                <span class="category-count">{{ category[1].size }} 篇</span>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>暂无分类</h2>
+        <p>正在整理文章中...</p>
+    </div>
+{% endif %}
