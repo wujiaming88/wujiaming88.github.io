@@ -172,8 +172,9 @@ code {
     border-bottom: 1px solid #e5e7eb;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     z-index: 1000;
-    padding: 1rem 0;
+    padding: 0.75rem 0;
     transition: background-color 0.3s ease;
+    height: 70px;
 }
 
 .navbar-content {
@@ -223,8 +224,8 @@ code {
 
 /* 主内容区 */
 .main-content {
-    margin-top: 80px;
-    padding: 1.5rem 0;
+    margin-top: 70px;
+    padding: 0.5rem 0;
     min-height: calc(100vh - 120px);
 }
 
@@ -570,7 +571,7 @@ a:focus, button:focus, input:focus {
 .footer {
     background-color: #f8f9fa;
     border-top: 1px solid #e5e7eb;
-    padding: 0.75rem 0;
+    padding: 0.5rem 0;
     margin-top: 0.5rem;
     text-align: center;
     color: #6b7280;
