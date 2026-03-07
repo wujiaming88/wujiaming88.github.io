@@ -38,15 +38,27 @@ layout: default
     text-decoration: underline;
 }
 
-/* 分享按钮 */
+/* 分享按钮 - 与相似文章统一风格 */
 .share-section {
-    margin-top: 2rem;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     text-align: center;
 }
 
-.share-section p {
-    color: #6b7280;
-    margin-bottom: 1rem;
+.share-section h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
 }
 
 .share-buttons {
@@ -61,22 +73,35 @@ layout: default
     color: white;
     border-radius: 8px;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    font-weight: 500;
 }
 
 .share-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
 }
 
-.share-btn.twitter { background-color: #1da1f2; }
-.share-btn.facebook { background-color: #3b5998; }
-.share-btn.linkedin { background-color: #0077b5; }
-.share-btn.copy { background-color: #6366f1; cursor: pointer; border: none; }
-.share-btn.copy:hover { background-color: #4f46e5; }
+.share-btn.twitter { background: linear-gradient(135deg, #1da1f2 0%, #0d8ecf 100%); }
+.share-btn.facebook { background: linear-gradient(135deg, #3b5998 0%, #2d4373 100%); }
+.share-btn.linkedin { background: linear-gradient(135deg, #0077b5 0%, #005582 100%); }
+.share-btn.copy { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); cursor: pointer; border: none; }
+.share-btn.copy:hover { background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%); }
+
+@media (max-width: 768px) {
+    .share-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    .share-btn {
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+    }
+}
 
 /* 相似文章推荐 */
 .related-posts {
@@ -249,7 +274,7 @@ layout: default
 
   <!-- 分享按钮 -->
   <div class="share-section">
-    <p>分享这篇文章：</p>
+    <h3>📤 分享这篇文章</h3>
     <div class="share-buttons">
       <a href="https://twitter.com/intent/tweet?url={{ site.url }}{{ page.url }}&text={{ page.title | url_encode }}" target="_blank" rel="noopener noreferrer" class="share-btn twitter">
         🐦 Twitter
