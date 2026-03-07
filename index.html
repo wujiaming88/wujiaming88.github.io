@@ -63,7 +63,7 @@ title: W.ai - 深度技术研究博客
             <button class="clear-search-btn" onclick="clearSearch()">清除搜索</button>
         </div>
         
-        <div class="post-list">
+        <div class="post-list" id="postList">
             {% for post in site.posts %}
             <article class="post-card">
                 <a href="{{ post.url | relative_url }}" class="post-card-link">
@@ -408,6 +408,23 @@ mark {
     background: var(--accent-primary);
     color: white;
     border-color: var(--accent-primary);
+}
+
+/* 无结果提示 */
+.no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+}
+
+.no-results p {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.no-results-hint {
+    font-size: 0.9rem !important;
+    color: var(--text-tertiary) !important;
 }
 
 /* 代码块装饰 */
@@ -890,7 +907,7 @@ const searchResultInfo = document.getElementById('searchResultInfo');
 const searchResultText = document.getElementById('searchResultText');
 const postCount = document.getElementById('postCount');
 const postListTitle = document.getElementById('postListTitle');
-const postList = document.querySelector('.post-list');
+const postList = document.getElementById('postList');
 
 let currentSearchTerm = '';
 

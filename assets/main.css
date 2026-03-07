@@ -167,9 +167,10 @@ code {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #1e293b;
+    background-color: #ffffff;
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     z-index: 1000;
     padding: 1rem 0;
     transition: background-color 0.3s ease;
@@ -187,12 +188,12 @@ code {
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #ffffff;
+    color: #1f2937;
     text-decoration: none;
 }
 
 .navbar-brand:hover {
-    color: #60a5fa;
+    color: #6366f1;
 }
 
 .navbar-nav {
@@ -203,7 +204,7 @@ code {
 }
 
 .nav-link {
-    color: #e2e8f0;
+    color: #6b7280;
     font-size: 1rem;
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -211,29 +212,13 @@ code {
 }
 
 .nav-link:hover {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.1);
+    color: #1f2937;
+    background-color: #f3f4f6;
 }
 
 .nav-link.active {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.15);
-}
-
-.theme-toggle {
-    background: none;
-    border: none;
-    color: #e2e8f0;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.theme-toggle:hover {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.1);
+    color: #1f2937;
+    background-color: #e5e7eb;
 }
 
 /* 主内容区 */
@@ -534,18 +519,6 @@ img.lazyloaded {
     background: var(--text-secondary);
 }
 
-body.light-theme ::-webkit-scrollbar-track {
-    background: var(--light-bg-primary);
-}
-
-body.light-theme ::-webkit-scrollbar-thumb {
-    background: var(--light-border-color);
-}
-
-body.light-theme ::-webkit-scrollbar-thumb:hover {
-    background: var(--light-text-secondary);
-}
-
 /* 无障碍设计 */
 a:focus, button:focus, input:focus {
     outline: 2px solid var(--link-color);
@@ -593,51 +566,27 @@ a:focus, button:focus, input:focus {
     background-color: var(--card-bg);
 }
 
-/* 浅色主题 - 导航栏 */
-body.light-theme .navbar {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-body.light-theme .navbar-brand {
-    color: #1f2937;
-}
-
-body.light-theme .navbar-brand:hover {
-    color: #2563eb;
-}
-
-body.light-theme .nav-link {
-    color: #4b5563;
-}
-
-body.light-theme .nav-link:hover {
-    color: #1f2937;
-    background-color: #f3f4f6;
-}
-
-body.light-theme .nav-link.active {
-    color: #1f2937;
-    background-color: #e5e7eb;
-}
-
-body.light-theme .theme-toggle {
-    color: #4b5563;
-}
-
-body.light-theme .theme-toggle:hover {
-    color: #1f2937;
-    background-color: #f3f4f6;
-}
-
-/* 浅色主题 - 页脚 */
-body.light-theme .footer {
+/* 页脚样式 */
+.footer {
     background-color: #f3f4f6;
     border-top: 1px solid #e5e7eb;
-    color: #4b5563;
+    padding: 2rem 0;
+    margin-top: 3rem;
+    text-align: center;
+    color: #6b7280;
 }
 
-body.light-theme .footer a {
-    color: #2563eb;
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.footer a {
+    color: #6366f1;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
 }
