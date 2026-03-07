@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "改进Skill-Creator：测试、衡量和优化Agent Skills"
 date: 2026-03-05 14:00:00 +0000
 categories: AI 技术研究

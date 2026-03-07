@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "基于OpenClaw搭建虚拟公司：完整架构指南"
 date:   2026-03-07 14:10:00 +0800
 categories: openclaw 虚拟公司 技术架构

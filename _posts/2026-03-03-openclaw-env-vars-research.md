@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "OpenClaw环境变量加载和使用机制研究"
 date: 2026-03-03 04:29:00 +0000
 categories: OpenClaw 技术研究

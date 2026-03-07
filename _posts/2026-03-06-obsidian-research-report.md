@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "Obsidian研究报告：本地优先的知识管理工具"
 date:   2026-03-06 09:37:00 +0800
 categories: 工具评测 知识管理
