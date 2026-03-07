@@ -257,6 +257,9 @@ pre[class*="language-"] {
     width: 100%;
     border-collapse: collapse;
     margin: 1.5rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .post-content th,
@@ -267,12 +270,106 @@ pre[class*="language-"] {
 }
 
 .post-content th {
-    background: #f9fafb;
+    background: #6366f1;
+    color: #fff;
     font-weight: 600;
+    text-align: left;
 }
 
 .post-content tr:nth-child(even) {
     background: #f9fafb;
+}
+
+.post-content tr:hover {
+    background: #f0f1f7;
+}
+
+/* 表格响应式滚动 */
+.post-content .table-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.post-content .table-wrapper table {
+    margin: 0;
+    min-width: 100%;
+}
+
+/* 视频容器 */
+.post-content .video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.post-content .video-container iframe,
+.post-content .video-container video,
+.post-content .video-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* B站视频特殊处理 */
+.post-content .video-container.bilibili {
+    padding-bottom: 0;
+    height: auto;
+}
+
+.post-content .video-container.bilibili iframe {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+/* 音频样式 */
+.post-content audio {
+    width: 100%;
+    margin: 1rem 0;
+    border-radius: 20px;
+    outline: none;
+}
+
+/* 图片画廊 */
+.post-content .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.post-content .gallery img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.post-content .gallery img:hover {
+    transform: scale(1.05);
+}
+
+/* 图片说明文字 */
+.post-content figure {
+    margin: 1.5rem 0;
+}
+
+.post-content figcaption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6b7280;
+    padding: 0.5rem;
+    font-style: italic;
 }
 
 /* 文章头部 */
