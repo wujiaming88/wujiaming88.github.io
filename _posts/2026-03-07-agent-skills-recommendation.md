@@ -8,6 +8,8 @@ header:
   caption: "AI 助手技能升级"
 ---
 
+# 500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的"外挂"，让你的 AI 助手原地起飞！
+
 > **警告**: 阅读本文后，你的 AI 助手可能会变得比你还聪明。
 
 ---
