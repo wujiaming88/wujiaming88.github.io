@@ -3,41 +3,39 @@ layout: default
 title: W.ai - 深度技术研究博客
 ---
 
-<!-- 全新 Hero 区 - 极客 Terminal 风格 -->
-<div class="hero-terminal">
-    <div class="terminal-header">
-        <div class="terminal-buttons">
-            <span class="terminal-btn close"></span>
-            <span class="terminal-btn minimize"></span>
-            <span class="terminal-btn maximize"></span>
+<!-- Hero 区 - 明亮极客风格 -->
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-icon">⚡</span>
+            <span>深度技术研究</span>
         </div>
-        <span class="terminal-title">wai@blog:~$ ./run.sh</span>
+        <h1 class="hero-title">W.ai</h1>
+        <p class="hero-subtitle">探索AI技术 · 记录深度研究 · 分享科技洞察</p>
+        <div class="hero-tags">
+            <span class="tag">AI</span>
+            <span class="tag">深度学习</span>
+            <span class="tag">OpenClaw</span>
+            <span class="tag">工程实践</span>
+        </div>
     </div>
-    <div class="terminal-body">
-        <div class="terminal-line">
-            <span class="prompt">❯</span>
-            <span class="command">whoami</span>
-        </div>
-        <div class="terminal-output">W.ai - 深度技术研究与科技博客</div>
-        <div class="terminal-line">
-            <span class="prompt">❯</span>
-            <span class="command">cat ./topics.txt</span>
-        </div>
-        <div class="terminal-output topics">
-            <span class="topic-tag">AI</span>
-            <span class="topic-tag">深度学习</span>
-            <span class="topic-tag">算法</span>
-            <span class="topic-tag">工程实践</span>
-            <span class="topic-tag">工具</span>
-        </div>
-        <div class="terminal-line cursor-line">
-            <span class="prompt">❯</span>
-            <span class="cursor">▋</span>
+    <div class="hero-decoration">
+        <div class="code-block">
+            <div class="code-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <pre><code><span class="keyword">const</span> <span class="var">blog</span> = {
+  <span class="prop">topic</span>: <span class="string">"深度技术研究"</span>,
+  <span class="prop">focus</span>: [<span class="string">"AI"</span>, <span class="string">"LLM"</span>, <span class="string">"Agent"</span>],
+  <span class="prop">author</span>: <span class="string">"W.ai Team"</span>
+};</code></pre>
         </div>
     </div>
 </div>
 
-<!-- 主内容区 - 紧凑布局 -->
+<!-- 主内容区 -->
 <div class="content-wrapper">
     <section class="posts-section">
         <div class="section-header">
@@ -53,13 +51,14 @@ title: W.ai - 深度技术研究博客
             <article class="post-card">
                 <a href="{{ post.url | relative_url }}" class="post-card-link">
                     <div class="post-image-wrapper">
-                        {% if post.image %}
-                        <img src="{{ post.image }}" alt="{{ post.title }}" class="post-image" loading="lazy">
+                        {% if post.header.overlay_image %}
+                        <img src="{{ post.header.overlay_image }}" alt="{{ post.title }}" class="post-image" loading="lazy">
                         {% else %}
                         <div class="post-image-placeholder">
                             <span>{% if post.categories %}{{ post.categories | first }}{% else %}技术{% endif %}</span>
                         </div>
                         {% endif %}
+                        <div class="image-overlay"></div>
                     </div>
                     <div class="post-content">
                         <div class="post-meta">
@@ -101,107 +100,179 @@ title: W.ai - 深度技术研究博客
         {% endif %}
     </section>
     
-    <!-- 底部信息 -->
+    <!-- 页脚 -->
     <footer class="site-footer">
         <p>基于 <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> 构建 · © {{ site.time | date: '%Y' }} {{ site.title }}</p>
     </footer>
 </div>
 
 <style>
-/* Hero Terminal 样式 */
-.hero-terminal {
-    background: #0d1117;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 3rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+/* 明亮极客主题 - 全局变量 */
+:root {
+    --bg-primary: #fafbfc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f3f4f6;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9ca3af;
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --border-color: #e5e7eb;
+    --border-light: #f3f4f6;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
 }
 
-.terminal-header {
-    background: #161b22;
-    padding: 0.75rem 1rem;
+/* 页面基础 */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hero 区域 */
+.hero-section {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 4rem 2rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    border-bottom: 1px solid #30363d;
+    justify-content: center;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
 }
 
-.terminal-buttons {
+.hero-content {
+    text-align: center;
+    flex: 1;
+    min-width: 300px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-tertiary);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.badge-icon {
+    font-size: 1rem;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0 0 1rem 0;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin: 0 0 1.5rem 0;
+    font-weight: 400;
+}
+
+.hero-tags {
     display: flex;
-    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
 }
 
-.terminal-btn {
+.tag {
+    background: var(--bg-secondary);
+    color: var(--accent-primary);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.tag:hover {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+/* 代码块装饰 */
+.hero-decoration {
+    flex: 1;
+    min-width: 300px;
+    max-width: 450px;
+}
+
+.code-block {
+    background: #1e293b;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.code-header {
+    background: #0f172a;
+    padding: 0.75rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
 }
 
-.terminal-btn.close { background: #ff5f56; }
-.terminal-btn.minimize { background: #ffbd2e; }
-.terminal-btn.maximize { background: #27ca40; }
+.dot.red { background: #ef4444; }
+.dot.yellow { background: #f59e0b; }
+.dot.green { background: #22c55e; }
 
-.terminal-title {
-    color: #8b949e;
-    font-size: 0.85rem;
+.code-block pre {
+    margin: 0;
+    padding: 1.25rem;
+    overflow-x: auto;
 }
 
-.terminal-body {
-    padding: 1.5rem;
-    color: #c9d1d9;
-    font-size: 0.95rem;
-    line-height: 1.8;
+.code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: #e2e8f0;
+    line-height: 1.7;
 }
 
-.terminal-line {
-    margin-bottom: 0.25rem;
-}
+.keyword { color: #c084fc; }
+.var { color: #38bdf8; }
+.prop { color: #fbbf24; }
+.string { color: #34d399; }
 
-.prompt {
-    color: #58a6ff;
-    margin-right: 0.75rem;
-}
-
-.command {
-    color: #c9d1d9;
-}
-
-.terminal-output {
-    color: #7ee787;
-    margin-bottom: 1rem;
-    padding-left: 1.5rem;
-}
-
-.topops {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.topic-tag {
-    background: #21262d;
-    color: #58a6ff;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    border: 1px solid #30363d;
-}
-
-.cursor {
-    animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-    50% { opacity: 0; }
-}
-
-/* 内容区域 - 紧凑布局 */
+/* 内容区域 */
 .content-wrapper {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 3rem 1.5rem;
 }
 
 .section-header {
@@ -210,19 +281,19 @@ title: W.ai - 深度技术研究博客
     justify-content: space-between;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid #30363d;
+    border-bottom: 2px solid var(--border-color);
 }
 
 .section-title {
     font-size: 1.5rem;
-    font-weight: 600;
-    color: #f0f6fc;
+    font-weight: 700;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    margin: 0;
     border: none;
     padding: 0;
-    margin: 0;
 }
 
 .title-icon {
@@ -230,11 +301,11 @@ title: W.ai - 深度技术研究博客
 }
 
 .post-count {
-    color: #8b949e;
+    color: var(--text-tertiary);
     font-size: 0.9rem;
 }
 
-/* 文章卡片 - 垂直布局 */
+/* 文章卡片 */
 .post-list {
     display: flex;
     flex-direction: column;
@@ -242,17 +313,17 @@ title: W.ai - 深度技术研究博客
 }
 
 .post-card {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .post-card:hover {
-    border-color: #58a6ff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
 }
 
 .post-card-link {
@@ -262,20 +333,30 @@ title: W.ai - 深度技术研究博客
 }
 
 .post-image-wrapper {
-    height: 200px;
+    height: 220px;
     overflow: hidden;
-    background: #21262d;
+    background: var(--bg-tertiary);
+    position: relative;
 }
 
 .post-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.5s ease;
 }
 
 .post-card:hover .post-image {
-    transform: scale(1.05);
+    transform: scale(1.08);
+}
+
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
 }
 
 .post-image-placeholder {
@@ -284,8 +365,8 @@ title: W.ai - 深度技术研究博客
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #21262d 0%, #30363d 100%);
-    color: #8b949e;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: var(--text-tertiary);
     font-size: 1.25rem;
     font-weight: 500;
 }
@@ -299,31 +380,36 @@ title: W.ai - 深度技术研究博客
     align-items: center;
     gap: 0.5rem;
     font-size: 0.85rem;
-    color: #8b949e;
+    color: var(--text-tertiary);
     margin-bottom: 0.75rem;
 }
 
 .meta-sep {
-    color: #484f58;
+    color: var(--border-color);
 }
 
 .post-category {
-    color: #58a6ff;
-    font-weight: 500;
+    color: var(--accent-primary);
+    font-weight: 600;
 }
 
 .post-title {
     font-size: 1.35rem;
-    font-weight: 600;
-    color: #f0f6fc;
+    font-weight: 700;
+    color: var(--text-primary);
     margin: 0 0 0.75rem 0;
     line-height: 1.4;
     border: none;
     padding: 0;
+    transition: color 0.2s ease;
+}
+
+.post-card:hover .post-title {
+    color: var(--accent-primary);
 }
 
 .post-excerpt {
-    color: #8b949e;
+    color: var(--text-secondary);
     font-size: 0.95rem;
     line-height: 1.7;
     margin: 0 0 1rem 0;
@@ -336,14 +422,14 @@ title: W.ai - 深度技术研究博客
 }
 
 .read-more {
-    color: #58a6ff;
+    color: var(--accent-primary);
     font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.2s ease;
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
 
 .post-card:hover .read-more {
-    color: #79c0ff;
+    transform: translateX(4px);
 }
 
 .post-tags-mini {
@@ -352,9 +438,9 @@ title: W.ai - 深度技术研究博客
 }
 
 .tag-mini {
-    color: #8b949e;
+    color: var(--text-tertiary);
     font-size: 0.8rem;
-    background: #21262d;
+    background: var(--bg-tertiary);
     padding: 0.2rem 0.6rem;
     border-radius: 4px;
 }
@@ -367,24 +453,28 @@ title: W.ai - 深度技术研究博客
     gap: 1.5rem;
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 1px solid #30363d;
+    border-top: 1px solid var(--border-color);
 }
 
 .page-btn {
-    color: #58a6ff;
+    color: var(--accent-primary);
     font-size: 0.95rem;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
     transition: all 0.2s ease;
+    background: var(--bg-secondary);
 }
 
 .page-btn:hover {
-    background: #21262d;
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
 }
 
 .page-info {
-    color: #8b949e;
+    color: var(--text-tertiary);
     font-size: 0.9rem;
 }
 
@@ -392,23 +482,42 @@ title: W.ai - 深度技术研究博客
 .site-footer {
     text-align: center;
     padding: 3rem 0;
-    color: #8b949e;
+    color: var(--text-tertiary);
     font-size: 0.9rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 3rem;
 }
 
 .site-footer a {
-    color: #58a6ff;
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
 }
 
 /* 响应式 */
 @media (max-width: 768px) {
-    .terminal-body {
-        padding: 1rem;
-        font-size: 0.85rem;
+    .hero-section {
+        padding: 2rem 1rem;
+        gap: 2rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero-decoration {
+        display: none;
     }
     
     .content-wrapper {
-        padding: 0 1rem;
+        padding: 2rem 1rem;
     }
     
     .post-image-wrapper {
@@ -420,7 +529,7 @@ title: W.ai - 深度技术研究博客
     }
     
     .post-title {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
     }
 }
 </style>

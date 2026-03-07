@@ -3,6 +3,10 @@ layout: post
 title:  "Obsidian研究报告：本地优先的知识管理工具"
 date:   2026-03-06 09:37:00 +0800
 categories: 工具评测 知识管理
+header:
+  overlay_image: https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=400&fit=crop
+  overlay_filter: 0.6
+  caption: "Obsidian"
 ---
 
 # Obsidian研究报告

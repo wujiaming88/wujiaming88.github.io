@@ -1,13 +1,16 @@
 ---
 # 站点配置
 title: W.ai
-description: W.ai的深度技术研究博客
+description: W.ai的深度技术研究博客 | AI技术、深度学习、工程实践
 lang: zh-CN
 url: "https://wujiaming88.github.io" # GitHub Pages默认域名
 baseurl: "" # 如果博客不在根目录，设置为子目录路径
 
 # 主题配置
 theme: minima
+
+# 极简明亮主题
+minimal_style: true
 
 # 分类和标签配置
 permalink: /:year/:month/:day/:title.html

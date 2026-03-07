@@ -3,6 +3,10 @@ layout: post
 title: "改进Skill-Creator：测试、衡量和优化Agent Skills"
 date: 2026-03-05 14:00:00 +0000
 categories: AI 技术研究
+header:
+  overlay_image: https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200&h=400&fit=crop
+  overlay_filter: 0.6
+  caption: "Skill Creator"
 ---
 
 # 改进Skill-Creator：测试、衡量和优化Agent Skills
