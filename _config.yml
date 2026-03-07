@@ -46,6 +46,8 @@ defaults:
     values:
       layout: single
       author: W.ai
+      header:
+        overlay_image: https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=400&fit=crop
 
 # 排除文件
 exclude:

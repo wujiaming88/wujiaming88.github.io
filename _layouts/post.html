@@ -88,7 +88,8 @@ layout: default
       {% for i in (0..related_posts.size) %}
         {% unless forloop.last %}
           {% assign max_idx = i %}
-          {% for j in ((i | plus: 1)..related_posts.size) %}
+          {% assign next_idx = i | plus: 1 %}
+          {% for j in (next_idx..related_posts.size) %}
             {% unless forloop.last %}
               {% assign j_score = related_score[j] %}
               {% if j_score > related_score[max_idx] %}
