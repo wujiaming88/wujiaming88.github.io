@@ -29,6 +29,15 @@ paginate_path: "/page/:num/"
 # Markdown设置
 markdown: kramdown
 
+# Kramdown配置 - 启用代码行号
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    line_numbers: true
+    line_number_start: 1
+    line_number_anchors: false
+    css_class: 'code-content'
+
 # 默认值
 defaults:
   - scope:

@@ -18,16 +18,39 @@ pre[class*="language-"] {
     hyphens: none;
 }
 
-/* 代码块容器 - 带复制按钮 */
+/* 代码块容器 - 带复制按钮和行号 */
 pre[class*="language-"] {
     padding: 1.5rem;
     padding-top: 2.5rem;
+    padding-left: 4rem;
     margin: 1.5rem 0;
     overflow: auto;
     border-radius: 12px;
     background: #1e293b;
     position: relative;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* 行号显示 */
+.code-line-numbers {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3rem;
+    padding: 2.5rem 0.5rem 1.5rem 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: right;
+    user-select: none;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #5c6370;
+    border-radius: 12px 0 0 12px;
+}
+
+.code-line-number {
+    display: block;
 }
 
 /* 复制按钮 */
@@ -323,16 +346,46 @@ pre[class*="language-"] {
     pre[class*="language-"] {
         padding: 1rem;
         padding-top: 2rem;
+        padding-left: 3rem;
         font-size: 0.85rem;
+    }
+    
+    /* 移动端行号隐藏（可选） */
+    .code-line-numbers {
+        width: 2.5rem;
+        padding: 2rem 0.3rem 1rem 0;
+        font-size: 0.75rem;
     }
 }
 </style>
 
-<!-- Prism.js 复制按钮功能 -->
+<!-- Prism.js 复制按钮功能 + 行号生成 -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 为所有代码块添加复制按钮
+    // 为所有代码块添加复制按钮和行号
     document.querySelectorAll('pre[class*="language-"]').forEach(function(pre) {
+        // 获取代码内容
+        var code = pre.querySelector('code');
+        if (!code) return;
+        
+        var codeText = code.textContent || code.innerText;
+        var lines = codeText.split('\n');
+        var lineCount = lines.length;
+        
+        // 创建行号容器
+        var lineNumbers = document.createElement('div');
+        lineNumbers.className = 'code-line-numbers';
+        
+        // 生成行号
+        for (var i = 1; i <= lineCount; i++) {
+            var lineNum = document.createElement('span');
+            lineNum.className = 'code-line-number';
+            lineNum.textContent = i;
+            lineNumbers.appendChild(lineNum);
+        }
+        
+        pre.appendChild(lineNumbers);
+        
         // 创建复制按钮
         var btn = document.createElement('button');
         btn.className = 'code-copy-btn';
@@ -340,25 +393,22 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 添加点击事件
         btn.addEventListener('click', function() {
-            var code = pre.querySelector('code');
-            if (code) {
-                var text = code.textContent || code.innerText;
+            var text = code.textContent || code.innerText;
+            
+            navigator.clipboard.writeText(text).then(function() {
+                btn.textContent = '已复制!';
+                btn.classList.add('copied');
                 
-                navigator.clipboard.writeText(text).then(function() {
-                    btn.textContent = '已复制!';
-                    btn.classList.add('copied');
-                    
-                    setTimeout(function() {
-                        btn.textContent = '复制';
-                        btn.classList.remove('copied');
-                    }, 2000);
-                }).catch(function(err) {
-                    btn.textContent = '复制失败';
-                    setTimeout(function() {
-                        btn.textContent = '复制';
-                    }, 2000);
-                });
-            }
+                setTimeout(function() {
+                    btn.textContent = '复制';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                btn.textContent = '复制失败';
+                setTimeout(function() {
+                    btn.textContent = '复制';
+                }, 2000);
+            });
         });
         
         pre.appendChild(btn);
