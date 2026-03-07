@@ -1,155 +1,206 @@
----
-layout: default
-title: 文章分类
-permalink: /categories/
----
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分类与标签</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-/* 分类页面统一配色 */
-.page-section {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 2rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
 
-.page-section:hover {
-    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15);
-    border-color: #c7d2fe;
-}
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-.category-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-}
+        .page-title {
+            font-size: 2rem;
+            color: #1f2937;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
 
-.category-header h2 {
-    color: #1f2937;
-    border: none;
-    padding: 0;
-    margin: 0;
-}
+        /* Tab 切换器 */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
 
-.category-count {
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
+        .tab-btn {
+            padding: 0.75rem 2rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.category-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+        .tab-btn:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+        }
 
-.category-list li {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-}
+        .tab-btn.active {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border-color: #6366f1;
+        }
 
-.category-list li:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
+        /* 卡片列表 */
+        .card-grid {
+            display: grid;
+            gap: 1rem;
+        }
 
-.category-list a {
-    color: #1f2937;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-    display: block;
-}
+        .taxonomy-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
 
-.category-list a:hover {
-    color: #6366f1;
-}
+        .taxonomy-card:hover {
+            border-color: #c7d2fe;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+            transform: translateY(-2px);
+        }
 
-.category-date {
-    font-size: 0.85rem;
-    color: #6b7280;
-    margin-top: 0.5rem;
-    display: block;
-}
+        .card-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
 
-/* 导航卡片 */
-.nav-card {
-    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
-    border: 1px solid #c7d2fe;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-top: 3rem;
-}
+        .card-count {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
 
-.nav-card h3 {
-    color: #1f2937;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-}
+        .view-section {
+            display: none;
+        }
 
-.nav-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-
-.nav-tag {
-    color: #6366f1;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background: white;
-    border: 1px solid #e0e7ff;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-}
-
-.nav-tag:hover {
-    background: #6366f1;
-    color: white;
-    border-color: #6366f1;
-}
-</style>
-
-<div style="max-width: 800px; margin: 0 auto;">
-    <h1 style="font-size: 2.5rem; margin-bottom: 2rem; color: #1f2937;">📂 文章分类</h1>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-        {% for category in site.categories %}
-        <div class="page-section fade-in">
-            <div class="category-header">
-                <h2 style="font-size: 1.5rem;"># {{ category[0] }}</h2>
-                <span class="category-count">{{ category[1].size }} 篇</span>
+        .view-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">分类与标签</h1>
+        
+        <!-- Tab 按钮 -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('categories')">分类</button>
+            <button class="tab-btn" onclick="switchTab('tags')">标签</button>
+        </div>
+        
+        <!-- 分类列表 -->
+        <div id="categories" class="view-section active">
+            <div class="card-grid">
+                <div class="taxonomy-card">
+                    <span class="card-name">技术教程</span>
+                    <span class="card-count">12</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">产品设计</span>
+                    <span class="card-count">8</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">AI 工具</span>
+                    <span class="card-count">15</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">开发日志</span>
+                    <span class="card-count">6</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">经验分享</span>
+                    <span class="card-count">9</span>
+                </div>
             </div>
+        </div>
+        
+        <!-- 标签列表 -->
+        <div id="tags" class="view-section">
+            <div class="card-grid">
+                <div class="taxonomy-card">
+                    <span class="card-name">JavaScript</span>
+                    <span class="card-count">18</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">Python</span>
+                    <span class="card-count">14</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">AI</span>
+                    <span class="card-count">22</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">ChatGPT</span>
+                    <span class="card-count">10</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">前端</span>
+                    <span class="card-count">16</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">后端</span>
+                    <span class="card-count">11</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">DevOps</span>
+                    <span class="card-count">7</span>
+                </div>
+                <div class="taxonomy-card">
+                    <span class="card-name">效率工具</span>
+                    <span class="card-count">13</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // 隐藏所有视图
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.remove('active');
+            });
             
-            <ul class="category-list">
-                {% for post in category[1] %}
-                <li>
-                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                    <span class="category-date">📅 {{ post.date | date: '%Y年%m月%d日' }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endfor %}
-    </div>
-    
-    <!-- 分类导航 -->
-    <div class="nav-card">
-        <h3>⚡ 快速导航</h3>
-        <div class="nav-tags">
-            {% for category in site.categories %}
-            <a href="#{{ category[0] | slugify }}" class="nav-tag">{{ category[0] }} ({{ category[1].size }})</a>
-            {% endfor %}
-        </div>
-    </div>
-</div>
+            // 移除所有按钮的 active 状态
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 显示选中的视图
+            document.getElementById(tabName).classList.add('active');
+            
+            // 给当前按钮添加 active 状态
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
