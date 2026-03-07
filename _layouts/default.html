@@ -36,11 +36,6 @@
                 <li><a href="{{ '/categories/' | relative_url }}" class="nav-link {% if page.url contains 'categories' %}active{% endif %}">分类</a></li>
                 <li><a href="{{ '/tags/' | relative_url }}" class="nav-link {% if page.url contains 'tags' %}active{% endif %}">标签</a></li>
                 <li><a href="{{ '/about/' | relative_url }}" class="nav-link {% if page.url contains 'about' %}active{% endif %}">关于</a></li>
-                <li>
-                    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
-                        🌙
-                    </button>
-                </li>
             </ul>
         </div>
     </nav>
@@ -64,32 +59,6 @@
 
     <!-- JavaScript -->
     <script>
-        // 主题切换功能
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        
-        // 检查本地存储的主题偏好
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            body.classList.remove('dark-theme');
-            body.classList.add('light-theme');
-            themeToggle.textContent = '☀️';
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            if (body.classList.contains('dark-theme')) {
-                body.classList.remove('dark-theme');
-                body.classList.add('light-theme');
-                themeToggle.textContent = '☀️';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.classList.remove('light-theme');
-                body.classList.add('dark-theme');
-                themeToggle.textContent = '🌙';
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-        
         // 图片懒加载
         document.addEventListener('DOMContentLoaded', () => {
             const lazyImages = document.querySelectorAll('img.lazyload');
