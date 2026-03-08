@@ -54,7 +54,7 @@ OpenClaw 提供了两套互补的多Agent协作机制：
 
 ### 架构图
 
-```
+````text
             ┌─────────────┐
             │  Main Agent │
             └──────┬──────┘
@@ -64,7 +64,7 @@ OpenClaw 提供了两套互补的多Agent协作机制：
    ┌─────────┐ ┌─────────┐ ┌─────────┐
    │SubAgent1│ │SubAgent2│ │SubAgent3│
    └─────────┘ └─────────┘ └─────────┘
-```
+````
 
 ### 核心特性
 
@@ -128,7 +128,7 @@ const reply = await sessions_send(subAgent, { type: 'query' }, { timeoutSeconds:
 
 ### 架构图
 
-```
+````text
     ┌────────────────────────────────┐
     │         Team Workspace         │
     │  ┌──────────────────────────┐  │
@@ -142,7 +142,7 @@ const reply = await sessions_send(subAgent, { type: 'query' }, { timeoutSeconds:
     │  Agent1  Agent2  Agent3    │
     │                             │
     └─────────────────────────────┘
-```
+````
 
 ### 核心特性
 
@@ -198,7 +198,7 @@ agent.mailbox.send(targetAgent, message) // 发送消息
 
 ### 架构图
 
-```
+````text
             ┌─────────────────────────────┐
             │        Main Agent           │
             │    (Coordinator Role)       │
@@ -216,7 +216,7 @@ agent.mailbox.send(targetAgent, message) // 发送消息
    ┌─────────┐        ┌─────────┐        ┌─────────┐
    │SubAgent1│◄──────►│SubAgent2│◄──────►│SubAgent3│
    └─────────┘  文件   └─────────┘  文件   └─────────┘
-```
+````
 
 ### 实现要点
 
@@ -274,14 +274,14 @@ watchEvents('workspace/events.jsonl', (event) => {
 
 #### 2. 架构演进路径
 
-```
+````text
 Phase 1 (当前)     Phase 2 (3-6月)      Phase 3 (6-12月)
 ┌──────────────┐   ┌──────────────┐    ┌──────────────┐
 │ sessions_    │   │ 混合模式     │    │ Agent Teams  │
 │ spawn        │ → │ + 共享文件   │ → │ 正式版       │
 │ 简单场景     │   │ 复杂协作     │    │ 全面协作     │
 └──────────────┘   └──────────────┘    └──────────────┘
-```
+````
 
 #### 3. 场景适配
 

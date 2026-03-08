@@ -29,14 +29,14 @@ paginate_path: "/page/:num/"
 # Markdown设置
 markdown: kramdown
 
-# Kramdown配置 - 启用代码行号
+# Kramdown配置 - 禁用代码行号避免渲染问题
 kramdown:
   syntax_highlighter: rouge
   syntax_highlighter_opts:
-    line_numbers: true
-    line_number_start: 1
+    line_numbers: false
     line_number_anchors: false
     css_class: 'code-content'
+    default_lang: javascript
 
 # 默认值
 defaults:
