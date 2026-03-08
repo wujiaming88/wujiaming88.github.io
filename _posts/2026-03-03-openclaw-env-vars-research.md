@@ -3,7 +3,7 @@ title: "OpenClaw环境变量加载和使用机制研究"
 date: 2026-03-03 04:29:00 +0000
 categories: OpenClaw 技术研究
 header:
-  overlay_image: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=400&fit=crop
+  overlay_image: https://picsum.photos/1200/400?random=1555066931-4365d14bab8c?w=1200&h=400&fit=crop
   overlay_filter: 0.6
   caption: "Environment Variables"
 ---

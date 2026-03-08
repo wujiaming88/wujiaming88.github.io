@@ -4,7 +4,7 @@ date: 2026-03-07 12:00:00 +0000
 categories: [AI, Technology, Weekly]
 tags: [AI, 人工智能, 周报, 全球AI动态]
 header:
-  overlay_image: https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=400&fit=crop
+  overlay_image: https://picsum.photos/1200/400?random=1677442136019-21780ecad995?w=1200&h=400&fit=crop
   overlay_filter: 0.6
   caption: "全球AI动态周报 (2026.03.01-03.07)"
 ---

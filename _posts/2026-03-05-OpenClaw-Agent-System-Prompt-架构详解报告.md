@@ -3,7 +3,7 @@ title:  "OpenClaw Agent System Prompt 架构详解报告"
 date:   2026-03-05 14:43:00 +0800
 categories: openclaw 技术研究
 header:
-  overlay_image: https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=400&fit=crop
+  overlay_image: https://picsum.photos/1200/400?random=1526374965328-7f61d4dc18c5?w=1200&h=400&fit=crop
   overlay_filter: 0.6
   caption: "System Prompt"
 ---
