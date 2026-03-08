@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W.ai - 深度技术研究博客</title>
+    <meta name="description" content="W.ai的深度技术研究博客 | AI技术、深度学习、工程实践">
+    
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- 引入主样式 -->
+    <link rel="stylesheet" href="/assets/main.css">
+    
+    <!-- SEO标签 -->
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>W.ai - 深度技术研究博客 | W.ai</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="W.ai - 深度技术研究博客" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="W.ai的深度技术研究博客 AI技术、深度学习、工程实践" />
+<meta property="og:description" content="W.ai的深度技术研究博客 AI技术、深度学习、工程实践" />
+<link rel="canonical" href="https://wujiaming88.github.io/" />
+<meta property="og:url" content="https://wujiaming88.github.io/" />
+<meta property="og:site_name" content="W.ai" />
+<meta property="og:type" content="website" />
+<link rel="next" href="https://wujiaming88.github.io/page/2/" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="W.ai - 深度技术研究博客" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"W.ai的深度技术研究博客 AI技术、深度学习、工程实践","headline":"W.ai - 深度技术研究博客","name":"W.ai","url":"https://wujiaming88.github.io/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    
+    <!-- 站点图标 -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="navbar-brand">
+                W.ai
+            </a>
+            
+            <ul class="navbar-nav">
+                <li><a href="/" class="nav-link active">首页</a></li>
+                <li><a href="/categories/" class="nav-link ">分类</a></li>
+                <li><a href="/tags/" class="nav-link ">标签</a></li>
+                <li><a href="/about/" class="nav-link ">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero 区 - 明亮极客风格 -->
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-icon">⚡</span>
+            <span>深度技术研究</span>
+        </div>
+        <h1 class="hero-title">W.ai</h1>
+        <p class="hero-subtitle">探索AI技术 · 记录深度研究 · 分享科技洞察</p>
+        
+        <!-- 搜索框 -->
+        <div class="search-wrapper">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索文章标题、分类、标签..." autocomplete="off">
+                <span class="search-shortcut">⌘K</span>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+        
+        <div class="hero-tags">
+            <span class="tag">AI</span>
+            <span class="tag">深度学习</span>
+            <span class="tag">OpenClaw</span>
+            <span class="tag">工程实践</span>
+        </div>
+    </div>
+    <div class="hero-decoration">
+        <div class="code-block">
+            <div class="code-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <pre><code><span class="keyword">const</span> <span class="var">blog</span> = {
+  <span class="prop">topic</span>: <span class="string">"深度技术研究"</span>,
+  <span class="prop">focus</span>: [<span class="string">"AI"</span>, <span class="string">"LLM"</span>, <span class="string">"Agent"</span>],
+  <span class="prop">author</span>: <span class="string">"W.ai Team"</span>
+};</code></pre>
+        </div>
+    </div>
+</div>
+
+<!-- 主内容区 -->
+<div class="content-wrapper">
+    <section class="posts-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="title-icon">📝</span>
+                <span id="postListTitle">最新文章</span>
+            </h2>
+            <span class="post-count" id="postCount">18 篇</span>
+        </div>
+        
+        <!-- 搜索结果提示 -->
+        <div class="search-result-info" id="searchResultInfo" style="display: none;">
+            <span id="searchResultText"></span>
+            <button class="clear-search-btn" onclick="clearSearch()">清除搜索</button>
+        </div>
+        
+        <div class="post-list" id="postList">
+            
+            <article class="post-card">
+                <a href="/2026/03/08/telegram-multi-bot-group-collaboration.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=8" alt="Telegram 多Bot群组协作配置研究" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-08">2026.03.08</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">telegram</span>
+                        </div>
+                        <h3 class="post-title">Telegram 多Bot群组协作配置研究</h3>
+                        <p class="post-excerpt">Telegram 多Bot群组协作配置研究
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#telegram</span>
+                                
+                                <span class="tag-mini">#openclaw</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/08/openclaw-multi-agent-research.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1454165804606-c3d57bc86b40?w=1200&h=400&fit=crop" alt="OpenClaw 多Agent协作模式技术架构" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-08">2026.03.08</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">openclaw</span>
+                        </div>
+                        <h3 class="post-title">OpenClaw 多Agent协作模式技术架构</h3>
+                        <p class="post-excerpt">OpenClaw 多Agent协作模式技术架构
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#openclaw</span>
+                                
+                                <span class="tag-mini">#多Agent</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/07/claude-code-deep-research.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1555066931-4365d14bab8c?w=1200&h=600&fit=crop" alt="Claude Code 深度研究：从终端到企业级AI开发平台" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-07">2026.03.07</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">AI</span>
+                        </div>
+                        <h3 class="post-title">Claude Code 深度研究：从终端到企业级AI开发平台</h3>
+                        <p class="post-excerpt">Claude Code 深度研究：从终端到企业级AI开发平台，以及它与 OpenClaw 的”化学反应”
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/07/global-ai-weekly.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1677442136019-21780ecad995?w=1200&h=400&fit=crop" alt="全球AI动态周报（2026年3月1日-3月7日）" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-07">2026.03.07</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">AI</span>
+                        </div>
+                        <h3 class="post-title">全球AI动态周报（2026年3月1日-3月7日）</h3>
+                        <p class="post-excerpt">全球AI动态周报
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#AI</span>
+                                
+                                <span class="tag-mini">#人工智能</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/07/agent-skills-recommendation.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1677442136019-21780ecad995?w=1200&h=400&fit=crop" alt="500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的"外挂"，让你的 AI 助手原地起飞！" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-07">2026.03.07</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">AI技术</span>
+                        </div>
+                        <h3 class="post-title">500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的"外挂"，让你的 AI 助手原地起飞！</h3>
+                        <p class="post-excerpt">500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的”外挂”，让你的 AI 助手原地起飞！
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#Agent</span>
+                                
+                                <span class="tag-mini">#Claude</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/07/skillsbench-paper-research.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1620712943543-bcc4688e7485?w=1200&h=400&fit=crop" alt="SkillsBench论文研究：Agent Skills有效性的系统性评估" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-07">2026.03.07</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">AI</span>
+                        </div>
+                        <h3 class="post-title">SkillsBench论文研究：Agent Skills有效性的系统性评估</h3>
+                        <p class="post-excerpt">SkillsBench论文研究报告
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#AI研究</span>
+                                
+                                <span class="tag-mini">#论文</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/07/openclaw-virtual-company.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1497366216548-37526070297c?w=1200&h=400&fit=crop" alt="基于OpenClaw搭建虚拟公司：完整架构指南" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-07">2026.03.07</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">openclaw</span>
+                        </div>
+                        <h3 class="post-title">基于OpenClaw搭建虚拟公司：完整架构指南</h3>
+                        <p class="post-excerpt">基于OpenClaw搭建虚拟公司：完整架构指南
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#openclaw</span>
+                                
+                                <span class="tag-mini">#虚拟公司</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/06/news-broadcast.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1504711434969-e33886168f5c?w=1200&h=400&fit=crop" alt="2026年3月6日新闻联播主要内容" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-06">2026.03.06</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">news</span>
+                        </div>
+                        <h3 class="post-title">2026年3月6日新闻联播主要内容</h3>
+                        <p class="post-excerpt">2026年3月6日新闻联播主要内容
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#News Broadcast</span>
+                                
+                                <span class="tag-mini">#Politics</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/06/obsidian-research-report.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1499750310107-5fef28a66643?w=1200&h=400&fit=crop" alt="Obsidian研究报告：本地优先的知识管理工具" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-06">2026.03.06</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">工具评测</span>
+                        </div>
+                        <h3 class="post-title">Obsidian研究报告：本地优先的知识管理工具</h3>
+                        <p class="post-excerpt">Obsidian研究报告
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/05/skill-creator-improvements-translation.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1555949963-aa79dcee981c?w=1200&h=400&fit=crop" alt="改进Skill-Creator：测试、衡量和优化Agent Skills" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-05">2026.03.05</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">AI</span>
+                        </div>
+                        <h3 class="post-title">改进Skill-Creator：测试、衡量和优化Agent Skills</h3>
+                        <p class="post-excerpt">改进Skill-Creator：测试、衡量和优化Agent Skills
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1526374965328-7f61d4dc18c5?w=1200&h=400&fit=crop" alt="OpenClaw Agent System Prompt 架构详解报告" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-05">2026.03.05</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">openclaw</span>
+                        </div>
+                        <h3 class="post-title">OpenClaw Agent System Prompt 架构详解报告</h3>
+                        <p class="post-excerpt">OpenClaw Agent System Prompt 架构详解报告
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/03/openclaw-2026.3.2-update.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1461749280684-dccba630e2f6?w=1200&h=400&fit=crop" alt="OpenClaw 2026.3.2 版本更新详解" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-03">2026.03.03</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">OpenClaw</span>
+                        </div>
+                        <h3 class="post-title">OpenClaw 2026.3.2 版本更新详解</h3>
+                        <p class="post-excerpt">OpenClaw 2026.3.2 版本更新详解
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/03/openclaw-env-vars-research.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1555066931-4365d14bab8c?w=1200&h=400&fit=crop" alt="OpenClaw环境变量加载和使用机制研究" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-03">2026.03.03</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">OpenClaw</span>
+                        </div>
+                        <h3 class="post-title">OpenClaw环境变量加载和使用机制研究</h3>
+                        <p class="post-excerpt">OpenClaw环境变量加载和使用机制研究报告
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/02/github-trend-analysis.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1556075798-4825dfaaf498?w=1200&h=400&fit=crop" alt="卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-02">2026.03.02</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">TechTrends</span>
+                        </div>
+                        <h3 class="post-title">卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）</h3>
+                        <p class="post-excerpt">
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#AI</span>
+                                
+                                <span class="tag-mini">#Open Source</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/02/openclaw-2026-3-1-update-analysis.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1518432031352-d6fc5c10da5a?w=1200&h=400&fit=crop" alt="OpenClaw 2026.3.1 版本深度解析：移动端能力飞跃与飞书深度集成" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-02">2026.03.02</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">Technology</span>
+                        </div>
+                        <h3 class="post-title">OpenClaw 2026.3.1 版本深度解析：移动端能力飞跃与飞书深度集成</h3>
+                        <p class="post-excerpt">
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#OpenClaw</span>
+                                
+                                <span class="tag-mini">#Version Update</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/02/global-ai-tech-news-weekly.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1620712943543-bcc4688e7485?w=1200&h=400&fit=crop" alt="全球AI科技资讯周报" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-02">2026.03.02</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">AI</span>
+                        </div>
+                        <h3 class="post-title">全球AI科技资讯周报</h3>
+                        <p class="post-excerpt">全球AI科技资讯周报
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#AI</span>
+                                
+                                <span class="tag-mini">#科技资讯</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/03/01/us-iran-news.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1532375810709-75b1da00537c?w=1200&h=400&fit=crop" alt="2026年3月1日美国对伊朗军事行动最新新闻汇总" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-03-01">2026.03.01</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">news</span>
+                        </div>
+                        <h3 class="post-title">2026年3月1日美国对伊朗军事行动最新新闻汇总</h3>
+                        <p class="post-excerpt">2026年3月1日美国对伊朗军事行动最新新闻汇总
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#International News</span>
+                                
+                                <span class="tag-mini">#Military</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+            <article class="post-card">
+                <a href="/2026/02/28/news-broadcast.html" class="post-card-link">
+                    <div class="post-image-wrapper">
+                        
+                        <img src="https://picsum.photos/1200/400?random=1504711434969-e33886168f5c?w=1200&h=400&fit=crop" alt="2026年2月28日新闻联播主要内容" class="post-image" loading="lazy">
+                        
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <time datetime="2026-02-28">2026.02.28</time>
+                            <span class="meta-sep">·</span>
+                            <span class="post-category">news</span>
+                        </div>
+                        <h3 class="post-title">2026年2月28日新闻联播主要内容</h3>
+                        <p class="post-excerpt">2026年2月28日新闻联播主要内容
+</p>
+                        <div class="post-footer">
+                            <span class="read-more">阅读全文 →</span>
+                            
+                            <div class="post-tags-mini">
+                                
+                                <span class="tag-mini">#News Broadcast</span>
+                                
+                                <span class="tag-mini">#Politics</span>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </a>
+            </article>
+            
+        </div>
+        
+        <!-- 分页 -->
+        
+        <nav class="pagination">
+            
+            
+            <span class="page-info">1 / 2</span>
+            
+            
+            <a href="/page/2/" class="page-btn">下一页 →</a>
+            
+        </nav>
+        
+    </section>
+</div>
+
+<style>
+/* 明亮极客主题 - 全局变量 */
+:root {
+    --bg-primary: #fafbfc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f3f4f6;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9ca3af;
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --border-color: #e5e7eb;
+    --border-light: #f3f4f6;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+}
+
+/* 页面基础 */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hero 区域 */
+.hero-section {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 3rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.hero-content {
+    text-align: center;
+    flex: 1;
+    min-width: 300px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-tertiary);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.badge-icon {
+    font-size: 1rem;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0 0 1rem 0;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin: 0 0 1.5rem 0;
+    font-weight: 400;
+}
+
+.hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.tag {
+    background: var(--bg-secondary);
+    color: var(--accent-primary);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.tag:hover {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+/* 搜索框样式 */
+.search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.search-box:focus-within {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+.search-icon {
+    font-size: 1.1rem;
+    margin-right: 0.75rem;
+    opacity: 0.6;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: var(--text-primary);
+    outline: none;
+    font-family: var(--font-sans);
+}
+
+.search-input::placeholder {
+    color: var(--text-tertiary);
+}
+
+.search-shortcut {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    background: var(--bg-tertiary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+/* 搜索结果下拉 */
+.search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.search-result-item .result-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.search-result-item .result-meta {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+}
+
+.search-result-item .result-excerpt {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    line-height: 1.5;
+}
+
+/* 搜索结果提示 */
+.search-result-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-secondary);
+    border: 1px solid var(--accent-primary);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.clear-search-btn {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+/* 搜索高亮 */
+mark {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--accent-primary);
+    padding: 0.1rem 0.3rem;
+    border-radius: 2px;
+}
+
+/* 更多结果 */
+.search-more {
+    text-align: center;
+    color: var(--accent-primary);
+    font-weight: 500;
+}
+    background: var(--bg-tertiary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.clear-search-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+/* 无结果提示 */
+.no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+}
+
+.no-results p {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.no-results-hint {
+    font-size: 0.9rem !important;
+    color: var(--text-tertiary) !important;
+}
+
+/* 代码块装饰 */
+.hero-decoration {
+    flex: 1;
+    min-width: 300px;
+    max-width: 450px;
+}
+
+.code-block {
+    background: #1e293b;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.code-header {
+    background: #0f172a;
+    padding: 0.75rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot.red { background: #ef4444; }
+.dot.yellow { background: #f59e0b; }
+.dot.green { background: #22c55e; }
+
+.code-block pre {
+    margin: 0;
+    padding: 1.25rem;
+    overflow-x: auto;
+}
+
+.code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: #e2e8f0;
+    line-height: 1.7;
+}
+
+.keyword { color: #c084fc; }
+.var { color: #38bdf8; }
+.prop { color: #fbbf24; }
+.string { color: #34d399; }
+
+/* 内容区域 */
+.content-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 1rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.title-icon {
+    font-size: 1.25rem;
+}
+
+.post-count {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+}
+
+/* 文章卡片 */
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.post-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.post-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.post-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-image-wrapper {
+    height: 220px;
+    overflow: hidden;
+    background: var(--bg-tertiary);
+    position: relative;
+}
+
+.post-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.post-card:hover .post-image {
+    transform: scale(1.08);
+}
+
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+}
+
+.post-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: var(--text-tertiary);
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.post-content {
+    padding: 1.5rem;
+}
+
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    margin-bottom: 0.75rem;
+}
+
+.meta-sep {
+    color: var(--border-color);
+}
+
+.post-category {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+.post-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.4;
+    border: none;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.post-card:hover .post-title {
+    color: var(--accent-primary);
+}
+
+.post-excerpt {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
+}
+
+.post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.read-more {
+    color: var(--accent-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.post-card:hover .read-more {
+    transform: translateX(4px);
+}
+
+.post-tags-mini {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tag-mini {
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+    background: var(--bg-tertiary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+}
+
+/* 分页 */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.page-btn {
+    color: var(--accent-primary);
+    font-size: 0.9rem;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    background: var(--bg-secondary);
+}
+
+.page-btn:hover {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+.page-info {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+}
+
+/* 页脚 - 使用全局样式，无需重复定义 */
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2rem 1rem;
+        gap: 2rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero-decoration {
+        display: none;
+    }
+    
+    .content-wrapper {
+        padding: 2rem 1rem;
+    }
+    
+    .post-image-wrapper {
+        height: 180px;
+    }
+    
+    .post-content {
+        padding: 1.25rem;
+    }
+    
+    .post-title {
+        font-size: 1.15rem;
+    }
+}
+</style>
+
+<script>
+// 文章数据 - 由Jekyll模板生成
+const postsData = [
+    
+    {
+        title: "Telegram 多Bot群组协作配置研究",
+        url: "/2026/03/08/telegram-multi-bot-group-collaboration.html",
+        date: "2026.03.08",
+        category: "telegram",
+        excerpt: "Telegram 多Bot群组协作配置研究
+",
+        tags: ["telegram", "openclaw", "多Bot", "群组协作", "配置"]
+    }, 
+    
+    {
+        title: "OpenClaw 多Agent协作模式技术架构",
+        url: "/2026/03/08/openclaw-multi-agent-research.html",
+        date: "2026.03.08",
+        category: "openclaw",
+        excerpt: "OpenClaw 多Agent协作模式技术架构
+",
+        tags: ["openclaw", "多Agent", "协作模式", "技术架构", "研究"]
+    }, 
+    
+    {
+        title: "Claude Code 深度研究：从终端到企业级AI开发平台",
+        url: "/2026/03/07/claude-code-deep-research.html",
+        date: "2026.03.07",
+        category: "AI",
+        excerpt: "Claude Code 深度研究：从终端到企业级AI开发平台，以及它与 OpenClaw 的”化学反应”
+",
+        tags: []
+    }, 
+    
+    {
+        title: "全球AI动态周报（2026年3月1日-3月7日）",
+        url: "/2026/03/07/global-ai-weekly.html",
+        date: "2026.03.07",
+        category: "AI",
+        excerpt: "全球AI动态周报
+",
+        tags: ["AI", "人工智能", "周报", "全球AI动态"]
+    }, 
+    
+    {
+        title: "500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的&quot;外挂&quot;，让你的 AI 助手原地起飞！",
+        url: "/2026/03/07/agent-skills-recommendation.html",
+        date: "2026.03.07",
+        category: "AI技术",
+        excerpt: "500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的”外挂”，让你的 AI 助手原地起飞！
+",
+        tags: ["Agent", "Claude", "GPT", "AI", "Skills", "开源"]
+    }, 
+    
+    {
+        title: "SkillsBench论文研究：Agent Skills有效性的系统性评估",
+        url: "/2026/03/07/skillsbench-paper-research.html",
+        date: "2026.03.07",
+        category: "AI",
+        excerpt: "SkillsBench论文研究报告
+",
+        tags: ["AI研究", "论文", "Agent", "Skills"]
+    }, 
+    
+    {
+        title: "基于OpenClaw搭建虚拟公司：完整架构指南",
+        url: "/2026/03/07/openclaw-virtual-company.html",
+        date: "2026.03.07",
+        category: "openclaw",
+        excerpt: "基于OpenClaw搭建虚拟公司：完整架构指南
+",
+        tags: ["openclaw", "虚拟公司", "多Agent协作", "团队协作"]
+    }, 
+    
+    {
+        title: "2026年3月6日新闻联播主要内容",
+        url: "/2026/03/06/news-broadcast.html",
+        date: "2026.03.06",
+        category: "news",
+        excerpt: "2026年3月6日新闻联播主要内容
+",
+        tags: ["News Broadcast", "Politics", "Two Sessions", "Economy"]
+    }, 
+    
+    {
+        title: "Obsidian研究报告：本地优先的知识管理工具",
+        url: "/2026/03/06/obsidian-research-report.html",
+        date: "2026.03.06",
+        category: "工具评测",
+        excerpt: "Obsidian研究报告
+",
+        tags: []
+    }, 
+    
+    {
+        title: "改进Skill-Creator：测试、衡量和优化Agent Skills",
+        url: "/2026/03/05/skill-creator-improvements-translation.html",
+        date: "2026.03.05",
+        category: "AI",
+        excerpt: "改进Skill-Creator：测试、衡量和优化Agent Skills
+",
+        tags: []
+    }, 
+    
+    {
+        title: "OpenClaw Agent System Prompt 架构详解报告",
+        url: "/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html",
+        date: "2026.03.05",
+        category: "openclaw",
+        excerpt: "OpenClaw Agent System Prompt 架构详解报告
+",
+        tags: []
+    }, 
+    
+    {
+        title: "OpenClaw 2026.3.2 版本更新详解",
+        url: "/2026/03/03/openclaw-2026.3.2-update.html",
+        date: "2026.03.03",
+        category: "OpenClaw",
+        excerpt: "OpenClaw 2026.3.2 版本更新详解
+",
+        tags: []
+    }, 
+    
+    {
+        title: "OpenClaw环境变量加载和使用机制研究",
+        url: "/2026/03/03/openclaw-env-vars-research.html",
+        date: "2026.03.03",
+        category: "OpenClaw",
+        excerpt: "OpenClaw环境变量加载和使用机制研究报告
+",
+        tags: []
+    }, 
+    
+    {
+        title: "卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）",
+        url: "/2026/03/02/github-trend-analysis.html",
+        date: "2026.03.02",
+        category: "TechTrends",
+        excerpt: "
+",
+        tags: ["AI", "Open Source", "Technical Analysis"]
+    }, 
+    
+    {
+        title: "OpenClaw 2026.3.1 版本深度解析：移动端能力飞跃与飞书深度集成",
+        url: "/2026/03/02/openclaw-2026-3-1-update-analysis.html",
+        date: "2026.03.02",
+        category: "Technology",
+        excerpt: "
+",
+        tags: ["OpenClaw", "Version Update", "Android", "Feishu", "AI"]
+    }, 
+    
+    {
+        title: "全球AI科技资讯周报",
+        url: "/2026/03/02/global-ai-tech-news-weekly.html",
+        date: "2026.03.02",
+        category: "AI",
+        excerpt: "全球AI科技资讯周报
+",
+        tags: ["AI", "科技资讯", "周报"]
+    }, 
+    
+    {
+        title: "2026年3月1日美国对伊朗军事行动最新新闻汇总",
+        url: "/2026/03/01/us-iran-news.html",
+        date: "2026.03.01",
+        category: "news",
+        excerpt: "2026年3月1日美国对伊朗军事行动最新新闻汇总
+",
+        tags: ["International News", "Military", "Iran", "United States"]
+    }, 
+    
+    {
+        title: "2026年2月28日新闻联播主要内容",
+        url: "/2026/02/28/news-broadcast.html",
+        date: "2026.02.28",
+        category: "news",
+        excerpt: "2026年2月28日新闻联播主要内容
+",
+        tags: ["News Broadcast", "Politics"]
+    }
+    
+];
+
+// 搜索功能
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+const searchResultInfo = document.getElementById('searchResultInfo');
+const searchResultText = document.getElementById('searchResultText');
+const postListTitle = document.getElementById('postListTitle');
+const postCount = document.getElementById('postCount');
+const postCards = document.querySelectorAll('.post-card');
+
+let currentSearchTerm = '';
+
+// 防抖搜索
+let searchTimeout;
+searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        performSearch(e.target.value);
+    }, 300);
+});
+
+// 点击外部关闭搜索结果
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-wrapper')) {
+        searchResults.classList.remove('active');
+    }
+});
+
+// 搜索快捷键 ⌘K
+document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+    }
+    if (e.key === 'Escape') {
+        searchInput.blur();
+        searchResults.classList.remove('active');
+    }
+});
+
+function performSearch(term) {
+    currentSearchTerm = term.trim().toLowerCase();
+    
+    if (!currentSearchTerm) {
+        clearSearch();
+        return;
+    }
+    
+    // 过滤文章
+    const filteredPosts = postsData.filter(post => {
+        return post.title.toLowerCase().includes(currentSearchTerm) ||
+               post.category.toLowerCase().includes(currentSearchTerm) ||
+               post.tags.some(tag => tag.toLowerCase().includes(currentSearchTerm)) ||
+               post.excerpt.toLowerCase().includes(currentSearchTerm);
+    });
+    
+    // 显示搜索结果数量
+    searchResultInfo.style.display = 'flex';
+    searchResultText.textContent = `找到 ${filteredPosts.length} 篇与"${term}"相关的文章`;
+    
+    // 更新文章列表标题
+    postListTitle.textContent = '搜索结果';
+    postCount.textContent = `${filteredPosts.length} 篇`;
+    
+    // 筛选显示文章卡片
+    postCards.forEach(card => {
+        const title = card.querySelector('.post-title').textContent.toLowerCase();
+        const category = card.querySelector('.post-category').textContent.toLowerCase();
+        const excerpt = card.querySelector('.post-excerpt').textContent.toLowerCase();
+        
+        const isMatch = title.includes(currentSearchTerm) || 
+                       category.includes(currentSearchTerm) || 
+                       excerpt.includes(currentSearchTerm);
+        
+        card.style.display = isMatch ? '' : 'none';
+    });
+    
+    // 显示下拉搜索结果
+    if (filteredPosts.length > 0 && currentSearchTerm.length > 0) {
+        showSearchDropdown(filteredPosts);
+    } else {
+        searchResults.classList.remove('active');
+    }
+}
+
+function showSearchDropdown(posts) {
+    searchResults.innerHTML = posts.slice(0, 5).map(post => `
+        <a href="${post.url}" class="search-result-item">
+            <div class="result-title">${highlightMatch(post.title)}</div>
+            <div class="result-meta">${post.date} · ${post.category}</div>
+            <div class="result-excerpt">${post.excerpt}</div>
+        </a>
+    `).join('');
+    
+    if (posts.length > 5) {
+        searchResults.innerHTML += `
+            <div class="search-result-item search-more">
+                <span>查看全部 ${posts.length} 条结果 →</span>
+            </div>
+        `;
+    }
+    
+    searchResults.classList.add('active');
+}
+
+function highlightMatch(text) {
+    if (!currentSearchTerm) return text;
+    const regex = new RegExp(`(${currentSearchTerm})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+}
+
+function clearSearch() {
+    searchInput.value = '';
+    currentSearchTerm = '';
+    searchResultInfo.style.display = 'none';
+    postListTitle.textContent = '最新文章';
+    postCount.textContent = '18 篇';
+    searchResults.classList.remove('active');
+    
+    // 显示所有文章
+    postCards.forEach(card => {
+        card.style.display = '';
+    });
+}
+</script>
+
+<!-- 文章数据 - 用于搜索 -->
+<script>
+var postsData = [
+    
+    {
+        title: "Telegram 多Bot群组协作配置研究",
+        url: "/2026/03/08/telegram-multi-bot-group-collaboration.html",
+        date: "2026.03.08",
+        category: "telegram",
+        excerpt: "Telegram 多Bot群组协作配置研究
+",
+        tags: ["telegram","openclaw","多Bot","群组协作","配置"]
+    },
+    
+    {
+        title: "OpenClaw 多Agent协作模式技术架构",
+        url: "/2026/03/08/openclaw-multi-agent-research.html",
+        date: "2026.03.08",
+        category: "openclaw",
+        excerpt: "OpenClaw 多Agent协作模式技术架构
+",
+        tags: ["openclaw","多Agent","协作模式","技术架构","研究"]
+    },
+    
+    {
+        title: "Claude Code 深度研究：从终端到企业级AI开发平台",
+        url: "/2026/03/07/claude-code-deep-research.html",
+        date: "2026.03.07",
+        category: "AI",
+        excerpt: "Claude Code 深度研究：从终端到企业级AI开发平台，以及它与 OpenClaw 的”化学反应”
+",
+        tags: []
+    },
+    
+    {
+        title: "全球AI动态周报（2026年3月1日-3月7日）",
+        url: "/2026/03/07/global-ai-weekly.html",
+        date: "2026.03.07",
+        category: "AI",
+        excerpt: "全球AI动态周报
+",
+        tags: ["AI","人工智能","周报","全球AI动态"]
+    },
+    
+    {
+        title: "500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的&quot;外挂&quot;，让你的 AI 助手原地起飞！",
+        url: "/2026/03/07/agent-skills-recommendation.html",
+        date: "2026.03.07",
+        category: "AI技术",
+        excerpt: "500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的”外挂”，让你的 AI 助手原地起飞！
+",
+        tags: ["Agent","Claude","GPT","AI","Skills","开源"]
+    },
+    
+    {
+        title: "SkillsBench论文研究：Agent Skills有效性的系统性评估",
+        url: "/2026/03/07/skillsbench-paper-research.html",
+        date: "2026.03.07",
+        category: "AI",
+        excerpt: "SkillsBench论文研究报告
+",
+        tags: ["AI研究","论文","Agent","Skills"]
+    },
+    
+    {
+        title: "基于OpenClaw搭建虚拟公司：完整架构指南",
+        url: "/2026/03/07/openclaw-virtual-company.html",
+        date: "2026.03.07",
+        category: "openclaw",
+        excerpt: "基于OpenClaw搭建虚拟公司：完整架构指南
+",
+        tags: ["openclaw","虚拟公司","多Agent协作","团队协作"]
+    },
+    
+    {
+        title: "2026年3月6日新闻联播主要内容",
+        url: "/2026/03/06/news-broadcast.html",
+        date: "2026.03.06",
+        category: "news",
+        excerpt: "2026年3月6日新闻联播主要内容
+",
+        tags: ["News Broadcast","Politics","Two Sessions","Economy"]
+    },
+    
+    {
+        title: "Obsidian研究报告：本地优先的知识管理工具",
+        url: "/2026/03/06/obsidian-research-report.html",
+        date: "2026.03.06",
+        category: "工具评测",
+        excerpt: "Obsidian研究报告
+",
+        tags: []
+    },
+    
+    {
+        title: "改进Skill-Creator：测试、衡量和优化Agent Skills",
+        url: "/2026/03/05/skill-creator-improvements-translation.html",
+        date: "2026.03.05",
+        category: "AI",
+        excerpt: "改进Skill-Creator：测试、衡量和优化Agent Skills
+",
+        tags: []
+    },
+    
+    {
+        title: "OpenClaw Agent System Prompt 架构详解报告",
+        url: "/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html",
+        date: "2026.03.05",
+        category: "openclaw",
+        excerpt: "OpenClaw Agent System Prompt 架构详解报告
+",
+        tags: []
+    },
+    
+    {
+        title: "OpenClaw 2026.3.2 版本更新详解",
+        url: "/2026/03/03/openclaw-2026.3.2-update.html",
+        date: "2026.03.03",
+        category: "OpenClaw",
+        excerpt: "OpenClaw 2026.3.2 版本更新详解
+",
+        tags: []
+    },
+    
+    {
+        title: "OpenClaw环境变量加载和使用机制研究",
+        url: "/2026/03/03/openclaw-env-vars-research.html",
+        date: "2026.03.03",
+        category: "OpenClaw",
+        excerpt: "OpenClaw环境变量加载和使用机制研究报告
+",
+        tags: []
+    },
+    
+    {
+        title: "卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）",
+        url: "/2026/03/02/github-trend-analysis.html",
+        date: "2026.03.02",
+        category: "TechTrends",
+        excerpt: "
+",
+        tags: ["AI","Open Source","Technical Analysis"]
+    },
+    
+    {
+        title: "OpenClaw 2026.3.1 版本深度解析：移动端能力飞跃与飞书深度集成",
+        url: "/2026/03/02/openclaw-2026-3-1-update-analysis.html",
+        date: "2026.03.02",
+        category: "Technology",
+        excerpt: "
+",
+        tags: ["OpenClaw","Version Update","Android","Feishu","AI"]
+    },
+    
+    {
+        title: "全球AI科技资讯周报",
+        url: "/2026/03/02/global-ai-tech-news-weekly.html",
+        date: "2026.03.02",
+        category: "AI",
+        excerpt: "全球AI科技资讯周报
+",
+        tags: ["AI","科技资讯","周报"]
+    },
+    
+    {
+        title: "2026年3月1日美国对伊朗军事行动最新新闻汇总",
+        url: "/2026/03/01/us-iran-news.html",
+        date: "2026.03.01",
+        category: "news",
+        excerpt: "2026年3月1日美国对伊朗军事行动最新新闻汇总
+",
+        tags: ["International News","Military","Iran","United States"]
+    },
+    
+    {
+        title: "2026年2月28日新闻联播主要内容",
+        url: "/2026/02/28/news-broadcast.html",
+        date: "2026.02.28",
+        category: "news",
+        excerpt: "2026年2月28日新闻联播主要内容
+",
+        tags: ["News Broadcast","Politics"]
+    }
+    
+];
+</script>
+
+<!-- 搜索功能 JavaScript -->
+<script>
+// 搜索功能
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+const searchResultInfo = document.getElementById('searchResultInfo');
+const searchResultText = document.getElementById('searchResultText');
+const postCount = document.getElementById('postCount');
+const postListTitle = document.getElementById('postListTitle');
+const postList = document.getElementById('postList');
+
+let currentSearchTerm = '';
+
+// 实时搜索
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.trim().toLowerCase();
+    currentSearchTerm = term;
+    
+    if (term.length === 0) {
+        searchResults.classList.remove('active');
+        searchResultInfo.style.display = 'none';
+        postListTitle.textContent = '最新文章';
+        postCount.textContent = '18 篇';
+        renderAllPosts();
+        return;
+    }
+    
+    // 过滤文章
+    const filteredPosts = postsData.filter(post => {
+        return post.title.toLowerCase().includes(term) ||
+               post.category.toLowerCase().includes(term) ||
+               post.tags.some(tag => tag.toLowerCase().includes(term)) ||
+               post.excerpt.toLowerCase().includes(term);
+    });
+    
+    // 显示搜索结果数量
+    searchResultInfo.style.display = 'flex';
+    searchResultText.textContent = `找到 ${filteredPosts.length} 篇与"${term}"相关的文章`;
+    postCount.textContent = `${filteredPosts.length} 篇`;
+    postListTitle.textContent = '搜索结果';
+    
+    // 渲染搜索结果
+    renderSearchResults(filteredPosts);
+    
+    // 显示下拉结果
+    showSearchDropdown(filteredPosts.slice(0, 5), term);
+});
+
+// 渲染搜索下拉结果
+function showSearchDropdown(results, term) {
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="search-result-item"><div class="result-meta">未找到相关文章</div></div>';
+        searchResults.classList.add('active');
+        return;
+    }
+    
+    searchResults.innerHTML = results.map(post => {
+        const highlightedTitle = post.title.replace(new RegExp(`(${term})`, 'gi'), '<mark>$1</mark>');
+        return `
+            <a href="${post.url}" class="search-result-item">
+                <div class="result-title">${highlightedTitle}</div>
+                <div class="result-meta">${post.date} · ${post.category}</div>
+                <div class="result-excerpt">${post.excerpt}</div>
+            </a>
+        `;
+    }).join('');
+    
+    searchResults.classList.add('active');
+}
+
+// 渲染搜索结果列表
+function renderSearchResults(posts) {
+    if (posts.length === 0) {
+        postList.innerHTML = `
+            <div class="no-results">
+                <p>未找到相关文章</p>
+                <p class="no-results-hint">试试其他关键词</p>
+            </div>
+        `;
+        return;
+    }
+    
+    postList.innerHTML = posts.map(post => `
+        <article class="post-card">
+            <a href="${post.url}" class="post-card-link">
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time>${post.date}</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">${post.category}</span>
+                    </div>
+                    <h3 class="post-title">${post.title}</h3>
+                    <p class="post-excerpt">${post.excerpt}</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+    `).join('');
+}
+
+// 渲染所有文章
+function renderAllPosts() {
+    postList.innerHTML = `
+        
+        <article class="post-card">
+            <a href="/2026/03/08/telegram-multi-bot-group-collaboration.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=8" alt="Telegram 多Bot群组协作配置研究" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-08">2026.03.08</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">telegram</span>
+                    </div>
+                    <h3 class="post-title">Telegram 多Bot群组协作配置研究</h3>
+                    <p class="post-excerpt">Telegram 多Bot群组协作配置研究
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#telegram</span>
+                            
+                            <span class="tag-mini">#openclaw</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/08/openclaw-multi-agent-research.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1454165804606-c3d57bc86b40?w=1200&h=400&fit=crop" alt="OpenClaw 多Agent协作模式技术架构" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-08">2026.03.08</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">openclaw</span>
+                    </div>
+                    <h3 class="post-title">OpenClaw 多Agent协作模式技术架构</h3>
+                    <p class="post-excerpt">OpenClaw 多Agent协作模式技术架构
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#openclaw</span>
+                            
+                            <span class="tag-mini">#多Agent</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/07/claude-code-deep-research.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1555066931-4365d14bab8c?w=1200&h=600&fit=crop" alt="Claude Code 深度研究：从终端到企业级AI开发平台" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-07">2026.03.07</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">AI</span>
+                    </div>
+                    <h3 class="post-title">Claude Code 深度研究：从终端到企业级AI开发平台</h3>
+                    <p class="post-excerpt">Claude Code 深度研究：从终端到企业级AI开发平台，以及它与 OpenClaw 的”化学反应”
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/07/global-ai-weekly.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1677442136019-21780ecad995?w=1200&h=400&fit=crop" alt="全球AI动态周报（2026年3月1日-3月7日）" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-07">2026.03.07</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">AI</span>
+                    </div>
+                    <h3 class="post-title">全球AI动态周报（2026年3月1日-3月7日）</h3>
+                    <p class="post-excerpt">全球AI动态周报
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#AI</span>
+                            
+                            <span class="tag-mini">#人工智能</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/07/agent-skills-recommendation.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1677442136019-21780ecad995?w=1200&h=400&fit=crop" alt="500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的"外挂"，让你的 AI 助手原地起飞！" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-07">2026.03.07</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">AI技术</span>
+                    </div>
+                    <h3 class="post-title">500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的"外挂"，让你的 AI 助手原地起飞！</h3>
+                    <p class="post-excerpt">500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的”外挂”，让你的 AI 助手原地起飞！
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#Agent</span>
+                            
+                            <span class="tag-mini">#Claude</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/07/skillsbench-paper-research.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1620712943543-bcc4688e7485?w=1200&h=400&fit=crop" alt="SkillsBench论文研究：Agent Skills有效性的系统性评估" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-07">2026.03.07</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">AI</span>
+                    </div>
+                    <h3 class="post-title">SkillsBench论文研究：Agent Skills有效性的系统性评估</h3>
+                    <p class="post-excerpt">SkillsBench论文研究报告
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#AI研究</span>
+                            
+                            <span class="tag-mini">#论文</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/07/openclaw-virtual-company.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1497366216548-37526070297c?w=1200&h=400&fit=crop" alt="基于OpenClaw搭建虚拟公司：完整架构指南" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-07">2026.03.07</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">openclaw</span>
+                    </div>
+                    <h3 class="post-title">基于OpenClaw搭建虚拟公司：完整架构指南</h3>
+                    <p class="post-excerpt">基于OpenClaw搭建虚拟公司：完整架构指南
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#openclaw</span>
+                            
+                            <span class="tag-mini">#虚拟公司</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/06/news-broadcast.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1504711434969-e33886168f5c?w=1200&h=400&fit=crop" alt="2026年3月6日新闻联播主要内容" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-06">2026.03.06</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">news</span>
+                    </div>
+                    <h3 class="post-title">2026年3月6日新闻联播主要内容</h3>
+                    <p class="post-excerpt">2026年3月6日新闻联播主要内容
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#News Broadcast</span>
+                            
+                            <span class="tag-mini">#Politics</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/06/obsidian-research-report.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1499750310107-5fef28a66643?w=1200&h=400&fit=crop" alt="Obsidian研究报告：本地优先的知识管理工具" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-06">2026.03.06</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">工具评测</span>
+                    </div>
+                    <h3 class="post-title">Obsidian研究报告：本地优先的知识管理工具</h3>
+                    <p class="post-excerpt">Obsidian研究报告
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/05/skill-creator-improvements-translation.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1555949963-aa79dcee981c?w=1200&h=400&fit=crop" alt="改进Skill-Creator：测试、衡量和优化Agent Skills" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-05">2026.03.05</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">AI</span>
+                    </div>
+                    <h3 class="post-title">改进Skill-Creator：测试、衡量和优化Agent Skills</h3>
+                    <p class="post-excerpt">改进Skill-Creator：测试、衡量和优化Agent Skills
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1526374965328-7f61d4dc18c5?w=1200&h=400&fit=crop" alt="OpenClaw Agent System Prompt 架构详解报告" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-05">2026.03.05</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">openclaw</span>
+                    </div>
+                    <h3 class="post-title">OpenClaw Agent System Prompt 架构详解报告</h3>
+                    <p class="post-excerpt">OpenClaw Agent System Prompt 架构详解报告
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/03/openclaw-2026.3.2-update.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1461749280684-dccba630e2f6?w=1200&h=400&fit=crop" alt="OpenClaw 2026.3.2 版本更新详解" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-03">2026.03.03</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">OpenClaw</span>
+                    </div>
+                    <h3 class="post-title">OpenClaw 2026.3.2 版本更新详解</h3>
+                    <p class="post-excerpt">OpenClaw 2026.3.2 版本更新详解
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/03/openclaw-env-vars-research.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1555066931-4365d14bab8c?w=1200&h=400&fit=crop" alt="OpenClaw环境变量加载和使用机制研究" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-03">2026.03.03</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">OpenClaw</span>
+                    </div>
+                    <h3 class="post-title">OpenClaw环境变量加载和使用机制研究</h3>
+                    <p class="post-excerpt">OpenClaw环境变量加载和使用机制研究报告
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/02/github-trend-analysis.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1556075798-4825dfaaf498?w=1200&h=400&fit=crop" alt="卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-02">2026.03.02</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">TechTrends</span>
+                    </div>
+                    <h3 class="post-title">卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）</h3>
+                    <p class="post-excerpt">
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#AI</span>
+                            
+                            <span class="tag-mini">#Open Source</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/02/openclaw-2026-3-1-update-analysis.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1518432031352-d6fc5c10da5a?w=1200&h=400&fit=crop" alt="OpenClaw 2026.3.1 版本深度解析：移动端能力飞跃与飞书深度集成" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-02">2026.03.02</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">Technology</span>
+                    </div>
+                    <h3 class="post-title">OpenClaw 2026.3.1 版本深度解析：移动端能力飞跃与飞书深度集成</h3>
+                    <p class="post-excerpt">
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#OpenClaw</span>
+                            
+                            <span class="tag-mini">#Version Update</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/02/global-ai-tech-news-weekly.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1620712943543-bcc4688e7485?w=1200&h=400&fit=crop" alt="全球AI科技资讯周报" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-02">2026.03.02</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">AI</span>
+                    </div>
+                    <h3 class="post-title">全球AI科技资讯周报</h3>
+                    <p class="post-excerpt">全球AI科技资讯周报
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#AI</span>
+                            
+                            <span class="tag-mini">#科技资讯</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/03/01/us-iran-news.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1532375810709-75b1da00537c?w=1200&h=400&fit=crop" alt="2026年3月1日美国对伊朗军事行动最新新闻汇总" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-03-01">2026.03.01</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">news</span>
+                    </div>
+                    <h3 class="post-title">2026年3月1日美国对伊朗军事行动最新新闻汇总</h3>
+                    <p class="post-excerpt">2026年3月1日美国对伊朗军事行动最新新闻汇总
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#International News</span>
+                            
+                            <span class="tag-mini">#Military</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+        <article class="post-card">
+            <a href="/2026/02/28/news-broadcast.html" class="post-card-link">
+                <div class="post-image-wrapper">
+                    
+                    <img src="https://picsum.photos/1200/400?random=1504711434969-e33886168f5c?w=1200&h=400&fit=crop" alt="2026年2月28日新闻联播主要内容" class="post-image" loading="lazy">
+                    
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <time datetime="2026-02-28">2026.02.28</time>
+                        <span class="meta-sep">·</span>
+                        <span class="post-category">news</span>
+                    </div>
+                    <h3 class="post-title">2026年2月28日新闻联播主要内容</h3>
+                    <p class="post-excerpt">2026年2月28日新闻联播主要内容
+</p>
+                    <div class="post-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        
+                        <div class="post-tags-mini">
+                            
+                            <span class="tag-mini">#News Broadcast</span>
+                            
+                            <span class="tag-mini">#Politics</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </a>
+        </article>
+        
+    `;
+}
+
+// 清除搜索
+function clearSearch() {
+    searchInput.value = '';
+    currentSearchTerm = '';
+    searchResults.classList.remove('active');
+    searchResultInfo.style.display = 'none';
+    postListTitle.textContent = '最新文章';
+    postCount.textContent = '18 篇';
+    renderAllPosts();
+}
+
+// 点击外部关闭搜索结果
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.search-wrapper')) {
+        searchResults.classList.remove('active');
+    }
+});
+
+// 键盘快捷键 Cmd/Ctrl + K 聚焦搜索
+document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+    }
+    
+    // ESC 关闭搜索
+    if (e.key === 'Escape') {
+        searchResults.classList.remove('active');
+        searchInput.blur();
+    }
+});
+</script>
+
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p style="font-size: 0.85rem;">&copy; 2026 W.ai · 基于 Jekyll 构建</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 图片懒加载
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img.lazyload');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            image.src = image.dataset.src;
+                            image.classList.remove('lazyload');
+                            image.classList.add('lazyloaded');
+                            imageObserver.unobserve(image);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(image => {
+                    imageObserver.observe(image);
+                });
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 返回顶部按钮
+        const backToTop = document.createElement('button');
+        backToTop.textContent = '↑';
+        backToTop.style.cssText = `
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            background-color: rgba(66, 165, 245, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(backToTop);
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.style.opacity = '1';
+                backToTop.style.visibility = 'visible';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.visibility = 'hidden';
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>改进Skill-Creator：测试、衡量和优化Agent Skills</title>
+    <meta name="description" content="改进Skill-Creator：测试、衡量和优化Agent Skills">
+    
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- 引入主样式 -->
+    <link rel="stylesheet" href="/assets/main.css">
+    
+    <!-- SEO标签 -->
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>改进Skill-Creator：测试、衡量和优化Agent Skills | W.ai</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="改进Skill-Creator：测试、衡量和优化Agent Skills" />
+<meta name="author" content="W.ai" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="改进Skill-Creator：测试、衡量和优化Agent Skills" />
+<meta property="og:description" content="改进Skill-Creator：测试、衡量和优化Agent Skills" />
+<link rel="canonical" href="https://wujiaming88.github.io/2026/03/05/skill-creator-improvements-translation.html" />
+<meta property="og:url" content="https://wujiaming88.github.io/2026/03/05/skill-creator-improvements-translation.html" />
+<meta property="og:site_name" content="W.ai" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-05T14:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="改进Skill-Creator：测试、衡量和优化Agent Skills" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"W.ai"},"dateModified":"2026-03-05T14:00:00+00:00","datePublished":"2026-03-05T14:00:00+00:00","description":"改进Skill-Creator：测试、衡量和优化Agent Skills","headline":"改进Skill-Creator：测试、衡量和优化Agent Skills","mainEntityOfPage":{"@type":"WebPage","@id":"https://wujiaming88.github.io/2026/03/05/skill-creator-improvements-translation.html"},"url":"https://wujiaming88.github.io/2026/03/05/skill-creator-improvements-translation.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    
+    <!-- 站点图标 -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="navbar-brand">
+                W.ai
+            </a>
+            
+            <ul class="navbar-nav">
+                <li><a href="/" class="nav-link ">首页</a></li>
+                <li><a href="/categories/" class="nav-link ">分类</a></li>
+                <li><a href="/tags/" class="nav-link ">标签</a></li>
+                <li><a href="/about/" class="nav-link ">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <style>
+/* ============================================
+   文章页面样式 - 2026版优化
+   ============================================ */
+
+/* 文章标题样式 */
+.post-header h1 {
+    color: #1f2937;
+    border-bottom: 3px solid #6366f1;
+}
+
+.post-meta {
+    color: #6b7280;
+}
+
+/* ============================================
+   封面图片样式
+   ============================================ */
+
+/* 封面图片容器 */
+.post-cover {
+    margin: 0 0 2.5rem 0;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 450px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+}
+
+.post-cover:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 20px 40px -10px rgba(0, 0, 0, 0.15),
+        0 10px 15px -5px rgba(99, 102, 241, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+/* 封面图片 */
+.post-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.post-cover:hover img {
+    transform: scale(1.02);
+}
+
+/* 渐变遮罩层 */
+.post-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+    border-radius: 0 0 16px 16px;
+}
+
+/* 图片说明文字 */
+.post-cover-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    color: #ffffff;
+    font-size: 0.85rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+.post-cover:hover .post-cover-caption {
+    opacity: 1;
+}
+
+/* ============================================
+   文章底部通用样式（推荐/分享/导航）
+   ============================================ */
+
+.post-bottom-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================
+   文章导航样式 - 优化版
+   ============================================ */
+
+.post-nav {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+    border: 2px solid #c7d2fe;
+}
+
+.post-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #6366f1 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.post-nav-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.post-nav-item {
+    flex: 1;
+}
+
+.post-nav-item.left {
+    text-align: left;
+}
+
+.post-nav-item.right {
+    text-align: right;
+}
+
+.post-nav-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #c7d2fe 20%,
+        #c7d2fe 80%,
+        transparent 100%
+    );
+}
+
+.post-nav-label {
+    color: #6366f1;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-nav-item.left .post-nav-label::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+.post-nav-item.right .post-nav-label::after {
+    content: '→';
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+.post-nav-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-nav-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.post-nav-item a:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateX(4px);
+}
+
+.post-nav-item.right a:hover {
+    transform: translateX(-4px);
+}
+
+.post-nav-item a:hover .post-nav-title {
+    color: #6366f1;
+}
+
+/* ============================================
+   分享按钮样式 - 优化版
+   ============================================ */
+
+.share-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.share-section h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    padding: 0.8rem 1.75rem;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.share-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.share-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.share-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(99, 102, 241, 0.4);
+}
+
+.share-btn:active {
+    transform: translateY(-2px);
+}
+
+/* 社交平台品牌色 */
+.share-btn.twitter { 
+    background: linear-gradient(135deg, #1da1f2 0%, #0d8ecf 100%);
+}
+.share-btn.facebook { 
+    background: linear-gradient(135deg, #3b5998 0%, #2d4373 100%);
+}
+.share-btn.linkedin { 
+    background: linear-gradient(135deg, #0077b5 0%, #005582 100%);
+}
+.share-btn.copy { 
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    cursor: pointer;
+    border: none;
+}
+
+.share-btn.twitter:hover {
+    background: linear-gradient(135deg, #0d8ecf 0%, #0a7bc4 100%);
+}
+
+.share-btn.facebook:hover {
+    background: linear-gradient(135deg, #2d4373 0%, #1e2e4f 100%);
+}
+
+.share-btn.linkedin:hover {
+    background: linear-gradient(135deg, #005582 0%, #003d5c 100%);
+}
+
+.share-btn.copy:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+/* ============================================
+   相似文章推荐样式 - 优化版
+   ============================================ */
+
+.related-posts {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.related-posts h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.25rem;
+}
+
+.related-post-card {
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.related-post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.related-post-card:hover::before {
+    transform: scaleY(1);
+}
+
+.related-post-card:hover {
+    border-color: #c7d2fe;
+    box-shadow: 
+        0 8px 16px -4px rgba(99, 102, 241, 0.2),
+        0 4px 8px -2px rgba(99, 102, 241, 0.1);
+    transform: translateY(-3px);
+}
+
+.related-post-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-post-card:hover .related-post-title {
+    color: #6366f1;
+}
+
+.related-post-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.related-post-category {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    color: #6366f1;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid #e0e7ff;
+}
+
+.no-related {
+    color: #6b7280;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* 封面图片响应式 */
+    .post-cover {
+        border-radius: 12px;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 300px;
+    }
+    
+    .post-cover-caption {
+        font-size: 0.75rem;
+        padding: 1rem;
+    }
+    
+    /* 底部组件响应式 */
+    .share-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .share-btn {
+        justify-content: center;
+    }
+    
+    .related-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-divider {
+        display: none;
+    }
+    
+    .post-nav-item {
+        text-align: left !important;
+    }
+    
+    .post-nav-item a {
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-cover {
+        border-radius: 0;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 250px;
+    }
+}
+
+/* ============================================
+   动画效果
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.related-post-card,
+.share-btn,
+.post-nav-item {
+    animation: fadeInUp 0.5s ease backwards;
+}
+
+.related-post-card:nth-child(1) { animation-delay: 0.1s; }
+.related-post-card:nth-child(2) { animation-delay: 0.2s; }
+.related-post-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* 无障碍设计 */
+.share-btn:focus,
+.related-post-card:focus,
+.post-nav-item a:focus {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+</style>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting" style="max-width: 800px; margin: 0 auto;">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem;">改进Skill-Creator：测试、衡量和优化Agent Skills</h1>
+    <div class="post-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+      <time class="dt-published" datetime="2026-03-05T14:00:00+00:00" itemprop="datePublished">
+        📅 2026年03月05日
+      </time>
+      
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span class="p-author h-card" itemprop="name">👤 W.ai</span>
+        </span>
+      
+      
+        • <span>📂 AI, 技术研究</span>
+      
+      
+        • <span>#️⃣ </span>
+      
+    </div>
+  </header>
+
+  <!-- 封面图片 -->
+  
+  
+  <div class="post-cover">
+    <img src="https://picsum.photos/1200/400?random=1555949963-aa79dcee981c?w=1200&h=400&fit=crop" alt="改进Skill-Creator：测试、衡量和优化Agent Skills" loading="lazy">
+    
+    <div class="post-cover-caption">Skill Creator</div>
+    
+  </div>
+  
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="改进skill-creator测试衡量和优化agent-skills">改进Skill-Creator：测试、衡量和优化Agent Skills</h1>
+
+<p>Skill-creator现在可以帮助你编写评估、运行基准测试，并确保你的技能在模型演进过程中持续有效。这些更新现已在Claude.ai和Cowork中可用，作为<a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator">Claude Code插件</a>，也可在我们的<a href="https://github.com/anthropics/skills/tree/main/skills/skill-creator">代码库</a>中获取。</p>
+
+<p>自去年10月<a href="https://claude.com/blog/skills">推出Agent Skills</a>以来，我们注意到大多数技能作者都是主题专家，而非工程师。他们熟悉自己的工作流程，但缺乏工具来判断技能在新模型上是否仍然有效、是否在应该触发时触发，或者编辑后是否真的有所改进。</p>
+
+<p>今天，我们宣布skill-creator的增强功能，帮助作者更有信心地构建技能。我们将软件开发的一些严谨性（测试、基准测试、迭代改进）引入技能创作，而无需编写代码。</p>
+
+<h2 id="两种类型的技能">两种类型的技能</h2>
+
+<p>技能通常分为两类：</p>
+
+<p><strong>能力提升技能</strong>帮助Claude完成基础模型无法完成或无法持续完成的任务。我们的<a href="https://github.com/anthropics/skills/tree/main/skills">文档创建技能</a>就是很好的例子。它们编码了比单独提示更能产生更好输出的技术和模式。</p>
+
+<p><strong>编码偏好技能</strong>记录了Claude已经可以完成每个部分的工作流程，但技能会根据你的团队流程对其进行排序。例如：根据设定标准审查NDA的技能，或利用各种MCP的数据起草每周更新的技能。</p>
+
+<p>这种区分很重要，因为这两种类型的技能可能需要出于不同的原因进行测试：</p>
+
+<ul>
+  <li>随着模型的改进，能力提升技能可能变得不那么必要。评估会告诉你何时发生这种情况。</li>
+  <li>编码偏好技能更持久，但只有在忠实于实际工作流程时才有价值。评估验证这种忠实度。</li>
+</ul>
+
+<p>无论哪种方式，测试都能将看似有效的技能转变为你确信有效的技能。</p>
+
+<h2 id="使用评估来测试和改进技能">使用评估来测试和改进技能</h2>
+
+<p>Skill-creator现在可以帮助你编写评估，即检查Claude在给定提示下是否按预期执行的测试。如果你编写过软件测试，这会很熟悉：定义一些测试提示（如果需要，加上文件），描述良好输出的样子，skill-creator会告诉你技能是否达标。</p>
+
+<p>例如，我们的PDF技能以前在处理非可填写表单时遇到困难。Claude必须在没有定义字段引导的情况下将文本放置在精确坐标处。评估找出了失败点，我们发布了一个修复方案，将定位锚定到提取的文本坐标。</p>
+
+<p>评估在很多方面都有帮助，但两个重要用途是发现质量退化和了解模型进展。</p>
+
+<p>首先，发现质量退化。随着模型和周围基础设施的演进，上个月运行良好的技能今天可能表现不同。在新模型上运行评估可以在影响团队工作之前提前发出变化信号。</p>
+
+<p>其次，了解通用模型能力何时超越你的技能。这主要适用于能力提升技能。如果基础模型在不加载技能的情况下开始通过你的评估，这表明技能的技术可能已被纳入模型的默认行为。技能没有损坏，只是不再必要。</p>
+
+<p>我们还添加了基准测试模式，使用你的评估运行标准化评估。你可以在模型更新后或迭代技能本身时运行此模式。它跟踪评估通过率、耗时和令牌使用情况。</p>
+
+<p>你的评估和结果会保留在你身边。你可以本地存储，与仪表板集成，或插入CI系统。</p>
+
+<h2 id="多代理支持实现更快更一致的评估">多代理支持实现更快、更一致的评估</h2>
+
+<p>顺序运行评估可能很慢，而且上下文积累可能会在测试运行之间产生干扰。Skill-creator现在支持多代理并行运行评估，每个代理都在干净的上下文中，有自己的令牌和时间指标。结果更快，没有交叉污染。</p>
+
+<p>我们还添加了比较代理用于A/B比较：两个技能版本，或技能与无技能的比较。它们在不知道哪个是哪个的情况下判断输出，因此你可以知道更改是否真的有帮助。</p>
+
+<h2 id="确保技能在正确的时间触发">确保技能在正确的时间触发</h2>
+
+<p>评估衡量输出质量，但只有在技能在应该触发时触发才有意义。随着技能数量的增长，描述的精确性变得至关重要：太宽泛会导致误触发，太狭窄则永远不会触发。Skill-creator现在可以帮助你调整描述以实现更可靠的触发——它会分析你当前的描述与示例提示，并建议编辑以减少误报和漏报。</p>
+
+<p>我们在文档创建技能上运行了此功能，发现6个公共技能中有5个的触发效果得到了改善。</p>
+
+<h2 id="展望未来">展望未来</h2>
+
+<p>随着模型的改进，”技能”和”规范”之间的界限可能会模糊。今天，SKILL.md文件本质上是一个实施计划，提供了告诉Claude如何做事的详细说明。随着时间的推移，对技能应该做什么的自然语言描述可能就足够了，模型会自行解决其余问题。</p>
+
+<p>我们今天发布的评估框架是朝着这个方向迈出的一步。评估已经描述了”做什么”。最终，这个描述本身可能就是技能。</p>
+
+<h2 id="开始使用">开始使用</h2>
+
+<p>所有skill-creator更新现已在Claude.ai和Cowork中可用。让Claude使用skill-creator开始吧。</p>
+
+<p>Claude Code用户可以安装<a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator">插件</a>或从我们的<a href="https://github.com/anthropics/skills/tree/main/skills/skill-creator">代码库</a>下载。</p>
+
+  </div>
+
+  <!-- 相似文章推荐 -->
+  
+  <div class="related-posts post-bottom-section">
+    <h3>📖 相似文章推荐</h3>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="related-posts-grid">
+      
+    </div>
+    
+    
+    <p class="no-related">暂无相似文章</p>
+    
+  </div>
+  
+
+  <!-- 文章导航 -->
+  <div class="post-nav post-bottom-section">
+    <div class="post-nav-container">
+      
+      <div class="post-nav-item left">
+        <a href="/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html">
+          <div class="post-nav-label">上一篇</div>
+          <div class="post-nav-title">OpenClaw Agent System Prompt 架构详解报告</div>
+        </a>
+      </div>
+      <div class="post-nav-divider"></div>
+      
+      
+      <div class="post-nav-item right">
+        <a href="/2026/03/06/obsidian-research-report.html">
+          <div class="post-nav-label">下一篇</div>
+          <div class="post-nav-title">Obsidian研究报告：本地优先的知识管理工具</div>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 分享按钮 -->
+  <div class="share-section post-bottom-section">
+    <h3>📤 分享这篇文章</h3>
+    <div class="share-buttons">
+      <a href="https://twitter.com/intent/tweet?url=https://wujiaming88.github.io/2026/03/05/skill-creator-improvements-translation.html&text=%E6%94%B9%E8%BF%9BSkill-Creator%EF%BC%9A%E6%B5%8B%E8%AF%95%E3%80%81%E8%A1%A1%E9%87%8F%E5%92%8C%E4%BC%98%E5%8C%96Agent+Skills" target="_blank" rel="noopener noreferrer" class="share-btn twitter">
+        🐦 Twitter
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://wujiaming88.github.io/2026/03/05/skill-creator-improvements-translation.html&title=%E6%94%B9%E8%BF%9BSkill-Creator%EF%BC%9A%E6%B5%8B%E8%AF%95%E3%80%81%E8%A1%A1%E9%87%8F%E5%92%8C%E4%BC%98%E5%8C%96Agent+Skills" target="_blank" rel="noopener noreferrer" class="share-btn facebook">
+        📘 Facebook
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://wujiaming88.github.io/2026/03/05/skill-creator-improvements-translation.html&title=%E6%94%B9%E8%BF%9BSkill-Creator%EF%BC%9A%E6%B5%8B%E8%AF%95%E3%80%81%E8%A1%A1%E9%87%8F%E5%92%8C%E4%BC%98%E5%8C%96Agent+Skills&summary=%E6%94%B9%E8%BF%9BSkill-Creator%EF%BC%9A%E6%B5%8B%E8%AF%95%E3%80%81%E8%A1%A1%E9%87%8F%E5%92%8C%E4%BC%98%E5%8C%96Agent+Skills%0A" target="_blank" rel="noopener noreferrer" class="share-btn linkedin">
+        💼 LinkedIn
+      </a>
+      <button onclick="copyToClipboard('https://wujiaming88.github.io/2026/03/05/skill-creator-improvements-translation.html')" class="share-btn copy">
+        📋 复制链接
+      </button>
+    </div>
+  </div>
+
+  
+
+</article>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    alert('链接已复制到剪贴板！');
+  }, function(err) {
+    console.error('无法复制文本: ', err);
+    alert('复制失败，请手动复制链接: ' + text);
+  });
+}
+
+// 代码块高亮和复制功能
+document.addEventListener('DOMContentLoaded', () => {
+  // 为代码块添加复制按钮
+  document.querySelectorAll('pre').forEach((pre, index) => {
+    const copyButton = document.createElement('button');
+    copyButton.textContent = '📋 复制代码';
+    copyButton.style.cssText = `
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(99, 102, 241, 0.9);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+    `;
+    
+    pre.style.position = 'relative';
+    pre.appendChild(copyButton);
+    
+    // 鼠标悬停时显示复制按钮
+    pre.addEventListener('mouseenter', () => {
+      copyButton.style.opacity = '1';
+    });
+    
+    pre.addEventListener('mouseleave', () => {
+      copyButton.style.opacity = '0';
+    });
+    
+    // 复制功能
+    copyButton.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        copyButton.textContent = '✅ 已复制';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      }).catch(err => {
+        console.error('无法复制代码: ', err);
+        copyButton.textContent = '❌ 复制失败';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      });
+    });
+  });
+  
+  // 代码折叠功能（超过20行自动折叠）
+  document.querySelectorAll('pre code').forEach((code) => {
+    const lines = code.textContent.split('\n').length;
+    if (lines > 20) {
+      code.style.maxHeight = '300px';
+      code.style.overflow = 'hidden';
+      code.style.position = 'relative';
+      
+      const expandButton = document.createElement('button');
+      expandButton.textContent = '🔽 展开全部代码';
+      expandButton.style.cssText = `
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(30, 30, 30, 0.9), transparent);
+        color: white;
+        border: none;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+      `;
+      
+      code.appendChild(expandButton);
+      
+      expandButton.addEventListener('click', () => {
+        if (code.style.maxHeight === '300px') {
+          code.style.maxHeight = 'none';
+          expandButton.textContent = '🔼 收起代码';
+        } else {
+          code.style.maxHeight = '300px';
+          expandButton.textContent = '🔽 展开全部代码';
+        }
+      });
+    }
+  });
+});
+</script>
+
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p style="font-size: 0.85rem;">&copy; 2026 W.ai · 基于 Jekyll 构建</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 图片懒加载
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img.lazyload');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            image.src = image.dataset.src;
+                            image.classList.remove('lazyload');
+                            image.classList.add('lazyloaded');
+                            imageObserver.unobserve(image);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(image => {
+                    imageObserver.observe(image);
+                });
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 返回顶部按钮
+        const backToTop = document.createElement('button');
+        backToTop.textContent = '↑';
+        backToTop.style.cssText = `
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            background-color: rgba(66, 165, 245, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(backToTop);
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.style.opacity = '1';
+                backToTop.style.visibility = 'visible';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.visibility = 'hidden';
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

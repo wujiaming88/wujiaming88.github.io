@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 2026.3.2 版本更新详解</title>
+    <meta name="description" content="OpenClaw 2026.3.2 版本更新详解">
+    
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- 引入主样式 -->
+    <link rel="stylesheet" href="/assets/main.css">
+    
+    <!-- SEO标签 -->
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>OpenClaw 2026.3.2 版本更新详解 | W.ai</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="OpenClaw 2026.3.2 版本更新详解" />
+<meta name="author" content="W.ai" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="OpenClaw 2026.3.2 版本更新详解" />
+<meta property="og:description" content="OpenClaw 2026.3.2 版本更新详解" />
+<link rel="canonical" href="https://wujiaming88.github.io/2026/03/03/openclaw-2026.3.2-update.html" />
+<meta property="og:url" content="https://wujiaming88.github.io/2026/03/03/openclaw-2026.3.2-update.html" />
+<meta property="og:site_name" content="W.ai" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-03T10:37:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="OpenClaw 2026.3.2 版本更新详解" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"W.ai"},"dateModified":"2026-03-03T10:37:00+00:00","datePublished":"2026-03-03T10:37:00+00:00","description":"OpenClaw 2026.3.2 版本更新详解","headline":"OpenClaw 2026.3.2 版本更新详解","mainEntityOfPage":{"@type":"WebPage","@id":"https://wujiaming88.github.io/2026/03/03/openclaw-2026.3.2-update.html"},"url":"https://wujiaming88.github.io/2026/03/03/openclaw-2026.3.2-update.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    
+    <!-- 站点图标 -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="navbar-brand">
+                W.ai
+            </a>
+            
+            <ul class="navbar-nav">
+                <li><a href="/" class="nav-link ">首页</a></li>
+                <li><a href="/categories/" class="nav-link ">分类</a></li>
+                <li><a href="/tags/" class="nav-link ">标签</a></li>
+                <li><a href="/about/" class="nav-link ">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <style>
+/* ============================================
+   文章页面样式 - 2026版优化
+   ============================================ */
+
+/* 文章标题样式 */
+.post-header h1 {
+    color: #1f2937;
+    border-bottom: 3px solid #6366f1;
+}
+
+.post-meta {
+    color: #6b7280;
+}
+
+/* ============================================
+   封面图片样式
+   ============================================ */
+
+/* 封面图片容器 */
+.post-cover {
+    margin: 0 0 2.5rem 0;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 450px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+}
+
+.post-cover:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 20px 40px -10px rgba(0, 0, 0, 0.15),
+        0 10px 15px -5px rgba(99, 102, 241, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+/* 封面图片 */
+.post-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.post-cover:hover img {
+    transform: scale(1.02);
+}
+
+/* 渐变遮罩层 */
+.post-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+    border-radius: 0 0 16px 16px;
+}
+
+/* 图片说明文字 */
+.post-cover-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    color: #ffffff;
+    font-size: 0.85rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+.post-cover:hover .post-cover-caption {
+    opacity: 1;
+}
+
+/* ============================================
+   文章底部通用样式（推荐/分享/导航）
+   ============================================ */
+
+.post-bottom-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================
+   文章导航样式 - 优化版
+   ============================================ */
+
+.post-nav {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+    border: 2px solid #c7d2fe;
+}
+
+.post-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #6366f1 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.post-nav-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.post-nav-item {
+    flex: 1;
+}
+
+.post-nav-item.left {
+    text-align: left;
+}
+
+.post-nav-item.right {
+    text-align: right;
+}
+
+.post-nav-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #c7d2fe 20%,
+        #c7d2fe 80%,
+        transparent 100%
+    );
+}
+
+.post-nav-label {
+    color: #6366f1;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-nav-item.left .post-nav-label::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+.post-nav-item.right .post-nav-label::after {
+    content: '→';
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+.post-nav-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-nav-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.post-nav-item a:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateX(4px);
+}
+
+.post-nav-item.right a:hover {
+    transform: translateX(-4px);
+}
+
+.post-nav-item a:hover .post-nav-title {
+    color: #6366f1;
+}
+
+/* ============================================
+   分享按钮样式 - 优化版
+   ============================================ */
+
+.share-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.share-section h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    padding: 0.8rem 1.75rem;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.share-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.share-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.share-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(99, 102, 241, 0.4);
+}
+
+.share-btn:active {
+    transform: translateY(-2px);
+}
+
+/* 社交平台品牌色 */
+.share-btn.twitter { 
+    background: linear-gradient(135deg, #1da1f2 0%, #0d8ecf 100%);
+}
+.share-btn.facebook { 
+    background: linear-gradient(135deg, #3b5998 0%, #2d4373 100%);
+}
+.share-btn.linkedin { 
+    background: linear-gradient(135deg, #0077b5 0%, #005582 100%);
+}
+.share-btn.copy { 
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    cursor: pointer;
+    border: none;
+}
+
+.share-btn.twitter:hover {
+    background: linear-gradient(135deg, #0d8ecf 0%, #0a7bc4 100%);
+}
+
+.share-btn.facebook:hover {
+    background: linear-gradient(135deg, #2d4373 0%, #1e2e4f 100%);
+}
+
+.share-btn.linkedin:hover {
+    background: linear-gradient(135deg, #005582 0%, #003d5c 100%);
+}
+
+.share-btn.copy:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+/* ============================================
+   相似文章推荐样式 - 优化版
+   ============================================ */
+
+.related-posts {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.related-posts h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.25rem;
+}
+
+.related-post-card {
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.related-post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.related-post-card:hover::before {
+    transform: scaleY(1);
+}
+
+.related-post-card:hover {
+    border-color: #c7d2fe;
+    box-shadow: 
+        0 8px 16px -4px rgba(99, 102, 241, 0.2),
+        0 4px 8px -2px rgba(99, 102, 241, 0.1);
+    transform: translateY(-3px);
+}
+
+.related-post-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-post-card:hover .related-post-title {
+    color: #6366f1;
+}
+
+.related-post-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.related-post-category {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    color: #6366f1;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid #e0e7ff;
+}
+
+.no-related {
+    color: #6b7280;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* 封面图片响应式 */
+    .post-cover {
+        border-radius: 12px;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 300px;
+    }
+    
+    .post-cover-caption {
+        font-size: 0.75rem;
+        padding: 1rem;
+    }
+    
+    /* 底部组件响应式 */
+    .share-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .share-btn {
+        justify-content: center;
+    }
+    
+    .related-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-divider {
+        display: none;
+    }
+    
+    .post-nav-item {
+        text-align: left !important;
+    }
+    
+    .post-nav-item a {
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-cover {
+        border-radius: 0;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 250px;
+    }
+}
+
+/* ============================================
+   动画效果
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.related-post-card,
+.share-btn,
+.post-nav-item {
+    animation: fadeInUp 0.5s ease backwards;
+}
+
+.related-post-card:nth-child(1) { animation-delay: 0.1s; }
+.related-post-card:nth-child(2) { animation-delay: 0.2s; }
+.related-post-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* 无障碍设计 */
+.share-btn:focus,
+.related-post-card:focus,
+.post-nav-item a:focus {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+</style>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting" style="max-width: 800px; margin: 0 auto;">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem;">OpenClaw 2026.3.2 版本更新详解</h1>
+    <div class="post-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+      <time class="dt-published" datetime="2026-03-03T10:37:00+00:00" itemprop="datePublished">
+        📅 2026年03月03日
+      </time>
+      
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span class="p-author h-card" itemprop="name">👤 W.ai</span>
+        </span>
+      
+      
+        • <span>📂 OpenClaw, 版本更新</span>
+      
+      
+        • <span>#️⃣ </span>
+      
+    </div>
+  </header>
+
+  <!-- 封面图片 -->
+  
+  
+  <div class="post-cover">
+    <img src="https://picsum.photos/1200/400?random=1461749280684-dccba630e2f6?w=1200&h=400&fit=crop" alt="OpenClaw 2026.3.2 版本更新详解" loading="lazy">
+    
+    <div class="post-cover-caption">OpenClaw</div>
+    
+  </div>
+  
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="openclaw-202632-版本更新详解">OpenClaw 2026.3.2 版本更新详解</h1>
+
+<h2 id="一版本概述">一、版本概述</h2>
+
+<p>OpenClaw 2026.3.2 是一个重要的功能更新版本，包含了大量新功能、改进和 bug 修复。该版本重点提升了多通道支持、安全性、可扩展性和开发者体验。</p>
+
+<h2 id="二主要新功能">二、主要新功能</h2>
+
+<h3 id="1-秘密管理增强">1. 秘密管理增强</h3>
+<ul>
+  <li>扩展了 SecretRef 支持到所有用户提供的凭证表面（共 64 个目标）</li>
+  <li>新增 <code class="language-javascript highlighter-rouge"><span class="nx">openclaw</span> <span class="nx">secrets</span></code> 规划/应用/审计流程</li>
+  <li>新增入职 SecretInput UX</li>
+  <li>未解析的引用现在会在活动表面上快速失败，非活动表面则报告非阻塞诊断</li>
+</ul>
+
+<h3 id="2-pdf-工具支持">2. PDF 工具支持</h3>
+<ul>
+  <li>新增一流的 <code class="language-javascript highlighter-rouge"><span class="nx">pdf</span></code> 工具，支持 Anthropic 和 Google PDF 提供商</li>
+  <li>为非原生模型提供提取回退</li>
+  <li>可配置默认值（<code class="language-javascript highlighter-rouge"><span class="nx">agents</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">pdfModel</span></code>, <code class="language-javascript highlighter-rouge"><span class="nx">pdfMaxBytesMb</span></code>, <code class="language-javascript highlighter-rouge"><span class="nx">pdfMaxPages</span></code>）</li>
+  <li>新增专门的 PDF 工具文档页面</li>
+</ul>
+
+<h3 id="3-多通道广播支持">3. 多通道广播支持</h3>
+<ul>
+  <li>Feishu 新增多代理组广播支持</li>
+  <li>统一了 Lark SDK 错误处理</li>
+  <li>修复了权限授予 URL 中的无效范围名称</li>
+</ul>
+
+<h3 id="4-会话附件支持">4. 会话附件支持</h3>
+<ul>
+  <li><code class="language-javascript highlighter-rouge"><span class="nx">sessions_spawn</span></code> 新增内联文件附件支持（仅子代理运行时）</li>
+  <li>支持 base64/utf8 编码</li>
+  <li>转录内容编辑</li>
+  <li>生命周期清理</li>
+  <li>可配置限制（<code class="language-javascript highlighter-rouge"><span class="nx">tools</span><span class="p">.</span><span class="nx">sessions_spawn</span><span class="p">.</span><span class="nx">attachments</span></code>）</li>
+</ul>
+
+<h3 id="5-telegram-增强">5. Telegram 增强</h3>
+<ul>
+  <li>默认启用 Telegram 流式传输（<code class="language-javascript highlighter-rouge"><span class="nx">partial</span></code> 模式）</li>
+  <li>私人预览流式传输使用 <code class="language-javascript highlighter-rouge"><span class="nx">sendMessageDraft</span></code></li>
+  <li>新增 <code class="language-javascript highlighter-rouge"><span class="nx">disableAudioPreflight</span></code> 配置选项，可跳过语音笔记的提及检测预飞行转录</li>
+</ul>
+
+<h3 id="6-配置验证">6. 配置验证</h3>
+<ul>
+  <li>新增 <code class="language-javascript highlighter-rouge"><span class="nx">openclaw</span> <span class="nx">config</span> <span class="nx">validate</span></code> 命令，可在网关启动前验证配置文件</li>
+  <li>启动无效配置错误中包含详细的无效键路径</li>
+</ul>
+
+<h3 id="7-ollama-嵌入支持">7. Ollama 嵌入支持</h3>
+<ul>
+  <li>新增 <code class="language-javascript highlighter-rouge"><span class="nx">memorySearch</span><span class="p">.</span><span class="nx">provider</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">ollama</span><span class="dl">"</span></code> 和 <code class="language-javascript highlighter-rouge"><span class="nx">memorySearch</span><span class="p">.</span><span class="nx">fallback</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">ollama</span><span class="dl">"</span></code> 支持</li>
+  <li>为内存嵌入请求遵循 <code class="language-javascript highlighter-rouge"><span class="nx">models</span><span class="p">.</span><span class="nx">providers</span><span class="p">.</span><span class="nx">ollama</span></code> 设置</li>
+</ul>
+
+<h3 id="8-zalo-个人插件重构">8. Zalo 个人插件重构</h3>
+<ul>
+  <li>使用原生 <code class="language-javascript highlighter-rouge"><span class="nx">zca</span><span class="o">-</span><span class="nx">js</span></code> 集成重构 Zalo 个人插件</li>
+  <li>移除了外部 CLI 传输依赖</li>
+  <li>完全在 OpenClaw 内部实现 QR/登录 + 发送/监听流程</li>
+</ul>
+
+<h2 id="三重要改进">三、重要改进</h2>
+
+<h3 id="1-插件-sdk-增强">1. 插件 SDK 增强</h3>
+<ul>
+  <li>暴露 <code class="language-javascript highlighter-rouge"><span class="nx">channelRuntime</span></code> 到 <code class="language-javascript highlighter-rouge"><span class="nx">ChannelGatewayContext</span></code>，使外部通道插件可以访问共享运行时助手</li>
+  <li>暴露 <code class="language-javascript highlighter-rouge"><span class="nx">runtime</span><span class="p">.</span><span class="nx">system</span><span class="p">.</span><span class="nf">requestHeartbeatNow</span><span class="p">(...)</span></code>，使扩展可以在排队系统事件后立即唤醒目标会话</li>
+  <li>暴露 <code class="language-javascript highlighter-rouge"><span class="nx">runtime</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">onAgentEvent</span></code> 和 <code class="language-javascript highlighter-rouge"><span class="nx">runtime</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">onSessionTranscriptUpdate</span></code> 用于扩展端订阅</li>
+</ul>
+
+<h3 id="2-媒体理解增强">2. 媒体理解增强</h3>
+<ul>
+  <li>新增可选 <code class="language-javascript highlighter-rouge"><span class="nx">tools</span><span class="p">.</span><span class="nx">media</span><span class="p">.</span><span class="nx">audio</span><span class="p">.</span><span class="nx">echoTranscript</span></code> + <code class="language-javascript highlighter-rouge"><span class="nx">echoFormat</span></code>，可向原始聊天发送代理前转录确认消息</li>
+  <li>新增 <code class="language-javascript highlighter-rouge"><span class="nx">api</span><span class="p">.</span><span class="nx">runtime</span><span class="p">.</span><span class="nx">stt</span><span class="p">.</span><span class="nf">transcribeAudioFile</span><span class="p">(...)</span></code>，使扩展可以通过 OpenClaw 配置的媒体理解音频提供商转录本地音频文件</li>
+</ul>
+
+<h3 id="3-cicd-优化">3. CI/CD 优化</h3>
+<ul>
+  <li>减少检查构建和 Windows 作业的关键路径</li>
+  <li>使节点依赖安装在设置操作中可选</li>
+  <li>加速 Windows 依赖预热</li>
+  <li>将 Windows 测试分片为六分之一并跳过缓存恢复</li>
+</ul>
+
+<h3 id="4-文档改进">4. 文档改进</h3>
+<ul>
+  <li>新增专门的 PDF 工具文档页面</li>
+  <li>Feishu 文档添加了 verificationToken 并对齐了 zh-CN 与 EN 版本</li>
+</ul>
+
+<h2 id="四重大变更">四、重大变更</h2>
+
+<h3 id="1-入职默认值变更">1. 入职默认值变更</h3>
+<ul>
+  <li>新本地安装默认 <code class="language-javascript highlighter-rouge"><span class="nx">tools</span><span class="p">.</span><span class="nx">profile</span></code> 为 <code class="language-javascript highlighter-rouge"><span class="nx">messaging</span></code></li>
+  <li>新设置不再默认包含广泛的编码/系统工具，除非显式配置</li>
+</ul>
+
+<h3 id="2-acp-调度默认启用">2. ACP 调度默认启用</h3>
+<ul>
+  <li>ACP 调度现在默认启用，除非显式禁用（<code class="language-javascript highlighter-rouge"><span class="nx">acp</span><span class="p">.</span><span class="nx">dispatch</span><span class="p">.</span><span class="nx">enabled</span><span class="o">=</span><span class="kc">false</span></code>）</li>
+  <li>如果需要暂停 ACP 转向同时保留 <code class="language-javascript highlighter-rouge"><span class="o">/</span><span class="nx">acp</span></code> 控制，请设置 <code class="language-javascript highlighter-rouge"><span class="nx">acp</span><span class="p">.</span><span class="nx">dispatch</span><span class="p">.</span><span class="nx">enabled</span><span class="o">=</span><span class="kc">false</span></code></li>
+</ul>
+
+<h3 id="3-plugin-sdk-变更">3. Plugin SDK 变更</h3>
+<ul>
+  <li>移除了 <code class="language-javascript highlighter-rouge"><span class="nx">api</span><span class="p">.</span><span class="nf">registerHttpHandler</span><span class="p">(...)</span></code></li>
+  <li>插件必须通过 <code class="language-javascript highlighter-rouge"><span class="nx">api</span><span class="p">.</span><span class="nf">registerHttpRoute</span><span class="p">({</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">auth</span><span class="p">,</span> <span class="nx">match</span><span class="p">,</span> <span class="nx">handler</span> <span class="p">})</span></code> 注册显式 HTTP 路由</li>
+  <li>动态 webhook 生命周期应使用 <code class="language-javascript highlighter-rouge"><span class="nf">registerPluginHttpRoute</span><span class="p">(...)</span></code></li>
+</ul>
+
+<h3 id="4-zalo-个人插件依赖变更">4. Zalo 个人插件依赖变更</h3>
+<ul>
+  <li>Zalo 个人插件不再依赖外部 <code class="language-javascript highlighter-rouge"><span class="nx">zca</span></code> 兼容的 CLI 二进制文件</li>
+  <li>升级后应使用 <code class="language-javascript highlighter-rouge"><span class="nx">openclaw</span> <span class="nx">channels</span> <span class="nx">login</span> <span class="o">--</span><span class="nx">channel</span> <span class="nx">zalouser</span></code> 刷新会话</li>
+</ul>
+
+<h2 id="五bug-修复">五、Bug 修复</h2>
+
+<h3 id="1-稳定性修复">1. 稳定性修复</h3>
+<ul>
+  <li>插件命令/运行时强化：在注册边界验证和规范化插件命令名称/描述</li>
+  <li>Telegram：保护重复令牌检查和网关启动令牌规范化，防止 <code class="language-javascript highlighter-rouge"><span class="nx">token</span><span class="p">.</span><span class="nf">trim</span><span class="p">()</span></code> 崩溃</li>
+  <li>Discord：在网关已连接时立即推送 <code class="language-javascript highlighter-rouge"><span class="nx">connected</span></code> 状态快照</li>
+  <li>Feishu/LINE：将每组 <code class="language-javascript highlighter-rouge"><span class="nx">systemPrompt</span></code> 配置转发到入站上下文 <code class="language-javascript highlighter-rouge"><span class="nx">GroupSystemPrompt</span></code></li>
+</ul>
+
+<h3 id="2-兼容性修复">2. 兼容性修复</h3>
+<ul>
+  <li>Feishu/Plugin SDK 兼容性：加载 Feishu 监控状态时添加安全的 webhook 默认回退</li>
+  <li>Gateway/Subagent TLS 配对：允许经过身份验证的本地 <code class="language-javascript highlighter-rouge"><span class="nx">gateway</span><span class="o">-</span><span class="nx">client</span></code> 后端自连接跳过设备配对</li>
+  <li>Browser/CDP 启动诊断：在启动超时错误中包含 Chrome stderr 输出和 Linux no-sandbox 提示</li>
+</ul>
+
+<h3 id="3-安全性修复">3. 安全性修复</h3>
+<ul>
+  <li>Synology Chat/webhook 入口强化：通过共享请求体保护强制有界体读取（大小 + 超时）</li>
+  <li>Voice-call/运行时生命周期：通过重置失败的运行时承诺防止 <code class="language-javascript highlighter-rouge"><span class="nx">EADDRINUSE</span></code> 循环</li>
+</ul>
+
+<h2 id="六总结">六、总结</h2>
+
+<p>OpenClaw 2026.3.2 版本是一个全面的更新，显著提升了多通道支持、安全性、可扩展性和开发者体验。特别是在秘密管理、PDF 工具、多通道广播和插件 SDK 方面的改进，使得 OpenClaw 更加适合企业级应用和复杂的工作流场景。</p>
+
+<p>建议所有用户尽快升级到该版本，以获得更好的性能、安全性和功能体验。</p>
+
+  </div>
+
+  <!-- 相似文章推荐 -->
+  
+  <div class="related-posts post-bottom-section">
+    <h3>📖 相似文章推荐</h3>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="related-posts-grid">
+      
+    </div>
+    
+    
+    <p class="no-related">暂无相似文章</p>
+    
+  </div>
+  
+
+  <!-- 文章导航 -->
+  <div class="post-nav post-bottom-section">
+    <div class="post-nav-container">
+      
+      <div class="post-nav-item left">
+        <a href="/2026/03/03/openclaw-env-vars-research.html">
+          <div class="post-nav-label">上一篇</div>
+          <div class="post-nav-title">OpenClaw环境变量加载和使用机制研究</div>
+        </a>
+      </div>
+      <div class="post-nav-divider"></div>
+      
+      
+      <div class="post-nav-item right">
+        <a href="/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html">
+          <div class="post-nav-label">下一篇</div>
+          <div class="post-nav-title">OpenClaw Agent System Prompt 架构详解报告</div>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 分享按钮 -->
+  <div class="share-section post-bottom-section">
+    <h3>📤 分享这篇文章</h3>
+    <div class="share-buttons">
+      <a href="https://twitter.com/intent/tweet?url=https://wujiaming88.github.io/2026/03/03/openclaw-2026.3.2-update.html&text=OpenClaw+2026.3.2+%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E8%AF%A6%E8%A7%A3" target="_blank" rel="noopener noreferrer" class="share-btn twitter">
+        🐦 Twitter
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://wujiaming88.github.io/2026/03/03/openclaw-2026.3.2-update.html&title=OpenClaw+2026.3.2+%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E8%AF%A6%E8%A7%A3" target="_blank" rel="noopener noreferrer" class="share-btn facebook">
+        📘 Facebook
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://wujiaming88.github.io/2026/03/03/openclaw-2026.3.2-update.html&title=OpenClaw+2026.3.2+%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E8%AF%A6%E8%A7%A3&summary=OpenClaw+2026.3.2+%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E8%AF%A6%E8%A7%A3%0A" target="_blank" rel="noopener noreferrer" class="share-btn linkedin">
+        💼 LinkedIn
+      </a>
+      <button onclick="copyToClipboard('https://wujiaming88.github.io/2026/03/03/openclaw-2026.3.2-update.html')" class="share-btn copy">
+        📋 复制链接
+      </button>
+    </div>
+  </div>
+
+  
+
+</article>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    alert('链接已复制到剪贴板！');
+  }, function(err) {
+    console.error('无法复制文本: ', err);
+    alert('复制失败，请手动复制链接: ' + text);
+  });
+}
+
+// 代码块高亮和复制功能
+document.addEventListener('DOMContentLoaded', () => {
+  // 为代码块添加复制按钮
+  document.querySelectorAll('pre').forEach((pre, index) => {
+    const copyButton = document.createElement('button');
+    copyButton.textContent = '📋 复制代码';
+    copyButton.style.cssText = `
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(99, 102, 241, 0.9);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+    `;
+    
+    pre.style.position = 'relative';
+    pre.appendChild(copyButton);
+    
+    // 鼠标悬停时显示复制按钮
+    pre.addEventListener('mouseenter', () => {
+      copyButton.style.opacity = '1';
+    });
+    
+    pre.addEventListener('mouseleave', () => {
+      copyButton.style.opacity = '0';
+    });
+    
+    // 复制功能
+    copyButton.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        copyButton.textContent = '✅ 已复制';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      }).catch(err => {
+        console.error('无法复制代码: ', err);
+        copyButton.textContent = '❌ 复制失败';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      });
+    });
+  });
+  
+  // 代码折叠功能（超过20行自动折叠）
+  document.querySelectorAll('pre code').forEach((code) => {
+    const lines = code.textContent.split('\n').length;
+    if (lines > 20) {
+      code.style.maxHeight = '300px';
+      code.style.overflow = 'hidden';
+      code.style.position = 'relative';
+      
+      const expandButton = document.createElement('button');
+      expandButton.textContent = '🔽 展开全部代码';
+      expandButton.style.cssText = `
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(30, 30, 30, 0.9), transparent);
+        color: white;
+        border: none;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+      `;
+      
+      code.appendChild(expandButton);
+      
+      expandButton.addEventListener('click', () => {
+        if (code.style.maxHeight === '300px') {
+          code.style.maxHeight = 'none';
+          expandButton.textContent = '🔼 收起代码';
+        } else {
+          code.style.maxHeight = '300px';
+          expandButton.textContent = '🔽 展开全部代码';
+        }
+      });
+    }
+  });
+});
+</script>
+
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p style="font-size: 0.85rem;">&copy; 2026 W.ai · 基于 Jekyll 构建</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 图片懒加载
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img.lazyload');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            image.src = image.dataset.src;
+                            image.classList.remove('lazyload');
+                            image.classList.add('lazyloaded');
+                            imageObserver.unobserve(image);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(image => {
+                    imageObserver.observe(image);
+                });
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 返回顶部按钮
+        const backToTop = document.createElement('button');
+        backToTop.textContent = '↑';
+        backToTop.style.cssText = `
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            background-color: rgba(66, 165, 245, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(backToTop);
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.style.opacity = '1';
+                backToTop.style.visibility = 'visible';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.visibility = 'hidden';
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

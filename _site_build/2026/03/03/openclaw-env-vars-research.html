@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw环境变量加载和使用机制研究</title>
+    <meta name="description" content="OpenClaw环境变量加载和使用机制研究报告">
+    
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- 引入主样式 -->
+    <link rel="stylesheet" href="/assets/main.css">
+    
+    <!-- SEO标签 -->
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>OpenClaw环境变量加载和使用机制研究 | W.ai</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="OpenClaw环境变量加载和使用机制研究" />
+<meta name="author" content="W.ai" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="OpenClaw环境变量加载和使用机制研究报告" />
+<meta property="og:description" content="OpenClaw环境变量加载和使用机制研究报告" />
+<link rel="canonical" href="https://wujiaming88.github.io/2026/03/03/openclaw-env-vars-research.html" />
+<meta property="og:url" content="https://wujiaming88.github.io/2026/03/03/openclaw-env-vars-research.html" />
+<meta property="og:site_name" content="W.ai" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-03T04:29:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="OpenClaw环境变量加载和使用机制研究" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"W.ai"},"dateModified":"2026-03-03T04:29:00+00:00","datePublished":"2026-03-03T04:29:00+00:00","description":"OpenClaw环境变量加载和使用机制研究报告","headline":"OpenClaw环境变量加载和使用机制研究","mainEntityOfPage":{"@type":"WebPage","@id":"https://wujiaming88.github.io/2026/03/03/openclaw-env-vars-research.html"},"url":"https://wujiaming88.github.io/2026/03/03/openclaw-env-vars-research.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    
+    <!-- 站点图标 -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="navbar-brand">
+                W.ai
+            </a>
+            
+            <ul class="navbar-nav">
+                <li><a href="/" class="nav-link ">首页</a></li>
+                <li><a href="/categories/" class="nav-link ">分类</a></li>
+                <li><a href="/tags/" class="nav-link ">标签</a></li>
+                <li><a href="/about/" class="nav-link ">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <style>
+/* ============================================
+   文章页面样式 - 2026版优化
+   ============================================ */
+
+/* 文章标题样式 */
+.post-header h1 {
+    color: #1f2937;
+    border-bottom: 3px solid #6366f1;
+}
+
+.post-meta {
+    color: #6b7280;
+}
+
+/* ============================================
+   封面图片样式
+   ============================================ */
+
+/* 封面图片容器 */
+.post-cover {
+    margin: 0 0 2.5rem 0;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 450px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+}
+
+.post-cover:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 20px 40px -10px rgba(0, 0, 0, 0.15),
+        0 10px 15px -5px rgba(99, 102, 241, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+/* 封面图片 */
+.post-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.post-cover:hover img {
+    transform: scale(1.02);
+}
+
+/* 渐变遮罩层 */
+.post-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+    border-radius: 0 0 16px 16px;
+}
+
+/* 图片说明文字 */
+.post-cover-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    color: #ffffff;
+    font-size: 0.85rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+.post-cover:hover .post-cover-caption {
+    opacity: 1;
+}
+
+/* ============================================
+   文章底部通用样式（推荐/分享/导航）
+   ============================================ */
+
+.post-bottom-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================
+   文章导航样式 - 优化版
+   ============================================ */
+
+.post-nav {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+    border: 2px solid #c7d2fe;
+}
+
+.post-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #6366f1 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.post-nav-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.post-nav-item {
+    flex: 1;
+}
+
+.post-nav-item.left {
+    text-align: left;
+}
+
+.post-nav-item.right {
+    text-align: right;
+}
+
+.post-nav-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #c7d2fe 20%,
+        #c7d2fe 80%,
+        transparent 100%
+    );
+}
+
+.post-nav-label {
+    color: #6366f1;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-nav-item.left .post-nav-label::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+.post-nav-item.right .post-nav-label::after {
+    content: '→';
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+.post-nav-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-nav-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.post-nav-item a:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateX(4px);
+}
+
+.post-nav-item.right a:hover {
+    transform: translateX(-4px);
+}
+
+.post-nav-item a:hover .post-nav-title {
+    color: #6366f1;
+}
+
+/* ============================================
+   分享按钮样式 - 优化版
+   ============================================ */
+
+.share-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.share-section h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    padding: 0.8rem 1.75rem;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.share-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.share-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.share-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(99, 102, 241, 0.4);
+}
+
+.share-btn:active {
+    transform: translateY(-2px);
+}
+
+/* 社交平台品牌色 */
+.share-btn.twitter { 
+    background: linear-gradient(135deg, #1da1f2 0%, #0d8ecf 100%);
+}
+.share-btn.facebook { 
+    background: linear-gradient(135deg, #3b5998 0%, #2d4373 100%);
+}
+.share-btn.linkedin { 
+    background: linear-gradient(135deg, #0077b5 0%, #005582 100%);
+}
+.share-btn.copy { 
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    cursor: pointer;
+    border: none;
+}
+
+.share-btn.twitter:hover {
+    background: linear-gradient(135deg, #0d8ecf 0%, #0a7bc4 100%);
+}
+
+.share-btn.facebook:hover {
+    background: linear-gradient(135deg, #2d4373 0%, #1e2e4f 100%);
+}
+
+.share-btn.linkedin:hover {
+    background: linear-gradient(135deg, #005582 0%, #003d5c 100%);
+}
+
+.share-btn.copy:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+/* ============================================
+   相似文章推荐样式 - 优化版
+   ============================================ */
+
+.related-posts {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.related-posts h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.25rem;
+}
+
+.related-post-card {
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.related-post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.related-post-card:hover::before {
+    transform: scaleY(1);
+}
+
+.related-post-card:hover {
+    border-color: #c7d2fe;
+    box-shadow: 
+        0 8px 16px -4px rgba(99, 102, 241, 0.2),
+        0 4px 8px -2px rgba(99, 102, 241, 0.1);
+    transform: translateY(-3px);
+}
+
+.related-post-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-post-card:hover .related-post-title {
+    color: #6366f1;
+}
+
+.related-post-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.related-post-category {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    color: #6366f1;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid #e0e7ff;
+}
+
+.no-related {
+    color: #6b7280;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* 封面图片响应式 */
+    .post-cover {
+        border-radius: 12px;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 300px;
+    }
+    
+    .post-cover-caption {
+        font-size: 0.75rem;
+        padding: 1rem;
+    }
+    
+    /* 底部组件响应式 */
+    .share-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .share-btn {
+        justify-content: center;
+    }
+    
+    .related-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-divider {
+        display: none;
+    }
+    
+    .post-nav-item {
+        text-align: left !important;
+    }
+    
+    .post-nav-item a {
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-cover {
+        border-radius: 0;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 250px;
+    }
+}
+
+/* ============================================
+   动画效果
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.related-post-card,
+.share-btn,
+.post-nav-item {
+    animation: fadeInUp 0.5s ease backwards;
+}
+
+.related-post-card:nth-child(1) { animation-delay: 0.1s; }
+.related-post-card:nth-child(2) { animation-delay: 0.2s; }
+.related-post-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* 无障碍设计 */
+.share-btn:focus,
+.related-post-card:focus,
+.post-nav-item a:focus {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+</style>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting" style="max-width: 800px; margin: 0 auto;">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem;">OpenClaw环境变量加载和使用机制研究</h1>
+    <div class="post-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+      <time class="dt-published" datetime="2026-03-03T04:29:00+00:00" itemprop="datePublished">
+        📅 2026年03月03日
+      </time>
+      
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span class="p-author h-card" itemprop="name">👤 W.ai</span>
+        </span>
+      
+      
+        • <span>📂 OpenClaw, 技术研究</span>
+      
+      
+        • <span>#️⃣ </span>
+      
+    </div>
+  </header>
+
+  <!-- 封面图片 -->
+  
+  
+  <div class="post-cover">
+    <img src="https://picsum.photos/1200/400?random=1555066931-4365d14bab8c?w=1200&h=400&fit=crop" alt="OpenClaw环境变量加载和使用机制研究" loading="lazy">
+    
+    <div class="post-cover-caption">Environment Variables</div>
+    
+  </div>
+  
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="openclaw环境变量加载和使用机制研究报告">OpenClaw环境变量加载和使用机制研究报告</h1>
+
+<h2 id="一核心机制概述">一、核心机制概述</h2>
+
+<p>OpenClaw提供了完善的环境变量加载和管理机制，主要用于安全地处理API密钥等敏感信息。其核心设计理念是：</p>
+<ul>
+  <li><strong>配置优先，环境变量兜底</strong>：优先使用配置文件中的设置，环境变量作为备选方案</li>
+  <li><strong>类型安全的秘密引用</strong>：支持通过SecretRef对象引用环境变量、文件或执行命令获取的秘密</li>
+  <li><strong>自动注入机制</strong>：技能可以自动从环境变量加载配置的API密钥</li>
+  <li><strong>安全沙箱隔离</strong>：对环境变量进行 sanitize 处理，防止注入攻击</li>
+</ul>
+
+<h2 id="二环境变量文件位置与生效优先级">二、环境变量文件位置与生效优先级</h2>
+
+<h3 id="1-环境变量文件位置">1. 环境变量文件位置</h3>
+
+<p>OpenClaw支持多种环境变量文件位置，按加载顺序排列：</p>
+
+<h4 id="1系统级环境变量">（1）系统级环境变量</h4>
+<ul>
+  <li><strong>位置</strong>：操作系统级别的环境变量，通过<code class="language-javascript highlighter-rouge"><span class="k">export</span></code>命令设置</li>
+  <li><strong>示例</strong>：<code class="language-javascript highlighter-rouge"><span class="k">export</span> <span class="nx">MY_SKILL_API_KEY</span><span class="o">=</span><span class="dl">"</span><span class="s2">sk-xxxxxxxx</span><span class="dl">"</span></code></li>
+  <li><strong>生效范围</strong>：全局生效，影响所有OpenClaw实例</li>
+</ul>
+
+<h4 id="2用户级环境变量文件">（2）用户级环境变量文件</h4>
+<ul>
+  <li><strong>位置</strong>：<code class="language-javascript highlighter-rouge"><span class="o">~</span><span class="sr">/.openclaw/</span><span class="p">.</span><span class="nx">env</span></code></li>
+  <li><strong>格式</strong>：标准dotenv格式，每行一个环境变量</li>
+  <li><strong>示例</strong>：
+    <pre><code class="language-env">MY_SKILL_API_KEY="sk-xxxxxxxx"
+NODE_ENV="production"
+</code></pre>
+  </li>
+  <li><strong>生效范围</strong>：当前用户的所有OpenClaw实例</li>
+</ul>
+
+<h4 id="3项目级环境变量文件">（3）项目级环境变量文件</h4>
+<ul>
+  <li><strong>位置</strong>：项目根目录下的<code class="language-javascript highlighter-rouge"><span class="p">.</span><span class="nx">env</span></code>文件</li>
+  <li><strong>格式</strong>：标准dotenv格式</li>
+  <li><strong>生效范围</strong>：仅影响当前项目的OpenClaw实例</li>
+</ul>
+
+<h4 id="4运行时临时环境变量">（4）运行时临时环境变量</h4>
+<ul>
+  <li><strong>位置</strong>：通过命令行参数传递</li>
+  <li><strong>示例</strong>：<code class="language-javascript highlighter-rouge"><span class="nx">MY_SKILL_API_KEY</span><span class="o">=</span><span class="dl">"</span><span class="s2">sk-xxxxxxxx</span><span class="dl">"</span> <span class="nx">openclaw</span> <span class="nx">start</span></code></li>
+  <li><strong>生效范围</strong>：仅影响当前运行的OpenClaw实例</li>
+</ul>
+
+<h3 id="2-环境变量生效优先级">2. 环境变量生效优先级</h3>
+
+<p>OpenClaw环境变量的生效优先级从高到低为：</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="nx">运行时临时环境变量</span> <span class="o">&gt;</span> <span class="nx">项目级</span><span class="p">.</span><span class="nx">env文件</span> <span class="o">&gt;</span> <span class="nx">用户级</span><span class="o">~</span><span class="sr">/.openclaw/</span><span class="p">.</span><span class="nx">env文件</span> <span class="o">&gt;</span> <span class="nx">系统级环境变量</span>
+</code></pre></div></div>
+
+<h3 id="3-配置文件与环境变量的优先级">3. 配置文件与环境变量的优先级</h3>
+
+<p>当配置文件和环境变量同时存在时，OpenClaw的优先级规则为：</p>
+<ul>
+  <li><strong>显式配置优先</strong>：如果配置文件中明确设置了值（非SecretRef），则优先使用配置文件中的值</li>
+  <li><strong>SecretRef次之</strong>：如果配置文件中使用了SecretRef引用环境变量，则解析对应的环境变量</li>
+  <li><strong>环境变量兜底</strong>：如果配置文件中未设置，且没有SecretRef引用，则直接读取环境变量</li>
+</ul>
+
+<h2 id="三环境变量读取的三种方式">三、环境变量读取的三种方式</h2>
+
+<h3 id="1-直接读取简单场景">1. 直接读取（简单场景）</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="c1">// 直接读取环境变量</span>
+<span class="kd">const</span> <span class="nx">apiKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">MY_SKILL_API_KEY</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>适用场景</strong>：快速原型开发、简单技能
+<strong>示例</strong>：web-search.ts中直接读取BRAVE_API_KEY</p>
+
+<h3 id="2-使用normalizeresolvedsecretinputstring推荐方式">2. 使用normalizeResolvedSecretInputString（推荐方式）</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">normalizeResolvedSecretInputString</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../config/types.secrets.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// 从配置或环境变量读取API密钥</span>
+<span class="kd">const</span> <span class="nx">apiKey</span> <span class="o">=</span> <span class="nf">normalizeResolvedSecretInputString</span><span class="p">({</span>
+  <span class="na">value</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">apiKey</span><span class="p">,</span> <span class="c1">// 配置文件中的值</span>
+  <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">skills.entries.my-skill.apiKey</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// 配置路径，用于错误提示</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p><strong>适用场景</strong>：正式技能开发，支持配置文件和环境变量两种方式
+<strong>示例</strong>：tts.ts中读取ElevenLabs和OpenAI的API密钥</p>
+
+<h3 id="3-使用secretref对象高级场景">3. 使用SecretRef对象（高级场景）</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="c1">// 在配置文件中定义SecretRef</span>
+<span class="p">{</span>
+  <span class="dl">"</span><span class="s2">apiKey</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">source</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">env</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">provider</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">default</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">MY_SKILL_API_KEY</span><span class="dl">"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 在代码中解析</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">ref</span> <span class="p">}</span> <span class="o">=</span> <span class="nf">resolveSecretInputRef</span><span class="p">({</span>
+  <span class="na">value</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">apiKey</span><span class="p">,</span>
+  <span class="na">defaults</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">secrets</span><span class="p">?.</span><span class="nx">defaults</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p><strong>适用场景</strong>：需要动态切换秘密来源的复杂场景
+<strong>示例</strong>：secrets/command-config.ts中的秘密解析逻辑</p>
+
+<h2 id="四技能中读取api密钥的最佳实践">四、技能中读取API密钥的最佳实践</h2>
+
+<h3 id="1-配置文件优先环境变量兜底">1. 配置文件优先，环境变量兜底</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">normalizeResolvedSecretInputString</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../config/types.secrets.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">normalizeSecretInput</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../utils/normalize-secret-input.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nf">resolveMySkillApiKey</span><span class="p">(</span><span class="nx">config</span><span class="p">?:</span> <span class="nx">MySkillConfig</span><span class="p">):</span> <span class="kr">string</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+  <span class="c1">// 优先使用配置文件中的值</span>
+  <span class="kd">const</span> <span class="nx">fromConfig</span> <span class="o">=</span> <span class="nf">normalizeResolvedSecretInputString</span><span class="p">({</span>
+    <span class="na">value</span><span class="p">:</span> <span class="nx">config</span><span class="p">?.</span><span class="nx">apiKey</span><span class="p">,</span>
+    <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">skills.entries.my-skill.apiKey</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">});</span>
+  
+  <span class="c1">// 环境变量作为备选</span>
+  <span class="kd">const</span> <span class="nx">fromEnv</span> <span class="o">=</span> <span class="nf">normalizeSecretInput</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">MY_SKILL_API_KEY</span><span class="p">);</span>
+  
+  <span class="k">return</span> <span class="nx">fromConfig</span> <span class="o">||</span> <span class="nx">fromEnv</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2-在技能元数据中声明依赖">2. 在技能元数据中声明依赖</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="c1">// 在SKILL.md或技能配置中声明所需环境变量</span>
+<span class="p">{</span>
+  <span class="dl">"</span><span class="s2">metadata</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">primaryEnv</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">MY_SKILL_API_KEY</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">requires</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">env</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">MY_SKILL_API_KEY</span><span class="dl">"</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="3-使用applyskillenvoverrides自动注入">3. 使用applySkillEnvOverrides自动注入</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">applySkillEnvOverrides</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../agents/skills/env-overrides.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// 自动将技能配置中的环境变量注入到process.env</span>
+<span class="kd">const</span> <span class="nx">revert</span> <span class="o">=</span> <span class="nf">applySkillEnvOverrides</span><span class="p">({</span>
+  <span class="na">skills</span><span class="p">:</span> <span class="p">[</span><span class="nx">mySkillEntry</span><span class="p">],</span>
+  <span class="na">config</span><span class="p">:</span> <span class="nx">openClawConfig</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="c1">// 使用后清理</span>
+<span class="nf">revert</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h2 id="五环境变量的安全机制">五、环境变量的安全机制</h2>
+
+<h3 id="1-敏感信息过滤">1. 敏感信息过滤</h3>
+<ul>
+  <li>自动过滤包含null字节的环境变量值</li>
+  <li>对危险的环境变量名称进行拦截（如OPENSSL_CONF）</li>
+  <li>支持环境变量白名单机制</li>
+</ul>
+
+<h3 id="2-沙箱隔离">2. 沙箱隔离</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">sanitizeEnvVars</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../agents/sandbox/sanitize-env-vars.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// 清理环境变量，只保留允许的变量</span>
+<span class="kd">const</span> <span class="nx">sanitizedEnv</span> <span class="o">=</span> <span class="nf">sanitizeEnvVars</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">allowlist</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">MY_SKILL_API_KEY</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">NODE_ENV</span><span class="dl">"</span><span class="p">],</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="3-秘密解析验证">3. 秘密解析验证</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">assertSecretInputResolved</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../config/types.secrets.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// 验证秘密是否已解析</span>
+<span class="nf">assertSecretInputResolved</span><span class="p">({</span>
+  <span class="na">value</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">apiKey</span><span class="p">,</span>
+  <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">skills.entries.my-skill.apiKey</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="六完整示例开发一个使用环境变量的python技能">六、完整示例：开发一个使用环境变量的Python技能</h2>
+
+<h3 id="1-技能配置文件">1. 技能配置文件</h3>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my-python-skill"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"使用环境变量API密钥的Python示例技能"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"primaryEnv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MY_PYTHON_SKILL_API_KEY"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"requires"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"MY_PYTHON_SKILL_API_KEY"</span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"config"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"apiKey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${MY_PYTHON_SKILL_API_KEY}"</span><span class="p">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="err">环境变量引用模板</span><span class="w">
+    </span><span class="nl">"endpoint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.example.com/v1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"pythonPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/usr/bin/python3"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="2-技能实现代码python">2. 技能实现代码（Python）</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="k">def</span> <span class="nf">resolve_api_key</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    从配置文件或环境变量解析API密钥
+    :param config: 技能配置字典
+    :return: API密钥或None
+    </span><span class="sh">"""</span>
+    <span class="c1"># 优先使用配置文件中的值
+</span>    <span class="k">if</span> <span class="n">config</span> <span class="ow">and</span> <span class="sh">"</span><span class="s">apiKey</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">api_key</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="sh">"</span><span class="s">apiKey</span><span class="sh">"</span><span class="p">]</span>
+        <span class="c1"># 如果是环境变量引用模板，解析对应的环境变量
+</span>        <span class="k">if</span> <span class="n">api_key</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">"</span><span class="s">${</span><span class="sh">"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">api_key</span><span class="p">.</span><span class="nf">endswith</span><span class="p">(</span><span class="sh">"</span><span class="s">}</span><span class="sh">"</span><span class="p">):</span>
+            <span class="n">env_var_name</span> <span class="o">=</span> <span class="n">api_key</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="n">env_var_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">api_key</span>
+    
+    <span class="c1"># 环境变量作为备选
+</span>    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">MY_PYTHON_SKILL_API_KEY</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">execute_skill</span><span class="p">(</span><span class="n">tool_call_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sh">"""</span><span class="s">
+    执行Python技能
+    :param tool_call_id: 工具调用ID
+    :param args: 工具调用参数
+    :param config: 技能配置
+    :return: 执行结果
+    </span><span class="sh">"""</span>
+    <span class="c1"># 解析API密钥
+</span>    <span class="n">api_key</span> <span class="o">=</span> <span class="nf">resolve_api_key</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">api_key</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">success</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">missing_api_key</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">MY_PYTHON_SKILL_API_KEY环境变量未设置</span><span class="sh">"</span>
+        <span class="p">}</span>
+    
+    <span class="c1"># 获取查询参数
+</span>    <span class="n">query</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">query</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">success</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">missing_parameter</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">缺少必填参数: query</span><span class="sh">"</span>
+        <span class="p">}</span>
+    
+    <span class="c1"># 获取API端点
+</span>    <span class="n">endpoint</span> <span class="o">=</span> <span class="n">config</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">endpoint</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">https://api.example.com/v1</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># 使用API密钥调用外部服务
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span>
+            <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s">/search</span><span class="sh">"</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                <span class="sh">"</span><span class="s">Authorization</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Bearer </span><span class="si">{</span><span class="n">api_key</span><span class="si">}</span><span class="sh">"</span><span class="p">,</span>
+                <span class="sh">"</span><span class="s">Content-Type</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">application/json</span><span class="sh">"</span>
+            <span class="p">},</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">query</span><span class="sh">"</span><span class="p">:</span> <span class="n">query</span><span class="p">},</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span>
+        <span class="p">)</span>
+        <span class="n">response</span><span class="p">.</span><span class="nf">raise_for_status</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">success</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">result</span><span class="sh">"</span><span class="p">:</span> <span class="n">data</span>
+        <span class="p">}</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="sh">"</span><span class="s">success</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">api_request_failed</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">API请求失败: </span><span class="si">{</span><span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span>
+        <span class="p">}</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="c1"># 从命令行参数获取输入
+</span>    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">success</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">missing_input</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">缺少输入参数</span><span class="sh">"</span>
+        <span class="p">}))</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">input_data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">loads</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">tool_call_id</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">toolCallId</span><span class="sh">"</span><span class="p">,</span> <span class="sh">""</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">args</span><span class="sh">"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">config</span><span class="sh">"</span><span class="p">,</span> <span class="p">{})</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">execute_skill</span><span class="p">(</span><span class="n">tool_call_id</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">json</span><span class="p">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">({</span>
+            <span class="sh">"</span><span class="s">success</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">error</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">invalid_json</span><span class="sh">"</span><span class="p">,</span>
+            <span class="sh">"</span><span class="s">message</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">无效的JSON输入: </span><span class="si">{</span><span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span>
+        <span class="p">}))</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="3-typescript包装器用于openclaw集成">3. TypeScript包装器（用于OpenClaw集成）</h3>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Type</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@sinclair/typebox</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">spawn</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">node:child_process</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="kd">type</span> <span class="p">{</span> <span class="nx">AnyAgentTool</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./common.js</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">jsonResult</span><span class="p">,</span> <span class="nx">readStringParam</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./common.js</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">MyPythonSkillSchema</span> <span class="o">=</span> <span class="nx">Type</span><span class="p">.</span><span class="nc">Object</span><span class="p">({</span>
+  <span class="na">query</span><span class="p">:</span> <span class="nx">Type</span><span class="p">.</span><span class="nc">String</span><span class="p">({</span> <span class="na">description</span><span class="p">:</span> <span class="dl">"</span><span class="s2">查询字符串</span><span class="dl">"</span> <span class="p">}),</span>
+<span class="p">});</span>
+
+<span class="k">export</span> <span class="kd">function</span> <span class="nf">createMyPythonSkillTool</span><span class="p">(</span><span class="nx">config</span><span class="p">?:</span> <span class="nx">OpenClawConfig</span><span class="p">):</span> <span class="nx">AnyAgentTool</span> <span class="o">|</span> <span class="kc">null</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">skillConfig</span> <span class="o">=</span> <span class="nx">config</span><span class="p">?.</span><span class="nx">skills</span><span class="p">?.</span><span class="nx">entries</span><span class="p">?.[</span><span class="dl">"</span><span class="s2">my-python-skill</span><span class="dl">"</span><span class="p">];</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">skillConfig</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">label</span><span class="p">:</span> <span class="dl">"</span><span class="s2">我的Python技能</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">my_python_skill</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">description</span><span class="p">:</span> <span class="dl">"</span><span class="s2">使用环境变量API密钥的Python示例技能</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">parameters</span><span class="p">:</span> <span class="nx">MyPythonSkillSchema</span><span class="p">,</span>
+    <span class="na">execute</span><span class="p">:</span> <span class="k">async </span><span class="p">(</span><span class="nx">_toolCallId</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">query</span> <span class="o">=</span> <span class="nf">readStringParam</span><span class="p">(</span><span class="nx">args</span><span class="p">,</span> <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span> <span class="na">required</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span>
+      <span class="kd">const</span> <span class="nx">pythonPath</span> <span class="o">=</span> <span class="nx">skillConfig</span><span class="p">.</span><span class="nx">config</span><span class="p">?.</span><span class="nx">pythonPath</span> <span class="o">||</span> <span class="dl">"</span><span class="s2">python3</span><span class="dl">"</span><span class="p">;</span>
+      
+      <span class="k">return</span> <span class="k">new</span> <span class="nc">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="c1">// 生成Python子进程执行技能</span>
+        <span class="kd">const</span> <span class="nx">pythonProcess</span> <span class="o">=</span> <span class="nf">spawn</span><span class="p">(</span><span class="nx">pythonPath</span><span class="p">,</span> <span class="p">[</span>
+          <span class="dl">"</span><span class="s2">-c</span><span class="dl">"</span><span class="p">,</span>
+          <span class="s2">`import sys, json; sys.path.insert(0, '</span><span class="p">${</span><span class="nx">__dirname</span><span class="p">}</span><span class="s2">'); from my_python_skill import execute_skill; print(json.dumps(execute_skill('', </span><span class="p">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nx">args</span><span class="p">)}</span><span class="s2">, </span><span class="p">${</span><span class="nx">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nx">skillConfig</span><span class="p">.</span><span class="nx">config</span><span class="p">)}</span><span class="s2">)))`</span>
+        <span class="p">]);</span>
+        
+        <span class="kd">let</span> <span class="nx">output</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">errorOutput</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
+        
+        <span class="nx">pythonProcess</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nf">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="nx">output</span> <span class="o">+=</span> <span class="nx">data</span><span class="p">.</span><span class="nf">toString</span><span class="p">();</span>
+        <span class="p">});</span>
+        
+        <span class="nx">pythonProcess</span><span class="p">.</span><span class="nx">stderr</span><span class="p">.</span><span class="nf">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="nx">errorOutput</span> <span class="o">+=</span> <span class="nx">data</span><span class="p">.</span><span class="nf">toString</span><span class="p">();</span>
+        <span class="p">});</span>
+        
+        <span class="nx">pythonProcess</span><span class="p">.</span><span class="nf">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">close</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">code</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="k">if </span><span class="p">(</span><span class="nx">code</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nf">resolve</span><span class="p">(</span><span class="nf">jsonResult</span><span class="p">({</span>
+              <span class="na">success</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+              <span class="na">error</span><span class="p">:</span> <span class="dl">"</span><span class="s2">python_process_failed</span><span class="dl">"</span><span class="p">,</span>
+              <span class="na">message</span><span class="p">:</span> <span class="s2">`Python进程执行失败: </span><span class="p">${</span><span class="nx">errorOutput</span><span class="p">}</span><span class="s2">`</span>
+            <span class="p">}));</span>
+            <span class="k">return</span><span class="p">;</span>
+          <span class="p">}</span>
+          
+          <span class="k">try</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">output</span><span class="p">);</span>
+            <span class="nf">resolve</span><span class="p">(</span><span class="nf">jsonResult</span><span class="p">(</span><span class="nx">result</span><span class="p">));</span>
+          <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nf">resolve</span><span class="p">(</span><span class="nf">jsonResult</span><span class="p">({</span>
+              <span class="na">success</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+              <span class="na">error</span><span class="p">:</span> <span class="dl">"</span><span class="s2">invalid_json_output</span><span class="dl">"</span><span class="p">,</span>
+              <span class="na">message</span><span class="p">:</span> <span class="s2">`Python脚本返回无效JSON: </span><span class="p">${</span><span class="nx">output</span><span class="p">}</span><span class="s2">`</span>
+            <span class="p">}));</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">});</span>
+    <span class="p">},</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="4-使用方式">4. 使用方式</h3>
+
+<h4 id="1设置环境变量">（1）设置环境变量</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="c"># 方式1: 临时设置</span>
+<span class="nb">export </span><span class="nv">MY_PYTHON_SKILL_API_KEY</span><span class="o">=</span><span class="s2">"sk-xxxxxxxxxxxxxxxx"</span>
+
+<span class="c"># 方式2: 添加到~/.openclaw/.env文件</span>
+<span class="nb">cat</span> <span class="o">&gt;&gt;</span> ~/.openclaw/.env <span class="o">&lt;&lt;</span> <span class="no">EOF</span><span class="sh">
+MY_PYTHON_SKILL_API_KEY="sk-xxxxxxxxxxxxxxxx"
+</span><span class="no">EOF
+</span></code></pre></div></div>
+
+<h4 id="2运行openclaw">（2）运行OpenClaw</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="code-content"><code>openclaw start
+</code></pre></div></div>
+
+<h4 id="3调用技能">（3）调用技能</h4>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="code-content"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"tool"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my_python_skill"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"query"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example search query"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="七总结">七、总结</h2>
+
+<p>OpenClaw提供了灵活且安全的环境变量管理机制，技能开发者可以根据需求选择合适的方式读取API密钥：</p>
+<ul>
+  <li>对于简单技能，直接使用<code class="language-javascript highlighter-rouge"><span class="nx">process</span><span class="p">.</span><span class="nx">env</span></code>即可</li>
+  <li>对于正式技能，推荐使用<code class="language-javascript highlighter-rouge"><span class="nx">normalizeResolvedSecretInputString</span></code>支持配置文件和环境变量两种方式</li>
+  <li>对于复杂场景，可以使用SecretRef对象实现动态秘密来源切换</li>
+</ul>
+
+<p>同时，通过环境变量白名单、敏感信息过滤和沙箱隔离等安全机制，OpenClaw确保了环境变量的安全使用，防止敏感信息泄露和注入攻击。</p>
+
+  </div>
+
+  <!-- 相似文章推荐 -->
+  
+  <div class="related-posts post-bottom-section">
+    <h3>📖 相似文章推荐</h3>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="related-posts-grid">
+      
+    </div>
+    
+    
+    <p class="no-related">暂无相似文章</p>
+    
+  </div>
+  
+
+  <!-- 文章导航 -->
+  <div class="post-nav post-bottom-section">
+    <div class="post-nav-container">
+      
+      <div class="post-nav-item left">
+        <a href="/2026/03/02/github-trend-analysis.html">
+          <div class="post-nav-label">上一篇</div>
+          <div class="post-nav-title">卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）</div>
+        </a>
+      </div>
+      <div class="post-nav-divider"></div>
+      
+      
+      <div class="post-nav-item right">
+        <a href="/2026/03/03/openclaw-2026.3.2-update.html">
+          <div class="post-nav-label">下一篇</div>
+          <div class="post-nav-title">OpenClaw 2026.3.2 版本更新详解</div>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 分享按钮 -->
+  <div class="share-section post-bottom-section">
+    <h3>📤 分享这篇文章</h3>
+    <div class="share-buttons">
+      <a href="https://twitter.com/intent/tweet?url=https://wujiaming88.github.io/2026/03/03/openclaw-env-vars-research.html&text=OpenClaw%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8A%A0%E8%BD%BD%E5%92%8C%E4%BD%BF%E7%94%A8%E6%9C%BA%E5%88%B6%E7%A0%94%E7%A9%B6" target="_blank" rel="noopener noreferrer" class="share-btn twitter">
+        🐦 Twitter
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://wujiaming88.github.io/2026/03/03/openclaw-env-vars-research.html&title=OpenClaw%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8A%A0%E8%BD%BD%E5%92%8C%E4%BD%BF%E7%94%A8%E6%9C%BA%E5%88%B6%E7%A0%94%E7%A9%B6" target="_blank" rel="noopener noreferrer" class="share-btn facebook">
+        📘 Facebook
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://wujiaming88.github.io/2026/03/03/openclaw-env-vars-research.html&title=OpenClaw%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8A%A0%E8%BD%BD%E5%92%8C%E4%BD%BF%E7%94%A8%E6%9C%BA%E5%88%B6%E7%A0%94%E7%A9%B6&summary=OpenClaw%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%8A%A0%E8%BD%BD%E5%92%8C%E4%BD%BF%E7%94%A8%E6%9C%BA%E5%88%B6%E7%A0%94%E7%A9%B6%E6%8A%A5%E5%91%8A%0A" target="_blank" rel="noopener noreferrer" class="share-btn linkedin">
+        💼 LinkedIn
+      </a>
+      <button onclick="copyToClipboard('https://wujiaming88.github.io/2026/03/03/openclaw-env-vars-research.html')" class="share-btn copy">
+        📋 复制链接
+      </button>
+    </div>
+  </div>
+
+  
+
+</article>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    alert('链接已复制到剪贴板！');
+  }, function(err) {
+    console.error('无法复制文本: ', err);
+    alert('复制失败，请手动复制链接: ' + text);
+  });
+}
+
+// 代码块高亮和复制功能
+document.addEventListener('DOMContentLoaded', () => {
+  // 为代码块添加复制按钮
+  document.querySelectorAll('pre').forEach((pre, index) => {
+    const copyButton = document.createElement('button');
+    copyButton.textContent = '📋 复制代码';
+    copyButton.style.cssText = `
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(99, 102, 241, 0.9);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+    `;
+    
+    pre.style.position = 'relative';
+    pre.appendChild(copyButton);
+    
+    // 鼠标悬停时显示复制按钮
+    pre.addEventListener('mouseenter', () => {
+      copyButton.style.opacity = '1';
+    });
+    
+    pre.addEventListener('mouseleave', () => {
+      copyButton.style.opacity = '0';
+    });
+    
+    // 复制功能
+    copyButton.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        copyButton.textContent = '✅ 已复制';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      }).catch(err => {
+        console.error('无法复制代码: ', err);
+        copyButton.textContent = '❌ 复制失败';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      });
+    });
+  });
+  
+  // 代码折叠功能（超过20行自动折叠）
+  document.querySelectorAll('pre code').forEach((code) => {
+    const lines = code.textContent.split('\n').length;
+    if (lines > 20) {
+      code.style.maxHeight = '300px';
+      code.style.overflow = 'hidden';
+      code.style.position = 'relative';
+      
+      const expandButton = document.createElement('button');
+      expandButton.textContent = '🔽 展开全部代码';
+      expandButton.style.cssText = `
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(30, 30, 30, 0.9), transparent);
+        color: white;
+        border: none;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+      `;
+      
+      code.appendChild(expandButton);
+      
+      expandButton.addEventListener('click', () => {
+        if (code.style.maxHeight === '300px') {
+          code.style.maxHeight = 'none';
+          expandButton.textContent = '🔼 收起代码';
+        } else {
+          code.style.maxHeight = '300px';
+          expandButton.textContent = '🔽 展开全部代码';
+        }
+      });
+    }
+  });
+});
+</script>
+
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p style="font-size: 0.85rem;">&copy; 2026 W.ai · 基于 Jekyll 构建</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 图片懒加载
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img.lazyload');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            image.src = image.dataset.src;
+                            image.classList.remove('lazyload');
+                            image.classList.add('lazyloaded');
+                            imageObserver.unobserve(image);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(image => {
+                    imageObserver.observe(image);
+                });
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 返回顶部按钮
+        const backToTop = document.createElement('button');
+        backToTop.textContent = '↑';
+        backToTop.style.cssText = `
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            background-color: rgba(66, 165, 245, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(backToTop);
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.style.opacity = '1';
+                backToTop.style.visibility = 'visible';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.visibility = 'hidden';
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

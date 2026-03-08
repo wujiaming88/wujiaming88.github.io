@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球AI科技资讯周报</title>
+    <meta name="description" content="全球AI科技资讯周报">
+    
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- 引入主样式 -->
+    <link rel="stylesheet" href="/assets/main.css">
+    
+    <!-- SEO标签 -->
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>全球AI科技资讯周报 | W.ai</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="全球AI科技资讯周报" />
+<meta name="author" content="W.ai" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="全球AI科技资讯周报" />
+<meta property="og:description" content="全球AI科技资讯周报" />
+<link rel="canonical" href="https://wujiaming88.github.io/2026/03/02/global-ai-tech-news-weekly.html" />
+<meta property="og:url" content="https://wujiaming88.github.io/2026/03/02/global-ai-tech-news-weekly.html" />
+<meta property="og:site_name" content="W.ai" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-02T03:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="全球AI科技资讯周报" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"W.ai"},"dateModified":"2026-03-02T03:00:00+00:00","datePublished":"2026-03-02T03:00:00+00:00","description":"全球AI科技资讯周报","headline":"全球AI科技资讯周报","mainEntityOfPage":{"@type":"WebPage","@id":"https://wujiaming88.github.io/2026/03/02/global-ai-tech-news-weekly.html"},"url":"https://wujiaming88.github.io/2026/03/02/global-ai-tech-news-weekly.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    
+    <!-- 站点图标 -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="navbar-brand">
+                W.ai
+            </a>
+            
+            <ul class="navbar-nav">
+                <li><a href="/" class="nav-link ">首页</a></li>
+                <li><a href="/categories/" class="nav-link ">分类</a></li>
+                <li><a href="/tags/" class="nav-link ">标签</a></li>
+                <li><a href="/about/" class="nav-link ">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <style>
+/* ============================================
+   文章页面样式 - 2026版优化
+   ============================================ */
+
+/* 文章标题样式 */
+.post-header h1 {
+    color: #1f2937;
+    border-bottom: 3px solid #6366f1;
+}
+
+.post-meta {
+    color: #6b7280;
+}
+
+/* ============================================
+   封面图片样式
+   ============================================ */
+
+/* 封面图片容器 */
+.post-cover {
+    margin: 0 0 2.5rem 0;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 450px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+}
+
+.post-cover:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 20px 40px -10px rgba(0, 0, 0, 0.15),
+        0 10px 15px -5px rgba(99, 102, 241, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+/* 封面图片 */
+.post-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.post-cover:hover img {
+    transform: scale(1.02);
+}
+
+/* 渐变遮罩层 */
+.post-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+    border-radius: 0 0 16px 16px;
+}
+
+/* 图片说明文字 */
+.post-cover-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    color: #ffffff;
+    font-size: 0.85rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+.post-cover:hover .post-cover-caption {
+    opacity: 1;
+}
+
+/* ============================================
+   文章底部通用样式（推荐/分享/导航）
+   ============================================ */
+
+.post-bottom-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================
+   文章导航样式 - 优化版
+   ============================================ */
+
+.post-nav {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+    border: 2px solid #c7d2fe;
+}
+
+.post-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #6366f1 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.post-nav-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.post-nav-item {
+    flex: 1;
+}
+
+.post-nav-item.left {
+    text-align: left;
+}
+
+.post-nav-item.right {
+    text-align: right;
+}
+
+.post-nav-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #c7d2fe 20%,
+        #c7d2fe 80%,
+        transparent 100%
+    );
+}
+
+.post-nav-label {
+    color: #6366f1;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-nav-item.left .post-nav-label::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+.post-nav-item.right .post-nav-label::after {
+    content: '→';
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+.post-nav-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-nav-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.post-nav-item a:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateX(4px);
+}
+
+.post-nav-item.right a:hover {
+    transform: translateX(-4px);
+}
+
+.post-nav-item a:hover .post-nav-title {
+    color: #6366f1;
+}
+
+/* ============================================
+   分享按钮样式 - 优化版
+   ============================================ */
+
+.share-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.share-section h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    padding: 0.8rem 1.75rem;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.share-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.share-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.share-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(99, 102, 241, 0.4);
+}
+
+.share-btn:active {
+    transform: translateY(-2px);
+}
+
+/* 社交平台品牌色 */
+.share-btn.twitter { 
+    background: linear-gradient(135deg, #1da1f2 0%, #0d8ecf 100%);
+}
+.share-btn.facebook { 
+    background: linear-gradient(135deg, #3b5998 0%, #2d4373 100%);
+}
+.share-btn.linkedin { 
+    background: linear-gradient(135deg, #0077b5 0%, #005582 100%);
+}
+.share-btn.copy { 
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    cursor: pointer;
+    border: none;
+}
+
+.share-btn.twitter:hover {
+    background: linear-gradient(135deg, #0d8ecf 0%, #0a7bc4 100%);
+}
+
+.share-btn.facebook:hover {
+    background: linear-gradient(135deg, #2d4373 0%, #1e2e4f 100%);
+}
+
+.share-btn.linkedin:hover {
+    background: linear-gradient(135deg, #005582 0%, #003d5c 100%);
+}
+
+.share-btn.copy:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+/* ============================================
+   相似文章推荐样式 - 优化版
+   ============================================ */
+
+.related-posts {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.related-posts h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.25rem;
+}
+
+.related-post-card {
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.related-post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.related-post-card:hover::before {
+    transform: scaleY(1);
+}
+
+.related-post-card:hover {
+    border-color: #c7d2fe;
+    box-shadow: 
+        0 8px 16px -4px rgba(99, 102, 241, 0.2),
+        0 4px 8px -2px rgba(99, 102, 241, 0.1);
+    transform: translateY(-3px);
+}
+
+.related-post-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-post-card:hover .related-post-title {
+    color: #6366f1;
+}
+
+.related-post-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.related-post-category {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    color: #6366f1;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid #e0e7ff;
+}
+
+.no-related {
+    color: #6b7280;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* 封面图片响应式 */
+    .post-cover {
+        border-radius: 12px;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 300px;
+    }
+    
+    .post-cover-caption {
+        font-size: 0.75rem;
+        padding: 1rem;
+    }
+    
+    /* 底部组件响应式 */
+    .share-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .share-btn {
+        justify-content: center;
+    }
+    
+    .related-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-divider {
+        display: none;
+    }
+    
+    .post-nav-item {
+        text-align: left !important;
+    }
+    
+    .post-nav-item a {
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-cover {
+        border-radius: 0;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 250px;
+    }
+}
+
+/* ============================================
+   动画效果
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.related-post-card,
+.share-btn,
+.post-nav-item {
+    animation: fadeInUp 0.5s ease backwards;
+}
+
+.related-post-card:nth-child(1) { animation-delay: 0.1s; }
+.related-post-card:nth-child(2) { animation-delay: 0.2s; }
+.related-post-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* 无障碍设计 */
+.share-btn:focus,
+.related-post-card:focus,
+.post-nav-item a:focus {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+</style>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting" style="max-width: 800px; margin: 0 auto;">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem;">全球AI科技资讯周报</h1>
+    <div class="post-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+      <time class="dt-published" datetime="2026-03-02T03:00:00+00:00" itemprop="datePublished">
+        📅 2026年03月02日
+      </time>
+      
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span class="p-author h-card" itemprop="name">👤 W.ai</span>
+        </span>
+      
+      
+        • <span>📂 AI, Technology, Weekly</span>
+      
+      
+        • <span>#️⃣ AI, 科技资讯, 周报</span>
+      
+    </div>
+  </header>
+
+  <!-- 封面图片 -->
+  
+  
+  <div class="post-cover">
+    <img src="https://picsum.photos/1200/400?random=1620712943543-bcc4688e7485?w=1200&h=400&fit=crop" alt="全球AI科技资讯周报" loading="lazy">
+    
+    <div class="post-cover-caption">全球AI科技资讯周报 (2026.02.24-03.02)</div>
+    
+  </div>
+  
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="全球ai科技资讯周报">全球AI科技资讯周报</h1>
+
+<p><strong>报告周期</strong>：2026年2月24日 - 3月2日<br />
+<strong>研究团队</strong>：卷王小组<br />
+<strong>报告类型</strong>：科技资讯整理</p>
+
+<hr />
+
+<h2 id="执行摘要">执行摘要</h2>
+
+<p>过去一周，全球人工智能领域呈现技术加速落地、资本持续加码、治理议题升温的态势。字节跳动Seedance 2.0视频生成模型引发全球关注，OpenAI推出GPT-5.3-Codex编程智能体，美国科技巨头宣布将投入6500亿美元用于AI基础设施建设。与此同时，AI安全风险与治理问题引发市场波动，多国加强对AI的监管与规范。</p>
+
+<hr />
+
+<h2 id="一技术突破与产品发布">一、技术突破与产品发布</h2>
+
+<h3 id="11-字节跳动seedance-20视频生成的新里程碑">1.1 字节跳动Seedance 2.0：视频生成的新里程碑</h3>
+
+<p><strong>发布时间</strong>：2026年2月7日（小范围内测）</p>
+
+<p><strong>核心特性</strong>：</p>
+<ul>
+  <li>可根据文本或图像创建电影级视频</li>
+  <li>同时处理文本、图像、音频和视频内容</li>
+  <li>面向专业影视、电商和广告等场景设计</li>
+  <li>生成结果”完全无水印”</li>
+  <li>显著降低高质量视频内容的制作成本</li>
+</ul>
+
+<p><strong>行业反响</strong>：</p>
+<ul>
+  <li>《黑神话：悟空》制作人冯骥评价：”地表最强，没有之一”</li>
+  <li>科技博主”影视飓风”创始人Tim（潘天鸿）：”传统影视流程距离被AI海啸冲走已经彻底进入倒计时”</li>
+  <li>社交平台创作者惊呼：”不需要人类了，AI制作AI看”</li>
+  <li>媒体宣称：”AI视频第一阶段的比赛，结束了”</li>
+</ul>
+
+<p><strong>技术意义</strong>：</p>
+<ul>
+  <li>不再是简单的”文生视频”工具</li>
+  <li>标志着消费级AI视频生成器实现跨越式进步</li>
+  <li>以往AI视频中常见的技术破绽（模糊手指、帧间突变等）已极难察觉</li>
+  <li>可能成为视频内容创作的转折点</li>
+</ul>
+
+<p><strong>市场影响</strong>：</p>
+<ul>
+  <li>影视板块掀起涨停潮</li>
+  <li>因”真实感太强”引发信任危机，字节跳动紧急限权</li>
+</ul>
+
+<h3 id="12-openai-gpt-53-codex最强编程智能体">1.2 OpenAI GPT-5.3-Codex：最强编程智能体</h3>
+
+<p><strong>发布时间</strong>：2026年2月5日</p>
+
+<p><strong>核心特性</strong>：</p>
+<ul>
+  <li>迄今为止最强的AI智能体编程模型</li>
+  <li>推进GPT-5.2-Codex的前沿编码性能</li>
+  <li>整合GPT-5.2的推理和专业知识能力</li>
+  <li>速度提升25%</li>
+  <li>128k上下文窗口</li>
+  <li>在网络安全领域表现突出</li>
+</ul>
+
+<p><strong>配套产品</strong>：</p>
+<ul>
+  <li><strong>GPT-5.3-Codex-Spark</strong>：首个实时编码模型
+    <ul>
+      <li>生成速度提升15倍</li>
+      <li>128k上下文</li>
+      <li>ChatGPT Pro用户可使用研究预览版</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>技术意义</strong>：</p>
+<ul>
+  <li>标志着AI从聊天机器人向”超级助手”演进</li>
+  <li>能够理解目标、存储上下文、主动提供帮助</li>
+  <li>在Cybersecurity领域成为OpenAI部署的最强模型</li>
+</ul>
+
+<h3 id="13-谷歌双子座31-pro模型">1.3 谷歌双子座3.1 Pro模型</h3>
+
+<p><strong>发布时间</strong>：2026年2月</p>
+
+<p><strong>核心特性</strong>：</p>
+<ul>
+  <li>强调复杂推理能力</li>
+  <li>在不同能力维度上与GPT系列形成差异化竞争</li>
+</ul>
+
+<p><strong>竞争格局</strong>：</p>
+<ul>
+  <li>前沿模型竞争从”单一榜单比高低”转向”不同维度拼优势”</li>
+  <li>双子座模型更强调复杂推理</li>
+  <li>GPT系列在通用任务与工具调用方面保持较强竞争力</li>
+</ul>
+
+<h3 id="14-人形机器人从实验室走向应用">1.4 人形机器人从实验室走向应用</h3>
+
+<p><strong>春节亮相</strong>：</p>
+<ul>
+  <li>中国研发的人形机器人在春晚舞台上与演员同台展示</li>
+  <li>展示舞蹈、武术等动作能力</li>
+  <li>在零售展示、文旅导览等场景探索应用</li>
+</ul>
+
+<p><strong>行业观点</strong>：</p>
+<ul>
+  <li>第二届国际人形机器人论坛主席多米尼克·戈雷基表示：
+    <ul>
+      <li>人形机器人正处于从实验室研究迈向工业应用的关键阶段</li>
+      <li>跨行业协作将成为推动技术落地的重要路径</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="二资本投入与基础设施建设">二、资本投入与基础设施建设</h2>
+
+<h3 id="21-美国科技巨头6500亿美元ai投资">2.1 美国科技巨头：6500亿美元AI投资</h3>
+
+<p><strong>数据来源</strong>：美国桥水投资公司2月发布分析报告</p>
+
+<p><strong>投资规模</strong>：</p>
+<ul>
+  <li><strong>2026年预计投入</strong>：约6500亿美元</li>
+  <li><strong>2025年实际投入</strong>：4100亿美元</li>
+  <li><strong>增长幅度</strong>：约58.5%</li>
+</ul>
+
+<p><strong>主要公司</strong>：</p>
+<ul>
+  <li>Alphabet（谷歌母公司）</li>
+  <li>Amazon（亚马逊）</li>
+  <li>Meta（元宇宙平台）</li>
+  <li>Microsoft（微软）</li>
+</ul>
+
+<p><strong>投资方向</strong>：</p>
+<ul>
+  <li>扩大与AI相关的基础设施规模</li>
+  <li>数据中心建设</li>
+  <li>算力升级</li>
+</ul>
+
+<h3 id="22-印度2000亿美元数据中心投资计划">2.2 印度：2000亿美元数据中心投资计划</h3>
+
+<p><strong>发布时间</strong>：2026年2月17日</p>
+
+<p><strong>发布人</strong>：印度电子和信息技术部长阿什维尼·瓦伊什瑙</p>
+
+<p><strong>投资目标</strong>：</p>
+<ul>
+  <li>在未来数年吸引高达2000亿美元的数据中心相关投资</li>
+  <li>推动本国AI基础设施建设和产业发展</li>
+</ul>
+
+<h3 id="23-中东地区5000万美元ai基础设施投资">2.3 中东地区：5000万美元AI基础设施投资</h3>
+
+<p><strong>发布时间</strong>：2026年2月24日</p>
+
+<p><strong>合作方</strong>：</p>
+<ul>
+  <li>阿拉伯海湾投资集团</li>
+  <li>韩国云计算和数据中心企业DanaCloud</li>
+</ul>
+
+<p><strong>投资计划</strong>：</p>
+<ul>
+  <li>在中东地区打造适配AI应用的模块化数据中心与云基础设施</li>
+  <li>潜在总投资规模最高可达5000万美元</li>
+</ul>
+
+<h3 id="24-马斯克收购xai打造垂直整合创新引擎">2.4 马斯克收购xAI：打造垂直整合创新引擎</h3>
+
+<p><strong>发布时间</strong>：2026年2月2日</p>
+
+<p><strong>交易内容</strong>：</p>
+<ul>
+  <li>太空探索技术公司（SpaceX）收购人工智能公司xAI</li>
+  <li>马斯克旗下两家企业”合二为一”</li>
+</ul>
+
+<p><strong>战略愿景</strong>：</p>
+<ul>
+  <li>整合AI、火箭、卫星互联网和直连移动设备通信等资源</li>
+  <li>打造最具雄心、垂直整合程度最高的创新引擎</li>
+</ul>
+
+<p><strong>创新方向</strong>：</p>
+<ul>
+  <li>仅靠地面基础设施难以长期满足AI对电力的庞大需求</li>
+  <li>基于太空的数据中心与AI部署是其设想了中的重要扩展方向</li>
+</ul>
+
+<p><strong>市场影响</strong>：</p>
+<ul>
+  <li>据伦敦证券交易所集团数据，此次交易创下全球并购交易规模新纪录</li>
+</ul>
+
+<hr />
+
+<h3 id="三中国ai产业发展">三、中国AI产业发展</h3>
+
+<h3 id="31-华为昇腾生态43个主流大模型预训练">3.1 华为昇腾生态：43个主流大模型预训练</h3>
+
+<p><strong>发布时间</strong>：2026年2月24日</p>
+
+<p><strong>发布场合</strong>：广东省高质量发展大会</p>
+
+<p><strong>发言人</strong>：华为公司董事长梁华</p>
+
+<p><strong>核心数据</strong>：</p>
+<ul>
+  <li>43个业界主流大模型基于昇腾预训练</li>
+  <li>搭载HarmonyOS5和HarmonyOS6的终端设备数突破4500万</li>
+  <li>可获取的原生应用和云服务超过7.5万个</li>
+</ul>
+
+<p><strong>梁华观点</strong>：</p>
+<ul>
+  <li>正处在一个技术深刻变革的时代</li>
+  <li>人工智能的飞速发展将：
+    <ul>
+      <li>加速实现数字世界与物理世界的深度融合</li>
+      <li>重塑现有的开发范式和应用模式</li>
+      <li>改变人机交互方式</li>
+      <li>催生更多创新应用</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="32-鸿蒙生态从可用走向好用">3.2 鸿蒙生态：从可用走向好用</h3>
+
+<p><strong>发展现状</strong>：</p>
+<ul>
+  <li>鸿蒙生态正在从可用走向好用</li>
+  <li>终端设备数突破4500万</li>
+  <li>原生应用和云服务超过7.5万个</li>
+</ul>
+
+<h3 id="33-ai人工智能etf市场表现">3.3 AI人工智能ETF市场表现</h3>
+
+<p><strong>数据时间</strong>：2026年2月25日</p>
+
+<p><strong>市场数据</strong>：</p>
+<ul>
+  <li>中证人工智能主题指数(930713)成分股涨跌互现
+    <ul>
+      <li>乐鑫科技领涨4.54%</li>
+      <li>北京君正上涨2.83%</li>
+      <li>合合信息上涨2.66%</li>
+      <li>昆仑万维领跌</li>
+    </ul>
+  </li>
+  <li>AI人工智能ETF(512930)：
+    <ul>
+      <li>最新报价2.27元</li>
+      <li>盘中换手3.79%</li>
+      <li>成交1.34亿元</li>
+    </ul>
+  </li>
+  <li>近1月日均成交1.91亿元</li>
+</ul>
+
+<hr />
+
+<h2 id="四ai安全与治理">四、AI安全与治理</h2>
+
+<h3 id="41-2028年全球智能危机报告引发市场恐慌">4.1 《2028年全球智能危机》报告引发市场恐慌</h3>
+
+<p><strong>发布时间</strong>：2026年2月22日</p>
+
+<p><strong>发布机构</strong>：美国独立研究机构西特里尼研究公司（Citrini Research）</p>
+
+<p><strong>报告内容</strong>：</p>
+<ul>
+  <li>以2028年6月的回望视角，描述反乌托邦式经济场景</li>
+  <li>积极的AI应用最初推动创纪录的企业利润</li>
+  <li>但由于AI大规模替代工作岗位，裁员掏空美国消费者基础</li>
+  <li>最终演变成系统性金融危机</li>
+</ul>
+
+<p><strong>市场反应</strong>：</p>
+<ul>
+  <li>报告发布后引发热议</li>
+  <li>导致部分人群对AI的”恐慌”</li>
+  <li>部分欧美科技股出现短期抛售与市场重估</li>
+  <li>Uber、Mastercard和American Express等公司股价下跌</li>
+</ul>
+
+<p><strong>媒体评价</strong>：</p>
+<ul>
+  <li>《卫报》：”A feedback loop with no brake: how an AI doomsday report shook US markets”</li>
+  <li>报告被描述为”没有刹车的反馈循环”</li>
+</ul>
+
+<h3 id="42-ai安全威胁受到广泛关注">4.2 AI安全威胁受到广泛关注</h3>
+
+<p><strong>法国泰雷兹公司《2026年数据威胁报告》</strong></p>
+
+<p><strong>发布时间</strong>：2026年2月25日</p>
+
+<p><strong>核心发现</strong>：</p>
+<ul>
+  <li>70%的受访机构将AI相关风险置于重要数据安全议题之列</li>
+  <li>业界担忧的不只是恶意AI本身</li>
+  <li>更在于AI从工具转变为可信的”内部人员”时获得的过大访问权限</li>
+</ul>
+
+<h3 id="43-openai与美国国防部合作">4.3 OpenAI与美国国防部合作</h3>
+
+<p><strong>发布时间</strong>：2026年2月底</p>
+
+<p><strong>合作内容</strong>：</p>
+<ul>
+  <li>OpenAI首席执行官萨姆·奥尔特曼宣布</li>
+  <li>已与美国国防部达成协议</li>
+  <li>将模型部署到其机密网络中</li>
+</ul>
+
+<p><strong>意义</strong>：</p>
+<ul>
+  <li>标志着OpenAI在军事安全领域的首次重大合作</li>
+  <li>引发对AI军事化应用的讨论</li>
+</ul>
+
+<h3 id="44-英国监管机构调查格罗克滥用问题">4.4 英国监管机构调查”格罗克”滥用问题</h3>
+
+<p><strong>发布时间</strong>：2026年2月3日</p>
+
+<p><strong>监管机构</strong>：</p>
+<ul>
+  <li>英国信息监管局（ICO）</li>
+  <li>英国通信管理局（Ofcom）</li>
+</ul>
+
+<p><strong>调查内容</strong>：</p>
+<ul>
+  <li>从数据保护和平台安全角度</li>
+  <li>对AI聊天机器人”格罗克”（Grok）滥用问题展开调查</li>
+</ul>
+
+<p><strong>合作机制</strong>：</p>
+<ul>
+  <li>与对方以及其他国际监管机构密切合作</li>
+  <li>保障公众的安全和隐私</li>
+</ul>
+
+<hr />
+
+<h2 id="五国际ai治理与合作">五、国际AI治理与合作</h2>
+
+<h3 id="51-印度人工智能影响力峰会">5.1 印度人工智能影响力峰会</h3>
+
+<p><strong>时间</strong>：2026年2月中旬</p>
+
+<p><strong>地点</strong>：新德里</p>
+
+<p><strong>核心议题</strong>：</p>
+<ul>
+  <li>如何构建安全、可信且普惠可及的AI技术</li>
+  <li>AI伦理规范</li>
+  <li>AI安全机制建设</li>
+</ul>
+
+<h3 id="52-世界顶尖科学家峰会">5.2 世界顶尖科学家峰会</h3>
+
+<p><strong>时间</strong>：2026年2月1日至3日</p>
+
+<p><strong>地点</strong>：阿联酋迪拜</p>
+
+<p><strong>核心议题</strong>：</p>
+<ul>
+  <li>AI与机器学习</li>
+  <li>AI治理</li>
+  <li>AI伦理规范</li>
+</ul>
+
+<p><strong>意义</strong>：</p>
+<ul>
+  <li>反映出国际社会对AI治理、伦理规范和安全机制建设的持续关注</li>
+</ul>
+
+<hr />
+
+<h2 id="六市场与投资动态">六、市场与投资动态</h2>
+
+<h3 id="61-aicom域名以7000万美元成交">6.1 AI.com域名以7000万美元成交</h3>
+
+<p><strong>交易详情</strong>：</p>
+<ul>
+  <li>域名：AI.com</li>
+  <li>成交价格：7000万美元</li>
+  <li>买家：一家提供人工智能代理服务的公司</li>
+</ul>
+
+<p><strong>市场意义</strong>：</p>
+<ul>
+  <li>这是公开报道中已知的最贵互联网域名交易</li>
+  <li>AI.com将作为新平台向用户提供人工智能代理服务</li>
+  <li>帮助用户管理日常任务</li>
+  <li>用户可免费访问，付费获得更高级功能</li>
+</ul>
+
+<h3 id="62-ai人工智能etf活跃">6.2 AI人工智能ETF活跃</h3>
+
+<p><strong>市场表现</strong>：</p>
+<ul>
+  <li>盘中成交1.34亿元</li>
+  <li>近1月日均成交1.91亿元</li>
+  <li>反映出投资者对AI板块的持续关注</li>
+</ul>
+
+<hr />
+
+<h2 id="七趋势分析与展望">七、趋势分析与展望</h2>
+
+<h3 id="71-技术趋势">7.1 技术趋势</h3>
+
+<p><strong>1. 从”Chat”到”Agent”的范式转变</strong></p>
+<ul>
+  <li>以对话为核心的”Chat”范式已告终结</li>
+  <li>AI竞争转向”能办事”的智能体时代</li>
+  <li>OpenAI从聊天机器人向”超级助手”演进</li>
+</ul>
+
+<p><strong>2. 多模态融合加速</strong></p>
+<ul>
+  <li>Seedance 2.0同时处理文本、图像、音频和视频</li>
+  <li>多模态融合成为技术突破的关键方向</li>
+</ul>
+
+<p><strong>3. 视频生成质量飞跃</strong></p>
+<ul>
+  <li>消费级AI视频生成器实现跨越式进步</li>
+  <li>传统影视流程面临AI海啸冲击</li>
+</ul>
+
+<p><strong>4. 具身智能从实验室走向应用</strong></p>
+<ul>
+  <li>人形机器人从实验室研究迈向工业应用</li>
+  <li>跨行业协作成为推动技术落地的重要路径</li>
+</ul>
+
+<h3 id="72-投资趋势">7.2 投资趋势</h3>
+
+<p><strong>1. 巨额资本持续加码</strong></p>
+<ul>
+  <li>美国科技巨头2026年预计投入6500亿美元</li>
+  <li>较2025年增长58.5%</li>
+  <li>全球AI基础设施建设进入加速期</li>
+</ul>
+
+<p><strong>2. 多国加大AI基础设施投入</strong></p>
+<ul>
+  <li>印度计划吸引2000亿美元数据中心投资</li>
+  <li>中东地区5000万美元AI基础设施投资</li>
+  <li>马斯克打造太空数据中心创新引擎</li>
+</ul>
+
+<h3 id="73-治理趋势">7.3 治理趋势</h3>
+
+<p><strong>1. AI安全风险受到高度关注</strong></p>
+<ul>
+  <li>70%机构将AI相关风险置于重要数据安全议题</li>
+  <li>AI从工具转变为”内部人员”的权限问题引发担忧</li>
+</ul>
+
+<p><strong>2. 监管力度加强</strong></p>
+<ul>
+  <li>多国监管机构加强对AI的监管</li>
+  <li>英国调查AI聊天机器人滥用问题</li>
+  <li>AI军事化应用引发讨论</li>
+</ul>
+
+<p><strong>3. 国际合作加强</strong></p>
+<ul>
+  <li>多个国际峰会将AI治理列为重要议题</li>
+  <li>国际社会共同关注AI伦理规范和安全机制建设</li>
+</ul>
+
+<h3 id="74-市场趋势">7.4 市场趋势</h3>
+
+<p><strong>1. AI投资热情持续高涨</strong></p>
+<ul>
+  <li>AI人工智能ETF保持活跃交易</li>
+  <li>AI.com域名以7000万美元成交</li>
+  <li>影视板块因AI视频生成突破掀起涨停潮</li>
+</ul>
+
+<p><strong>2. 市场对AI风险敏感</strong></p>
+<ul>
+  <li>AI末日报告引发市场恐慌</li>
+  <li>部分科技股出现短期抛售</li>
+  <li>投资者对AI的长期影响存在分歧</li>
+</ul>
+
+<hr />
+
+<h2 id="八关键数据汇总">八、关键数据汇总</h2>
+
+<h3 id="81-技术发布">8.1 技术发布</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>产品/模型</th>
+      <th>发布时间</th>
+      <th>核心特性</th>
+      <th>意义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Seedance 2.0</td>
+      <td>2026年2月7日</td>
+      <td>电影级视频生成，无水印</td>
+      <td>视频生成新里程碑</td>
+    </tr>
+    <tr>
+      <td>GPT-5.3-Codex</td>
+      <td>2026年2月5日</td>
+      <td>最强编程智能体，速度提升25%</td>
+      <td>AI编程能力突破</td>
+    </tr>
+    <tr>
+      <td>双子座3.1 Pro</td>
+      <td>2026年2月</td>
+      <td>强调复杂推理</td>
+      <td>推理能力竞争</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="82-投资数据">8.2 投资数据</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>投资方</th>
+      <th>投资规模</th>
+      <th>投资方向</th>
+      <th>时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>美国科技巨头</td>
+      <td>6500亿美元</td>
+      <td>AI基础设施</td>
+      <td>2026年全年</td>
+    </tr>
+    <tr>
+      <td>印度</td>
+      <td>2000亿美元（目标）</td>
+      <td>数据中心</td>
+      <td>未来数年</td>
+    </tr>
+    <tr>
+      <td>中海合作</td>
+      <td>5000万美元</td>
+      <td>AI基础设施</td>
+      <td>潜在投资</td>
+    </tr>
+    <tr>
+      <td>马斯克收购xAI</td>
+      <td>未披露</td>
+      <td>垂直整合创新引擎</td>
+      <td>2026年2月2日</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="83-市场数据">8.3 市场数据</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>指标</th>
+      <th>数据</th>
+      <th>时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AI人工智能ETF成交</td>
+      <td>1.34亿元</td>
+      <td>2026年2月25日</td>
+    </tr>
+    <tr>
+      <td>AI人工智能ETF近1月日均成交</td>
+      <td>1.91亿元</td>
+      <td>截至2月24日</td>
+    </tr>
+    <tr>
+      <td>AI.com域名成交价</td>
+      <td>7000万美元</td>
+      <td>2026年2月</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="84-生态数据">8.4 生态数据</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>生态</th>
+      <th>数据</th>
+      <th>时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>基于昇腾预训练的大模型</td>
+      <td>43个</td>
+      <td>2026年2月24日</td>
+    </tr>
+    <tr>
+      <td>鸿蒙终端设备数</td>
+      <td>4500万+</td>
+      <td>2026年2月24日</td>
+    </tr>
+    <tr>
+      <td>鸿蒙原生应用和云服务</td>
+      <td>7.5万+</td>
+      <td>2026年2月24日</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="九结论与建议">九、结论与建议</h2>
+
+<h3 id="91-核心结论">9.1 核心结论</h3>
+
+<ol>
+  <li>
+    <p><strong>技术突破加速</strong>：Seedance 2.0和GPT-5.3-Codex的发布标志着AI在视频生成和编程能力上实现重大突破，多模态融合和智能体化成为技术发展主旋律。</p>
+  </li>
+  <li>
+    <p><strong>资本投入创纪录</strong>：美国科技巨头6500亿美元的AI投资创历史新高，全球AI基础设施建设进入加速期，反映出产业界对AI长期前景的信心。</p>
+  </li>
+  <li>
+    <p><strong>安全治理成为焦点</strong>：AI安全风险、伦理规范和监管问题受到前所未有的关注，多国加强监管，国际社会加强合作，AI治理进入新阶段。</p>
+  </li>
+  <li>
+    <p><strong>市场情绪分化</strong>：一方面AI投资热情持续高涨，另一方面AI末日报告引发市场恐慌，反映出市场对AI长期影响的复杂心态。</p>
+  </li>
+  <li>
+    <p><strong>中国AI生态加速发展</strong>：华为昇腾生态和鸿蒙生态的快速发展，显示出中国在AI基础设施和应用生态方面的快速进步。</p>
+  </li>
+</ol>
+
+
+  </div>
+
+  <!-- 相似文章推荐 -->
+  
+  <div class="related-posts post-bottom-section">
+    <h3>📖 相似文章推荐</h3>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="related-posts-grid">
+      
+        
+        <a href="/2026/03/07/global-ai-weekly.html" class="related-post-card">
+          <div class="related-post-title">全球AI动态周报（2026年3月1日-3月7日）</div>
+          <div class="related-post-meta">
+            
+            <span class="related-post-category">AI</span>
+            
+            <span>2026/03/07</span>
+          </div>
+        </a>
+        
+        
+      
+        
+        <a href="/2026/03/07/agent-skills-recommendation.html" class="related-post-card">
+          <div class="related-post-title">500+ Agent Skills 免费下载！Anthropic、Google、Vercel 官方都在用的"外挂"，让你的 AI 助手原地起飞！</div>
+          <div class="related-post-meta">
+            
+            <span class="related-post-category">AI技术</span>
+            
+            <span>2026/03/07</span>
+          </div>
+        </a>
+        
+        
+      
+        
+        <a href="/2026/03/02/github-trend-analysis.html" class="related-post-card">
+          <div class="related-post-title">卷王小组：GitHub趋势分析报告（2026年2月24日-3月2日）</div>
+          <div class="related-post-meta">
+            
+            <span class="related-post-category">TechTrends</span>
+            
+            <span>2026/03/02</span>
+          </div>
+        </a>
+        
+        
+      
+        
+      
+    </div>
+    
+    
+  </div>
+  
+
+  <!-- 文章导航 -->
+  <div class="post-nav post-bottom-section">
+    <div class="post-nav-container">
+      
+      <div class="post-nav-item left">
+        <a href="/2026/03/01/us-iran-news.html">
+          <div class="post-nav-label">上一篇</div>
+          <div class="post-nav-title">2026年3月1日美国对伊朗军事行动最新新闻汇总</div>
+        </a>
+      </div>
+      <div class="post-nav-divider"></div>
+      
+      
+      <div class="post-nav-item right">
+        <a href="/2026/03/02/openclaw-2026-3-1-update-analysis.html">
+          <div class="post-nav-label">下一篇</div>
+          <div class="post-nav-title">OpenClaw 2026.3.1 版本深度解析：移动端能力飞跃与飞书深度集成</div>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 分享按钮 -->
+  <div class="share-section post-bottom-section">
+    <h3>📤 分享这篇文章</h3>
+    <div class="share-buttons">
+      <a href="https://twitter.com/intent/tweet?url=https://wujiaming88.github.io/2026/03/02/global-ai-tech-news-weekly.html&text=%E5%85%A8%E7%90%83AI%E7%A7%91%E6%8A%80%E8%B5%84%E8%AE%AF%E5%91%A8%E6%8A%A5" target="_blank" rel="noopener noreferrer" class="share-btn twitter">
+        🐦 Twitter
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://wujiaming88.github.io/2026/03/02/global-ai-tech-news-weekly.html&title=%E5%85%A8%E7%90%83AI%E7%A7%91%E6%8A%80%E8%B5%84%E8%AE%AF%E5%91%A8%E6%8A%A5" target="_blank" rel="noopener noreferrer" class="share-btn facebook">
+        📘 Facebook
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://wujiaming88.github.io/2026/03/02/global-ai-tech-news-weekly.html&title=%E5%85%A8%E7%90%83AI%E7%A7%91%E6%8A%80%E8%B5%84%E8%AE%AF%E5%91%A8%E6%8A%A5&summary=%E5%85%A8%E7%90%83AI%E7%A7%91%E6%8A%80%E8%B5%84%E8%AE%AF%E5%91%A8%E6%8A%A5%0A" target="_blank" rel="noopener noreferrer" class="share-btn linkedin">
+        💼 LinkedIn
+      </a>
+      <button onclick="copyToClipboard('https://wujiaming88.github.io/2026/03/02/global-ai-tech-news-weekly.html')" class="share-btn copy">
+        📋 复制链接
+      </button>
+    </div>
+  </div>
+
+  
+
+</article>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    alert('链接已复制到剪贴板！');
+  }, function(err) {
+    console.error('无法复制文本: ', err);
+    alert('复制失败，请手动复制链接: ' + text);
+  });
+}
+
+// 代码块高亮和复制功能
+document.addEventListener('DOMContentLoaded', () => {
+  // 为代码块添加复制按钮
+  document.querySelectorAll('pre').forEach((pre, index) => {
+    const copyButton = document.createElement('button');
+    copyButton.textContent = '📋 复制代码';
+    copyButton.style.cssText = `
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(99, 102, 241, 0.9);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+    `;
+    
+    pre.style.position = 'relative';
+    pre.appendChild(copyButton);
+    
+    // 鼠标悬停时显示复制按钮
+    pre.addEventListener('mouseenter', () => {
+      copyButton.style.opacity = '1';
+    });
+    
+    pre.addEventListener('mouseleave', () => {
+      copyButton.style.opacity = '0';
+    });
+    
+    // 复制功能
+    copyButton.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        copyButton.textContent = '✅ 已复制';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      }).catch(err => {
+        console.error('无法复制代码: ', err);
+        copyButton.textContent = '❌ 复制失败';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      });
+    });
+  });
+  
+  // 代码折叠功能（超过20行自动折叠）
+  document.querySelectorAll('pre code').forEach((code) => {
+    const lines = code.textContent.split('\n').length;
+    if (lines > 20) {
+      code.style.maxHeight = '300px';
+      code.style.overflow = 'hidden';
+      code.style.position = 'relative';
+      
+      const expandButton = document.createElement('button');
+      expandButton.textContent = '🔽 展开全部代码';
+      expandButton.style.cssText = `
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(30, 30, 30, 0.9), transparent);
+        color: white;
+        border: none;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+      `;
+      
+      code.appendChild(expandButton);
+      
+      expandButton.addEventListener('click', () => {
+        if (code.style.maxHeight === '300px') {
+          code.style.maxHeight = 'none';
+          expandButton.textContent = '🔼 收起代码';
+        } else {
+          code.style.maxHeight = '300px';
+          expandButton.textContent = '🔽 展开全部代码';
+        }
+      });
+    }
+  });
+});
+</script>
+
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p style="font-size: 0.85rem;">&copy; 2026 W.ai · 基于 Jekyll 构建</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 图片懒加载
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img.lazyload');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            image.src = image.dataset.src;
+                            image.classList.remove('lazyload');
+                            image.classList.add('lazyloaded');
+                            imageObserver.unobserve(image);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(image => {
+                    imageObserver.observe(image);
+                });
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 返回顶部按钮
+        const backToTop = document.createElement('button');
+        backToTop.textContent = '↑';
+        backToTop.style.cssText = `
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            background-color: rgba(66, 165, 245, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(backToTop);
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.style.opacity = '1';
+                backToTop.style.visibility = 'visible';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.visibility = 'hidden';
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

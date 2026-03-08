@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw Agent System Prompt 架构详解报告</title>
+    <meta name="description" content="OpenClaw Agent System Prompt 架构详解报告">
+    
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- 引入主样式 -->
+    <link rel="stylesheet" href="/assets/main.css">
+    
+    <!-- SEO标签 -->
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>OpenClaw Agent System Prompt 架构详解报告 | W.ai</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="OpenClaw Agent System Prompt 架构详解报告" />
+<meta name="author" content="W.ai" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="OpenClaw Agent System Prompt 架构详解报告" />
+<meta property="og:description" content="OpenClaw Agent System Prompt 架构详解报告" />
+<link rel="canonical" href="https://wujiaming88.github.io/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html" />
+<meta property="og:url" content="https://wujiaming88.github.io/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html" />
+<meta property="og:site_name" content="W.ai" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-05T06:43:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="OpenClaw Agent System Prompt 架构详解报告" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"W.ai"},"dateModified":"2026-03-05T06:43:00+00:00","datePublished":"2026-03-05T06:43:00+00:00","description":"OpenClaw Agent System Prompt 架构详解报告","headline":"OpenClaw Agent System Prompt 架构详解报告","mainEntityOfPage":{"@type":"WebPage","@id":"https://wujiaming88.github.io/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html"},"url":"https://wujiaming88.github.io/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    
+    <!-- 站点图标 -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="navbar-brand">
+                W.ai
+            </a>
+            
+            <ul class="navbar-nav">
+                <li><a href="/" class="nav-link ">首页</a></li>
+                <li><a href="/categories/" class="nav-link ">分类</a></li>
+                <li><a href="/tags/" class="nav-link ">标签</a></li>
+                <li><a href="/about/" class="nav-link ">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <style>
+/* ============================================
+   文章页面样式 - 2026版优化
+   ============================================ */
+
+/* 文章标题样式 */
+.post-header h1 {
+    color: #1f2937;
+    border-bottom: 3px solid #6366f1;
+}
+
+.post-meta {
+    color: #6b7280;
+}
+
+/* ============================================
+   封面图片样式
+   ============================================ */
+
+/* 封面图片容器 */
+.post-cover {
+    margin: 0 0 2.5rem 0;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 450px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+}
+
+.post-cover:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 20px 40px -10px rgba(0, 0, 0, 0.15),
+        0 10px 15px -5px rgba(99, 102, 241, 0.1),
+        0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+/* 封面图片 */
+.post-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.post-cover:hover img {
+    transform: scale(1.02);
+}
+
+/* 渐变遮罩层 */
+.post-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+    border-radius: 0 0 16px 16px;
+}
+
+/* 图片说明文字 */
+.post-cover-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    color: #ffffff;
+    font-size: 0.85rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+.post-cover:hover .post-cover-caption {
+    opacity: 1;
+}
+
+/* ============================================
+   文章底部通用样式（推荐/分享/导航）
+   ============================================ */
+
+.post-bottom-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================
+   文章导航样式 - 优化版
+   ============================================ */
+
+.post-nav {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+    border: 2px solid #c7d2fe;
+}
+
+.post-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #6366f1 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.post-nav-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.post-nav-item {
+    flex: 1;
+}
+
+.post-nav-item.left {
+    text-align: left;
+}
+
+.post-nav-item.right {
+    text-align: right;
+}
+
+.post-nav-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #c7d2fe 20%,
+        #c7d2fe 80%,
+        transparent 100%
+    );
+}
+
+.post-nav-label {
+    color: #6366f1;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-nav-item.left .post-nav-label::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+.post-nav-item.right .post-nav-label::after {
+    content: '→';
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+.post-nav-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.post-nav-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.post-nav-item a:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateX(4px);
+}
+
+.post-nav-item.right a:hover {
+    transform: translateX(-4px);
+}
+
+.post-nav-item a:hover .post-nav-title {
+    color: #6366f1;
+}
+
+/* ============================================
+   分享按钮样式 - 优化版
+   ============================================ */
+
+.share-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.share-section h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    padding: 0.8rem 1.75rem;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.share-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.share-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.share-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -6px rgba(99, 102, 241, 0.4);
+}
+
+.share-btn:active {
+    transform: translateY(-2px);
+}
+
+/* 社交平台品牌色 */
+.share-btn.twitter { 
+    background: linear-gradient(135deg, #1da1f2 0%, #0d8ecf 100%);
+}
+.share-btn.facebook { 
+    background: linear-gradient(135deg, #3b5998 0%, #2d4373 100%);
+}
+.share-btn.linkedin { 
+    background: linear-gradient(135deg, #0077b5 0%, #005582 100%);
+}
+.share-btn.copy { 
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    cursor: pointer;
+    border: none;
+}
+
+.share-btn.twitter:hover {
+    background: linear-gradient(135deg, #0d8ecf 0%, #0a7bc4 100%);
+}
+
+.share-btn.facebook:hover {
+    background: linear-gradient(135deg, #2d4373 0%, #1e2e4f 100%);
+}
+
+.share-btn.linkedin:hover {
+    background: linear-gradient(135deg, #005582 0%, #003d5c 100%);
+}
+
+.share-btn.copy:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+/* ============================================
+   相似文章推荐样式 - 优化版
+   ============================================ */
+
+.related-posts {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.related-posts h3 {
+    color: #1f2937;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.25rem;
+}
+
+.related-post-card {
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.related-post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.related-post-card:hover::before {
+    transform: scaleY(1);
+}
+
+.related-post-card:hover {
+    border-color: #c7d2fe;
+    box-shadow: 
+        0 8px 16px -4px rgba(99, 102, 241, 0.2),
+        0 4px 8px -2px rgba(99, 102, 241, 0.1);
+    transform: translateY(-3px);
+}
+
+.related-post-title {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-post-card:hover .related-post-title {
+    color: #6366f1;
+}
+
+.related-post-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.related-post-category {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    color: #6366f1;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid #e0e7ff;
+}
+
+.no-related {
+    color: #6b7280;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* 封面图片响应式 */
+    .post-cover {
+        border-radius: 12px;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 300px;
+    }
+    
+    .post-cover-caption {
+        font-size: 0.75rem;
+        padding: 1rem;
+    }
+    
+    /* 底部组件响应式 */
+    .share-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .share-btn {
+        justify-content: center;
+    }
+    
+    .related-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .post-nav-divider {
+        display: none;
+    }
+    
+    .post-nav-item {
+        text-align: left !important;
+    }
+    
+    .post-nav-item a {
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-cover {
+        border-radius: 0;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        width: calc(100% + 2rem);
+        max-height: 250px;
+    }
+}
+
+/* ============================================
+   动画效果
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.related-post-card,
+.share-btn,
+.post-nav-item {
+    animation: fadeInUp 0.5s ease backwards;
+}
+
+.related-post-card:nth-child(1) { animation-delay: 0.1s; }
+.related-post-card:nth-child(2) { animation-delay: 0.2s; }
+.related-post-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* 无障碍设计 */
+.share-btn:focus,
+.related-post-card:focus,
+.post-nav-item a:focus {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+</style>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting" style="max-width: 800px; margin: 0 auto;">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem;">OpenClaw Agent System Prompt 架构详解报告</h1>
+    <div class="post-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+      <time class="dt-published" datetime="2026-03-05T06:43:00+00:00" itemprop="datePublished">
+        📅 2026年03月05日
+      </time>
+      
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span class="p-author h-card" itemprop="name">👤 W.ai</span>
+        </span>
+      
+      
+        • <span>📂 openclaw, 技术研究</span>
+      
+      
+        • <span>#️⃣ </span>
+      
+    </div>
+  </header>
+
+  <!-- 封面图片 -->
+  
+  
+  <div class="post-cover">
+    <img src="https://picsum.photos/1200/400?random=1526374965328-7f61d4dc18c5?w=1200&h=400&fit=crop" alt="OpenClaw Agent System Prompt 架构详解报告" loading="lazy">
+    
+    <div class="post-cover-caption">System Prompt</div>
+    
+  </div>
+  
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="openclaw-agent-system-prompt-架构详解报告">OpenClaw Agent System Prompt 架构详解报告</h1>
+
+<h2 id="一文章概述">一、文章概述</h2>
+<p>本文详细拆解了OpenClaw Agent发送给LLM的完整System Prompt组成结构（版本v2.1，更新时间2026-03-05），将其分为9层架构，重点说明了用户可控的Layer 7（Workspace Files）和Layer 8（Bootstrap Hook System），其他层为框架自动生成。</p>
+
+<h2 id="二核心架构分层详解">二、核心架构分层详解</h2>
+
+<h3 id="1-layer-1-openclaw-framework-core框架核心层">1. Layer 1: OpenClaw Framework Core（框架核心层）</h3>
+<ul>
+  <li><strong>比喻</strong>：操作手册的”使用说明”部分，告诉LLM身份、能力和回应规则</li>
+  <li><strong>核心内容</strong>：定义Agent基础身份、工具调用规范、安全边界等</li>
+  <li><strong>设计权衡</strong>：
+    <ul>
+      <li>权衡点：灵活性 vs 一致性</li>
+      <li>决策：框架层统一生成，保证所有Agent基础行为一致</li>
+      <li>好处：用户无需重复配置基础规则，框架升级自动同步新能力，降低配置错误风险</li>
+      <li>代价：用户无法修改核心规则，特殊行为需通过Layer 7/8间接实现</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="2-layer-2-tool-definitions工具定义层">2. Layer 2: Tool Definitions（工具定义层）</h3>
+<ul>
+  <li><strong>比喻</strong>：瑞士军刀的工具清单，说明可用工具、功能和使用方法</li>
+  <li><strong>核心内容</strong>：使用JSON Schema定义工具参数结构</li>
+  <li><strong>设计权衡</strong>：
+    <ul>
+      <li>权衡点：灵活性 vs 类型安全</li>
+      <li>决策：采用严格JSON Schema定义工具参数</li>
+      <li>好处：LLM能准确理解工具用法，框架可提前验证参数，自动生成文档和类型定义</li>
+      <li>代价：添加新工具需编写完整Schema，无法支持完全动态参数结构</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="3-layer-3-skills-registry技能注册表">3. Layer 3: Skills Registry（技能注册表）</h3>
+<ul>
+  <li><strong>比喻</strong>：餐厅的”特色菜谱”，提供专业领域的”配方”调用</li>
+  <li><strong>核心内容</strong>：自动扫描~/development/openclaw/skills/目录加载技能</li>
+  <li><strong>设计权衡</strong>：
+    <ul>
+      <li>权衡点：灵活性 vs 维护成本</li>
+      <li>决策：自动扫描技能目录</li>
+      <li>好处：添加新技能只需放入目录，无需修改配置，所有Agent自动获得新技能</li>
+      <li>代价：无法精确控制每个Agent可用技能，所有技能都会注入System Prompt增加token消耗</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="4-layer-4-model-aliases模型别名层">4. Layer 4: Model Aliases（模型别名层）</h3>
+<ul>
+  <li><strong>比喻</strong>：快捷键，给复杂模型路径起简短别名</li>
+  <li><strong>核心内容</strong>：为常用模型定义简短别名，支持多Provider切换</li>
+  <li><strong>设计权衡</strong>：
+    <ul>
+      <li>权衡点：灵活性 vs 可读性</li>
+      <li>决策：允许用户定义模型别名</li>
+      <li>好处：简化模型调用，支持多Provider切换，便于A/B测试和模型迁移</li>
+      <li>代价：需要维护别名配置文件，可能造成不同Agent同一别名指向不同模型的混淆</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="5-layer-5-protocol-specifications协议规范层">5. Layer 5: Protocol Specifications（协议规范层）</h3>
+<ul>
+  <li><strong>比喻</strong>：交通规则，定义Agent与系统交互的标准协议</li>
+  <li><strong>核心内容</strong>：标准化交互协议（Silent Replies、Heartbeats、Reply Tags等）</li>
+  <li><strong>设计权衡</strong>：
+    <ul>
+      <li>权衡点：自由度 vs 一致性</li>
+      <li>决策：定义标准化交互协议</li>
+      <li>好处：保证所有Agent行为一致，支持自动化监控和健康检查，简化多Agent协作</li>
+      <li>代价：限制Agent自由表达，需要LLM严格遵守协议</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="6-layer-6-runtime-info运行时信息层">6. Layer 6: Runtime Info（运行时信息层）</h3>
+<ul>
+  <li><strong>比喻</strong>：仪表盘，显示当前运行环境的实时状态</li>
+  <li><strong>核心内容</strong>：每次请求注入最新运行时状态（时间、模型、环境等）</li>
+  <li><strong>设计权衡</strong>：
+    <ul>
+      <li>权衡点：Token消耗 vs 上下文准确性</li>
+      <li>决策：每次请求注入最新运行时状态</li>
+      <li>好处：LLM知道当前时间、模型和环境，避免时间错乱、能力误判和路径错误</li>
+      <li>代价：每次请求消耗约2KB token，信息可能包含冗余</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="7-layer-7-workspace-files工作区文件层-用户可控">7. Layer 7: Workspace Files（工作区文件层）★ 用户可控</h3>
+<ul>
+  <li><strong>比喻</strong>：工作笔记，用户可直接编辑的静态配置文件</li>
+  <li><strong>核心内容</strong>：包含IDENTITY.md、SOUL.md、TOOLS.md等核心配置文件</li>
+  <li><strong>设计权衡</strong>：
+    <ul>
+      <li>权衡点：框架稳定性 vs 用户自由度</li>
+      <li>决策：分离”变”与”不变”，框架层保证一致性，用户层允许个性化</li>
+      <li>好处：用户可定义Agent身份、工作规范和记忆，框架升级不破坏用户配置，配置文件可版本管理</li>
+      <li>代价：用户无法修改框架核心行为，需要学习TELOS框架和文件结构</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="8-layer-8-bootstrap-hook-system动态注入层-用户可控">8. Layer 8: Bootstrap Hook System（动态注入层）★ 用户可控</h3>
+<ul>
+  <li><strong>比喻</strong>：可编程注射器，用户可写脚本在运行时动态注入内容到System Prompt</li>
+  <li><strong>核心内容</strong>：四种Hook机制：
+    <ol>
+      <li><strong>agent:bootstrap Hook</strong>：完全控制bootstrapFiles数组，可增删改文件和内容</li>
+      <li><strong>bootstrap-extra-files Hook</strong>：通过配置文件追加额外文件，不修改现有文件</li>
+      <li><strong>before_prompt_build Hook</strong>：在系统提示词构建后、发送给LLM前修改最终prompt</li>
+      <li>（文章内容被截断，第四种Hook未显示）</li>
+    </ol>
+  </li>
+  <li><strong>设计权衡</strong>：
+    <ul>
+      <li>权衡点：静态配置简单性 vs 动态注入灵活性</li>
+      <li>决策：提供动态Hook机制</li>
+      <li>好处：可根据上下文动态调整注入内容，执行shell命令并注入输出，读取外部文件注入，支持条件判断</li>
+      <li>代价：需要学习Hook系统语法和触发机制，Hook脚本错误可能导致System Prompt异常</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="三关键要点总结">三、关键要点总结</h2>
+<ol>
+  <li><strong>用户可控重点</strong>：Layer 7（静态配置文件）和Layer 8（动态注入Hook）是用户自定义Agent行为的核心入口</li>
+  <li><strong>设计原则</strong>：框架层保证一致性和稳定性，用户层提供个性化和灵活性</li>
+  <li><strong>常见需求实现路径</strong>：
+    <ul>
+      <li>定义Agent身份 → 编辑Layer 7的IDENTITY.md</li>
+      <li>添加项目文档 → 使用Layer 8的bootstrap-extra-files Hook</li>
+      <li>注入实时上下文 → 使用Layer 8的before_prompt_build Hook</li>
+      <li>控制文件大小 → 调整bootstrapMaxChars配置</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="四价值与意义">四、价值与意义</h2>
+<p>该架构通过分层设计实现了”一致性”与”灵活性”的平衡：</p>
+<ul>
+  <li>对框架开发者：保证核心规则统一，便于维护和升级</li>
+  <li>对Agent使用者：提供丰富的自定义能力，满足不同场景需求</li>
+  <li>对LLM：提供清晰的边界和规则，提升Agent行为的可预测性和可靠性</li>
+</ul>
+
+<p>这份架构详解为OpenClaw Agent的定制化开发提供了清晰的指南，帮助用户高效构建符合特定需求的AI Agent。</p>
+
+  </div>
+
+  <!-- 相似文章推荐 -->
+  
+  <div class="related-posts post-bottom-section">
+    <h3>📖 相似文章推荐</h3>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="related-posts-grid">
+      
+    </div>
+    
+    
+    <p class="no-related">暂无相似文章</p>
+    
+  </div>
+  
+
+  <!-- 文章导航 -->
+  <div class="post-nav post-bottom-section">
+    <div class="post-nav-container">
+      
+      <div class="post-nav-item left">
+        <a href="/2026/03/03/openclaw-2026.3.2-update.html">
+          <div class="post-nav-label">上一篇</div>
+          <div class="post-nav-title">OpenClaw 2026.3.2 版本更新详解</div>
+        </a>
+      </div>
+      <div class="post-nav-divider"></div>
+      
+      
+      <div class="post-nav-item right">
+        <a href="/2026/03/05/skill-creator-improvements-translation.html">
+          <div class="post-nav-label">下一篇</div>
+          <div class="post-nav-title">改进Skill-Creator：测试、衡量和优化Agent Skills</div>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 分享按钮 -->
+  <div class="share-section post-bottom-section">
+    <h3>📤 分享这篇文章</h3>
+    <div class="share-buttons">
+      <a href="https://twitter.com/intent/tweet?url=https://wujiaming88.github.io/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html&text=OpenClaw+Agent+System+Prompt+%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A" target="_blank" rel="noopener noreferrer" class="share-btn twitter">
+        🐦 Twitter
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://wujiaming88.github.io/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html&title=OpenClaw+Agent+System+Prompt+%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A" target="_blank" rel="noopener noreferrer" class="share-btn facebook">
+        📘 Facebook
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://wujiaming88.github.io/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html&title=OpenClaw+Agent+System+Prompt+%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A&summary=OpenClaw+Agent+System+Prompt+%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A%0A" target="_blank" rel="noopener noreferrer" class="share-btn linkedin">
+        💼 LinkedIn
+      </a>
+      <button onclick="copyToClipboard('https://wujiaming88.github.io/2026/03/05/OpenClaw-Agent-System-Prompt-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%E6%8A%A5%E5%91%8A.html')" class="share-btn copy">
+        📋 复制链接
+      </button>
+    </div>
+  </div>
+
+  
+
+</article>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    alert('链接已复制到剪贴板！');
+  }, function(err) {
+    console.error('无法复制文本: ', err);
+    alert('复制失败，请手动复制链接: ' + text);
+  });
+}
+
+// 代码块高亮和复制功能
+document.addEventListener('DOMContentLoaded', () => {
+  // 为代码块添加复制按钮
+  document.querySelectorAll('pre').forEach((pre, index) => {
+    const copyButton = document.createElement('button');
+    copyButton.textContent = '📋 复制代码';
+    copyButton.style.cssText = `
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(99, 102, 241, 0.9);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+    `;
+    
+    pre.style.position = 'relative';
+    pre.appendChild(copyButton);
+    
+    // 鼠标悬停时显示复制按钮
+    pre.addEventListener('mouseenter', () => {
+      copyButton.style.opacity = '1';
+    });
+    
+    pre.addEventListener('mouseleave', () => {
+      copyButton.style.opacity = '0';
+    });
+    
+    // 复制功能
+    copyButton.addEventListener('click', () => {
+      const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        copyButton.textContent = '✅ 已复制';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      }).catch(err => {
+        console.error('无法复制代码: ', err);
+        copyButton.textContent = '❌ 复制失败';
+        setTimeout(() => {
+          copyButton.textContent = '📋 复制代码';
+        }, 2000);
+      });
+    });
+  });
+  
+  // 代码折叠功能（超过20行自动折叠）
+  document.querySelectorAll('pre code').forEach((code) => {
+    const lines = code.textContent.split('\n').length;
+    if (lines > 20) {
+      code.style.maxHeight = '300px';
+      code.style.overflow = 'hidden';
+      code.style.position = 'relative';
+      
+      const expandButton = document.createElement('button');
+      expandButton.textContent = '🔽 展开全部代码';
+      expandButton.style.cssText = `
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(30, 30, 30, 0.9), transparent);
+        color: white;
+        border: none;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        font-size: 0.9rem;
+      `;
+      
+      code.appendChild(expandButton);
+      
+      expandButton.addEventListener('click', () => {
+        if (code.style.maxHeight === '300px') {
+          code.style.maxHeight = 'none';
+          expandButton.textContent = '🔼 收起代码';
+        } else {
+          code.style.maxHeight = '300px';
+          expandButton.textContent = '🔽 展开全部代码';
+        }
+      });
+    }
+  });
+});
+</script>
+
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p style="font-size: 0.85rem;">&copy; 2026 W.ai · 基于 Jekyll 构建</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 图片懒加载
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img.lazyload');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            image.src = image.dataset.src;
+                            image.classList.remove('lazyload');
+                            image.classList.add('lazyloaded');
+                            imageObserver.unobserve(image);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(image => {
+                    imageObserver.observe(image);
+                });
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 返回顶部按钮
+        const backToTop = document.createElement('button');
+        backToTop.textContent = '↑';
+        backToTop.style.cssText = `
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            background-color: rgba(66, 165, 245, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(backToTop);
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.style.opacity = '1';
+                backToTop.style.visibility = 'visible';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.visibility = 'hidden';
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

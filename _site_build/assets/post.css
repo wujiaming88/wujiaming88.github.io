@@ -1,0 +1,499 @@
+/* 文章页面样式优化 - 2026版 */
+
+/* 基础重置 */
+.page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.5rem 0;
+}
+
+.wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ==================== */
+/* 文章内容区域 - 800px舒适阅读宽度 */
+/* ==================== */
+.post-content {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+/* 段落间距优化 */
+.post-content p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+    word-spacing: 0.05em;
+}
+
+/* ==================== */
+/* 标题层级优化 */
+/* ==================== */
+.post-content h1 {
+    font-size: 2.2rem;
+    margin: 2.5rem 0 1.5rem 0;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-bottom: 3px solid var(--link-color);
+    padding-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.post-content h2 {
+    font-size: 1.8rem;
+    margin: 2rem 0 1.2rem 0;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.3rem;
+    line-height: 1.35;
+}
+
+.post-content h3 {
+    font-size: 1.4rem;
+    margin: 1.5rem 0 1rem 0;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.post-content h4 {
+    font-size: 1.2rem;
+    margin: 1.2rem 0 0.8rem 0;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.post-content h5, 
+.post-content h6 {
+    font-size: 1.1rem;
+    margin: 1rem 0 0.6rem 0;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* 列表样式优化 */
+.post-content ul, 
+.post-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.post-content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+}
+
+.post-content li::marker {
+    color: var(--link-color);
+}
+
+/* ==================== */
+/* 代码块样式 - 带语法高亮、圆角、行号、复制按钮 */
+/* ==================== */
+
+/* 行内代码 */
+.post-content code:not(pre code) {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', monospace;
+    font-size: 0.9em;
+    border: 1px solid var(--border-color);
+}
+
+/* 代码块容器 */
+.post-content pre {
+    background: var(--code-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+}
+
+/* 代码块头部 - 显示语言和复制按钮 */
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border-color);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.code-language {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+/* 复制按钮 */
+.copy-button {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.copy-button:hover {
+    background: var(--link-color);
+    color: white;
+    border-color: var(--link-color);
+}
+
+.copy-button.copied {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+}
+
+/* 代码区域 - 包含行号 */
+.code-wrapper {
+    display: flex;
+    overflow-x: auto;
+}
+
+/* 行号 */
+.code-line-numbers {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid var(--border-color);
+    user-select: none;
+    min-width: 50px;
+    text-align: right;
+}
+
+.code-line-number {
+    padding: 0 1rem;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+/* 代码内容 */
+.code-content {
+    flex: 1;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.post-content pre code {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--code-text);
+    display: block;
+    white-space: pre;
+}
+
+/* 语法高亮颜色 */
+.code-content .keyword { color: var(--keyword-color); }
+.code-content .string { color: var(--string-color); }
+.code-content .comment { color: var(--comment-color); font-style: italic; }
+.code-content .function { color: var(--function-color); }
+.code-content .variable { color: var(--variable-color); }
+.code-content .type { color: var(--type-color); }
+.code-content .constant { color: var(--constant-color); }
+.code-content .number { color: #b5cea8; }
+.code-content .operator { color: #d4d4d4; }
+.code-content .punctuation { color: #d4d4d4; }
+.code-content .tag { color: #569cd6; }
+.code-content .attribute { color: #9cdcfe; }
+.code-content .property { color: #9cdcfe; }
+.code-content .selector { color: #d7ba7d; }
+.code-content .value { color: #ce9178; }
+
+/* ==================== */
+/* 引用块样式 */
+/* ==================== */
+.post-content blockquote {
+    border-left: 4px solid var(--link-color);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background: rgba(100, 181, 246, 0.1);
+    border-radius: 0 8px 8px 0;
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.7;
+}
+
+.post-content blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* ==================== */
+/* 图片样式 */
+/* ==================== */
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+}
+
+.post-content figure {
+    margin: 2rem 0;
+}
+
+.post-content figcaption {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* ==================== */
+/* 表格样式 */
+/* ==================== */
+.post-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.post-content th,
+.post-content td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.post-content th {
+    background: var(--card-bg);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.post-content tr:last-child td {
+    border-bottom: none;
+}
+
+.post-content tr:hover td {
+    background: rgba(100, 181, 246, 0.05);
+}
+
+/* ==================== */
+/* 分隔线 */
+/* ==================== */
+.post-content hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+    margin: 2.5rem 0;
+}
+
+/* ==================== */
+/* 文章头部 */
+/* ==================== */
+.post-header {
+    margin-bottom: 3rem;
+    text-}
+    text-align: center;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.post-title {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.post-meta {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 3rem;
+    padding: 0.8rem 1.5rem;
+    background: var(--link-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.back-link:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* ==================== */
+/* 响应式设计 */
+/* ==================== */
+@media (max-width: 768px) {
+    .page-content {
+        padding: 1rem 0;
+    }
+    
+    .wrapper {
+        padding: 0 1rem;
+    }
+    
+    .post-content {
+        padding: 0 1rem;
+        font-size: 1rem;
+    }
+    
+    .post-title {
+        font-size: 2rem;
+    }
+    
+    .post-content h1 {
+        font-size: 1.8rem;
+    }
+    
+    .post-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .post-content h3 {
+        font-size: 1.25rem;
+    }
+    
+    .code-header {
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .code-line-numbers {
+        min-width: 40px;
+    }
+    
+    .code-line-number {
+        padding: 0 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .code-content {
+        padding: 0.8rem;
+    }
+}
+
+/* ==================== */
+/* 相似文章推荐模块 */
+/* ==================== */
+.related-posts {
+    max-width: 800px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.related-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.related-post-card {
+    display: block;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.related-post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: var(--link-color);
+}
+
+.related-post-image {
+    height: 140px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--code-bg);
+}
+
+.related-post-image-placeholder {
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--code-bg) 100%);
+}
+
+.related-post-content {
+    padding: 1rem;
+}
+
+.related-post-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-post-date {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* 响应式 - 相似文章 */
+@media (max-width: 768px) {
+    .related-posts {
+        padding: 1.5rem 1rem 0;
+        margin-top: 2rem;
+    }
+    
+    .related-title {
+        font-size: 1.25rem;
+    }
+    
+    .related-posts-grid {
+        grid-template-columns: 1fr;
+    }
+}
