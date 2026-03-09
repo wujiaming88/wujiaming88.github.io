@@ -1,16 +1,11 @@
-<header class="site-header" role="banner">
-
-  <div class="wrapper">
-    {%- assign default_paths = site.pages | map: "path" -%}
-    {%- assign page_paths = site.header_pages | default: default_paths -%}
-    <a class="site-title" rel="author" href="{{ "/" | relative_url }}">🎯 W.ai</a>
-
-    <nav class="site-nav">
-      <div class="trigger">
-        <a class="page-link" href="/about.html">About</a>
-        <a class="page-link" href="/categories.html">Categories</a>
-        <a class="page-link" href="/tags.html">Tags</a>
-      </div>
-    </nav>
-  </div>
-</header>
+<!-- 
+  旧版 header.html - 已弃用
+  此文件保留用于参考，但不被任何布局调用。
+  当前导航栏样式在 _layouts/default.html 中定义，
+  样式定义在 assets/main.scss 的 .navbar 相关类中。
+  
+  2026-03-09 更新：
+  - 旧版使用 .site-header + .site-nav 结构
+  - 新版使用 .navbar 结构（链接使用 /about/ 等路径）
+  - 旧版链接指向 .html，新版链接指向无后缀路径
+-->

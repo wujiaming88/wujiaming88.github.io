@@ -40,6 +40,154 @@
     "Liberation Mono", monospace;
 }
 
+/* ====================
+   导航栏样式 (Navbar)
+   ==================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  margin-right: auto;
+}
+
+.navbar-brand:hover {
+  color: var(--accent-color);
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.nav-link.active {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-color);
+}
+
+/* ====================
+   主内容区样式 (Main Content)
+   ==================== */
+.main-content {
+  margin-top: 64px;
+  padding: 40px 20px;
+  min-height: calc(100vh - 160px);
+}
+
+/* ====================
+   页脚样式 (Footer)
+   ==================== */
+.footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 30px 20px;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-content p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* ====================
+   响应式适配 (Responsive)
+   ==================== */
+@media (max-width: 768px) {
+  .navbar {
+    height: 56px;
+  }
+  
+  .navbar-content {
+    padding: 0 16px;
+  }
+  
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+  
+  .navbar-nav {
+    gap: 16px;
+  }
+  
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .main-content {
+    padding: 20px 16px;
+    margin-top: 56px;
+  }
+  
+  .footer {
+    padding: 20px 16px;
+  }
+}
+
 [data-theme="dark"] {
   --bg-primary: #1a1a1a;
   --bg-secondary: #252525;
