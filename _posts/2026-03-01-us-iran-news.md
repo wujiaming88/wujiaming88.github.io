@@ -4,7 +4,7 @@ date: 2026-03-01 15:00:00 +0000
 categories: [news, international]
 tags: [International News, Military, Iran, United States]
 header:
-  overlay_image: https://picsum.photos/1200/400?random=1532375810709-75b1da00537c?w=1200&h=400&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=1200&h=400&fit=crop
   overlay_filter: 0.6
   caption: "国际新闻"
 ---

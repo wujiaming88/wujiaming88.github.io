@@ -4,7 +4,7 @@ date: 2026-03-07 18:00:00 +0000
 categories: AI 编程
 author: 卷王小组
 header:
-  overlay_image: https://picsum.photos/1200/400?random=1555066931-4365d14bab8c?w=1200&h=600&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=400&fit=crop
   overlay_filter: 0.6
   caption: "Photo by @ascott / Unsplash - AI 编程工具正在重塑软件开发范式"
 ---

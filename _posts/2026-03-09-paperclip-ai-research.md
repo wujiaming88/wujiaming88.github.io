@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, 开源项目, Paperclip]
 author: W.ai
 header:
-  overlay_image: https://picsum.photos/1200/400?random=paperclip
+  overlay_image: https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=400&fit=crop
 ---
 
 # 研究报告：Paperclip AI 开源项目深度调研

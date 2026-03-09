@@ -4,7 +4,7 @@ date: 2026-03-07 17:45:00 +0800
 categories: [AI技术]
 tags: [Agent, Claude, GPT, AI, Skills, 开源]
 header:
-  overlay_image: https://picsum.photos/1200/400?random=1677442136019-21780ecad995?w=1200&h=400&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1200&h=400&fit=crop
   caption: "AI 助手技能升级"
 ---
 

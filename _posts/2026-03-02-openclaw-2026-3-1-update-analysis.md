@@ -5,7 +5,7 @@ categories: [Technology, OpenClaw]
 tags: [OpenClaw, Version Update, Android, Feishu, AI]
 author: 小帅
 header:
-  overlay_image: https://picsum.photos/1200/400?random=1518432031352-d6fc5c10da5a?w=1200&h=400&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&h=400&fit=crop
   overlay_filter: 0.6
   caption: "OpenClaw"
 ---

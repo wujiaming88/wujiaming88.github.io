@@ -4,7 +4,7 @@ date: 2026-03-02 11:30:00 +0800
 categories: [TechTrends, GitHub]
 tags: [AI, Open Source, Technical Analysis]
 header:
-  overlay_image: https://picsum.photos/1200/400?random=1556075798-4825dfaaf498?w=1200&h=400&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=1200&h=400&fit=crop
   overlay_filter: 0.6
   caption: "GitHub Trends"
 ---
