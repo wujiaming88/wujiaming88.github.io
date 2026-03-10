@@ -110,105 +110,29 @@
 
 /* 代码块容器 */
 .post-content pre {
-    background: var(--code-bg);
+    background: #1e293b;
     border-radius: 12px;
-    overflow: hidden;
+    overflow-x: auto;
     margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
     position: relative;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--border-color);
-}
-
-/* 代码块头部 - 显示语言和复制按钮 */
-.code-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.6rem 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid var(--border-color);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-.code-language {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 500;
-}
-
-/* 复制按钮 */
-.copy-button {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    padding: 0.3rem 0.8rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-
-.copy-button:hover {
-    background: var(--link-color);
-    color: white;
-    border-color: var(--link-color);
-}
-
-.copy-button.copied {
-    background: #10b981;
-    border-color: #10b981;
-    color: white;
-}
-
-/* 代码区域 - 包含行号 */
-.code-wrapper {
-    display: flex;
-    overflow-x: auto;
-}
-
-/* 行号 */
-.code-line-numbers {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 0;
-    background: rgba(0, 0, 0, 0.2);
-    border-right: 1px solid var(--border-color);
-    user-select: none;
-    min-width: 50px;
-    text-align: right;
-}
-
-.code-line-number {
-    padding: 0 1rem;
-    font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', monospace;
-    font-size: 0.85rem;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    opacity: 0.5;
-}
-
-/* 代码内容 */
-.code-content {
-    flex: 1;
-    padding: 1rem;
-    overflow-x: auto;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .post-content pre code {
     background: transparent;
     padding: 0;
     border-radius: 0;
+    border: none;
     font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', monospace;
     font-size: 0.9rem;
-    line-height: 1.6;
-    color: var(--code-text);
+    line-height: 1.7;
+    color: #e2e8f0;
     display: block;
     white-space: pre;
+    overflow-x: auto;
+    tab-size: 4;
 }
 
 /* 语法高亮颜色 */

@@ -525,6 +525,8 @@ layout: default
 }
 </style>
 
+{% include post_styles.html %}
+
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting" style="max-width: 800px; margin: 0 auto;">
 
   <header class="post-header">
@@ -671,95 +673,4 @@ function copyToClipboard(text) {
     alert('复制失败，请手动复制链接: ' + text);
   });
 }
-
-// 代码块高亮和复制功能
-document.addEventListener('DOMContentLoaded', () => {
-  // 为代码块添加复制按钮
-  document.querySelectorAll('pre').forEach((pre, index) => {
-    const copyButton = document.createElement('button');
-    copyButton.textContent = '📋 复制代码';
-    copyButton.style.cssText = `
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      background-color: rgba(99, 102, 241, 0.9);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.8rem;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      z-index: 10;
-    `;
-    
-    pre.style.position = 'relative';
-    pre.appendChild(copyButton);
-    
-    // 鼠标悬停时显示复制按钮
-    pre.addEventListener('mouseenter', () => {
-      copyButton.style.opacity = '1';
-    });
-    
-    pre.addEventListener('mouseleave', () => {
-      copyButton.style.opacity = '0';
-    });
-    
-    // 复制功能
-    copyButton.addEventListener('click', () => {
-      const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        copyButton.textContent = '✅ 已复制';
-        setTimeout(() => {
-          copyButton.textContent = '📋 复制代码';
-        }, 2000);
-      }).catch(err => {
-        console.error('无法复制代码: ', err);
-        copyButton.textContent = '❌ 复制失败';
-        setTimeout(() => {
-          copyButton.textContent = '📋 复制代码';
-        }, 2000);
-      });
-    });
-  });
-  
-  // 代码折叠功能（超过20行自动折叠）
-  document.querySelectorAll('pre code').forEach((code) => {
-    const lines = code.textContent.split('\n').length;
-    if (lines > 20) {
-      code.style.maxHeight = '300px';
-      code.style.overflow = 'hidden';
-      code.style.position = 'relative';
-      
-      const expandButton = document.createElement('button');
-      expandButton.textContent = '🔽 展开全部代码';
-      expandButton.style.cssText = `
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to top, rgba(30, 30, 30, 0.9), transparent);
-        color: white;
-        border: none;
-        padding: 1rem;
-        text-align: center;
-        cursor: pointer;
-        font-size: 0.9rem;
-      `;
-      
-      code.appendChild(expandButton);
-      
-      expandButton.addEventListener('click', () => {
-        if (code.style.maxHeight === '300px') {
-          code.style.maxHeight = 'none';
-          expandButton.textContent = '🔼 收起代码';
-        } else {
-          code.style.maxHeight = '300px';
-          expandButton.textContent = '🔽 展开全部代码';
-        }
-      });
-    }
-  });
-});
 </script>
