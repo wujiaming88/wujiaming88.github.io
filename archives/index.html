@@ -1,0 +1,297 @@
+---
+layout: default
+title: 文章归档
+permalink: /archives/
+---
+
+<style>
+.archives-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.archives-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.archives-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.archives-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.archives-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    margin-top: 0.25rem;
+}
+
+/* 搜索框 */
+.archives-search {
+    max-width: 500px;
+    margin: 2rem auto;
+}
+
+.archives-search-box {
+    display: flex;
+    align-items: center;
+    background: var(--bg-secondary, #fff);
+    border: 2px solid var(--border-color, #e5e7eb);
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.archives-search-box:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.archives-search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: var(--text-primary, #1f2937);
+    outline: none;
+}
+
+.archives-search-box input::placeholder {
+    color: var(--text-tertiary, #9ca3af);
+}
+
+/* 年份分组 */
+.year-group {
+    margin-bottom: 2.5rem;
+}
+
+.year-label {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #6366f1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.year-count {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.1);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+}
+
+/* 月份分组 */
+.month-group {
+    margin-bottom: 1.5rem;
+    margin-left: 1rem;
+}
+
+.month-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+/* 文章列表 */
+.archive-item {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.6rem 0.75rem;
+    margin-left: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.archive-item:hover {
+    background: rgba(99, 102, 241, 0.06);
+}
+
+.archive-date {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+    min-width: 50px;
+}
+
+.archive-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+    line-height: 1.4;
+}
+
+.archive-item:hover .archive-title {
+    color: #6366f1;
+}
+
+.archive-category {
+    font-size: 0.75rem;
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.08);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+/* 无结果 */
+.no-results {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-tertiary);
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .archives-header h1 {
+        font-size: 2rem;
+    }
+    
+    .archives-stats {
+        gap: 1.5rem;
+    }
+    
+    .archive-item {
+        flex-wrap: wrap;
+        gap: 0.25rem 0.75rem;
+    }
+    
+    .archive-category {
+        display: none;
+    }
+}
+</style>
+
+<div class="archives-page">
+    <div class="archives-header">
+        <h1>📚 文章归档</h1>
+        <p>所有文章按时间排列</p>
+        <div class="archives-stats">
+            <div class="stat-item">
+                <div class="stat-number">{{ site.posts.size }}</div>
+                <div class="stat-label">篇文章</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ site.categories.size }}</div>
+                <div class="stat-label">个分类</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ site.tags.size }}</div>
+                <div class="stat-label">个标签</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="archives-search">
+        <div class="archives-search-box">
+            <span style="margin-right: 0.75rem; opacity: 0.5;">🔍</span>
+            <input type="text" id="archiveSearch" placeholder="搜索文章标题..." autocomplete="off">
+        </div>
+    </div>
+
+    <div id="archiveList">
+        {% assign postsByYear = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+        {% for year in postsByYear %}
+        <div class="year-group" data-year="{{ year.name }}">
+            <div class="year-label">
+                {{ year.name }} 年
+                <span class="year-count">{{ year.items.size }} 篇</span>
+            </div>
+            {% assign postsByMonth = year.items | group_by_exp: "post", "post.date | date: '%m'" %}
+            {% for month in postsByMonth %}
+            <div class="month-group">
+                <div class="month-label">{{ month.name }} 月</div>
+                {% for post in month.items %}
+                <a href="{{ post.url | relative_url }}" class="archive-item" data-title="{{ post.title | downcase }}">
+                    <span class="archive-date">{{ post.date | date: "%m-%d" }}</span>
+                    <span class="archive-title">{{ post.title }}</span>
+                    {% if post.categories.size > 0 %}
+                    <span class="archive-category">{{ post.categories | first }}</span>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="no-results" id="noResults">
+        <p style="font-size: 1.25rem;">😕 没有找到匹配的文章</p>
+        <p style="font-size: 0.9rem;">试试其他关键词</p>
+    </div>
+</div>
+
+<script>
+document.getElementById('archiveSearch').addEventListener('input', function(e) {
+    var term = e.target.value.trim().toLowerCase();
+    var items = document.querySelectorAll('.archive-item');
+    var yearGroups = document.querySelectorAll('.year-group');
+    var monthGroups = document.querySelectorAll('.month-group');
+    var visibleCount = 0;
+
+    items.forEach(function(item) {
+        var title = item.getAttribute('data-title') || '';
+        var match = !term || title.includes(term);
+        item.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+    });
+
+    // 隐藏空的月份和年份组
+    monthGroups.forEach(function(mg) {
+        var visible = mg.querySelectorAll('.archive-item[style=""], .archive-item:not([style])');
+        var hasVisible = Array.from(mg.querySelectorAll('.archive-item')).some(function(i) {
+            return i.style.display !== 'none';
+        });
+        mg.style.display = hasVisible ? '' : 'none';
+    });
+
+    yearGroups.forEach(function(yg) {
+        var hasVisible = Array.from(yg.querySelectorAll('.archive-item')).some(function(i) {
+            return i.style.display !== 'none';
+        });
+        yg.style.display = hasVisible ? '' : 'none';
+    });
+
+    document.getElementById('noResults').style.display = visibleCount === 0 && term ? 'block' : 'none';
+});
+</script>

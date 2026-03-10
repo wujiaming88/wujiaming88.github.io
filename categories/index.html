@@ -1,100 +1,359 @@
 ---
 layout: default
-title: 分类
+title: 分类与标签
 permalink: /categories/
 ---
 
-<!-- 分类页面样式 -->
 <style>
-    .page-header {
-        text-align: center;
-        padding: 2rem 0 3rem;
-    }
+.cats-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
 
-    .page-header h1 {
+.cats-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.cats-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.cats-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+/* 标签页切换 */
+.tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.tab-btn {
+    padding: 0.6rem 1.5rem;
+    border: 2px solid var(--border-color, #e5e7eb);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+}
+
+.tab-btn.active {
+    background: #6366f1;
+    border-color: #6366f1;
+    color: white;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+/* 分类卡片 */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.category-card {
+    background: var(--bg-secondary, #fff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    border-color: #6366f1;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.12);
+}
+
+.category-card.expanded {
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.02);
+}
+
+.category-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.category-count {
+    font-size: 0.8rem;
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.1);
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.category-posts {
+    margin-top: 1rem;
+    display: none;
+}
+
+.category-card.expanded .category-posts {
+    display: block;
+}
+
+.cat-post-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.4rem 0;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 4px;
+    transition: color 0.2s ease;
+}
+
+.cat-post-item:hover .cat-post-title {
+    color: #6366f1;
+}
+
+.cat-post-date {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+}
+
+.cat-post-title {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+    line-height: 1.4;
+}
+
+/* 标签云 */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+}
+
+.tag-item {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 20px;
+    background: var(--bg-secondary, #fff);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.tag-item:hover,
+.tag-item.active {
+    background: #6366f1;
+    border-color: #6366f1;
+    color: white;
+}
+
+.tag-item .tag-count {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-left: 0.3rem;
+}
+
+/* 标签文章列表 */
+.tag-posts {
+    margin-top: 1.5rem;
+    display: none;
+}
+
+.tag-posts.active {
+    display: block;
+}
+
+.tag-posts-header {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #6366f1;
+}
+
+.tag-post-item {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s ease;
+}
+
+.tag-post-item:hover {
+    background: rgba(99, 102, 241, 0.06);
+}
+
+.tag-post-item:hover .tag-post-title {
+    color: #6366f1;
+}
+
+.tag-post-date {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+}
+
+.tag-post-title {
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+}
+
+@media (max-width: 768px) {
+    .cats-header h1 {
         font-size: 2rem;
-        margin-bottom: 0.5rem;
-        border: none;
     }
-
-    .page-header p {
-        color: var(--text-secondary);
-        font-size: 1rem;
-    }
-
-    /* 分类卡片网格 */
+    
     .category-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.25rem;
-        padding: 1rem 0;
+        grid-template-columns: 1fr;
     }
-
-    .category-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-decoration: none;
-        transition: all 0.3s ease;
+    
+    .tag-cloud {
+        gap: 0.5rem;
     }
-
-    .category-card:hover {
-        border-color: var(--link-color);
-        box-shadow: var(--shadow-md);
-        transform: translateY(-3px);
-    }
-
-    .category-name {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-
-    .category-count {
-        background: linear-gradient(135deg, var(--link-color) 0%, var(--link-hover) 100%);
-        color: white;
-        padding: 0.4rem 1rem;
-        border-radius: 20px;
+    
+    .tag-item {
         font-size: 0.85rem;
-        font-weight: 500;
-        white-space: nowrap;
+        padding: 0.4rem 0.9rem;
     }
-
-    /* 空状态 */
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        color: var(--text-secondary);
-    }
-
-    .empty-state h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-    }
+}
 </style>
 
-<div class="page-header">
-    <h1>文章分类</h1>
-    <p>按主题浏览所有文章</p>
-</div>
+<div class="cats-page">
+    <div class="cats-header">
+        <h1>🏷️ 分类与标签</h1>
+        <p>按分类或标签快速找到你想看的文章</p>
+    </div>
 
-{% if site.categories.size > 0 %}
-    <div class="category-grid">
-        {% assign sorted_categories = site.categories | sort %}
-        {% for category in sorted_categories %}
-            <a href="{{ '/categories/' | append: category[0] | relative_url }}" class="category-card">
-                <span class="category-name">{{ category[0] }}</span>
-                <span class="category-count">{{ category[1].size }} 篇</span>
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('categories')">📂 分类</button>
+        <button class="tab-btn" onclick="switchTab('tags')">🔖 标签</button>
+    </div>
+
+    <!-- 分类面板 -->
+    <div class="tab-panel active" id="panel-categories">
+        <div class="category-grid">
+            {% assign sorted_cats = site.categories | sort %}
+            {% for cat in sorted_cats %}
+            <div class="category-card" onclick="toggleCategory(this)">
+                <div class="category-name">
+                    📁 {{ cat[0] }}
+                    <span class="category-count">{{ cat[1].size }}</span>
+                </div>
+                <div class="category-posts">
+                    {% for post in cat[1] %}
+                    <a href="{{ post.url | relative_url }}" class="cat-post-item" onclick="event.stopPropagation()">
+                        <span class="cat-post-date">{{ post.date | date: "%m-%d" }}</span>
+                        <span class="cat-post-title">{{ post.title }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- 标签面板 -->
+    <div class="tab-panel" id="panel-tags">
+        <div class="tag-cloud">
+            {% assign sorted_tags = site.tags | sort %}
+            {% for tag in sorted_tags %}
+            <span class="tag-item" onclick="showTagPosts('{{ tag[0] | slugify }}', '{{ tag[0] }}')">
+                #{{ tag[0] }}<span class="tag-count">({{ tag[1].size }})</span>
+            </span>
+            {% endfor %}
+        </div>
+
+        {% for tag in sorted_tags %}
+        <div class="tag-posts" id="tag-{{ tag[0] | slugify }}">
+            <div class="tag-posts-header">#{{ tag[0] }} 的文章（{{ tag[1].size }} 篇）</div>
+            {% for post in tag[1] %}
+            <a href="{{ post.url | relative_url }}" class="tag-post-item">
+                <span class="tag-post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+                <span class="tag-post-title">{{ post.title }}</span>
             </a>
+            {% endfor %}
+        </div>
         {% endfor %}
     </div>
-{% else %}
-    <div class="empty-state">
-        <h2>暂无分类</h2>
-        <p>正在整理文章中...</p>
-    </div>
-{% endif %}
+</div>
+
+<script>
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-panel').forEach(function(panel) {
+        panel.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+}
+
+function toggleCategory(card) {
+    card.classList.toggle('expanded');
+}
+
+var activeTag = null;
+function showTagPosts(slug, name) {
+    // 取消之前的选中
+    document.querySelectorAll('.tag-item').forEach(function(t) {
+        t.classList.remove('active');
+    });
+    document.querySelectorAll('.tag-posts').forEach(function(p) {
+        p.classList.remove('active');
+    });
+
+    if (activeTag === slug) {
+        activeTag = null;
+        return;
+    }
+
+    activeTag = slug;
+    event.target.classList.add('active');
+    var panel = document.getElementById('tag-' + slug);
+    if (panel) {
+        panel.classList.add('active');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+</script>
