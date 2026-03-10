@@ -406,15 +406,3 @@ OpenClaw 的 A2A 架构是一个**精心设计的分层系统**：
 | 容错层 | Frozen Result + Wake + Idempotency | 可靠性保证 |
 
 核心设计原则是：**默认隔离，显式开启，最小权限**。Agent 之间默认完全隔离，必须通过配置显式允许通信，且每层策略只能收紧、不能放松上层的限制。
-
----
-
-## 参考来源
-
-1. OpenClaw 源码 — `/usr/lib/node_modules/openclaw/dist/plugin-sdk/agents/`
-2. OpenClaw 文档 — `/usr/lib/node_modules/openclaw/docs/concepts/multi-agent.md`
-3. OpenClaw 文档 — `/usr/lib/node_modules/openclaw/docs/tools/subagents.md`
-4. OpenClaw 文档 — `/usr/lib/node_modules/openclaw/docs/tools/agent-send.md`
-5. OpenClaw 文档 — `/usr/lib/node_modules/openclaw/docs/tools/acp-agents.md`
-6. OpenClaw 文档 — `/usr/lib/node_modules/openclaw/docs/concepts/session-tool.md`
-7. OpenClaw 配置 Schema — `config-DiiPndBn.js` (Zod schema definitions)
