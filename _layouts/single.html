@@ -654,7 +654,7 @@ layout: default
 var shareData = {
     title: {{ page.title | jsonify }},
     url: '{{ site.url }}{{ page.url }}',
-    excerpt: {{ page.excerpt | strip_html | normalize_whitespace | truncate: 150 | jsonify }},
+    excerpt: {{ page.excerpt | strip_html | normalize_whitespace | truncate: 500 | jsonify }},
     tags: {{ page.tags | default: "" | jsonify }}
 };
 
@@ -676,9 +676,21 @@ function shareToX() {
         }).join(',');
     }
     
-    var tweetText = '📖 ' + shareData.title + '\n\n' 
-        + shareData.excerpt.substring(0, 120) + '...\n\n'
-        + '🔗 ';
+    // X 推文限制 280 字符，URL 不计入（t.co 短链约 23 字符）
+    // 预留空间给标题 + 摘要 + emoji
+    var excerpt = shareData.excerpt.replace(/\n/g, ' ').trim();
+    
+    // 智能截断：尽量在句号/逗号处断开
+    var maxExcerpt = 200;
+    if (excerpt.length > maxExcerpt) {
+        var cut = excerpt.lastIndexOf('。', maxExcerpt);
+        if (cut < 80) cut = excerpt.lastIndexOf('，', maxExcerpt);
+        if (cut < 80) cut = excerpt.lastIndexOf('. ', maxExcerpt);
+        if (cut < 80) cut = maxExcerpt;
+        excerpt = excerpt.substring(0, cut + 1) + '...';
+    }
+    
+    var tweetText = '📖 ' + shareData.title + '\n\n' + excerpt;
     
     var url = 'https://x.com/intent/tweet?text=' + encodeURIComponent(tweetText)
         + '&url=' + encodeURIComponent(shareData.url);
