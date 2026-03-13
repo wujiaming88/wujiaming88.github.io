@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Multi-Agent, Memory, 记忆系统, 上下文共享]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=400&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=400&fit=crop
 ---
 
 # OpenClaw 多Agent记忆系统与上下文共享研究报告

@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Skill, AgentSkills, ClawHub, 架构]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=400&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&h=400&fit=crop
 ---
 
 # OpenClaw Skill 模块架构、机制与管理深度研究报告

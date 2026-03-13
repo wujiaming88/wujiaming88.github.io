@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, OpenViking, 高可用, Context Engine, 技术方案]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=400&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=400&fit=crop
 ---
 
 # OpenClaw + OpenViking 高可用上下文引擎技术方案
