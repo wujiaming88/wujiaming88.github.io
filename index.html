@@ -25,9 +25,11 @@ title: W.ai - 深度技术研究博客
         
         <!-- 热门标签 - 按文章数排序取前5 -->
         <div class="hero-tags">
-            {% assign sorted_tags = site.tags | sort: "last" | reverse %}
-            {% for tag_pair in sorted_tags limit:5 %}
-            <span class="tag" data-search="{{ tag_pair[0] }}" onclick="window.tagSearch(this)">{{ tag_pair[0] }}</span>
+            {% capture tag_string %}{% for tag in site.tags %}{{ tag[1].size | prepend: "000" | slice: -4, 4 }}::{{ tag[0] }}{% unless forloop.last %}|{% endunless %}{% endfor %}{% endcapture %}
+            {% assign sorted_tags = tag_string | split: "|" | sort | reverse %}
+            {% for item in sorted_tags limit:5 %}
+            {% assign tag_name = item | split: "::" | last %}
+            <span class="tag" data-search="{{ tag_name }}" onclick="window.tagSearch(this)">{{ tag_name }}</span>
             {% endfor %}
         </div>
     </div>
