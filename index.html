@@ -23,11 +23,12 @@ title: W.ai - 深度技术研究博客
             <div class="search-results" id="searchResults"></div>
         </div>
         
+        <!-- 热门标签 - 按文章数排序取前5 -->
         <div class="hero-tags">
-            <span class="tag">AI</span>
-            <span class="tag">深度学习</span>
-            <span class="tag">OpenClaw</span>
-            <span class="tag">工程实践</span>
+            {% assign sorted_tags = site.tags | sort: "last" | reverse %}
+            {% for tag_pair in sorted_tags limit:5 %}
+            <span class="tag" data-search="{{ tag_pair[0] }}" onclick="window.tagSearch(this)">{{ tag_pair[0] }}</span>
+            {% endfor %}
         </div>
     </div>
     <div class="hero-decoration">
@@ -229,6 +230,17 @@ body {
     background: var(--accent-primary);
     color: white;
     border-color: var(--accent-primary);
+}
+
+.tag.active {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+.tag {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* 搜索框样式 */
@@ -1010,6 +1022,11 @@ var __totalPostCount = {{ site.posts.size }};
         postCards.forEach(function(c) { c.style.display = ''; });
         var emptyEl = document.getElementById('searchEmpty');
         if (emptyEl) emptyEl.style.display = 'none';
+
+        // 清除标签高亮
+        document.querySelectorAll('.hero-tags .tag').forEach(function(t) {
+            t.classList.remove('active');
+        });
     }
 
     // --- 事件绑定 ---
@@ -1087,6 +1104,24 @@ var __totalPostCount = {{ site.posts.size }};
 
     // 暴露全局 clearSearch 供 HTML onclick 调用
     window.clearSearch = clearSearch;
+
+    // 标签点击搜索
+    window.tagSearch = function(el) {
+        var tag = el.getAttribute('data-search');
+        // 切换：再次点击同一标签则取消
+        if (input.value === tag) {
+            clearSearch();
+            el.classList.remove('active');
+            return;
+        }
+        // 清除其他标签的 active
+        document.querySelectorAll('.hero-tags .tag').forEach(function(t) {
+            t.classList.remove('active');
+        });
+        el.classList.add('active');
+        input.value = tag;
+        search(tag);
+    };
 
     // --- 工具函数 ---
     function updateHighlight(items) {
