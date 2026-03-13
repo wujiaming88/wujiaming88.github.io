@@ -79,13 +79,41 @@ permalink: /archives/
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 1rem;
+    font-size: 16px; /* 必须 >= 16px 防止 iOS Safari 自动缩放 */
     color: var(--text-primary, #1f2937);
     outline: none;
+    -webkit-appearance: none; /* 移除 iOS 默认样式 */
+    appearance: none;
+    line-height: 1.5;
+    min-height: 44px; /* Apple HIG 最小触控尺寸 */
+    padding: 0;
+    margin: 0;
 }
 
 .archives-search-box input::placeholder {
     color: var(--text-tertiary, #9ca3af);
+}
+
+/* 搜索清除按钮 */
+.archives-search-clear {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: var(--bg-tertiary, #f3f4f6);
+    color: var(--text-secondary, #6b7280);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.archives-search-clear.visible {
+    display: flex;
 }
 
 /* 年份分组 */
@@ -198,6 +226,14 @@ permalink: /archives/
     .archive-category {
         display: none;
     }
+
+    .archives-search-box {
+        padding: 0.5rem 1rem;
+    }
+
+    .archives-search-box input {
+        font-size: 16px; /* 防止 iOS 缩放 */
+    }
 }
 </style>
 
@@ -224,7 +260,8 @@ permalink: /archives/
     <div class="archives-search">
         <div class="archives-search-box">
             <span style="margin-right: 0.75rem; opacity: 0.5;">🔍</span>
-            <input type="text" id="archiveSearch" placeholder="搜索文章标题..." autocomplete="off">
+            <input type="search" id="archiveSearch" placeholder="搜索文章标题..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+            <button type="button" class="archives-search-clear" id="archiveClear" aria-label="清除搜索">✕</button>
         </div>
     </div>
 
@@ -262,36 +299,95 @@ permalink: /archives/
 </div>
 
 <script>
-document.getElementById('archiveSearch').addEventListener('input', function(e) {
-    var term = e.target.value.trim().toLowerCase();
+(function() {
+    'use strict';
+
+    var searchInput = document.getElementById('archiveSearch');
+    var clearBtn = document.getElementById('archiveClear');
+    var noResults = document.getElementById('noResults');
     var items = document.querySelectorAll('.archive-item');
-    var yearGroups = document.querySelectorAll('.year-group');
     var monthGroups = document.querySelectorAll('.month-group');
-    var visibleCount = 0;
+    var yearGroups = document.querySelectorAll('.year-group');
 
-    items.forEach(function(item) {
-        var title = item.getAttribute('data-title') || '';
-        var match = !term || title.includes(term);
-        item.style.display = match ? '' : 'none';
-        if (match) visibleCount++;
+    var isComposing = false; // 中文输入法标记
+    var debounceTimer;
+
+    function doFilter() {
+        var term = (searchInput.value || '').trim().toLowerCase();
+        var visibleCount = 0;
+
+        // 显示/隐藏清除按钮
+        clearBtn.classList.toggle('visible', term.length > 0);
+
+        // 过滤文章
+        for (var i = 0; i < items.length; i++) {
+            var title = items[i].getAttribute('data-title') || '';
+            var match = !term || title.indexOf(term) !== -1;
+            items[i].style.display = match ? '' : 'none';
+            if (match) visibleCount++;
+        }
+
+        // 隐藏空的月份组
+        for (var m = 0; m < monthGroups.length; m++) {
+            var hasVisibleMonth = false;
+            var monthItems = monthGroups[m].querySelectorAll('.archive-item');
+            for (var j = 0; j < monthItems.length; j++) {
+                if (monthItems[j].style.display !== 'none') { hasVisibleMonth = true; break; }
+            }
+            monthGroups[m].style.display = hasVisibleMonth ? '' : 'none';
+        }
+
+        // 隐藏空的年份组
+        for (var y = 0; y < yearGroups.length; y++) {
+            var hasVisibleYear = false;
+            var yearItems = yearGroups[y].querySelectorAll('.archive-item');
+            for (var k = 0; k < yearItems.length; k++) {
+                if (yearItems[k].style.display !== 'none') { hasVisibleYear = true; break; }
+            }
+            yearGroups[y].style.display = hasVisibleYear ? '' : 'none';
+        }
+
+        noResults.style.display = (visibleCount === 0 && term) ? 'block' : 'none';
+    }
+
+    // 处理中文输入法 (IME)
+    searchInput.addEventListener('compositionstart', function() {
+        isComposing = true;
     });
 
-    // 隐藏空的月份和年份组
-    monthGroups.forEach(function(mg) {
-        var visible = mg.querySelectorAll('.archive-item[style=""], .archive-item:not([style])');
-        var hasVisible = Array.from(mg.querySelectorAll('.archive-item')).some(function(i) {
-            return i.style.display !== 'none';
-        });
-        mg.style.display = hasVisible ? '' : 'none';
+    searchInput.addEventListener('compositionend', function() {
+        isComposing = false;
+        doFilter(); // 输入法确认后立即过滤
     });
 
-    yearGroups.forEach(function(yg) {
-        var hasVisible = Array.from(yg.querySelectorAll('.archive-item')).some(function(i) {
-            return i.style.display !== 'none';
-        });
-        yg.style.display = hasVisible ? '' : 'none';
+    // input 事件 - 防抖 + 跳过 IME 中间态
+    searchInput.addEventListener('input', function() {
+        if (isComposing) return; // 中文输入中，等 compositionend
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(doFilter, 150);
     });
 
-    document.getElementById('noResults').style.display = visibleCount === 0 && term ? 'block' : 'none';
-});
+    // 搜索键（移动端键盘"搜索"按钮）
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchInput.blur(); // 收起移动端键盘
+        }
+    });
+
+    // 清除按钮
+    clearBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        searchInput.value = '';
+        clearBtn.classList.remove('visible');
+        doFilter();
+        searchInput.focus();
+    });
+
+    // iOS Safari: 处理搜索框 type=search 的原生清除按钮
+    searchInput.addEventListener('search', function() {
+        doFilter();
+    });
+})();
 </script>
