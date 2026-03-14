@@ -1,7 +1,7 @@
 ---
 title:  "SkillsBench论文研究：Agent Skills有效性的系统性评估"
 date:   2026-03-07 16:00:00 +0800
-categories: AI
+categories: [AI]
 tags: [AI研究, 论文, Agent, Skills]
 header:
   overlay_image: https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200&h=400&fit=crop

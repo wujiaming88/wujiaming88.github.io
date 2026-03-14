@@ -1,7 +1,7 @@
 ---
 title: "Claude Code 深度研究：从终端到企业级AI开发平台"
 date: 2026-03-07 18:00:00 +0000
-categories: AI 编程
+categories: [AI]
 author: 卷王小组
 header:
   overlay_image: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=400&fit=crop

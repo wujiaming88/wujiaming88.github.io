@@ -1,7 +1,7 @@
 ---
 title: "AI 最大的谎言正在被揭穿！ChatGPT 为什么会胡说八道？科学家终于找到答案了！"
 date: 2026-03-08 16:17:00 +0000
-categories: [AI, Technology, Research]
+categories: [AI]
 tags: [AI, ChatGPT, Hallucination, 幻觉, 论文解读]
 header:
   overlay_image: https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&h=400&fit=crop

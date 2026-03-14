@@ -1,7 +1,7 @@
 ---
 title: "2026年3月6日新闻联播主要内容"
 date: 2026-03-06 19:00:00 +0000
-categories: [news, politics]
+categories: [新闻]
 tags: [News Broadcast, Politics, Two Sessions, Economy]
 header:
   overlay_image: https://images.unsplash.com/photo-1495020689067-958852a7765e?w=1200&h=400&fit=crop

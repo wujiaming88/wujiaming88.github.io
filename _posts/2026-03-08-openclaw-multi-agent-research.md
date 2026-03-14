@@ -1,8 +1,8 @@
 ---
 title:  "OpenClaw 多Agent协作模式技术架构"
 date:   2026-03-08 14:44:00 +0800
-categories: openclaw 多Agent 协作架构 技术研究
-tags: [openclaw, 多Agent, 协作模式, 技术架构, 研究]
+categories: [OpenClaw]
+tags: [OpenClaw, 多Agent, 协作模式, 技术架构, 研究]
 header:
   overlay_image: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=400&fit=crop
   overlay_filter: 0.6

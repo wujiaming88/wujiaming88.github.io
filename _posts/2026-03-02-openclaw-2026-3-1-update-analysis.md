@@ -1,7 +1,7 @@
 ---
 title: "OpenClaw 2026.3.1 版本深度解析：移动端能力飞跃与飞书深度集成"
 date: 2026-03-02 11:15:00 +0800
-categories: [Technology, OpenClaw]
+categories: [OpenClaw]
 tags: [OpenClaw, Version Update, Android, Feishu, AI]
 author: 小帅
 header:

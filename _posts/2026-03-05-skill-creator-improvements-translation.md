@@ -1,7 +1,7 @@
 ---
 title: "改进Skill-Creator：测试、衡量和优化Agent Skills"
 date: 2026-03-05 14:00:00 +0000
-categories: AI 技术研究
+categories: [AI]
 header:
   overlay_image: https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&h=400&fit=crop
   overlay_filter: 0.6

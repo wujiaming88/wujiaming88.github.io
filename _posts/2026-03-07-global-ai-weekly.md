@@ -1,7 +1,7 @@
 ---
 title: "全球AI动态周报（2026年3月1日-3月7日）"
 date: 2026-03-07 12:00:00 +0000
-categories: [AI, Technology, Weekly]
+categories: [周报]
 tags: [AI, 人工智能, 周报, 全球AI动态]
 header:
   overlay_image: https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&h=400&fit=crop
