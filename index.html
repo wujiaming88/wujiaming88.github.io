@@ -17,7 +17,8 @@ title: W.ai - 深度技术研究博客
         <div class="search-wrapper">
             <div class="search-box">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" class="search-input" placeholder="搜索文章标题、分类、标签..." autocomplete="off">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索文章... 回车进入全文搜索" autocomplete="off">
+                <a href="{{ '/search/' | relative_url }}" class="search-fulltext-link" title="全文搜索">全文</a>
                 <span class="search-shortcut">⌘K</span>
             </div>
             <div class="search-results" id="searchResults"></div>
@@ -296,6 +297,26 @@ body {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     border: 1px solid var(--border-color);
+}
+
+.search-fulltext-link {
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+    background: rgba(99, 102, 241, 0.08);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    text-decoration: none;
+    font-weight: 500;
+    margin-right: 0.5rem;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.search-fulltext-link:hover {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
 }
 
 /* 搜索结果下拉 */
@@ -1081,10 +1102,15 @@ var __totalPostCount = {{ site.posts.size }};
             e.preventDefault();
             highlightIdx = Math.max(highlightIdx - 1, 0);
             updateHighlight(items);
-        } else if (e.key === 'Enter' && highlightIdx >= 0) {
+        } else if (e.key === 'Enter') {
             e.preventDefault();
-            var link = items[highlightIdx];
-            if (link && link.href) window.location.href = link.href;
+            if (highlightIdx >= 0) {
+                var link = items[highlightIdx];
+                if (link && link.href) window.location.href = link.href;
+            } else if (input.value.trim()) {
+                // Enter without selection → go to full-text search page
+                window.location.href = '{{ "/search/" | relative_url }}?q=' + encodeURIComponent(input.value.trim());
+            }
         }
     });
 
