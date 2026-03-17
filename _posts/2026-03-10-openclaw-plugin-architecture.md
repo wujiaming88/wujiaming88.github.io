@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Plugin, 插件架构]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&h=400&fit=crop
+  overlay_image: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=400&fit=crop
 ---
 
 # OpenClaw Plugin 架构与原理研究报告
