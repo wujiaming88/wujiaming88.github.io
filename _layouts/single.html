@@ -516,32 +516,96 @@ layout: default
 }
 
 /* ============================================
-   文章目录样式
+   文章目录样式 - 左侧固定侧栏
    ============================================ */
 
+/* 文章主体居中偏右，给左侧目录留空间 */
+.post.h-entry {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media (min-width: 1200px) {
+    .post.h-entry {
+        margin-left: 300px;
+        margin-right: auto;
+        max-width: 800px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .post.h-entry {
+        margin-left: calc((100% - 800px) / 2 + 60px);
+    }
+}
+
 .post-toc {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    width: 250px;
+    max-height: calc(100vh - 140px);
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     border: 1px solid #e2e8f0;
     border-left: 4px solid #6366f1;
     border-radius: 0 12px 12px 0;
-    margin-bottom: 2.5rem;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
+    z-index: 100;
+    scrollbar-width: thin;
+    scrollbar-color: #c7d2fe transparent;
+}
+
+.post-toc::-webkit-scrollbar {
+    width: 4px;
+}
+
+.post-toc::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.post-toc::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 4px;
 }
 
 .post-toc:hover {
     box-shadow: 0 4px 12px -2px rgba(99, 102, 241, 0.15);
 }
 
+/* 移动端: 目录回到文章顶部，非固定 */
+@media (max-width: 1199px) {
+    .post.h-entry {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .post-toc {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 100%;
+        max-width: 800px;
+        max-height: none;
+        margin: 0 auto 2rem;
+        border-radius: 0 12px 12px 0;
+    }
+}
+
 .toc-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
+    padding: 0.85rem 1.25rem;
     cursor: pointer;
     user-select: none;
     transition: background 0.2s ease;
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    z-index: 1;
 }
 
 .toc-header:hover {
@@ -550,14 +614,14 @@ layout: default
 
 .toc-header h3 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #1f2937;
     font-weight: 600;
 }
 
 .toc-toggle {
     color: #6366f1;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     transition: transform 0.3s ease;
 }
 
@@ -566,7 +630,7 @@ layout: default
 }
 
 .toc-body {
-    padding: 0 1.5rem 1.25rem;
+    padding: 0 1rem 1rem;
     overflow: hidden;
     transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
 }
@@ -586,23 +650,24 @@ layout: default
 
 .toc-body > ul {
     border-top: 1px solid #e2e8f0;
-    padding-top: 0.75rem;
+    padding-top: 0.5rem;
 }
 
 /* 一级目录 */
 .toc-body > ul > li {
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.2rem;
 }
 
 .toc-body > ul > li > a {
     display: block;
-    padding: 0.4rem 0.5rem;
+    padding: 0.35rem 0.5rem;
     color: #1f2937;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 5px;
     transition: all 0.2s ease;
+    line-height: 1.4;
 }
 
 .toc-body > ul > li > a:hover {
@@ -613,22 +678,23 @@ layout: default
 
 /* 二级目录 */
 .toc-body > ul > li > ul {
-    padding-left: 1.25rem;
+    padding-left: 1rem;
 }
 
 .toc-body > ul > li > ul > li {
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.1rem;
 }
 
 .toc-body > ul > li > ul > li > a {
     display: block;
-    padding: 0.3rem 0.5rem;
+    padding: 0.25rem 0.5rem;
     color: #4b5563;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 500;
     text-decoration: none;
     border-radius: 4px;
     transition: all 0.2s ease;
+    line-height: 1.4;
 }
 
 .toc-body > ul > li > ul > li > a:hover {
@@ -639,22 +705,23 @@ layout: default
 
 /* 三级目录 */
 .toc-body > ul > li > ul > li > ul {
-    padding-left: 1.25rem;
+    padding-left: 1rem;
 }
 
 .toc-body > ul > li > ul > li > ul > li {
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.05rem;
 }
 
 .toc-body > ul > li > ul > li > ul > li > a {
     display: block;
-    padding: 0.25rem 0.5rem;
+    padding: 0.2rem 0.5rem;
     color: #6b7280;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 400;
     text-decoration: none;
     border-radius: 4px;
     transition: all 0.2s ease;
+    line-height: 1.4;
 }
 
 .toc-body > ul > li > ul > li > ul > li > a:hover {
@@ -681,35 +748,44 @@ layout: default
 /* 活跃项高亮 */
 .toc-body a.toc-active {
     color: #6366f1 !important;
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(99, 102, 241, 0.12);
     font-weight: 600 !important;
+    border-left: 3px solid #6366f1;
+    padding-left: 0.5rem;
 }
 
-/* 响应式 */
-@media (max-width: 768px) {
-    .post-toc {
-        margin-left: -0.5rem;
-        margin-right: -0.5rem;
-        border-radius: 0 8px 8px 0;
-    }
-    
-    .toc-body > ul > li > a {
-        font-size: 0.9rem;
-    }
-    
-    .toc-body > ul > li > ul > li > a {
-        font-size: 0.85rem;
-    }
-    
-    .toc-body > ul > li > ul > li > ul > li > a {
-        font-size: 0.8rem;
-    }
+/* 进度条 */
+.toc-progress {
+    height: 2px;
+    background: #e2e8f0;
+    position: sticky;
+    top: 46px;
+    z-index: 1;
+}
+
+.toc-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    width: 0%;
+    transition: width 0.1s ease;
 }
 </style>
 
 {% include post_styles.html %}
 
-<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting" style="max-width: 800px; margin: 0 auto;">
+<!-- 左侧固定目录 -->
+{% unless page.toc == false %}
+<nav class="post-toc" id="post-toc">
+  <div class="toc-header" onclick="toggleToc()">
+    <h3>📑 目录</h3>
+    <span class="toc-toggle" id="toc-toggle">▼</span>
+  </div>
+  <div class="toc-progress"><div class="toc-progress-bar" id="toc-progress-bar"></div></div>
+  <div class="toc-body" id="toc-body"></div>
+</nav>
+{% endunless %}
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
     <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem;">{{ page.title | escape }}</h1>
@@ -741,17 +817,6 @@ layout: default
     {% endif %}
   </div>
   {% endif %}
-
-  <!-- 文章目录 (自动生成，最多三级) -->
-  {% unless page.toc == false %}
-  <nav class="post-toc" id="post-toc">
-    <div class="toc-header" onclick="toggleToc()">
-      <h3>📑 目录</h3>
-      <span class="toc-toggle" id="toc-toggle">▼</span>
-    </div>
-    <div class="toc-body" id="toc-body"></div>
-  </nav>
-  {% endunless %}
 
   <div class="post-content e-content" itemprop="articleBody">
     {{ content }}
@@ -992,9 +1057,25 @@ function shareToX() {
     var scrollTimer;
     window.addEventListener('scroll', function() {
         clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(updateActiveLink, 50);
+        scrollTimer = setTimeout(function() {
+            updateActiveLink();
+            updateProgress();
+        }, 50);
     });
     updateActiveLink();
+
+    // 阅读进度条
+    var progressBar = document.getElementById('toc-progress-bar');
+    function updateProgress() {
+        if (!progressBar || !content) return;
+        var contentTop = content.offsetTop;
+        var contentHeight = content.scrollHeight;
+        var scrollPos = window.scrollY - contentTop;
+        var winHeight = window.innerHeight;
+        var progress = Math.min(100, Math.max(0, (scrollPos + winHeight * 0.3) / contentHeight * 100));
+        progressBar.style.width = progress + '%';
+    }
+    updateProgress();
 
     // 点击平滑滚动
     tocLinks.forEach(function(link) {
