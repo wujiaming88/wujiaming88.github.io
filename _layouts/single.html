@@ -519,24 +519,10 @@ layout: default
    文章目录样式 - 左侧固定侧栏
    ============================================ */
 
-/* 文章主体居中偏右，给左侧目录留空间 */
+/* 文章主体保持原来的居中布局 */
 .post.h-entry {
     max-width: 800px;
     margin: 0 auto;
-}
-
-@media (min-width: 1200px) {
-    .post.h-entry {
-        margin-left: 300px;
-        margin-right: auto;
-        max-width: 800px;
-    }
-}
-
-@media (min-width: 1440px) {
-    .post.h-entry {
-        margin-left: calc((100% - 800px) / 2 + 60px);
-    }
 }
 
 .post-toc {
