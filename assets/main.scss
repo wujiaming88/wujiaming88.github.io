@@ -202,7 +202,9 @@
   }
   
   .navbar-toggle {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   
   .navbar-nav {

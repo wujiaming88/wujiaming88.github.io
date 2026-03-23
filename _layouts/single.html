@@ -777,23 +777,29 @@ layout: default
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem;">{{ page.title | escape }}</h1>
-    <div class="post-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+    <h1 class="post-title p-name" itemprop="name headline" style="font-size: 2.5rem; margin-bottom: 1.5rem; word-wrap: break-word; overflow-wrap: break-word;">{{ page.title | escape }}</h1>
+    <div class="post-meta" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; overflow-wrap: break-word;">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
         📅 {{ page.date | date: '%Y年%m月%d日' }}
       </time>
       {% if page.author %}
-        • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span>•</span>
+        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
           <span class="p-author h-card" itemprop="name">👤 {{ page.author }}</span>
         </span>
       {% endif %}
       {% if page.categories %}
-        • <span>📂 {{ page.categories | join: ', ' }}</span>
-      {% endif %}
-      {% if page.tags %}
-        • <span>#️⃣ {{ page.tags | join: ', ' }}</span>
+        <span>•</span>
+        <span>📂 {{ page.categories | join: ', ' }}</span>
       {% endif %}
     </div>
+    {% if page.tags %}
+    <div class="post-tags" style="display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center;">
+      {% for tag in page.tags %}
+      <span style="background: #f1f5f9; color: #475569; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem;">#{{ tag }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
   </header>
 
   <!-- 封面图片 -->
