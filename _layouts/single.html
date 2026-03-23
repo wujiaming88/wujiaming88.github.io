@@ -673,9 +673,10 @@ layout: default
     overflow-y: auto;
     overflow-x: hidden;
     max-height: calc(100vh - 200px);
+    opacity: 1;
     scrollbar-width: thin;
     scrollbar-color: rgba(203, 213, 225, 0.4) transparent;
-    transition: max-height 0.4s ease, opacity 0.3s ease;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 
 .toc-body::-webkit-scrollbar {
@@ -1116,9 +1117,16 @@ function toggleToc() {
         tocBody.classList.remove('mobile-collapsed');
         tocToggle.classList.remove('collapsed');
         tocToggle.textContent = '▼';
+        // 强制恢复可见性
+        tocBody.style.maxHeight = 'calc(100vh - 200px)';
+        tocBody.style.opacity = '1';
+        tocBody.style.padding = '8px 0';
     } else {
         tocBody.classList.add('collapsed');
         tocToggle.classList.add('collapsed');
+        tocBody.style.maxHeight = '0';
+        tocBody.style.opacity = '0';
+        tocBody.style.padding = '0';
         if (window.innerWidth <= 768) {
             tocBody.classList.add('mobile-collapsed');
             tocToggle.textContent = '▶ 点击展开';
