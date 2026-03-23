@@ -429,12 +429,23 @@ layout: default
         margin-left: -1rem;
         margin-right: -1rem;
         width: calc(100% + 2rem);
-        max-height: 300px;
+        max-height: 220px;
     }
     
     .post-cover-caption {
         font-size: 0.75rem;
         padding: 1rem;
+    }
+    
+    /* 文章标题 */
+    .post-header h1 {
+        font-size: 1.6rem !important;
+        line-height: 1.4;
+    }
+    
+    .post-header .post-meta {
+        font-size: 0.8rem !important;
+        gap: 0.5rem !important;
     }
     
     /* 底部组件响应式 */
@@ -445,6 +456,8 @@ layout: default
     
     .share-btn {
         justify-content: center;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
     }
     
     .related-posts-grid {
@@ -469,6 +482,17 @@ layout: default
         padding: 1rem;
         background: rgba(255, 255, 255, 0.5);
         border-radius: 8px;
+    }
+    
+    /* 底部区块间距 */
+    .post-bottom-section {
+        margin-top: 2rem;
+        padding: 1.25rem;
+        border-radius: 10px;
+    }
+    
+    .post-bottom-section h3 {
+        font-size: 1.15rem;
     }
 }
 
@@ -563,6 +587,20 @@ layout: default
         max-height: none;
         margin: 0 auto 2rem;
         border-radius: 12px;
+    }
+}
+
+/* 手机端: 目录默认折叠 + 精简 */
+@media (max-width: 768px) {
+    .post-toc {
+        margin: 0 0 1.5rem 0;
+        border-radius: 10px;
+    }
+    
+    .toc-body.mobile-collapsed {
+        max-height: 0 !important;
+        opacity: 0;
+        padding: 0;
     }
 }
 
@@ -1002,6 +1040,17 @@ function shareToX() {
         if (activeHeading) {
             var activeLink = tocBody.querySelector('a[href="#' + activeHeading.id + '"]');
             if (activeLink) activeLink.classList.add('toc-active');
+        }
+    }
+
+    // 手机端默认折叠目录
+    if (window.innerWidth <= 768) {
+        var tocBody = document.getElementById('toc-body');
+        var tocToggle = document.getElementById('toc-toggle');
+        if (tocBody && tocToggle) {
+            tocBody.classList.add('collapsed');
+            tocBody.classList.add('mobile-collapsed');
+            tocToggle.classList.add('collapsed');
         }
     }
 

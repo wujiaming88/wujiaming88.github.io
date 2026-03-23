@@ -12,11 +12,15 @@
                 {{ site.title }}
             </a>
             
-            <ul class="navbar-nav">
+            <!-- 汉堡菜单按钮（手机端） -->
+            <button class="navbar-toggle" id="navbar-toggle" aria-label="菜单" onclick="toggleNav()">
+                <span></span><span></span><span></span>
+            </button>
+            
+            <ul class="navbar-nav" id="navbar-nav">
                 <li><a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' %}active{% endif %}">首页</a></li>
                 <li><a href="{{ '/archives/' | relative_url }}" class="nav-link {% if page.url contains 'archives' %}active{% endif %}">归档</a></li>
                 <li><a href="{{ '/categories/' | relative_url }}" class="nav-link {% if page.url contains 'categories' %}active{% endif %}">分类</a></li>
-                <!-- 搜索已融合到首页 -->
                 <li><a href="{{ '/about/' | relative_url }}" class="nav-link {% if page.url contains 'about' %}active{% endif %}">关于</a></li>
             </ul>
         </div>
@@ -153,6 +157,24 @@
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
+            });
+        });
+        
+        // 汉堡菜单切换
+        function toggleNav() {
+            var nav = document.getElementById('navbar-nav');
+            var btn = document.getElementById('navbar-toggle');
+            nav.classList.toggle('open');
+            btn.classList.toggle('open');
+        }
+        
+        // 点击导航链接后自动关闭菜单
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                var nav = document.getElementById('navbar-nav');
+                var btn = document.getElementById('navbar-toggle');
+                nav.classList.remove('open');
+                btn.classList.remove('open');
             });
         });
     </script>

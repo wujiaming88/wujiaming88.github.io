@@ -154,6 +154,38 @@
 }
 
 /* ====================
+   汉堡菜单按钮 (Hamburger)
+   ==================== */
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 1001;
+}
+
+.navbar-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-primary);
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggle.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.navbar-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+.navbar-toggle.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ====================
    响应式适配 (Responsive)
    ==================== */
 @media (max-width: 768px) {
@@ -169,17 +201,45 @@
     font-size: 1.25rem;
   }
   
+  .navbar-toggle {
+    display: block;
+  }
+  
   .navbar-nav {
-    gap: 16px;
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    padding: 8px 0;
+    gap: 0;
+  }
+  
+  .navbar-nav.open {
+    display: flex;
+  }
+  
+  .navbar-nav li {
+    list-style: none;
   }
   
   .nav-link {
-    padding: 6px 10px;
-    font-size: 0.9rem;
+    display: block;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 0;
+  }
+  
+  .nav-link:hover {
+    background: var(--bg-secondary);
   }
   
   .main-content {
-    padding: 20px 16px;
+    padding: 20px 0;
     margin-top: 56px;
   }
   

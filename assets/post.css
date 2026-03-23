@@ -258,29 +258,124 @@ article.post .post-header .post-meta {
 /* ==================== */
 @media (max-width: 768px) {
     article.post .post-content {
-        padding: 0 1rem;
+        padding: 0 0.5rem;
         font-size: 1rem;
+        line-height: 1.75;
+    }
+
+    article.post .post-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
     }
 
     article.post .post-header .post-title {
-        font-size: 2rem;
+        font-size: 1.6rem;
+        line-height: 1.4;
     }
 
     article.post .post-content h1 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        margin: 2rem 0 1rem 0;
     }
 
     article.post .post-content h2 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+        margin: 1.8rem 0 1rem 0;
     }
 
     article.post .post-content h3 {
-        font-size: 1.25rem;
+        font-size: 1.15rem;
+        margin: 1.3rem 0 0.8rem 0;
+    }
+
+    article.post .post-content h4 {
+        font-size: 1.05rem;
+    }
+
+    /* 代码块手机端优化 */
+    article.post .post-content pre {
+        padding: 0.8rem 1rem;
+        font-size: 0.78rem;
+        border-radius: 8px;
+        margin: 1.2rem -0.5rem;
+        width: calc(100% + 1rem);
+    }
+
+    article.post .post-content pre code {
+        font-size: 0.78rem;
+        line-height: 1.6;
+    }
+
+    /* 行内代码 */
+    article.post .post-content code:not(pre code) {
+        font-size: 0.85em;
+        padding: 0.15rem 0.35rem;
+        word-break: break-all;
+    }
+
+    /* 表格手机端优化 */
+    article.post .post-content table {
+        font-size: 0.85rem;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    article.post .post-content th,
+    article.post .post-content td {
+        padding: 0.5rem 0.65rem;
+        min-width: 80px;
+    }
+
+    /* 引用块 */
+    article.post .post-content blockquote {
+        padding: 0.75rem 1rem;
+        margin: 1.2rem 0;
+        font-size: 0.95rem;
+    }
+
+    /* 列表 */
+    article.post .post-content ul,
+    article.post .post-content ol {
+        padding-left: 1.5rem;
+    }
+
+    /* 段落 */
+    article.post .post-content p {
+        margin-bottom: 1.2rem;
+        text-align: left;
+    }
+
+    /* 图片 */
+    article.post .post-content img {
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+
+    /* 分隔线 */
+    article.post .post-content hr {
+        margin: 2rem 0;
+    }
+}
+
+/* 小屏手机 (≤375px) */
+@media (max-width: 375px) {
+    article.post .post-content {
+        font-size: 0.95rem;
+        padding: 0 0.25rem;
+    }
+
+    article.post .post-header .post-title {
+        font-size: 1.4rem;
     }
 
     article.post .post-content pre {
-        padding: 1rem;
-        font-size: 0.85rem;
-        border-radius: 8px;
+        font-size: 0.72rem;
+        padding: 0.7rem 0.8rem;
+    }
+
+    article.post .post-content table {
+        font-size: 0.8rem;
     }
 }
