@@ -316,16 +316,20 @@ article.post .post-header .post-meta {
     /* 表格手机端优化 */
     article.post .post-content table {
         font-size: 0.85rem;
-        display: block;
+    }
+
+    /* 表格包装器（由JS自动包裹） */
+    article.post .post-content .table-wrapper {
         overflow-x: auto;
-        white-space: nowrap;
         -webkit-overflow-scrolling: touch;
+        margin: 1.2rem -0.5rem;
+        padding: 0 0.5rem;
     }
 
     article.post .post-content th,
     article.post .post-content td {
         padding: 0.5rem 0.65rem;
-        min-width: 80px;
+        white-space: nowrap;
     }
 
     /* 引用块 */
