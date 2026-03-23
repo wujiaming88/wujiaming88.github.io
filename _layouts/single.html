@@ -642,12 +642,13 @@ layout: default
 
 .toc-toggle {
     color: #94a3b8;
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     transition: transform 0.3s ease;
+    white-space: nowrap;
 }
 
 .toc-toggle.collapsed {
-    transform: rotate(-90deg);
+    /* 不旋转，用文字提示代替 */
 }
 
 /* 进度条 */
