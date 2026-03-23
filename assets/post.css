@@ -2,6 +2,14 @@
 /* 所有样式限定在 article.post 作用域内，避免影响首页 */
 
 /* ==================== */
+/* 全局溢出保护 */
+/* ==================== */
+article.post {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* ==================== */
 /* 文章内容区域 - 800px舒适阅读宽度 */
 /* ==================== */
 article.post .post-content {
@@ -304,8 +312,9 @@ article.post .post-header .post-meta {
         padding: 0.8rem 1rem;
         font-size: 0.78rem;
         border-radius: 8px;
-        margin: 1.2rem -0.5rem;
-        width: calc(100% + 1rem);
+        margin: 1.2rem 0;
+        max-width: 100%;
+        overflow-x: auto;
     }
 
     article.post .post-content pre code {
