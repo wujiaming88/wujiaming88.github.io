@@ -286,6 +286,11 @@ article.post .post-header .post-meta {
     article.post .post-header .post-title {
         font-size: 1.6rem;
         line-height: 1.4;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+        display: block;
     }
 
     article.post .post-content h1 {
