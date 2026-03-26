@@ -11,7 +11,7 @@ tags:
   - 软件工程
   - Context Engineering
 header:
-  overlay_image: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/harness-engineering-header.png
   overlay_filter: 0.5
 excerpt: "Agent = Model + Harness。模型提供智能，线束让智能可用。从 OpenAI、Anthropic、LangChain 到 OpenClaw，深度解析 2026 年 AI Agent 领域最重要的新兴工程范式。"
 toc: true
