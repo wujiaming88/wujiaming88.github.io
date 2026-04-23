@@ -1,0 +1,207 @@
+<style>
+/* Prism.js 语法高亮主题 - 护眼深色代码块 */
+code[class*="language-"],
+pre[class*="language-"] {
+    color: #c5c8c6;
+    text-shadow: none;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Consolas, Monaco, monospace;
+    font-size: 0.88rem;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    line-height: 1.65;
+    tab-size: 4;
+    hyphens: none;
+}
+
+pre[class*="language-"] {
+    padding: 1.25rem 1.5rem;
+    padding-top: 2.25rem;
+    padding-left: 4rem;
+    margin: 1.5rem 0;
+    overflow: auto;
+    border-radius: 12px;
+    background: #1e1e2e;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* 行号 */
+.code-line-numbers {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3rem;
+    padding: 2.25rem 0.5rem 1.25rem 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: right;
+    user-select: none;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    color: #5c6370;
+    border-radius: 12px 0 0 12px;
+}
+
+.code-line-number {
+    display: block;
+}
+
+/* 复制按钮 */
+.code-copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    color: #94a3b8;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.code-copy-btn:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.code-copy-btn.copied {
+    color: #22c55e;
+    border-color: #22c55e;
+}
+
+/* 行内代码 */
+:not(pre) > code[class*="language-"] {
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    color: #e879f9;
+    background: var(--bg-tertiary, #f0efec);
+    border: 1px solid var(--border-color, #e5e7eb);
+}
+
+/* Prism 语法高亮 Token */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #5c6370;
+}
+
+.token.punctuation {
+    color: #abb2bf;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #e06c75;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #98c379;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #56b6c2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #c678dd;
+}
+
+.token.function,
+.token.class-name {
+    color: #61afef;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #d19a66;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    pre[class*="language-"] {
+        padding: 1rem;
+        padding-top: 2rem;
+        padding-left: 3rem;
+        font-size: 0.82rem;
+    }
+
+    .code-line-numbers {
+        width: 2.5rem;
+        padding: 2rem 0.3rem 1rem 0;
+        font-size: 0.72rem;
+    }
+}
+</style>
+
+<!-- Prism.js 复制按钮 + 行号生成 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('pre[class*="language-"]').forEach(function(pre) {
+        var code = pre.querySelector('code');
+        if (!code) return;
+        
+        var codeText = code.textContent || code.innerText;
+        var lines = codeText.split('\n');
+        var lineCount = lines.length;
+        
+        // 行号
+        var lineNumbers = document.createElement('div');
+        lineNumbers.className = 'code-line-numbers';
+        for (var i = 1; i <= lineCount; i++) {
+            var lineNum = document.createElement('span');
+            lineNum.className = 'code-line-number';
+            lineNum.textContent = i;
+            lineNumbers.appendChild(lineNum);
+        }
+        pre.appendChild(lineNumbers);
+        
+        // 复制按钮
+        var btn = document.createElement('button');
+        btn.className = 'code-copy-btn';
+        btn.textContent = '复制';
+        
+        btn.addEventListener('click', function() {
+            var text = code.textContent || code.innerText;
+            navigator.clipboard.writeText(text).then(function() {
+                btn.textContent = '已复制!';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = '复制';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(function() {
+                btn.textContent = '复制失败';
+                setTimeout(function() { btn.textContent = '复制'; }, 2000);
+            });
+        });
+        
+        pre.appendChild(btn);
+    });
+});
+</script>

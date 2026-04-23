@@ -4,120 +4,261 @@ title: 标签
 permalink: /tags/
 ---
 
-<!-- 标签页面样式 -->
 <style>
-    .page-header {
-        text-align: center;
-        padding: 2rem 0 3rem;
-    }
+.tags-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
 
-    .page-header h1 {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-        border: none;
-    }
+.tags-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
 
-    .page-header p {
-        color: var(--text-secondary);
-        font-size: 1rem;
-    }
+.tags-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin: 0 0 0.5rem;
+    border: none;
+    padding: 0;
+}
 
-    /* 标签云容器 */
-    .tag-cloud {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.75rem;
-        padding: 1rem 0;
-        max-width: 900px;
-        margin: 0 auto;
-    }
+.tags-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
 
-    .tag-cloud a {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.5rem 1rem;
-        background: var(--tag-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 20px;
-        color: var(--text-secondary);
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: all 0.25s ease;
-    }
+.tags-stats {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
 
-    .tag-cloud a:hover {
-        background: linear-gradient(135deg, var(--link-color) 0%, var(--link-hover) 100%);
-        color: white;
-        border-color: var(--link-color);
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-    }
+.tags-stats strong {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
 
-    .tag-count {
-        background: rgba(255, 255, 255, 0.3);
-        padding: 0.1rem 0.5rem;
-        border-radius: 10px;
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
+/* 标签云 */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 1rem 0 2rem;
+}
 
-    .tag-cloud a:hover .tag-count {
-        background: rgba(255, 255, 255, 0.25);
-    }
+.tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
 
-    /* 不同大小的标签 - 基于文章数量 */
-    .tag-size-1 { font-size: 0.8rem; }
-    .tag-size-2 { font-size: 0.9rem; }
-    .tag-size-3 { font-size: 1rem; }
-    .tag-size-4 { font-size: 1.1rem; }
-    .tag-size-5 { font-size: 1.2rem; }
+.tag-pill:hover,
+.tag-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
 
-    /* 空状态 */
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        color: var(--text-secondary);
-    }
+.tag-pill .tag-num {
+    font-size: 0.72rem;
+    opacity: 0.7;
+    background: rgba(255,255,255,0.2);
+    padding: 1px 6px;
+    border-radius: 10px;
+}
 
-    .empty-state h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-    }
+/* Size variants */
+.tag-size-1 { font-size: 0.8rem; padding: 6px 12px; }
+.tag-size-2 { font-size: 0.88rem; }
+.tag-size-3 { font-size: 0.95rem; }
+.tag-size-4 { font-size: 1.05rem; padding: 9px 18px; }
+.tag-size-5 { font-size: 1.15rem; padding: 10px 20px; font-weight: 600; }
+
+/* 展开的文章列表 */
+.tag-posts-section {
+    display: none;
+    margin-top: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    box-shadow: var(--shadow-sm);
+}
+
+.tag-posts-section.active { display: block; }
+
+.tag-posts-header {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tag-posts-close {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.tag-posts-close:hover {
+    background: rgba(99,102,241,0.08);
+    color: var(--accent);
+}
+
+.tag-post-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s ease;
+}
+
+.tag-post-item:hover { background: rgba(99,102,241,0.06); }
+.tag-post-item:hover .tag-post-title { color: var(--accent); }
+
+.tag-post-date {
+    font-size: 0.78rem;
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+}
+
+.tag-post-title {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+    line-height: 1.4;
+}
+
+.tag-post-cat {
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: var(--tag-bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+@media (max-width: 768px) {
+    .tags-header h1 { font-size: 1.75rem; }
+    .tag-cloud { gap: 6px; }
+    .tag-pill { padding: 6px 12px; }
+    .tag-post-item { flex-wrap: wrap; gap: 2px 8px; }
+    .tag-post-cat { display: none; }
+    .tag-posts-section { padding: 16px; }
+}
 </style>
 
-<div class="page-header">
-    <h1>文章标签</h1>
-    <p>按关键词浏览所有文章</p>
-</div>
+<div class="tags-page">
+    <div class="tags-header">
+        <h1>🏷️ 标签</h1>
+        <p>点击标签查看相关文章</p>
+        <div class="tags-stats"><strong>{{ site.tags.size }}</strong> 个标签 · <strong>{{ site.posts.size }}</strong> 篇文章</div>
+    </div>
 
-{% if site.tags.size > 0 %}
-    <div class="tag-cloud">
+    {% if site.tags.size > 0 %}
+    <div class="tag-cloud" id="tagCloud">
         {% assign sorted_tags = site.tags | sort %}
         {% for tag in sorted_tags %}
-            {% assign count = tag[1].size %}
-            {% if count <= 2 %}
-                {% assign size_class = 'tag-size-1' %}
-            {% elsif count <= 4 %}
-                {% assign size_class = 'tag-size-2' %}
-            {% elsif count <= 8 %}
-                {% assign size_class = 'tag-size-3' %}
-            {% elsif count <= 15 %}
-                {% assign size_class = 'tag-size-4' %}
-            {% else %}
-                {% assign size_class = 'tag-size-5' %}
-            {% endif %}
-            
-            <a href="{{ '/tags/' | append: tag[0] | relative_url }}" class="{{ size_class }}">
-                {{ tag[0] }}
-                <span class="tag-count">{{ count }}</span>
-            </a>
+        {% assign count = tag[1].size %}
+        {% if count <= 2 %}{% assign size_class = "tag-size-1" %}
+        {% elsif count <= 4 %}{% assign size_class = "tag-size-2" %}
+        {% elsif count <= 8 %}{% assign size_class = "tag-size-3" %}
+        {% elsif count <= 15 %}{% assign size_class = "tag-size-4" %}
+        {% else %}{% assign size_class = "tag-size-5" %}
+        {% endif %}
+        <span class="tag-pill {{ size_class }}" data-tag="{{ tag[0] | slugify }}" onclick="showTag('{{ tag[0] | slugify }}')">
+            #{{ tag[0] }}
+            <span class="tag-num">{{ count }}</span>
+        </span>
         {% endfor %}
     </div>
-{% else %}
-    <div class="empty-state">
-        <h2>暂无标签</h2>
-        <p>正在整理文章中...</p>
+
+    {% for tag in sorted_tags %}
+    <div class="tag-posts-section" id="tag-{{ tag[0] | slugify }}">
+        <div class="tag-posts-header">
+            <span>🔖 {{ tag[0] }}（{{ tag[1].size }} 篇）</span>
+            <span class="tag-posts-close" onclick="hideTag()">收起 ✕</span>
+        </div>
+        {% for post in tag[1] %}
+        <a href="{{ post.url | relative_url }}" class="tag-post-item">
+            <span class="tag-post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+            <span class="tag-post-title">{{ post.title }}</span>
+            {% if post.categories.size > 0 %}
+            <span class="tag-post-cat">{{ post.categories | first }}</span>
+            {% endif %}
+        </a>
+        {% endfor %}
     </div>
-{% endif %}
+    {% endfor %}
+    {% else %}
+    <div style="text-align: center; padding: 4rem 2rem; color: var(--text-secondary);">
+        <p style="font-size: 1.25rem;">暂无标签</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+(function() {
+    var activeSlug = null;
+
+    // Check URL hash on load
+    var hash = window.location.hash;
+    if (hash && hash.startsWith('#tag-')) {
+        var slug = hash.substring(5);
+        setTimeout(function() { showTag(slug); }, 100);
+    }
+
+    window.showTag = function(slug) {
+        // Deactivate all
+        document.querySelectorAll('.tag-pill').forEach(function(p) { p.classList.remove('active'); });
+        document.querySelectorAll('.tag-posts-section').forEach(function(s) { s.classList.remove('active'); });
+
+        if (activeSlug === slug) { activeSlug = null; return; }
+        activeSlug = slug;
+
+        // Activate
+        var pill = document.querySelector('.tag-pill[data-tag="' + slug + '"]');
+        var panel = document.getElementById('tag-' + slug);
+        if (pill) pill.classList.add('active');
+        if (panel) {
+            panel.classList.add('active');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    };
+
+    window.hideTag = function() {
+        activeSlug = null;
+        document.querySelectorAll('.tag-pill').forEach(function(p) { p.classList.remove('active'); });
+        document.querySelectorAll('.tag-posts-section').forEach(function(s) { s.classList.remove('active'); });
+    };
+})();
+</script>

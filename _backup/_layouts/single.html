@@ -1,0 +1,340 @@
+---
+layout: default
+---
+
+{% include post_styles.html %}
+
+<!-- 左侧固定目录 -->
+{% unless page.toc == false %}
+<nav class="post-toc" id="post-toc">
+  <div class="toc-header" onclick="toggleToc()">
+    <h3>📑 目录</h3>
+    <span class="toc-toggle" id="toc-toggle">▼</span>
+  </div>
+  <div class="toc-progress"><div class="toc-progress-bar" id="toc-progress-bar"></div></div>
+  <div class="toc-body" id="toc-body"></div>
+</nav>
+{% endunless %}
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+    <div class="post-meta">
+      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        📅 {{ page.date | date: '%Y年%m月%d日' }}
+      </time>
+      {% if page.author %}
+        <span>•</span>
+        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span class="p-author h-card" itemprop="name">👤 {{ page.author }}</span>
+        </span>
+      {% endif %}
+      {% if page.categories %}
+        <span>•</span>
+        <span>📂 {{ page.categories | join: ', ' }}</span>
+      {% endif %}
+    </div>
+    {% if page.tags %}
+    <div class="post-tags" style="display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center;">
+      {% for tag in page.tags %}
+      <span style="background: var(--tag-bg); color: var(--tag-color); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem;">#{{ tag }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </header>
+
+  <!-- 封面图片 -->
+  {% assign cover_image = page.header.overlay_image | default: site.default_cover_image %}
+  {% if cover_image %}
+  <div class="post-cover">
+    <img src="{{ cover_image }}" alt="{{ page.title | escape }}" loading="lazy">
+    {% if page.header.caption %}
+    <div class="post-cover-caption">{{ page.header.caption }}</div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="post-content e-content" itemprop="articleBody">
+    {{ content }}
+  </div>
+
+  <!-- 相似文章推荐 -->
+  {% if page.tags %}
+  <div class="related-posts post-bottom-section">
+    <h3>📖 相似文章推荐</h3>
+    {% assign related_posts = '' | split: '' %}
+    {% assign current_tags = page.tags %}
+    
+    {% for tag in current_tags %}
+      {% assign tag_posts = site.tags[tag] %}
+      {% for post in tag_posts %}
+        {% if post.url != page.url %}
+          {% assign related_posts = related_posts | push: post %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+    
+    {% assign related_posts = related_posts | uniq | sort: 'date' | reverse %}
+    {% assign max_related = 3 %}
+    {% assign related_count = 0 %}
+    
+    <div class="related-posts-grid">
+      {% for post in related_posts %}
+        {% if related_count < max_related %}
+        <a href="{{ post.url | relative_url }}" class="related-post-card">
+          <div class="related-post-title">{{ post.title }}</div>
+          <div class="related-post-meta">
+            {% if post.categories %}
+            <span class="related-post-category">{{ post.categories | first }}</span>
+            {% endif %}
+            <span>{{ post.date | date: '%Y/%m/%d' }}</span>
+          </div>
+        </a>
+        {% assign related_count = related_count | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+    {% if related_count == 0 %}
+    <p class="no-related">暂无相似文章</p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- 文章导航 -->
+  <div class="post-nav post-bottom-section">
+    <div class="post-nav-container">
+      {% if page.previous %}
+      <div class="post-nav-item left">
+        <a href="{{ page.previous.url | relative_url }}">
+          <div class="post-nav-label">上一篇</div>
+          <div class="post-nav-title">{{ page.previous.title }}</div>
+        </a>
+      </div>
+      <div class="post-nav-divider"></div>
+      {% endif %}
+      {% if page.next %}
+      <div class="post-nav-item right">
+        <a href="{{ page.next.url | relative_url }}">
+          <div class="post-nav-label">下一篇</div>
+          <div class="post-nav-title">{{ page.next.title }}</div>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- 分享按钮 -->
+  <div class="share-section post-bottom-section">
+    <h3>📤 分享这篇文章</h3>
+    <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+      <button onclick="shareToX()" style="padding: 0.65rem 1.5rem; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease;">
+        𝕏 分享到 X
+      </button>
+      <button onclick="copyToClipboard('{{ site.url }}{{ page.url }}')" style="padding: 0.65rem 1.5rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease;">
+        📋 复制链接
+      </button>
+    </div>
+  </div>
+
+  {% if site.disqus and page.comments %}
+    <div id="disqus_thread" style="margin-top: 3rem;"></div>
+    <script type="text/javascript">
+      var disqus_shortname = '{{ site.disqus }}';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  {% endif %}
+
+</article>
+
+<script>
+// === 文章元数据 ===
+var shareData = {
+    title: {{ page.title | jsonify }},
+    url: '{{ site.url }}{{ page.url }}',
+    excerpt: {{ page.excerpt | strip_html | normalize_whitespace | truncate: 500 | jsonify }},
+    tags: {{ page.tags | default: "" | jsonify }}
+};
+
+// === 复制链接 ===
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        alert('链接已复制到剪贴板！');
+    }, function() {
+        prompt('请手动复制链接：', text);
+    });
+}
+
+// === 分享到 X (Twitter) ===
+function shareToX() {
+    var hashtags = '';
+    if (shareData.tags && shareData.tags.length > 0) {
+        hashtags = shareData.tags.slice(0, 3).map(function(t) {
+            return t.replace(/[\s\-]/g, '');
+        }).join(',');
+    }
+    var excerpt = shareData.excerpt.replace(/\n/g, ' ').trim();
+    var maxExcerpt = 200;
+    if (excerpt.length > maxExcerpt) {
+        var cut = excerpt.lastIndexOf('。', maxExcerpt);
+        if (cut < 80) cut = excerpt.lastIndexOf('，', maxExcerpt);
+        if (cut < 80) cut = excerpt.lastIndexOf('. ', maxExcerpt);
+        if (cut < 80) cut = maxExcerpt;
+        excerpt = excerpt.substring(0, cut + 1) + '...';
+    }
+    var tweetText = '📖 ' + shareData.title + '\n\n' + excerpt;
+    var url = 'https://x.com/intent/tweet?text=' + encodeURIComponent(tweetText)
+        + '&url=' + encodeURIComponent(shareData.url);
+    if (hashtags) url += '&hashtags=' + encodeURIComponent(hashtags);
+    window.open(url, '_blank', 'width=600,height=450');
+}
+
+// === 自动生成目录 ===
+(function() {
+    var tocBody = document.getElementById('toc-body');
+    var tocNav = document.getElementById('post-toc');
+    if (!tocBody || !tocNav) return;
+
+    var content = document.querySelector('.post-content');
+    if (!content) return;
+
+    var headings = content.querySelectorAll('h2, h3, h4');
+    if (headings.length < 2) {
+        tocNav.style.display = 'none';
+        return;
+    }
+
+    headings.forEach(function(h, i) {
+        if (!h.id) h.id = 'heading-' + i;
+    });
+
+    var html = '<ul>';
+    var currentH2 = false;
+    var currentH3 = false;
+
+    headings.forEach(function(h) {
+        var level = parseInt(h.tagName.charAt(1));
+        var text = h.textContent.trim();
+        var link = '<a href="#' + h.id + '">' + text + '</a>';
+
+        if (level === 2) {
+            if (currentH3) { html += '</ul></li>'; currentH3 = false; }
+            if (currentH2) { html += '</ul></li>'; }
+            html += '<li>' + link + '<ul>';
+            currentH2 = true;
+        } else if (level === 3) {
+            if (currentH3) { html += '</ul></li>'; currentH3 = false; }
+            html += '<li>' + link + '<ul>';
+            currentH3 = true;
+        } else if (level === 4) {
+            html += '<li>' + link + '</li>';
+        }
+    });
+
+    if (currentH3) html += '</ul></li>';
+    if (currentH2) html += '</ul></li>';
+    html += '</ul>';
+    html = html.replace(/<ul><\/ul>/g, '');
+
+    tocBody.innerHTML = html;
+
+    var tocLinks = tocBody.querySelectorAll('a');
+    var headingsList = Array.from(headings);
+
+    function updateActiveLink() {
+        var scrollPos = window.scrollY + 100;
+        var activeHeading = null;
+
+        for (var i = headingsList.length - 1; i >= 0; i--) {
+            if (headingsList[i].offsetTop <= scrollPos) {
+                activeHeading = headingsList[i];
+                break;
+            }
+        }
+
+        tocLinks.forEach(function(link) { link.classList.remove('toc-active'); });
+
+        if (activeHeading) {
+            var activeLink = tocBody.querySelector('a[href="#' + activeHeading.id + '"]');
+            if (activeLink) activeLink.classList.add('toc-active');
+        }
+    }
+
+    if (window.innerWidth <= 768) {
+        var tb = document.getElementById('toc-body');
+        var tt = document.getElementById('toc-toggle');
+        if (tb && tt) {
+            tb.classList.add('collapsed');
+            tb.classList.add('mobile-collapsed');
+            tt.classList.add('collapsed');
+            tt.textContent = '▶ 点击展开';
+        }
+    }
+
+    var progressBar = document.getElementById('toc-progress-bar');
+    function updateProgress() {
+        if (!progressBar || !content) return;
+        var contentTop = content.offsetTop;
+        var contentHeight = content.scrollHeight;
+        var scrollPos = window.scrollY - contentTop;
+        var winHeight = window.innerHeight;
+        var progress = Math.min(100, Math.max(0, (scrollPos + winHeight * 0.3) / contentHeight * 100));
+        progressBar.style.width = progress + '%';
+    }
+
+    var scrollTimer;
+    window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function() {
+            updateActiveLink();
+            updateProgress();
+        }, 50);
+    });
+    updateActiveLink();
+    updateProgress();
+
+    tocLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('href').substring(1);
+            var target = document.getElementById(targetId);
+            if (target) {
+                window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                history.pushState(null, null, '#' + targetId);
+            }
+        });
+    });
+})();
+
+function toggleToc() {
+    var tocBody = document.getElementById('toc-body');
+    var tocToggle = document.getElementById('toc-toggle');
+    if (tocBody.classList.contains('collapsed')) {
+        tocBody.classList.remove('collapsed');
+        tocBody.classList.remove('mobile-collapsed');
+        tocToggle.classList.remove('collapsed');
+        tocToggle.textContent = '▼';
+        tocBody.style.maxHeight = 'calc(100vh - 200px)';
+        tocBody.style.opacity = '1';
+        tocBody.style.padding = '8px 0';
+    } else {
+        tocBody.classList.add('collapsed');
+        tocToggle.classList.add('collapsed');
+        tocBody.style.maxHeight = '0';
+        tocBody.style.opacity = '0';
+        tocBody.style.padding = '0';
+        if (window.innerWidth <= 768) {
+            tocBody.classList.add('mobile-collapsed');
+            tocToggle.textContent = '▶ 点击展开';
+        } else {
+            tocToggle.textContent = '▶';
+        }
+    }
+}
+</script>

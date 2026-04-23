@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 分类与标签
+title: 探索分类
 permalink: /categories/
 ---
 
@@ -13,7 +13,7 @@ permalink: /categories/
 
 .cats-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .cats-header h1 {
@@ -30,97 +30,128 @@ permalink: /categories/
     font-size: 1rem;
 }
 
-/* 标签页切换 */
-.tab-nav {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 2rem;
-}
-
-.tab-btn {
-    padding: 8px 20px;
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+/* 分类部分 */
+.section-label {
+    font-size: 0.82rem;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
 }
 
-.tab-btn:hover { border-color: var(--accent); color: var(--accent); }
-.tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-/* 分类卡片 */
-.category-grid {
+/* 分类卡片网格 */
+.cat-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
-.category-card {
+.cat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 16px;
-    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    color: inherit;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.category-card:hover {
+.cat-card:hover {
     border-color: var(--accent);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
-.category-card.expanded {
-    border-color: var(--accent);
-    background: rgba(99,102,241,0.02);
-}
-
-.category-name {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-heading);
-    margin-bottom: 2px;
+.cat-emoji {
+    font-size: 1.75rem;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
-    gap: 8px;
-}
-
-.category-count {
-    font-size: 0.78rem;
-    color: var(--accent);
+    justify-content: center;
     background: var(--tag-bg);
-    padding: 1px 8px;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+}
+
+.cat-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.cat-name {
+    font-size: 1rem;
     font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 2px;
 }
 
-.category-posts {
-    margin-top: 12px;
+.cat-meta {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+
+.cat-latest {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+
+.cat-arrow {
+    color: var(--border-color);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+.cat-card:hover .cat-arrow {
+    color: var(--accent);
+}
+
+/* 展开的文章列表 */
+.cat-posts-panel {
     display: none;
+    grid-column: 1 / -1;
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-top: -8px;
 }
 
-.category-card.expanded .category-posts { display: block; }
+.cat-posts-panel.active { display: block; }
+
+.cat-posts-panel .panel-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+}
 
 .cat-post-item {
     display: flex;
     align-items: baseline;
-    gap: 8px;
-    padding: 4px 0;
+    gap: 0.75rem;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
     text-decoration: none;
     color: inherit;
-    transition: color 0.2s ease;
+    transition: background 0.2s ease;
 }
 
+.cat-post-item:hover { background: rgba(99,102,241,0.06); }
 .cat-post-item:hover .cat-post-title { color: var(--accent); }
 
 .cat-post-date {
@@ -137,167 +168,164 @@ permalink: /categories/
     line-height: 1.4;
 }
 
+.cat-post-tags {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.cat-post-tag {
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: var(--tag-bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
 /* 标签云 */
+.tag-cloud-section {
+    margin-top: 1rem;
+}
+
 .tag-cloud {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
-    margin-bottom: 2rem;
 }
 
-.tag-item {
+.tc-tag {
+    display: inline-block;
     padding: 6px 14px;
-    border: 1px solid var(--border-color);
     border-radius: 20px;
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    font-size: 0.88rem;
     font-weight: 500;
-    cursor: pointer;
+    background: var(--tag-bg);
+    color: var(--accent);
+    text-decoration: none;
     transition: all 0.2s ease;
-    text-decoration: none;
+    border: 1px solid transparent;
 }
 
-.tag-item:hover,
-.tag-item.active {
+.tc-tag:hover {
     background: var(--accent);
-    border-color: var(--accent);
     color: #fff;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
-.tag-item .tag-count {
-    font-size: 0.72rem;
-    opacity: 0.7;
-    margin-left: 4px;
-}
-
-.tag-posts { margin-top: 1.5rem; display: none; }
-.tag-posts.active { display: block; }
-
-.tag-posts-header {
-    font-size: 1.15rem;
+.tc-lg {
+    font-size: 1rem;
+    padding: 8px 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: #fff;
     font-weight: 600;
-    color: var(--text-heading);
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--accent);
 }
 
-.tag-post-item {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    padding: 6px 10px;
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    color: inherit;
-    transition: background 0.2s ease;
+.tc-lg:hover {
+    box-shadow: var(--shadow-md);
 }
 
-.tag-post-item:hover { background: rgba(99,102,241,0.06); }
-.tag-post-item:hover .tag-post-title { color: var(--accent); }
+.tc-md { font-size: 0.88rem; }
 
-.tag-post-date {
+.tc-sm {
     font-size: 0.78rem;
-    color: var(--text-tertiary);
-    font-family: var(--font-mono);
-    white-space: nowrap;
+    color: var(--accent-light);
+    background: rgba(99,102,241,0.05);
 }
 
-.tag-post-title {
-    font-size: 0.95rem;
-    color: var(--text-primary);
-    transition: color 0.2s ease;
+@media (max-width: 1024px) {
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
     .cats-header h1 { font-size: 1.75rem; }
-    .category-grid { grid-template-columns: 1fr; }
+    .cat-grid { grid-template-columns: 1fr; }
     .tag-cloud { gap: 6px; }
-    .tag-item { font-size: 0.82rem; padding: 5px 10px; }
+    .tc-tag { padding: 5px 10px; }
+    .cat-post-tags { display: none; }
 }
 </style>
 
 <div class="cats-page">
     <div class="cats-header">
-        <h1>🏷️ 分类与标签</h1>
-        <p>按分类或标签快速找到你想看的文章</p>
+        <h1>🗂️ 探索分类</h1>
+        <p>按分类浏览，快速找到感兴趣的内容</p>
     </div>
 
-    <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('categories')">📂 分类</button>
-        <button class="tab-btn" onclick="switchTab('tags')">🔖 标签</button>
-    </div>
-
-    <!-- 分类面板 -->
-    <div class="tab-panel active" id="panel-categories">
-        <div class="category-grid">
-            {% assign sorted_cats = site.categories | sort %}
-            {% for cat in sorted_cats %}
-            <div class="category-card" onclick="toggleCategory(this)">
-                <div class="category-name">
-                    📁 {{ cat[0] }}
-                    <span class="category-count">{{ cat[1].size }}</span>
-                </div>
-                <div class="category-posts">
-                    {% for post in cat[1] %}
-                    <a href="{{ post.url | relative_url }}" class="cat-post-item" onclick="event.stopPropagation()">
-                        <span class="cat-post-date">{{ post.date | date: "%m-%d" }}</span>
-                        <span class="cat-post-title">{{ post.title }}</span>
-                    </a>
-                    {% endfor %}
-                </div>
+    <div class="section-label">分类 · Categories</div>
+    <div class="cat-grid" id="catGrid">
+        {% assign sorted_cats = site.categories | sort %}
+        {% for cat in sorted_cats %}
+        {% assign cat_name = cat[0] %}
+        {% assign cat_posts = cat[1] %}
+        {% comment %}Emoji mapping{% endcomment %}
+        {% if cat_name == "AI Agent" %}{% assign cat_icon = "🤖" %}
+        {% elsif cat_name == "大语言模型" or cat_name == "LLM" %}{% assign cat_icon = "🧠" %}
+        {% elsif cat_name == "工程实践" %}{% assign cat_icon = "🔧" %}
+        {% elsif cat_name == "技术调研" %}{% assign cat_icon = "📊" %}
+        {% elsif cat_name == "商业分析" %}{% assign cat_icon = "💼" %}
+        {% elsif cat_name == "开源项目" %}{% assign cat_icon = "🔬" %}
+        {% else %}{% assign cat_icon = "📁" %}
+        {% endif %}
+        <div class="cat-card" onclick="toggleCatPanel('{{ cat_name | slugify }}')">
+            <div class="cat-emoji">{{ cat_icon }}</div>
+            <div class="cat-body">
+                <div class="cat-name">{{ cat_name }}</div>
+                <div class="cat-meta">{{ cat_posts.size }} 篇文章</div>
+                <div class="cat-latest">最新: {{ cat_posts.first.title | truncate: 30 }}</div>
             </div>
-            {% endfor %}
+            <div class="cat-arrow">›</div>
         </div>
-    </div>
-
-    <!-- 标签面板 -->
-    <div class="tab-panel" id="panel-tags">
-        <div class="tag-cloud">
-            {% assign sorted_tags = site.tags | sort %}
-            {% for tag in sorted_tags %}
-            <span class="tag-item" onclick="showTagPosts('{{ tag[0] | slugify }}', '{{ tag[0] }}')">
-                #{{ tag[0] }}<span class="tag-count">({{ tag[1].size }})</span>
-            </span>
-            {% endfor %}
-        </div>
-
-        {% for tag in sorted_tags %}
-        <div class="tag-posts" id="tag-{{ tag[0] | slugify }}">
-            <div class="tag-posts-header">#{{ tag[0] }} 的文章（{{ tag[1].size }} 篇）</div>
-            {% for post in tag[1] %}
-            <a href="{{ post.url | relative_url }}" class="tag-post-item">
-                <span class="tag-post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
-                <span class="tag-post-title">{{ post.title }}</span>
+        <div class="cat-posts-panel" id="cat-{{ cat_name | slugify }}">
+            <div class="panel-title">{{ cat_icon }} {{ cat_name }}（{{ cat_posts.size }} 篇）</div>
+            {% for post in cat_posts %}
+            <a href="{{ post.url | relative_url }}" class="cat-post-item" onclick="event.stopPropagation()">
+                <span class="cat-post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+                <span class="cat-post-title">{{ post.title }}</span>
+                {% if post.tags.size > 0 %}
+                <span class="cat-post-tags">
+                    {% for tag in post.tags limit:2 %}
+                    <span class="cat-post-tag">{{ tag }}</span>
+                    {% endfor %}
+                </span>
+                {% endif %}
             </a>
             {% endfor %}
         </div>
         {% endfor %}
     </div>
+
+    <div class="tag-cloud-section">
+        <div class="section-label">标签云 · Tags</div>
+        <div class="tag-cloud">
+            {% assign sorted_tags = site.tags | sort %}
+            {% for tag in sorted_tags %}
+            {% assign count = tag[1].size %}
+            {% if count >= 8 %}{% assign tc_class = "tc-lg" %}
+            {% elsif count >= 4 %}{% assign tc_class = "tc-md" %}
+            {% else %}{% assign tc_class = "tc-sm" %}
+            {% endif %}
+            <a href="{{ '/tags/' | relative_url }}#tag-{{ tag[0] | slugify }}" class="tc-tag {{ tc_class }}">
+                {{ tag[0] }}<sup>{{ count }}</sup>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 
 <script>
-function switchTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
-    document.querySelectorAll('.tab-panel').forEach(function(panel) { panel.classList.remove('active'); });
-    event.target.classList.add('active');
-    document.getElementById('panel-' + tab).classList.add('active');
-}
-
-function toggleCategory(card) {
-    card.classList.toggle('expanded');
-}
-
-var activeTag = null;
-function showTagPosts(slug, name) {
-    document.querySelectorAll('.tag-item').forEach(function(t) { t.classList.remove('active'); });
-    document.querySelectorAll('.tag-posts').forEach(function(p) { p.classList.remove('active'); });
-    if (activeTag === slug) { activeTag = null; return; }
-    activeTag = slug;
-    event.target.classList.add('active');
-    var panel = document.getElementById('tag-' + slug);
-    if (panel) { panel.classList.add('active'); panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+var activePanel = null;
+function toggleCatPanel(slug) {
+    var panel = document.getElementById('cat-' + slug);
+    if (!panel) return;
+    if (activePanel && activePanel !== panel) {
+        activePanel.classList.remove('active');
+    }
+    panel.classList.toggle('active');
+    activePanel = panel.classList.contains('active') ? panel : null;
+    if (activePanel) {
+        activePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 }
 </script>

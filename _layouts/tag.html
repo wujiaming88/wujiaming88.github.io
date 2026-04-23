@@ -2,14 +2,113 @@
 layout: default
 ---
 
-<div style="max-width: 800px; margin: 0 auto; padding: 2rem 0;">
-  <h1 style="font-size: 1.75rem; font-weight: 700; color: var(--text-heading); margin-bottom: 1.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem;">🔖 {{ page.title }}</h1>
-  <div>
-    {% for post in page.posts %}
-    <a href="{{ post.url | relative_url }}" style="display: flex; align-items: baseline; gap: 0.75rem; padding: 8px 10px; border-radius: 8px; text-decoration: none; color: inherit; transition: background 0.2s ease;" onmouseover="this.style.background='rgba(99,102,241,0.06)'" onmouseout="this.style.background=''">
-      <span style="font-size: 0.82rem; color: var(--text-tertiary); font-family: var(--font-mono); white-space: nowrap;">{{ post.date | date: "%Y-%m-%d" }}</span>
-      <span style="font-size: 1rem; color: var(--text-heading); font-weight: 500;">{{ post.title | escape }}</span>
-    </a>
-    {% endfor %}
-  </div>
+<style>
+.tag-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+.tag-page-header {
+    margin-bottom: 2rem;
+}
+.tag-page-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin: 0 0 0.5rem;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.tag-page-header .count-badge {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--tag-bg);
+    padding: 2px 10px;
+    border-radius: 12px;
+}
+.tag-page-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+.tag-page-list {
+    display: flex;
+    flex-direction: column;
+}
+.tag-page-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid var(--border-color);
+}
+.tag-page-item:last-child { border-bottom: none; }
+.tag-page-item:hover { background: rgba(99,102,241,0.06); }
+.tag-page-item:hover .tp-title { color: var(--accent); }
+.tp-date {
+    font-size: 0.82rem;
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    min-width: 80px;
+}
+.tp-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-heading);
+    transition: color 0.2s ease;
+    flex: 1;
+}
+.tp-cat {
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: var(--tag-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 2rem;
+    padding: 8px 0;
+    transition: opacity 0.2s;
+}
+.back-link:hover { opacity: 0.8; }
+@media (max-width: 768px) {
+    .tag-page-item { flex-wrap: wrap; gap: 2px 8px; }
+    .tp-cat { display: none; }
+}
+</style>
+
+<div class="tag-page">
+    <div class="tag-page-header">
+        <h1>🔖 {{ page.title }} <span class="count-badge">{{ page.posts.size }} 篇</span></h1>
+        <p>该标签下的所有文章</p>
+    </div>
+    <div class="tag-page-list">
+        {% for post in page.posts %}
+        <a href="{{ post.url | relative_url }}" class="tag-page-item">
+            <span class="tp-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+            <span class="tp-title">{{ post.title | escape }}</span>
+            {% if post.categories.size > 0 %}
+            <span class="tp-cat">{{ post.categories | first }}</span>
+            {% endif %}
+        </a>
+        {% endfor %}
+    </div>
+    <a href="{{ '/tags/' | relative_url }}" class="back-link">← 返回标签</a>
 </div>
