@@ -35,20 +35,17 @@
 
     <!-- 页脚 -->
     <footer class="footer">
-        <div class="footer-content">
-            <p style="font-size: 0.85rem;">&copy; {{ site.time | date: '%Y' }} {{ site.title }} · 基于 Jekyll 构建</p>
-        </div>
+        <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }} · <a href="https://github.com/wujiaming88">GitHub</a></p>
     </footer>
 
-    <!-- Prism.js 代码高亮脚本 -->
+    <!-- Prism.js 代码高亮 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     
-    <!-- 代码块增强：为 kramdown 生成的代码块添加 Prism 类名 -->
+    <!-- 代码块增强 -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // kramdown 生成 <pre><code class="language-xxx"> 格式
-        // 确保 pre 也有对应的 language 类
+        // kramdown 生成的代码块添加 Prism 类名
         document.querySelectorAll('pre > code[class*="language-"]').forEach(function(code) {
             var lang = code.className.match(/language-(\S+)/);
             if (lang && lang[1]) {
@@ -56,7 +53,7 @@
             }
         });
         
-        // 处理没有语言标记的代码块（ASCII 图表等）
+        // 没有语言标记的代码块
         document.querySelectorAll('pre > code:not([class*="language-"])').forEach(function(code) {
             code.classList.add('language-text');
             code.parentElement.classList.add('language-text');
@@ -124,9 +121,9 @@
         backToTop.textContent = '↑';
         backToTop.style.cssText = `
             position: fixed;
-            bottom: 1rem;
+            bottom: 1.5rem;
             right: 1.5rem;
-            background-color: rgba(66, 165, 245, 0.9);
+            background-color: rgba(99, 102, 241, 0.9);
             color: white;
             border: none;
             border-radius: 50%;
