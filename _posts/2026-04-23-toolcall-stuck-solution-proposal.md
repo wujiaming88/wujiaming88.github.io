@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Tool Call Stuck 一劳永逸的解决方案：分层防御架构提案"
+title: "Tool Call Stuck 解决方案 v2：先看源码再提方案"
 date: 2026-04-23
 categories: [ai, engineering]
 tags: [OpenClaw, Tool Call, Session Stuck, Reliability, AI Agent, Engineering]
@@ -10,10 +10,27 @@ header:
   overlay_filter: 0.4
 toc: true
 toc_sticky: true
-excerpt: "每个 tool_call 必须有 tool_result——这是 LLM 对话协议的铁律。一旦 result 丢失，session 就永久卡死。本文提出 Supervisor + Guard 分层防御架构，让 Tool Call Stuck 在数学上不可能发生。"
+excerpt: "v1 方案提出写 600 行代码从头造防护——直到我们读了源码，发现 OpenClaw 已有 transcript repair 机制。本文基于源码实证重写方案：配置调优 + 补齐工具级超时，务实解决 Tool Call Stuck。"
 ---
 
-> **作者**：小帅（Team Commander）| **日期**：2026-04-23 | **状态**：Proposal | **优先级**：P0
+> **作者**：小帅（Team Commander）| **日期**：2026-04-23 | **状态**：Proposal v2 | **优先级**：P0  
+> **基于**：OpenClaw 2026.4.12 源码（GitHub main `6b126cd`）+ 社区调研
+
+---
+
+## v1 → v2：为什么要重写？
+
+### v1 的错误
+
+早上写 v1 方案时，我们基于推测性分析得出结论：「OpenClaw 没有任何防护机制，需要从头写 ~600 行代码实现 Supervisor + Guard 双层防御」。
+
+这个结论是**错的**。
+
+下午深入 OpenClaw GitHub 源码后发现：**OpenClaw 已经内建了完整的 transcript repair 机制**，包括缺失 tool result 的自动合成、重复 result 去重、孤立 result 丢弃、位移 result 重排。我们在 v1 中提出的「方案 B：Conversation State Guard」，OpenClaw 早就实现了。
+
+### v2 的态度
+
+**先看源码，再提方案。** 这是工程师的基本功，v1 犯了「先入为主、推测先行」的错误。v2 基于源码实证，明确了已有防护和真正的盲区，方案也从「大兴土木」变为「配置调优 + 精准补齐」。
 
 ---
 
@@ -21,293 +38,370 @@ excerpt: "每个 tool_call 必须有 tool_result——这是 LLM 对话协议的
 
 ### 现象
 
-Session 在 LLM 发出 `tool_call` 后永久卡死，无法接收新消息，用户只能手动 `/kill` 或 `/reset`。
+Session 在 LLM 发出 `tool_call` 后卡死，无法接收新消息，用户只能手动 `/kill` 或 `/reset`。
 
 ### 协议约束
 
-LLM 对话协议有一个**不可违反的约束**：
-
-```
-每个 tool_call 必须有且仅有一个对应的 tool_result。
-缺少 tool_result 时，对话状态非法，LLM 无法继续推理。
-```
-
-一旦 tool_result 丢失，session **在协议层面就已经进入了不可恢复状态**。
+LLM 对话协议的不可违反约束：**每个 tool_call 必须有且仅有一个对应的 tool_result。** 缺少 tool_result 时，对话状态非法，LLM 无法继续推理。
 
 ### 丢失 tool_result 的 5 种根因
 
-| # | 根因 | 触发条件 | 当前防护 |
-|---|------|---------|---------|
-| R1 | 工具进程崩溃/OOM kill | 大文件处理、内存不足 | ❌ 无 |
-| R2 | 工具执行永不返回 | 网络挂起、死循环 | ❌ 无 |
-| R3 | Gateway 执行期间重启 | 手动重启、崩溃恢复 | ❌ 无 |
-| R4 | Sandbox 超时未回传 | 沙箱杀进程后 Gateway 未收到通知 | ❌ 无 |
-| R5 | 格式错误致 executor 静默失败 | 非法参数、JSON 解析失败 | 部分 |
-
-### 影响面
-
-- **范围**：99%+ 的使用场景（几乎所有 session 都用工具）
-- **体验**：session 卡死，新消息被丢弃或排队
-- **数据风险**：工具可能已执行成功但 session 不知道，导致重复执行
-- **连锁反应**：父 session 等子 session 的 result → 父子同时卡死
+| # | 根因 | 触发条件 |
+|---|------|---------|
+| R1 | 工具进程崩溃/被 OOM kill | 大文件处理、内存不足 |
+| R2 | 工具执行永不返回 | 网络请求挂起、死循环、外部 API 无响应 |
+| R3 | Gateway 在工具执行期间重启 | 手动重启、崩溃恢复 |
+| R4 | Sandbox 超时但结果未回传 | 沙箱杀进程后 Gateway 未收到通知 |
+| R5 | 工具调用格式错误导致 executor 静默失败 | LLM 生成非法参数 |
 
 ---
 
-## 解决目标
+## OpenClaw 已有防护机制（源码实证）
 
-### 核心不变量
+这是 v2 最重要的新增章节。以下所有结论均来自 OpenClaw GitHub main 分支 `6b126cd` 的源码阅读。
 
-> **每个 tool_call 在有限时间内必定收到一个 tool_result（真实的或合成的）。**
+### Transcript Repair — 合成缺失 Tool Result
 
-只要这个不变量成立，tool call 导致的 stuck **在数学上不可能发生**。
+**源码位置**：`src/agents/session-transcript-repair.ts`
 
-### 验收标准
+OpenClaw 已经实现了 `repairToolUseResultPairing` 函数，在构建 LLM 上下文时自动修复缺失的 tool result：
 
-| # | 标准 | 优先级 |
-|---|------|--------|
-| A1 | 任何工具失败/超时后，session 在 `timeout + 30s` 内自动恢复 | P0 |
-| A2 | Gateway 重启后，所有中断的 tool call 自动恢复 | P0 |
-| A3 | 合成 tool_result 包含足够信息让 LLM 自主决策 | P0 |
-| A4 | 不影响正常工具执行性能（< 5ms 额外开销） | P1 |
-| A5 | 支持按工具类型配置超时和重试策略 | P1 |
-
----
-
-## 方案 A：Tool Execution Supervisor（主动预防型）
-
-### 核心思路
-
-在工具执行层包一层 Supervisor，**保证每次调用一定返回结果**：
-
-```
-Gateway → ToolSupervisor.run(call) → [保证返回]
-               │
-               ├── 正常完成 → 返回真实 result
-               ├── 超时 → kill 进程 → 返回合成 error result
-               ├── 进程崩溃 → 捕获 → 返回合成 error result
-               └── 异常 → catch → 返回合成 error result
-```
-
-### 关键伪代码
-
-```javascript
-class ToolSupervisor {
-  async execute(session, toolCall) {
-    const timeout = this.config.getTimeout(toolCall.name) ?? 300_000;
-    this.pending.set(toolCall.id, { sessionId: session.id, startedAt: Date.now() });
-
-    try {
-      return await Promise.race([
-        this._executeToolCall(session, toolCall),
-        this._createTimeout(toolCall, timeout)
-      ]);
-    } catch (error) {
-      return this._synthesizeErrorResult(toolCall, error);
-    } finally {
-      this.pending.delete(toolCall.id);
-    }
-  }
+```typescript
+// src/agents/session-transcript-repair.ts (L178-L192)
+function makeMissingToolResult(params: {
+  toolCallId: string;
+  toolName?: string;
+}) {
+  return {
+    role: "toolResult",
+    toolCallId: params.toolCallId,
+    toolName: params.toolName ?? "unknown",
+    content: [{
+      type: "text",
+      text: "[openclaw] missing tool result in session history; " +
+            "inserted synthetic error result for transcript repair."
+    }],
+    isError: true,
+    timestamp: Date.now(),
+  };
 }
 ```
 
-### 优劣分析
+**`repairToolUseResultPairing` 完整能力**：
 
-| ✅ 优势 | ❌ 劣势 |
-|---------|---------|
-| 主动预防，不让 stuck 发生 | 改动在工具执行热路径 |
-| 恢复延迟 = 配置的超时时间 | Gateway 重启后 pending 丢失 |
-| 每个工具独立配置超时/重试 | 超时配置需调优 |
-| 集中式 metrics 采集 | 需标注哪些工具可安全重试 |
+| 场景 | 处理方式 |
+|------|---------|
+| 缺失 tool result | ✅ 注入合成 error result |
+| 重复 tool result | ✅ 去重 |
+| 孤立 tool result（无匹配 tool_call） | ✅ 丢弃 |
+| 位移的 tool result（不紧跟 assistant） | ✅ 重排到正确位置 |
+| 已 abort/error 的 assistant turn | ✅ 跳过合成，保留已有真实 result |
+
+这就是我们 v1 中提出的「方案 B：Conversation State Guard」——**OpenClaw 早就有了**。
+
+### Transcript Policy — 按 Provider 控制启用范围
+
+**源码位置**：`src/agents/transcript-policy.ts`
+
+```typescript
+// 默认策略
+const DEFAULT_TRANSCRIPT_POLICY = {
+  repairToolUseResultPairing: true,    // 重排/移动 repair 默认开
+  allowSyntheticToolResults: false,    // 但合成缺失 result 默认关
+};
+
+// 仅 Google 和 Anthropic 启用合成
+...(isGoogle || isAnthropic
+  ? { allowSyntheticToolResults: true }
+  : {})
+```
+
+**Provider 覆盖矩阵**：
+
+| Provider | repair（重排） | 合成缺失 result | 原因 |
+|----------|--------------|----------------|------|
+| Google/Gemini | ✅ | ✅ | Gemini 严格要求 tool_call/result 配对 |
+| Anthropic（含 Bedrock） | ✅ | ✅ | Anthropic 严格要求配对 |
+| OpenAI | ❌ | ❌ | OpenAI 对 transcript 格式更宽松 |
+| Mistral | ❌（仅 id sanitize） | ❌ | — |
+| 其他 | ✅（默认） | ❌ | — |
+
+**关键发现**：我们使用 `amazon-bedrock/global.anthropic.claude-opus-4-6-v1`，走 `bedrock-converse-stream` API，属于 Anthropic 分支，**已经启用了合成 tool result repair**。
+
+### Tool Loop Detection — 循环检测与熔断
+
+**源码位置**：`src/agents/tool-loop-detection.ts`
+
+已有内建的工具调用循环检测：
+
+```json5
+{
+  tools: {
+    loopDetection: {
+      enabled: false,           // 默认关闭
+      historySize: 30,
+      warningThreshold: 10,
+      criticalThreshold: 20,
+      globalCircuitBreakerThreshold: 30,
+      detectors: {
+        genericRepeat: true,     // 重复相同 tool+params
+        knownPollNoProgress: true, // 已知轮询无进展
+        pingPong: true,          // 交替乒乓模式
+      },
+    },
+  },
+}
+```
+
+### Agent Timeout 与 LLM Idle Timeout
+
+**文档**：`docs/concepts/agent-loop.md`
+
+```
+Agent 总超时：agents.defaults.timeoutSeconds（默认 172800s = 48h）
+LLM 空闲超时：agents.defaults.llm.idleTimeoutSeconds（未设时默认 120s）
+```
 
 ---
 
-## 方案 B：Conversation State Guard（协议层防御型）
+## 已有防护的盲区分析
 
-### 核心思路
+有了源码实证，我们才能准确说出「什么是已有的」和「什么是真正缺的」。
 
-在对话协议层加 Guard：每次调用 LLM 前、session 加载时，**校验对话状态合法性**，发现孤立 tool_call 就自动注入合成 result：
+### 盲区 1：Transcript Repair 的触发时机
 
+Repair 只在**构建 LLM 上下文时**触发（即下一次 LLM 调用的 `sanitizeSessionHistory` 阶段），不是实时的。
+
+| 场景 | Repair 是否有效 | 原因 |
+|------|---------------|------|
+| Gateway 重启后 | ✅ | session 重新加载 → 新消息触发 rebuild → repair |
+| 工具崩溃后用户发新消息 | ✅ | 新消息触发新 turn → rebuild → repair |
+| **工具执行永不返回（R2）** | ❌ | session 卡在等 tool result，不会触发 rebuild |
+| **工具进程崩溃但 session 还在等（R1）** | ❌ | 同上，需要外部触发才能恢复 |
+
+**结论**：Repair 解决的是「transcript 中已有的缺失」，不解决「正在等待中的缺失」。这才是真正的盲区。
+
+### 盲区 2：Agent Timeout 太长
+
+默认 48 小时。工具挂了要等 48 小时才超时——这等于没有超时。
+
+### 盲区 3：无单个工具级别超时
+
+Agent 有总超时，LLM 有 idle timeout，但**单个工具调用没有独立超时**。一个 `web_fetch` 挂了，要等 agent 总超时（48h）才会终止。
+
+### 盲区 4：Loop Detection 默认关闭
+
+已内建但默认关闭，需要手动开启。
+
+---
+
+## 解决方案
+
+基于盲区分析，方案分三档，从零代码到源码 PR。
+
+### 第一档：配置调优（立即可做，零代码改动）
+
+#### 调低 Agent Timeout
+
+```json5
+{
+  agents: {
+    defaults: {
+      timeoutSeconds: 1800,  // 48h → 30min
+    },
+  },
+}
 ```
-对话历史 → ConversationGuard.validate() → 修复后发给 LLM
-                │
-                ├── 检查每个 tool_call 是否有匹配的 tool_result
-                ├── 孤立的 → 注入合成 error result
-                └── 返回合法的对话历史
+
+**效果**：session 最多卡 30 分钟（而非 48 小时）后自动终止。  
+**风险**：极长的合法任务可能被误杀，可按 agent 单独覆盖。  
+**ROI**：★★★★★
+
+#### 显式设置 LLM Idle Timeout
+
+```json5
+{
+  agents: {
+    defaults: {
+      llm: {
+        idleTimeoutSeconds: 90,  // LLM 流式 90s 无 token → 断流
+      },
+    },
+  },
+}
 ```
 
-### 关键伪代码
+**效果**：防止 LLM API 流式挂起——社区报告的最高频 stuck 模式。  
+**ROI**：★★★★★
 
-```javascript
-class ConversationStateGuard {
-  validate(messages) {
-    const toolCallIds = new Set();
-    const toolResultIds = new Set();
+#### 开启 Tool Loop Detection
 
-    for (const msg of messages) {
-      if (msg.role === 'assistant' && msg.tool_calls)
-        for (const tc of msg.tool_calls) toolCallIds.add(tc.id);
-      if (msg.role === 'tool')
-        toolResultIds.add(msg.tool_call_id);
-    }
+```json5
+{
+  tools: {
+    loopDetection: {
+      enabled: true,
+      warningThreshold: 10,
+      criticalThreshold: 20,
+      globalCircuitBreakerThreshold: 30,
+    },
+  },
+}
+```
 
-    const orphaned = [...toolCallIds].filter(id => !toolResultIds.has(id));
-    if (orphaned.length === 0) return { messages, fixed: false };
+**效果**：防止工具调用死循环。  
+**ROI**：★★★★
 
-    // 为每个孤立 tool_call 注入合成 result
-    const fixed = [...messages];
-    for (const callId of orphaned) {
-      fixed.splice(this._findInsertPos(fixed, callId), 0, {
-        role: 'tool', tool_call_id: callId,
-        content: '⚠️ TOOL RESULT RECOVERED: No result received...',
-        is_error: true, _synthetic: true
+### 第二档：外围 Watchdog（1-2 天，不改核心代码）
+
+用 cron 定期扫描 active session，检测并恢复 stuck：
+
+```bash
+#!/bin/bash
+# session-watchdog.sh — 每 5 分钟运行
+STUCK_THRESHOLD=1800  # 30 分钟无活动
+
+openclaw session list --json 2>/dev/null | jq -r '
+  .[] | select(.status == "running") |
+  select((now - (.lastActivity / 1000)) > '"$STUCK_THRESHOLD"') |
+  "\(.id) \(.sessionKey) \(.lastActivity)"
+' | while read -r sid skey last; do
+  echo "[WATCHDOG $(date)] Stuck: $skey"
+  openclaw message send --channel telegram --target 8577482651 \
+    --message "⚠️ Stuck session: $skey，超过 ${STUCK_THRESHOLD}s 无活动"
+done
+```
+
+**效果**：提供可见性 + 可选自动恢复。  
+**ROI**：★★★★
+
+### 第三档：源码级改进（需提 PR）
+
+#### 工具级超时（核心缺失项）
+
+在工具执行入口包一层 `Promise.race`：
+
+```typescript
+async function executeToolWithTimeout(
+  toolName: string,
+  params: Record<string, unknown>,
+  options: { timeoutMs: number }
+): Promise<ToolResult> {
+  return Promise.race([
+    actualToolExecution(toolName, params),
+    new Promise<never>((_, reject) =>
+      setTimeout(
+        () => reject(new ToolTimeoutError(toolName, options.timeoutMs)),
+        options.timeoutMs
+      )
+    ),
+  ]).catch((error) => {
+    if (error instanceof ToolTimeoutError) {
+      // 复用已有的 makeMissingToolResult
+      return makeMissingToolResult({
+        toolCallId: currentCallId,
+        toolName,
       });
     }
-    return { messages: fixed, fixed: true };
-  }
+    throw error;
+  });
 }
 ```
 
-### 优劣分析
+**改动量**：~50 行。复用已有的 `makeMissingToolResult`，新增配置 `agents.defaults.tools.timeoutSeconds`（默认 300s）。  
+**ROI**：★★★★★（根本解决 R1/R2/R4）
 
-| ✅ 优势 | ❌ 劣势 |
-|---------|---------|
-| 覆盖所有场景（不管怎么丢的） | 被动恢复，需等下一个触发点 |
-| 改动极小（2-3 个插入点） | stuck 期间 session 仍不可用 |
-| 完全向后兼容 | 不解决工具挂起本身 |
-| Gateway 重启后自动修复 | 合成 result 位置插入需精确 |
+#### 扩大合成 Tool Result 的 Provider 覆盖
+
+```typescript
+// src/agents/transcript-policy.ts
+const DEFAULT_TRANSCRIPT_POLICY = {
+  repairToolUseResultPairing: true,
+  allowSyntheticToolResults: true,  // 改为默认开启
+};
+```
+
+**改动量**：1 行。补齐 OpenAI 等 provider 的覆盖。  
+**ROI**：★★★
 
 ---
 
-## 方案对比
+## 社区方案对比
 
-| 维度 | 方案 A（Supervisor） | 方案 B（Guard） |
-|------|---------------------|----------------|
-| **防御策略** | 主动预防 | 被动修复 |
-| **覆盖进程崩溃** | ✅ 直接捕获 | ✅ 下次触发时修复 |
-| **覆盖永不返回** | ✅ 超时 kill | ⚠️ 需配合外部超时 |
-| **覆盖 Gateway 重启** | ❌ 内存态丢失 | ✅ 启动扫描修复 |
-| **恢复延迟** | 快（= 超时配置） | 慢（等触发点） |
-| **代码改动量** | 中（热路径） | 小（插入点） |
-| **风险** | 中（可能引入新 bug） | 低（只读 + 追加） |
-| **可配置性** | 高（按工具配置） | 低（统一行为） |
+Tool call stuck 是 AI Agent 领域的普遍问题，几乎所有主流框架都遇到过。
+
+| 框架 | 核心方案 | OpenClaw 是否已有 |
+|------|---------|-----------------|
+| **OpenAI Assistants** | Run 10min 硬超时 → `expired` | ✅ 有 agent timeout（但默认 48h） |
+| **LangChain/LangGraph** | `handle_tool_error` + `RetryPolicy` + 条件边降级 | 部分（有 loop detection，无 per-tool retry） |
+| **AutoGen** | `CancellationToken` + 可配超时 | 部分（有 AbortSignal，无 per-tool timeout） |
+| **Anthropic Claude API** | `is_error` 协议字段 | ✅ 有 `isError: true` |
+| **Dify** | 四种策略（error/retry/fail-branch/default-value） | 部分（有 error，无 default-value） |
+| **MemGPT/Letta** | 持久化 + 心跳检测 | 部分（有持久化，无心跳） |
+
+### 值得借鉴的思路
+
+| 思路 | 来源 | 适合 OpenClaw 的落地方式 |
+|------|------|----------------------|
+| Per-tool 声明式超时 | LangGraph RetryPolicy | 配置 `tools.timeouts.<toolName>` |
+| Default Value 模式 | Dify | 非关键工具超时返回默认值而非 error |
+| Circuit Breaker | 分布式系统经典 | 已有 `globalCircuitBreakerThreshold`，建议开启 |
+| 心跳进度报告 | MemGPT | 长期考虑，短期不需要 |
+| CancellationToken | AutoGen/Semantic Kernel | 已有 AbortSignal 基础 |
 
 ---
 
-## 推荐方案：A + B 混合（分层防御）
+## 行动计划
 
-### 为什么需要混合？
+### 立即执行（今天）
 
-两个方案解决的是**不同层面的问题**：
+| # | 动作 | 方式 | 预期效果 |
+|---|------|------|---------|
+| 1 | Agent timeout 48h → 1800s | 改配置 | stuck 最长 30 分钟 |
+| 2 | 显式设 LLM idle timeout 90s | 改配置 | 防 LLM 流挂起 |
+| 3 | 开启 Tool Loop Detection | 改配置 | 防工具死循环 |
 
-- **方案 A**：解决"工具执行中的超时和崩溃"（预防）
-- **方案 B**：解决"无论什么原因导致的 result 丢失"（兜底）
+### 本周
 
-单独用任何一个都有盲区。混合使用 = **两层安全网，任何一层失效，另一层兜底**。
+| # | 动作 | 方式 | 预期效果 |
+|---|------|------|---------|
+| 4 | 部署 Watchdog 脚本 | cron | stuck 自动检测 + 告警 |
+| 5 | 手动恢复 SOP | 文档 | 标准化排查流程 |
 
-### 混合架构
+### 提 PR（推动源码改进）
 
-```
-┌──────────────────────────────────────────────┐
-│                Session Turn                   │
-│                                               │
-│  User Message                                 │
-│       │                                       │
-│       ▼                                       │
-│  Layer 2: Conversation State Guard (方案 B)   │
-│    校验对话状态 → 修复孤立 tool_call            │
-│       │                                       │
-│       ▼                                       │
-│  LLM Inference → 生成 tool_call               │
-│       │                                       │
-│       ▼                                       │
-│  Layer 1: Tool Supervisor (方案 A)            │
-│    执行工具 → 超时保护 → 保证返回 result        │
-│       │                                       │
-│       ▼                                       │
-│  Tool Result → 继续对话                        │
-│                                               │
-│  ═══════════════════════════════════════════  │
-│  Layer 0: Gateway 启动扫描 (方案 B)           │
-│    扫描所有 session → 修复中断的 tool_call      │
-└──────────────────────────────────────────────┘
-```
+| # | 动作 | 改动量 | 优先级 |
+|---|------|--------|--------|
+| 6 | 工具级超时（`Promise.race` 包装） | ~50 行 | P0 |
+| 7 | `allowSyntheticToolResults` 默认开启 | 1 行 | P1 |
+| 8 | Per-tool 超时配置 | ~100 行 | P2 |
 
-### 分阶段实施
+---
 
-#### Phase 1（1-2 周）：方案 B 先行 — 低风险高覆盖
+## 关键源码文件索引
 
-1. 实现 `ConversationStateGuard.validate()`
-2. 在 LLM 调用前插入校验
-3. 在 Session 加载/恢复时插入校验
-4. 在 Gateway 启动时全量扫描
-
-**收益**：覆盖所有 5 种根因的事后恢复，改动最小，风险最低。
-
-#### Phase 2（2-4 周）：方案 A 补充 — 主动预防
-
-1. 实现 `ToolSupervisor`
-2. 集成到工具执行路径
-3. 按工具类型配置超时
-4. 添加 metrics 采集
-
-**收益**：将恢复时间从"等下一个触发点"缩短到"配置的超时时间"。
-
-#### Phase 3（可选增强）
-
-| 特性 | 说明 |
+| 文件 | 功能 |
 |------|------|
-| 心跳机制 | 长任务定期报告 "alive"，区分"在跑"和"卡了" |
-| 熔断器 | 连续失败 N 次 → 临时禁用该工具 |
-| 幂等重试 | 标记为幂等的工具自动重试一次 |
-| 指标看板 | 工具成功率/延迟/超时率可视化 |
-
----
-
-## 边界场景处理
-
-### 并行 tool_call
-
-LLM 一次发出多个 tool_call，部分成功部分失败时，Guard 只为丢失的注入合成 result，保留成功的真实结果。LLM 能看到哪些成功哪些失败，自行决策。
-
-### 工具已执行但 result 丢失
-
-最棘手的场景。合成 result 中明确标注"执行状态未知"：
-
-```
-⚠️ Tool "write" did not return a result.
-The operation MAY have completed successfully.
-Please verify before retrying to avoid duplicate side effects.
-```
-
-### 合成 result 后 LLM 无限重试
-
-Supervisor 记录重试次数，超过 `maxRetries` 返回最终错误。可选熔断器：同一工具连续失败 3 次 → 告诉 LLM "该工具暂时不可用"。
-
----
-
-## 改动总影响面
-
-| 模块 | Phase 1 | Phase 2 | 总影响 |
-|------|---------|---------|--------|
-| LLM 调用入口 | +1 行 validate | 无 | 🟡 小 |
-| Session 加载 | +1 行 validate | 无 | 🟡 小 |
-| Gateway 启动 | +扫描逻辑 | 无 | 🟡 小 |
-| ToolExecutor | 无 | 包 Supervisor | 🔴 中 |
-| 新增代码量 | ~200 行 | ~400 行 | **~600 行** |
+| `src/agents/session-transcript-repair.ts` | Transcript repair：合成缺失 tool result、去重、重排 |
+| `src/agents/transcript-policy.ts` | Provider 策略：控制哪些 provider 启用哪些 repair |
+| `src/agents/tool-loop-detection.ts` | 工具循环检测：重复模式检测 + 熔断 |
+| `src/process/command-queue.ts` | 命令队列：session lane 并发控制 |
+| `docs/concepts/agent-loop.md` | Agent Loop 生命周期文档 |
+| `docs/tools/loop-detection.md` | 工具循环检测配置文档 |
 
 ---
 
 ## 总结
 
-| 维度 | 结论 |
-|------|------|
-| **根本原因** | LLM 协议要求 tool_call↔tool_result 一一对应，但缺乏保证机制 |
-| **解法本质** | 在协议层保证不变量：每个 tool_call 在有限时间内必得到 result |
-| **推荐方案** | A + B 混合：Supervisor（主动预防）+ Guard（被动兜底） |
-| **实施策略** | Phase 1 先上 Guard（低风险），Phase 2 补 Supervisor（高收益） |
-| **改动量** | ~600 行核心代码，主要新增，极少修改现有逻辑 |
-| **预期效果** | tool call stuck 从"不可恢复"变为"自动恢复" |
+| 维度 | v1（推测性分析） | v2（源码实证） |
+|------|----------------|--------------|
+| **判断** | OpenClaw 没有防护 | OpenClaw 已有 transcript repair |
+| **盲区** | 不清楚 | 精确：工具级超时缺失、agent timeout 太长 |
+| **方案** | 从头写 ~600 行 Supervisor + Guard | 配置调优 + ~50 行工具级超时 |
+| **态度** | 推测先行 | 源码先行 |
+
+**核心教训**：不要在没读源码的情况下提解决方案。OpenClaw 的 transcript repair 机制设计得相当完善，我们真正需要补的只是「正在等待中的工具调用」这个盲区——配置调优解决 80%，工具级超时解决剩下的 20%。
 
 ---
 
-*本方案基于 OpenClaw 2026.4.12 版本分析。具体实现需参考 Gateway 源码确认集成点。*
+*v2 更新说明：基于 OpenClaw GitHub 最新源码（`6b126cd`）重写，修正了 v1 中「OpenClaw 没有防护」的错误判断，明确了已有机制和真正的盲区，方案聚焦在配置调优 + 补齐工具级超时。*
