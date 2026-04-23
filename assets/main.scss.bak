@@ -43,22 +43,6 @@
   --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
   --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
 
-  --navbar-bg: rgba(255,255,255,0.92);
-  --navbar-mobile-bg: rgba(255,255,255,0.98);
-  --blockquote-text: #4b5563;
-  --blockquote-bg: rgba(99,102,241,0.04);
-  --timeline-dot: #d1d5db;
-  --placeholder-gradient: linear-gradient(135deg, #f0efec, #e5e7eb);
-  --toc-bg: rgba(255,255,255,0.88);
-  --toc-header-bg: rgba(255,255,255,0.95);
-  --toc-hover-bg: rgba(248,247,244,0.95);
-  --toc-text-1: #334155;
-  --toc-text-2: #64748b;
-  --toc-text-3: #94a3b8;
-  --toc-label: #94a3b8;
-  --share-modal-bg: #ffffff;
-  --inline-code-color: #e879f9;
-
   --font-sans: "Inter", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", Menlo, Monaco, Consolas, monospace;
 }
@@ -130,7 +114,7 @@ img {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--navbar-bg);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-color);
@@ -244,7 +228,7 @@ img {
     top: 52px;
     left: 0;
     right: 0;
-    background: var(--navbar-mobile-bg);
+    background: rgba(255,255,255,0.98);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-color);
     box-shadow: var(--shadow-md);
@@ -373,86 +357,4 @@ img {
 .post-tag:hover {
   background: var(--accent);
   color: #fff;
-}
-
-/* ============================================
-   深色主题
-   ============================================ */
-[data-theme="dark"] {
-  --bg-primary: #0a0a0b;
-  --bg-card: #141415;
-  --bg-code: #0d1117;
-  --bg-tertiary: #1a1a1c;
-  --bg-secondary: #111112;
-
-  --text-primary: #d4d4d8;
-  --text-secondary: #71717a;
-  --text-heading: #e4e4e7;
-  --text-tertiary: #52525b;
-
-  --accent: #818cf8;
-  --accent-light: #a5b4fc;
-  --accent-cyan: #22d3ee;
-
-  --link-color: #818cf8;
-  --link-hover: #a5b4fc;
-  --accent-color: #818cf8;
-
-  --border-color: #222224;
-  --border-light: #1a1a1c;
-
-  --tag-bg: rgba(99,102,241,0.12);
-  --tag-color: #818cf8;
-
-  --card-bg: #141415;
-  --card-shadow: 0 1px 3px rgba(0,0,0,0.3);
-
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-  --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
-
-  --navbar-bg: rgba(10,10,11,0.85);
-  --navbar-mobile-bg: rgba(20,20,21,0.98);
-  --blockquote-text: #a1a1aa;
-  --blockquote-bg: rgba(99,102,241,0.06);
-  --timeline-dot: #52525b;
-  --placeholder-gradient: linear-gradient(135deg, #1a1a1c, #222224);
-  --toc-bg: rgba(20,20,21,0.88);
-  --toc-header-bg: rgba(20,20,21,0.95);
-  --toc-hover-bg: rgba(26,26,28,0.95);
-  --toc-text-1: #d4d4d8;
-  --toc-text-2: #a1a1aa;
-  --toc-text-3: #71717a;
-  --toc-label: #71717a;
-  --share-modal-bg: #141415;
-  --inline-code-color: #e879f9;
-
-  color-scheme: dark;
-}
-
-/* ============================================
-   主题切换过渡
-   ============================================ */
-html,
-html *:not(pre):not(code):not(img):not(video):not(canvas):not(svg):not(pre *) {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* ============================================
-   主题切换按钮
-   ============================================ */
-.theme-toggle {
-  background: none;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 6px 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s;
-  color: var(--text-secondary);
-  line-height: 1;
-}
-.theme-toggle:hover {
-  border-color: var(--accent);
-  background: var(--tag-bg);
 }

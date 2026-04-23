@@ -22,11 +22,6 @@
                 <li><a href="{{ '/archives/' | relative_url }}" class="nav-link {% if page.url contains 'archives' %}active{% endif %}">归档</a></li>
                 <li><a href="{{ '/categories/' | relative_url }}" class="nav-link {% if page.url contains 'categories' %}active{% endif %}">分类</a></li>
                 <li><a href="{{ '/about/' | relative_url }}" class="nav-link {% if page.url contains 'about' %}active{% endif %}">关于</a></li>
-                <li>
-                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="切换主题">
-                        <span class="theme-icon">🌙</span>
-                    </button>
-                </li>
             </ul>
         </div>
     </nav>
@@ -128,7 +123,7 @@
             position: fixed;
             bottom: 1.5rem;
             right: 1.5rem;
-            background-color: var(--accent, rgba(99, 102, 241, 0.9));
+            background-color: rgba(99, 102, 241, 0.9);
             color: white;
             border: none;
             border-radius: 50%;
@@ -179,33 +174,6 @@
                 btn.classList.remove('open');
             });
         });
-        
-        // 主题切换
-        function toggleTheme() {
-            var html = document.documentElement;
-            var current = html.getAttribute('data-theme');
-            var next = current === 'dark' ? 'light' : 'dark';
-            if (next === 'dark') {
-                html.setAttribute('data-theme', 'dark');
-            } else {
-                html.removeAttribute('data-theme');
-            }
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        }
-
-        function updateThemeIcon(theme) {
-            var btn = document.getElementById('themeToggle');
-            if (btn) {
-                btn.querySelector('.theme-icon').textContent = theme === 'dark' ? '☀️' : '🌙';
-            }
-        }
-
-        // 页面加载时设置图标
-        (function() {
-            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            updateThemeIcon(isDark ? 'dark' : 'light');
-        })();
     </script>
 </body>
 </html>

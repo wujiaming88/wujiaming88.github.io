@@ -212,7 +212,7 @@ article.post .post-content code:not(pre code),
 .post-content code:not(pre code),
 .post-content code:not([class*="language-"]) {
   background: var(--bg-tertiary, #f0efec);
-  color: var(--inline-code-color);
+  color: #e879f9;
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
   font-size: 0.88em;
@@ -262,7 +262,7 @@ article.post .post-content blockquote,
   padding: 1rem 1.25rem;
   margin: 1.5rem 0;
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  color: var(--blockquote-text);
+  color: #4b5563;
   font-style: italic;
   line-height: 1.8;
 }
@@ -461,7 +461,7 @@ article.post .post-content hr,
   transition: all 0.2s ease;
 }
 
-.post-nav-item a:hover { background: var(--bg-tertiary); }
+.post-nav-item a:hover { background: rgba(255,255,255,0.6); }
 .post-nav-item a:hover .post-nav-title { color: var(--accent); }
 
 /* 分享区域 */
@@ -575,10 +575,10 @@ article.post .post-content hr,
   left: 16px;
   width: 220px;
   max-height: calc(100vh - 120px);
-  background: var(--toc-bg);
+  background: rgba(255,255,255,0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(229,231,235,0.6);
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.04);
@@ -627,18 +627,18 @@ article.post .post-content hr,
   transition: background 0.2s ease;
   position: sticky;
   top: 0;
-  background: var(--toc-header-bg);
+  background: rgba(255,255,255,0.95);
   backdrop-filter: blur(8px);
   z-index: 1;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(229,231,235,0.5);
 }
 
-.toc-header:hover { background: var(--toc-hover-bg); }
+.toc-header:hover { background: rgba(248,247,244,0.95); }
 
 .toc-header h3 {
   margin: 0;
   font-size: 0.8rem;
-  color: var(--toc-label);
+  color: #94a3b8;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -647,7 +647,7 @@ article.post .post-content hr,
 }
 
 .toc-toggle {
-  color: var(--toc-label);
+  color: #94a3b8;
   font-size: 0.75rem;
   transition: transform 0.3s ease;
   white-space: nowrap;
@@ -706,7 +706,7 @@ article.post .post-content hr,
 
 .toc-body > ul > li > a {
   padding: 5px 12px 5px 14px;
-  color: var(--toc-text-1);
+  color: #334155;
   font-weight: 500;
   font-size: 0.8rem;
   margin: 0 4px;
@@ -720,7 +720,7 @@ article.post .post-content hr,
 
 .toc-body > ul > li > ul > li > a {
   padding: 3px 12px 3px 26px;
-  color: var(--toc-text-2);
+  color: #64748b;
   font-size: 0.75rem;
   font-weight: 400;
   margin: 0 4px;
@@ -734,7 +734,7 @@ article.post .post-content hr,
 
 .toc-body > ul > li > ul > li > ul > li > a {
   padding: 2px 12px 2px 38px;
-  color: var(--toc-text-3);
+  color: #94a3b8;
   font-size: 0.7rem;
   margin: 0 4px;
 }
