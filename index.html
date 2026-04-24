@@ -6,6 +6,9 @@ title: W.ai - 深度技术研究博客
 <!-- Hero 区 -->
 <div class="hero-section">
     <div class="hero-content">
+        <div class="hero-logo">
+            <span class="hl-w">W</span><span class="hl-dot"></span><span class="hl-ai">ai</span>
+        </div>
         <h1 class="hero-title">深度技术研究</h1>
         <p class="hero-subtitle">探索 AI 前沿 · 记录工程实践</p>
         
@@ -137,6 +140,40 @@ title: W.ai - 深度技术研究博客
 .hero-section {
     text-align: center;
     padding: 48px 20px 32px;
+}
+
+/* Hero 大 Logo */
+.hero-logo {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    letter-spacing: -0.04em;
+    margin-bottom: 16px;
+}
+
+.hl-w {
+    font-family: 'Space Grotesk', var(--font-sans);
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--text-heading);
+}
+
+.hl-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: relative;
+    top: -6px;
+    margin: 0 2px;
+}
+
+.hl-ai {
+    font-family: 'Space Grotesk', var(--font-sans);
+    font-size: 4rem;
+    font-weight: 400;
+    color: var(--text-secondary);
 }
 
 .hero-title {

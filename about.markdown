@@ -29,6 +29,39 @@ permalink: /about/
     padding: 0;
 }
 
+.about-logo {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    letter-spacing: -0.04em;
+    margin-bottom: 12px;
+}
+
+.al-w {
+    font-family: 'Space Grotesk', var(--font-sans);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+}
+
+.al-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: relative;
+    top: -5px;
+    margin: 0 2px;
+}
+
+.al-ai {
+    font-family: 'Space Grotesk', var(--font-sans);
+    font-size: 3.5rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
 .about-hero p {
     font-size: 1.1rem;
     color: var(--text-secondary);
@@ -214,7 +247,9 @@ permalink: /about/
 
 <div class="about-page">
     <section class="about-hero">
-        <h1>W.ai</h1>
+        <div class="about-logo">
+            <span class="al-w">W</span><span class="al-dot"></span><span class="al-ai">ai</span>
+        </div>
         <p>探索 AI 技术 · 记录深度研究</p>
     </section>
 

@@ -40,7 +40,20 @@
 
     <!-- 页脚 -->
     <footer class="footer">
-        <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }} · <a href="https://github.com/wujiaming88">GitHub</a></p>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="fb-w">W</span><span class="fb-dot"></span><span class="fb-ai">ai</span>
+            </div>
+            <p class="footer-desc">Deep Tech Research</p>
+            <div class="footer-links">
+                <a href="https://github.com/wujiaming88" target="_blank">GitHub</a>
+                <span class="footer-sep">·</span>
+                <a href="{{ '/about/' | relative_url }}">关于</a>
+                <span class="footer-sep">·</span>
+                <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+            </div>
+            <p class="footer-copy">&copy; {{ site.time | date: '%Y' }} {{ site.title }}</p>
+        </div>
     </footer>
 
     <!-- Prism.js 代码高亮 -->
