@@ -943,6 +943,8 @@ var __totalPostCount = {{ site.posts.size }};
         titleEl.textContent = '搜索结果';
         countEl.textContent = filteredCache.length + ' 篇';
         clearBtn.classList.add('visible');
+        var shortcutEl = document.querySelector('.search-shortcut');
+        if (shortcutEl) shortcutEl.style.display = 'none';
 
         var matchedUrls = {};
         filteredCache.forEach(function(r, idx) { matchedUrls[r.url] = idx; });
@@ -1013,6 +1015,8 @@ var __totalPostCount = {{ site.posts.size }};
         titleEl.textContent = '最新文章';
         countEl.textContent = __totalPostCount + ' 篇';
         clearBtn.classList.remove('visible');
+        var shortcutEl = document.querySelector('.search-shortcut');
+        if (shortcutEl) shortcutEl.style.display = '';
         postCards.forEach(function(c) { c.style.display = ''; c.style.order = ''; });
         var emptyEl = document.getElementById('searchEmpty');
         if (emptyEl) emptyEl.style.display = 'none';
