@@ -150,17 +150,45 @@ img {
 }
 
 .navbar-brand {
-  font-size: 1.4rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: flex;
+  align-items: baseline;
   text-decoration: none;
+  letter-spacing: -0.04em;
+  gap: 0;
+  transition: opacity 0.2s;
 }
 
 .navbar-brand:hover {
-  opacity: 0.85;
+  opacity: 0.8;
+}
+
+.brand-w {
+  font-family: 'Space Grotesk', var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  -webkit-text-fill-color: var(--text-heading);
+  background: none;
+  -webkit-background-clip: unset;
+}
+
+.brand-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  position: relative;
+  top: -3px;
+  margin: 0 1px;
+  flex-shrink: 0;
+}
+
+.brand-ai {
+  font-family: 'Space Grotesk', var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-secondary);
 }
 
 .navbar-nav {

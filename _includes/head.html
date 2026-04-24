@@ -22,7 +22,7 @@
   <!-- 字体 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- 样式 -->
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
@@ -32,7 +32,14 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ '/assets/favicon.ico' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/logo/favicon-32.png' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/logo/favicon-16.png' | relative_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/logo/favicon-180.png' | relative_url }}">
+  <meta name="msapplication-TileImage" content="{{ '/assets/images/logo/favicon-192.png' | relative_url }}">
+  {% unless page.header.overlay_image %}
+  <meta property="og:image" content="{{ '/assets/images/logo/logo-og.png' | absolute_url }}">
+  <meta name="twitter:image" content="{{ '/assets/images/logo/logo-og.png' | absolute_url }}">
+  {% endunless %}
 
   {%- feed_meta -%}
 
