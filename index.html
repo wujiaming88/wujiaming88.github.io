@@ -156,6 +156,32 @@ title: W.ai - 深度技术研究博客
     margin-top: 16px;
 }
 
+.tag-pill {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--tag-bg);
+    color: var(--accent);
+    border: 1px solid rgba(99,102,241,0.15);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.tag-pill:hover {
+    background: rgba(99,102,241,0.15);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.tag-pill.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
 /* 搜索框 */
 .search-wrapper {
     position: relative;
