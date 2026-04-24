@@ -43,9 +43,9 @@ permalink: /categories/
 /* 分类卡片网格 */
 .cat-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 2.5rem;
 }
 
 .cat-card {
@@ -232,10 +232,6 @@ permalink: /categories/
     font-size: 0.78rem;
     color: var(--accent-light);
     background: rgba(99,102,241,0.05);
-}
-
-@media (max-width: 1024px) {
-    .cat-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
