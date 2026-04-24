@@ -140,9 +140,9 @@ img {
 }
 
 .navbar-content {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -316,9 +316,9 @@ img {
    page-content 区（兼容 page/post/category/tag 布局）
    ============================================ */
 .page-content {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem 20px;
+  padding: 2rem 24px;
 }
 
 @media (max-width: 768px) {
