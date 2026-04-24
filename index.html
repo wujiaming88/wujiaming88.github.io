@@ -48,7 +48,8 @@ title: W.ai - 深度技术研究博客
         <div class="featured-body">
             <h3>{{ featured_post.title }}</h3>
             <div class="featured-meta">{{ featured_post.date | date: '%Y-%m-%d' }}{% if featured_post.author %} · {{ featured_post.author }}{% endif %}</div>
-            <div class="featured-excerpt">{{ featured_post.excerpt | strip_html | truncate: 150 }}</div>
+            <div class="featured-excerpt">{{ featured_post.excerpt | strip_html | truncate: 200 }}</div>
+            <span class="read-featured">阅读全文 →</span>
         </div>
     </a>
 </div>
@@ -431,9 +432,9 @@ mark {
     padding: 0 0 24px;
 }
 
-/* 精选文章卡片 */
+/* 精选文章卡片 - 横向大卡片 */
 .featured-card {
-    display: block;
+    display: flex;
     background: var(--bg-card);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -442,21 +443,38 @@ mark {
     text-decoration: none;
     color: inherit;
     transition: all 0.3s ease;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
+    position: relative;
+}
+
+.featured-card::before {
+    content: '★ 精选';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 2;
+    letter-spacing: 1px;
 }
 
 .featured-card:hover {
     border-color: var(--accent);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99,102,241,0.12);
+    transform: translateY(-3px);
 }
 
 .featured-img {
-    width: 100%;
-    height: 240px;
+    width: 45%;
+    min-height: 260px;
     background: linear-gradient(135deg, var(--accent), var(--accent-light), var(--accent-cyan));
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .featured-img img {
@@ -478,7 +496,7 @@ mark {
 
 .featured-badge {
     position: absolute;
-    top: 14px;
+    bottom: 14px;
     left: 14px;
     background: rgba(255,255,255,0.95);
     color: var(--accent);
@@ -492,31 +510,51 @@ mark {
 }
 
 .featured-body {
-    padding: 16px 20px;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
 }
 
 .featured-body h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    line-height: 1.4;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.35;
     color: var(--text-heading);
 }
 
 .featured-meta {
     font-size: 0.82rem;
     color: var(--text-secondary);
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .featured-excerpt {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.75;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.featured-body .read-featured {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-top: auto;
+    transition: gap 0.2s;
+}
+
+.featured-card:hover .read-featured {
+    gap: 10px;
 }
 
 /* 文章网格 */
@@ -721,8 +759,26 @@ mark {
         grid-template-columns: 1fr;
     }
 
+    .featured-card {
+        flex-direction: column;
+    }
+
+    .featured-card::before {
+        top: 12px;
+        right: 12px;
+    }
+
     .featured-img {
-        height: 180px;
+        width: 100%;
+        min-height: 200px;
+    }
+
+    .featured-body {
+        padding: 20px;
+    }
+
+    .featured-body h3 {
+        font-size: 1.2rem;
     }
 
     .post-card-img {
