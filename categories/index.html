@@ -6,9 +6,9 @@ permalink: /categories/
 
 <style>
 .cats-page {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: 2rem 1rem;
 }
 
 .cats-header {
@@ -261,11 +261,16 @@ permalink: /categories/
         {% assign cat_posts = cat[1] %}
         {% comment %}Emoji mapping{% endcomment %}
         {% if cat_name == "AI Agent" %}{% assign cat_icon = "🤖" %}
+        {% elsif cat_name == "AI" or cat_name == "ai" %}{% assign cat_icon = "🤖" %}
         {% elsif cat_name == "大语言模型" or cat_name == "LLM" %}{% assign cat_icon = "🧠" %}
-        {% elsif cat_name == "工程实践" %}{% assign cat_icon = "🔧" %}
-        {% elsif cat_name == "技术调研" %}{% assign cat_icon = "📊" %}
+        {% elsif cat_name == "工程实践" or cat_name == "engineering" %}{% assign cat_icon = "🔧" %}
+        {% elsif cat_name == "技术调研" or cat_name == "Research" or cat_name == "research" %}{% assign cat_icon = "📊" %}
         {% elsif cat_name == "商业分析" %}{% assign cat_icon = "💼" %}
-        {% elsif cat_name == "开源项目" %}{% assign cat_icon = "🔬" %}
+        {% elsif cat_name == "开源项目" or cat_name == "开源" %}{% assign cat_icon = "🔬" %}
+        {% elsif cat_name == "OpenClaw" or cat_name == "openclaw" %}{% assign cat_icon = "⚡" %}
+        {% elsif cat_name == "周报" %}{% assign cat_icon = "📅" %}
+        {% elsif cat_name == "工具" %}{% assign cat_icon = "🛠️" %}
+        {% elsif cat_name == "新闻" %}{% assign cat_icon = "📰" %}
         {% else %}{% assign cat_icon = "📁" %}
         {% endif %}
         <div class="cat-card" onclick="toggleCatPanel('{{ cat_name | slugify }}')">
