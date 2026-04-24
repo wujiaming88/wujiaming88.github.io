@@ -13,18 +13,32 @@ article.post {
 /* 文章头部 */
 /* ==================== */
 article.post .post-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   text-align: center;
-  padding: 2rem 0 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  padding: 3rem 0 2rem;
+  border-bottom: none;
+  position: relative;
+}
+
+article.post .post-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
 }
 
 article.post .post-header h1,
 article.post .post-header .post-title {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
   color: var(--text-heading);
-  line-height: 1.4;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
   margin-bottom: 1rem;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -33,8 +47,9 @@ article.post .post-header .post-title {
 }
 
 article.post .post-header .post-meta {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  color: var(--text-tertiary);
+  font-size: 0.88rem;
+  letter-spacing: 0.3px;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
@@ -52,23 +67,25 @@ article.post .post-header .post-tags {
 
 article.post .post-header .post-tags span {
   background: var(--tag-bg);
-  color: var(--tag-color);
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  color: var(--accent);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid rgba(99,102,241,0.12);
 }
 
 /* ==================== */
 /* 封面图片 */
 /* ==================== */
 .post-cover {
-  margin: 0 0 2rem 0;
-  width: 100%;
+  margin: 0 -2rem 2.5rem;
+  width: calc(100% + 4rem);
   aspect-ratio: 16 / 9;
   max-height: 420px;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
   position: relative;
 }
 
@@ -116,44 +133,58 @@ article.post .post-content,
   max-width: 800px;
   margin: 0 auto;
   font-size: 17px;
-  line-height: 1.9;
+  line-height: 2.0;
+  letter-spacing: 0.01em;
   color: var(--text-primary);
 }
 
 article.post .post-content p,
 .post-content p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+/* 首段稍大，增加阅读入口感 */
+article.post .post-content > p:first-of-type,
+.post-content > p:first-of-type {
+  font-size: 1.1em;
+  color: var(--text-heading);
+  line-height: 1.85;
 }
 
 /* 标题层级 */
 article.post .post-content h1,
 .post-content h1 {
-  font-size: 1.9rem;
-  margin: 2.5rem 0 1.25rem;
-  font-weight: 700;
+  font-size: 2rem;
+  margin: 3rem 0 1.5rem;
+  font-weight: 800;
   color: var(--text-heading);
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 3px solid var(--accent);
   padding-bottom: 0.4rem;
   line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
 article.post .post-content h2,
 .post-content h2 {
-  font-size: 1.6rem;
-  margin: 2rem 0 1rem;
-  font-weight: 600;
+  font-size: 1.65rem;
+  margin: 3rem 0 1.25rem;
+  font-weight: 700;
   color: var(--text-heading);
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 0.3rem;
+  border-bottom: none;
+  border-left: 4px solid var(--accent);
+  padding-left: 16px;
+  padding-bottom: 0;
   line-height: 1.35;
+  letter-spacing: -0.02em;
 }
 
 article.post .post-content h3,
 .post-content h3 {
-  font-size: 1.3rem;
-  margin: 1.5rem 0 0.8rem;
-  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 2.5rem 0 1rem;
+  font-weight: 700;
   color: var(--text-heading);
+  letter-spacing: -0.01em;
 }
 
 article.post .post-content h4,
@@ -183,12 +214,13 @@ article.post .post-content ol,
 
 article.post .post-content li,
 .post-content li {
-  margin-bottom: 0.5rem;
-  line-height: 1.8;
+  margin-bottom: 0.6rem;
+  line-height: 1.85;
 }
 
 article.post .post-content li::marker {
   color: var(--accent);
+  font-weight: 700;
 }
 
 /* 链接 */
@@ -212,12 +244,13 @@ article.post .post-content code:not(pre code),
 .post-content code:not(pre code),
 .post-content code:not([class*="language-"]) {
   background: var(--bg-tertiary, #f0efec);
-  color: var(--inline-code-color);
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
+  color: var(--accent);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
   font-size: 0.88em;
   border: 1px solid var(--border-color);
   font-family: var(--font-mono);
+  font-weight: 500;
 }
 
 /* ==================== */
@@ -227,14 +260,14 @@ article.post .post-content pre,
 .post-content pre,
 pre[class*="language-"] {
   background: #1e1e2e;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow-x: auto;
-  margin: 1.5rem 0;
-  padding: 1.25rem 1.5rem;
-  padding-top: 2.25rem;
+  margin: 2rem 0;
+  padding: 1.5rem 1.75rem;
+  padding-top: 2.5rem;
   position: relative;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 article.post .post-content pre code,
@@ -244,9 +277,10 @@ pre[class*="language-"] code {
   padding: 0 !important;
   border: none !important;
   border-radius: 0;
-  font-size: 0.88rem;
-  line-height: 1.65;
+  font-size: 0.85rem;
+  line-height: 1.7;
   color: #e2e8f0;
+  font-family: 'JetBrains Mono', 'Fira Code', var(--font-mono);
   display: block;
   white-space: pre;
   tab-size: 4;
@@ -257,14 +291,29 @@ pre[class*="language-"] code {
 /* ==================== */
 article.post .post-content blockquote,
 .post-content blockquote {
-  border-left: 3px solid var(--accent);
-  background: rgba(99,102,241,0.04);
-  padding: 1rem 1.25rem;
-  margin: 1.5rem 0;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  border-left: 4px solid var(--accent);
+  background: linear-gradient(135deg, rgba(99,102,241,0.04), rgba(99,102,241,0.02));
+  padding: 1.5rem 1.75rem;
+  margin: 2rem 0;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   color: var(--blockquote-text);
-  font-style: italic;
-  line-height: 1.8;
+  font-style: normal;
+  line-height: 1.85;
+  font-size: 1.05rem;
+  position: relative;
+}
+
+article.post .post-content blockquote::before,
+.post-content blockquote::before {
+  content: '\201C';
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  font-size: 3rem;
+  color: var(--accent);
+  opacity: 0.2;
+  font-family: Georgia, serif;
+  line-height: 1;
 }
 
 article.post .post-content blockquote p:last-child,
@@ -281,9 +330,10 @@ article.post .post-content table,
   border-collapse: collapse;
   margin: 1.5rem 0;
   font-size: 0.95rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
 
 article.post .post-content th,
@@ -291,19 +341,26 @@ article.post .post-content th,
   background: rgba(99,102,241,0.06);
   padding: 0.7rem 1rem;
   text-align: left;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   border-bottom: 2px solid var(--border-color);
-  color: var(--text-heading);
+  color: var(--accent);
 }
 
 article.post .post-content td,
 .post-content td {
-  padding: 0.7rem 1rem;
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--border-color);
 }
 
-article.post .post-content tr:hover td {
+article.post .post-content tr:nth-child(even) td {
   background: rgba(99,102,241,0.02);
+}
+
+article.post .post-content tr:hover td {
+  background: rgba(99,102,241,0.04);
 }
 
 .table-wrapper {
@@ -319,9 +376,10 @@ article.post .post-content img,
 .post-content img {
   max-width: 100%;
   height: auto;
-  border-radius: var(--radius-md);
-  margin: 1.5rem 0;
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  margin: 2rem auto;
+  display: block;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
 
 article.post .post-content figure { margin: 1.5rem 0; }
@@ -360,8 +418,14 @@ article.post .post-content hr,
 .post-content hr {
   border: none;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-  margin: 2.5rem 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-color) 20%,
+    var(--border-color) 80%,
+    transparent
+  );
+  margin: 3rem 0;
 }
 
 /* ==================== */
