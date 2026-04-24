@@ -637,20 +637,19 @@ article.post .post-content hr,
   position: fixed;
   top: 80px;
   left: 20px;
-  width: 230px;
+  width: 220px;
   max-height: calc(100vh - 120px);
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
+  background: transparent;
+  border: none;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   transition: all 0.3s ease;
   z-index: 100;
 }
 
 .post-toc:hover {
-  box-shadow: var(--shadow-md);
-  border-color: rgba(99,102,241,0.25);
+  box-shadow: none;
 }
 
 @media (max-width: 1199px) {
@@ -662,7 +661,10 @@ article.post .post-content hr,
     max-width: 800px;
     max-height: none;
     margin: 0 auto 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
   }
 }
 
@@ -683,25 +685,26 @@ article.post .post-content hr,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 18px;
+  padding: 0 4px 10px;
   cursor: pointer;
   user-select: none;
   transition: background 0.2s ease;
   position: sticky;
   top: 0;
-  background: var(--bg-card);
+  background: var(--bg-primary);
   z-index: 1;
   border-bottom: 1px solid var(--border-light);
+  margin-bottom: 4px;
 }
 
-.toc-header:hover { background: var(--bg-tertiary); }
+.toc-header:hover { opacity: 0.8; }
 
 .toc-header h3 {
   margin: 0;
-  font-size: 0.78rem;
-  color: var(--text-secondary);
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   border: none;
   padding: 0;
@@ -709,7 +712,7 @@ article.post .post-content hr,
 
 .toc-toggle {
   color: var(--text-tertiary);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   transition: transform 0.3s ease;
   white-space: nowrap;
 }
@@ -718,7 +721,7 @@ article.post .post-content hr,
   height: 2px;
   background: var(--border-light);
   position: sticky;
-  top: 47px;
+  top: 35px;
   z-index: 1;
 }
 
@@ -731,19 +734,19 @@ article.post .post-content hr,
 }
 
 .toc-body {
-  padding: 10px 0;
+  padding: 6px 0;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: calc(100vh - 200px);
+  max-height: calc(100vh - 180px);
   opacity: 1;
   scrollbar-width: thin;
   scrollbar-color: rgba(203,213,225,0.3) transparent;
   transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 
-.toc-body::-webkit-scrollbar { width: 3px; }
+.toc-body::-webkit-scrollbar { width: 2px; }
 .toc-body::-webkit-scrollbar-track { background: transparent; }
-.toc-body::-webkit-scrollbar-thumb { background: rgba(203,213,225,0.3); border-radius: 3px; }
+.toc-body::-webkit-scrollbar-thumb { background: rgba(203,213,225,0.3); border-radius: 2px; }
 
 .toc-body.collapsed {
   max-height: 0 !important;
@@ -761,54 +764,48 @@ article.post .post-content hr,
   display: block;
   text-decoration: none;
   transition: all 0.15s ease;
-  line-height: 1.45;
+  line-height: 1.4;
   border-left: 2px solid transparent;
 }
 
 /* H2 级目录 */
 .toc-body > ul > li > a {
-  padding: 6px 14px 6px 16px;
-  color: var(--text-primary);
+  padding: 5px 8px 5px 12px;
+  color: var(--text-secondary);
   font-weight: 500;
-  font-size: 0.82rem;
-  margin: 1px 6px;
-  border-radius: 0 6px 6px 0;
+  font-size: 0.78rem;
+  margin: 0;
 }
 
 .toc-body > ul > li > a:hover {
   color: var(--accent);
-  background: var(--tag-bg);
   border-left-color: var(--accent);
 }
 
 /* H3 级目录 */
 .toc-body > ul > li > ul > li > a {
-  padding: 4px 14px 4px 28px;
-  color: var(--text-secondary);
-  font-size: 0.78rem;
+  padding: 3px 8px 3px 24px;
+  color: var(--text-tertiary);
+  font-size: 0.73rem;
   font-weight: 400;
-  margin: 1px 6px;
-  border-radius: 0 6px 6px 0;
+  margin: 0;
 }
 
 .toc-body > ul > li > ul > li > a:hover {
   color: var(--accent);
-  background: rgba(99,102,241,0.04);
   border-left-color: rgba(99,102,241,0.4);
 }
 
 /* H4 级目录 */
 .toc-body > ul > li > ul > li > ul > li > a {
-  padding: 3px 14px 3px 40px;
+  padding: 2px 8px 2px 36px;
   color: var(--text-tertiary);
-  font-size: 0.72rem;
-  margin: 1px 6px;
-  border-radius: 0 6px 6px 0;
+  font-size: 0.7rem;
+  margin: 0;
 }
 
 .toc-body a.toc-active {
   color: var(--accent) !important;
-  background: var(--tag-bg) !important;
   border-left-color: var(--accent) !important;
   font-weight: 600 !important;
 }
