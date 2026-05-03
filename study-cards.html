@@ -788,15 +788,15 @@ function shuffle(arr) {
 }
 
 /**
- * 获取新卡
+ * 获取新卡（随机选取）
  * @param {Array} cards - 卡片列表
  * @param {number} limit - 限制数量
- * @returns {Array} 新卡
+ * @returns {Array} 随机选取的新卡
  */
 function getNewCards(cards, limit = 30) {
-  return cards
-    .filter(card => card.state === CardState.NEW)
-    .slice(0, limit);
+  const newCards = cards.filter(card => card.state === CardState.NEW);
+  shuffle(newCards);
+  return newCards.slice(0, limit);
 }
 
 /**
