@@ -56,7 +56,7 @@
       -webkit-touch-callout: none;
       -webkit-user-select: none;
       user-select: none;
-      touch-action: manipulation;
+      touch-action: pan-y;
     }
 
     .progress-bar {
@@ -181,7 +181,7 @@
       transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
-      touch-action: manipulation;
+      touch-action: pan-y;
     }
 
     .card.flipped {
@@ -223,9 +223,11 @@
       left: 0;
       right: 0;
       bottom: 0;
-      overflow-y: auto;
+      overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
+      overscroll-behavior-y: contain;
+      touch-action: pan-y;
+      -webkit-transform: translateZ(0);
       padding: 40px 16px 16px;
     }
 
@@ -961,12 +963,7 @@ if (typeof window !== 'undefined') {
       setTimeout(setIOSHeight, 100);
     });
 
-    // Prevent iOS rubber-band scrolling on body (only on body itself)
-    document.body.addEventListener('touchmove', function(e) {
-      if (e.target === document.body) {
-        e.preventDefault();
-      }
-    }, { passive: false });
+    // overscroll-behavior: contain on scroll-inner handles rubber-band prevention
 
     const CARDS_DATA = [
   {
