@@ -696,7 +696,7 @@ function getDueCards(cards) {
  * @param {number} limit - 限制数量
  * @returns {Array} 新卡
  */
-function getNewCards(cards, limit = 20) {
+function getNewCards(cards, limit = 30) {
   return cards
     .filter(card => card.state === CardState.NEW)
     .slice(0, limit);
@@ -708,7 +708,7 @@ function getNewCards(cards, limit = 20) {
  * @param {number} newCardLimit - 每日新卡限制
  * @returns {Array} 今日学习队列
  */
-function buildQueue(cards, newCardLimit = 20) {
+function buildQueue(cards, newCardLimit = 30) {
   const dueCards = getDueCards(cards).filter(card => card.state !== CardState.NEW);
   const newCards = getNewCards(cards, newCardLimit);
 
