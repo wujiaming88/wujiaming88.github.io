@@ -337,31 +337,32 @@
       box-shadow: 0 1px 4px var(--shadow);
     }
 
-    .fab-menu {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      z-index: 1001;
-    }
-
     .fab-button {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: var(--button-bg);
-      color: var(--button-text);
-      border: none;
-      font-size: 18px;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      font-size: 14px;
       cursor: pointer;
-      box-shadow: 0 2px 8px var(--shadow);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform 0.2s;
+      flex-shrink: 0;
     }
 
     .fab-button:active {
       transform: scale(0.9);
+    }
+
+    .btn-undo {
+      background: var(--bg-secondary) !important;
+      color: var(--text-primary) !important;
+      flex: 0 0 44px !important;
+      font-size: 18px;
+      border: 1px solid var(--border-color);
     }
 
     .empty-state {
@@ -453,6 +454,7 @@
       <span class="stats-label">已掌握</span>
       <span class="stats-value" id="statMastery">0%</span>
     </div>
+    <button class="fab-button" onclick="toggleFilter()">⚙️</button>
   </div>
 
   <div class="filter-panel" id="filterPanel">
@@ -496,6 +498,9 @@
   </div>
 
   <div class="buttons-container" id="buttonsContainer" style="display:none;">
+    <button class="action-btn btn-undo" onclick="undoCard()" id="undoBtn" style="display:none;">
+      ↩
+    </button>
     <button class="action-btn btn-again" onclick="rateCard(1)">
       忘了<br><small>1分钟</small>
     </button>
@@ -510,9 +515,6 @@
     </button>
   </div>
 
-  <div class="fab-menu">
-    <button class="fab-button" onclick="toggleFilter()">⚙️</button>
-  </div>
 
   <script>
     /**
@@ -3094,14 +3096,19 @@ if (typeof window !== 'undefined') {
 
     // 格式化背面内容
     function formatBack(text) {
+      // Handle markdown bold
+      function processBold(str) {
+        return str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      }
+
       // 检测是否是表格
       if (text.includes('|') && text.split('\n').length > 2) {
         const lines = text.split('\n').filter(l => l.trim());
         let html = '<div class="table-wrapper"><table>';
         lines.forEach((line, i) => {
-          if (i === 1 && line.match(/^[\s\-|:]+$/)) return; // 跳过分隔行
+          if (line.match(/^[\s\-|:]+$/)) return; // 跳过分隔行
 
-          const cells = line.split('|').filter(c => c.trim()).map(c => c.trim());
+          const cells = line.split('|').filter(c => c.trim()).map(c => processBold(c.trim()));
           const tag = i === 0 ? 'th' : 'td';
           html += '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
         });
@@ -3109,7 +3116,15 @@ if (typeof window !== 'undefined') {
         return html;
       }
 
-      return text.replace(/\n/g, '<br>');
+      // 处理列表
+      let result = text;
+      result = result.replace(/^- (.+)$/gm, '<li>$1</li>');
+      if (result.includes('<li>')) {
+        result = result.replace(/((?:<li>.+<\/li>\n?)+)/g, '<ul>$1</ul>');
+      }
+      result = processBold(result);
+      result = result.replace(/\n/g, '<br>');
+      return result;
     }
 
     // 更新间隔预览
@@ -3126,9 +3141,32 @@ if (typeof window !== 'undefined') {
       document.getElementById('card').classList.toggle('flipped');
     }
 
+    // 撤销上一张
+    let lastCardState = null;
+
+    function undoCard() {
+      if (!lastCardState) return;
+      // 恢复上一张卡片状态
+      const cardIndex = allCards.findIndex(c => c.id === lastCardState.id);
+      if (cardIndex !== -1) {
+        allCards[cardIndex] = lastCardState;
+        saveCardState(lastCardState);
+      }
+      // 回退索引
+      if (currentCardIndex > 0) currentCardIndex--;
+      lastCardState = null;
+      document.getElementById('undoBtn').style.display = 'none';
+      updateStats();
+      showNextCard();
+    }
+
     // 评分卡片
     function rateCard(buttonType) {
       const card = currentQueue[currentCardIndex];
+      // 保存当前状态用于撤销
+      lastCardState = { ...card };
+      document.getElementById('undoBtn').style.display = 'flex';
+
       const quality = SM2.mapButtonToQuality(buttonType);
       const sm2Result = SM2.calculateSM2(quality, card.repetitions, card.easeFactor, card.interval);
       const nextReview = SM2.getNextReviewDate(sm2Result.interval);
