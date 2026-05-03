@@ -17,7 +17,8 @@
     "testEnvironment": "node",
     "collectCoverageFrom": [
       "sm2.js",
-      "queue.js"
+      "queue.js",
+      "swipe.js"
     ],
     "coverageThreshold": {
       "global": {
