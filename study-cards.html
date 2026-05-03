@@ -258,31 +258,31 @@
       font-size: 14px;
       text-align: left;
       overflow-y: auto;
-      overflow-x: auto;
+      overflow-x: hidden;
       flex: 1;
       -webkit-overflow-scrolling: touch;
-      position: relative;
     }
 
     .table-wrapper {
-      display: inline-block;
-      min-width: 100%;
+      width: 100%;
       margin: 8px 0;
-      padding-bottom: 8px;
     }
 
     .card-back table {
-      width: max-content;
-      min-width: 100%;
+      width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
-      font-size: 12px;
+      font-size: 11px;
+      word-break: break-word;
     }
 
     .card-back th,
     .card-back td {
-      padding: 8px;
+      padding: 6px 4px;
       border: 1px solid var(--border-color);
       text-align: left;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
     }
 
     .card-back th {
