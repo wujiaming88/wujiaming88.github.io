@@ -263,6 +263,49 @@
       -webkit-overflow-scrolling: touch;
     }
 
+    /* 竖向块布局（3列+表格） */
+    .v-table {
+      width: 100%;
+    }
+
+    .v-table-item {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      background: var(--bg-secondary);
+    }
+
+    .v-table-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+
+    .v-table-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 3px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .v-table-key {
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .v-table-key::after {
+      content: '：';
+    }
+
+    .v-table-val {
+      color: var(--text-primary);
+      word-break: break-word;
+    }
+
+    /* 普通表格（2列以下） */
     .table-wrapper {
       width: 100%;
       margin: 8px 0;
@@ -270,19 +313,15 @@
 
     .card-back table {
       width: 100%;
-      table-layout: fixed;
       border-collapse: collapse;
-      font-size: 11px;
-      word-break: break-word;
+      font-size: 13px;
     }
 
     .card-back th,
     .card-back td {
-      padding: 6px 4px;
+      padding: 8px;
       border: 1px solid var(--border-color);
       text-align: left;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
     }
 
     .card-back th {
@@ -3130,20 +3169,39 @@ if (typeof window !== 'undefined') {
       // 检测是否是表格（含单行表格）
       const tableLines = text.split('\n').filter(l => l.trim().startsWith('|') && l.trim().endsWith('|'));
       if (tableLines.length >= 1) {
-        const lines = text.split('\n').filter(l => l.trim());
-        let html = '<div class="table-wrapper"><table>';
-        lines.forEach((line, i) => {
-          if (line.match(/^[\s\-|:]+$/)) return; // 跳过分隔行
-          if (!line.includes('|')) {
-            // 非表格行，跳过
-            return;
+        const dataLines = text.split('\n').filter(l => l.trim() && l.includes('|') && !l.match(/^[\s\-|:]+$/));
+        const headers = dataLines.length > 0 ? dataLines[0].split('|').filter(c => c.trim()).map(c => c.trim()) : [];
+        const colCount = headers.length;
+
+        // 3列及以上：竖向块布局（每行变一块）
+        if (colCount >= 3 && dataLines.length > 1) {
+          let html = '<div class="v-table">';
+          for (let i = 1; i < dataLines.length; i++) {
+            const cells = dataLines[i].split('|').filter(c => c.trim()).map(c => c.trim());
+            html += '<div class="v-table-item">';
+            html += '<div class="v-table-title">' + processBold(cells[0] || '') + '</div>';
+            for (let j = 1; j < cells.length && j < headers.length; j++) {
+              html += '<div class="v-table-row"><span class="v-table-key">' + processBold(headers[j]) + '</span><span class="v-table-val">' + processBold(cells[j] || '') + '</span></div>';
+            }
+            html += '</div>';
           }
+          html += '</div>';
+          // 处理表格外的非管道行
+          const nonTableLines = text.split('\n').filter(l => l.trim() && !l.includes('|') && !l.match(/^[\s\-|:]+$/));
+          if (nonTableLines.length > 0) {
+            html += '<br>' + nonTableLines.map(l => processBold(l)).join('<br>');
+          }
+          return html;
+        }
+
+        // 2列及以下：普通表格
+        let html = '<div class="table-wrapper"><table>';
+        dataLines.forEach((line, i) => {
           const cells = line.split('|').filter(c => c.trim()).map(c => processBold(c.trim()));
-          const tag = (i === 0 && tableLines.length > 1) ? 'th' : 'td';
+          const tag = (i === 0 && dataLines.length > 1) ? 'th' : 'td';
           html += '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
         });
         html += '</table></div>';
-        // 处理表格外的非管道行
         const nonTableLines = text.split('\n').filter(l => l.trim() && !l.includes('|') && !l.match(/^[\s\-|:]+$/));
         if (nonTableLines.length > 0) {
           html += '<br>' + nonTableLines.map(l => processBold(l)).join('<br>');
