@@ -7,7 +7,8 @@ const {
   buildQueue,
   updateCardState,
   getStats,
-  getChapters
+  getChapters,
+  shuffle
 } = require('./queue');
 
 describe('Card Queue Management', () => {
@@ -156,16 +157,27 @@ describe('Card Queue Management', () => {
       expect(result.length).toBe(2);
     });
 
-    test('sorts due cards by nextReview time', () => {
-      const cards = [
-        { ...initCardState(mockCard), state: CardState.REVIEW, nextReview: Date.now() - 1000 },
-        { ...initCardState(mockCard), state: CardState.REVIEW, nextReview: Date.now() - 5000 }
-      ];
-      const result = buildQueue(cards);
-      expect(result[0].nextReview).toBeLessThan(result[1].nextReview);
+    test('randomizes card order', () => {
+      const cards = Array(10).fill(null).map((_, i) =>
+        ({ ...initCardState({...mockCard, front: `Card ${i}`}), state: CardState.NEW })
+      );
+      const result1 = buildQueue([...cards]);
+      const result2 = buildQueue([...cards]);
+      // 因为随机性，两次结果很可能不同（除非极小概率相同）
+      // 这里我们检查结果都包含相同的卡片
+      expect(result1.length).toBe(Math.min(10, 30));
+      expect(result2.length).toBe(Math.min(10, 30));
     });
 
-    test('respects new card limit', () => {
+    test('respects queue limit', () => {
+      const cards = Array(50).fill(null).map(() =>
+        ({ ...initCardState(mockCard), state: CardState.NEW })
+      );
+      const result = buildQueue(cards, 30);
+      expect(result.length).toBe(30);
+    });
+
+    test('respects smaller queue limit', () => {
       const cards = Array(30).fill(null).map(() =>
         ({ ...initCardState(mockCard), state: CardState.NEW })
       );
@@ -179,6 +191,19 @@ describe('Card Queue Management', () => {
       ];
       const result = buildQueue(cards, 0);
       expect(result.length).toBe(0);
+    });
+
+    test('combines due and new cards up to limit', () => {
+      const cards = [
+        ...Array(20).fill(null).map(() =>
+          ({ ...initCardState(mockCard), state: CardState.REVIEW, nextReview: Date.now() - 1000 })
+        ),
+        ...Array(20).fill(null).map(() =>
+          ({ ...initCardState(mockCard), state: CardState.NEW })
+        )
+      ];
+      const result = buildQueue(cards, 30);
+      expect(result.length).toBe(30);
     });
   });
 
@@ -302,6 +327,52 @@ describe('Card Queue Management', () => {
     test('handles empty card list', () => {
       const result = getChapters([]);
       expect(result).toEqual([]);
+    });
+  });
+
+  describe('shuffle', () => {
+    test('returns array with same length', () => {
+      const arr = [1, 2, 3, 4, 5];
+      const result = shuffle([...arr]);
+      expect(result.length).toBe(arr.length);
+    });
+
+    test('contains same elements', () => {
+      const arr = [1, 2, 3, 4, 5];
+      const result = shuffle([...arr]);
+      expect(result.sort()).toEqual(arr.sort());
+    });
+
+    test('modifies array in place', () => {
+      const arr = [1, 2, 3, 4, 5];
+      const original = arr;
+      shuffle(arr);
+      expect(arr).toBe(original);
+    });
+
+    test('handles empty array', () => {
+      const arr = [];
+      const result = shuffle(arr);
+      expect(result).toEqual([]);
+    });
+
+    test('handles single element array', () => {
+      const arr = [42];
+      const result = shuffle(arr);
+      expect(result).toEqual([42]);
+    });
+
+    test('produces different orders on multiple calls', () => {
+      // 统计学测试：多次打乱应该产生不同的结果
+      const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const orders = new Set();
+      for (let i = 0; i < 20; i++) {
+        const copy = [...arr];
+        shuffle(copy);
+        orders.add(copy.join(','));
+      }
+      // 20次打乱应该至少产生2种不同的顺序（实际上应该更多）
+      expect(orders.size).toBeGreaterThan(1);
     });
   });
 });

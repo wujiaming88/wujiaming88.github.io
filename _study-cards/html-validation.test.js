@@ -142,8 +142,8 @@ describe('HTML File Validation', () => {
     expect(htmlContent).toContain('data-value="green"');
   });
 
-  test('contains chapter filter placeholder', () => {
-    expect(htmlContent).toContain('data-filter="chapter"');
+  test('contains chapter filter container', () => {
     expect(htmlContent).toContain('id="chapterFilters"');
+    expect(htmlContent).toContain('章节筛选');
   });
 });

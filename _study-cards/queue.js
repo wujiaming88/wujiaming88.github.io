@@ -70,12 +70,25 @@ function getDueCards(cards) {
 }
 
 /**
+ * Fisher-Yates 洗牌算法
+ * @param {Array} arr - 输入数组（会被原地修改）
+ * @returns {Array} 打乱后的数组
+ */
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/**
  * 获取新卡
  * @param {Array} cards - 卡片列表
  * @param {number} limit - 限制数量
  * @returns {Array} 新卡
  */
-function getNewCards(cards, limit = 20) {
+function getNewCards(cards, limit = 30) {
   return cards
     .filter(card => card.state === CardState.NEW)
     .slice(0, limit);
@@ -84,17 +97,20 @@ function getNewCards(cards, limit = 20) {
 /**
  * 构建学习队列
  * @param {Array} cards - 所有卡片
- * @param {number} newCardLimit - 每日新卡限制
- * @returns {Array} 今日学习队列
+ * @param {number} queueLimit - 每批队列总数限制（新卡+复习卡）
+ * @returns {Array} 今日学习队列（随机排列）
  */
-function buildQueue(cards, newCardLimit = 20) {
+function buildQueue(cards, queueLimit = 30) {
   const dueCards = getDueCards(cards).filter(card => card.state !== CardState.NEW);
-  const newCards = getNewCards(cards, newCardLimit);
+  const newCards = getNewCards(cards, queueLimit);
 
-  // 排序: 到期时间越早越靠前
-  dueCards.sort((a, b) => a.nextReview - b.nextReview);
+  // Fisher-Yates 随机打乱复习卡和新卡
+  shuffle(dueCards);
+  shuffle(newCards);
 
-  return [...dueCards, ...newCards];
+  // 合并并限制总数
+  const combined = [...dueCards, ...newCards];
+  return combined.slice(0, queueLimit);
 }
 
 /**
@@ -179,7 +195,8 @@ if (typeof module !== 'undefined' && module.exports) {
     buildQueue,
     updateCardState,
     getStats,
-    getChapters
+    getChapters,
+    shuffle
   };
 }
 
@@ -195,6 +212,7 @@ if (typeof window !== 'undefined') {
     buildQueue,
     updateCardState,
     getStats,
-    getChapters
+    getChapters,
+    shuffle
   };
 }

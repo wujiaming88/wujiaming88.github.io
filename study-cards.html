@@ -106,26 +106,75 @@
       left: 0;
       right: 0;
       background: var(--bg-primary);
-      padding: 12px 16px;
-      box-shadow: 0 2px 8px var(--shadow);
+      padding: 16px;
+      box-shadow: 0 4px 16px var(--shadow);
       z-index: 998;
       display: none;
-      max-height: 50vh;
+      max-height: 60vh;
       overflow-y: auto;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
     }
 
     .filter-panel.active {
       display: block;
     }
 
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .filter-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-header-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .filter-count {
+      font-size: 13px;
+      color: var(--button-bg);
+      background: var(--bg-secondary);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .filter-reset-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 18px;
+      background: var(--red-card);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .filter-reset-btn:active {
+      transform: scale(0.95);
+    }
+
     .filter-group {
-      margin-bottom: 12px;
+      margin-bottom: 20px;
     }
 
     .filter-title {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-secondary);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      font-weight: 600;
     }
 
     .filter-buttons {
@@ -135,20 +184,28 @@
     }
 
     .filter-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
+      padding: 9px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 20px;
       background: var(--bg-secondary);
       color: var(--text-primary);
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
       transition: all 0.2s;
+      user-select: none;
+      font-weight: 500;
+    }
+
+    .filter-btn:active {
+      transform: scale(0.95);
     }
 
     .filter-btn.active {
       background: var(--button-bg);
       color: var(--button-text);
       border-color: var(--button-bg);
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0, 122, 255, 0.3);
     }
 
     .card-container {
@@ -369,6 +426,40 @@
 
     .empty-state-subtext {
       font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .continue-btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 12px;
+      background: var(--button-bg);
+      color: var(--button-text);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px var(--shadow);
+      transition: transform 0.1s;
+      margin-top: 8px;
+    }
+
+    .continue-btn:active {
+      transform: scale(0.93);
+    }
+
+    .end-btn {
+      padding: 10px 24px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .end-btn:active {
+      transform: scale(0.93);
     }
 
     .card-fade-in {
@@ -444,19 +535,24 @@
   </div>
 
   <div class="filter-panel" id="filterPanel">
+    <div class="filter-header">
+      <div class="filter-header-left">
+        <span class="filter-header-title">筛选</span>
+        <span class="filter-count" id="filterCount">0 张卡片</span>
+      </div>
+      <button class="filter-reset-btn" onclick="resetFilters()">重置</button>
+    </div>
     <div class="filter-group">
-      <div class="filter-title">颜色筛选</div>
+      <div class="filter-title">颜色筛选（可多选）</div>
       <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="color" data-value="all">全部</button>
         <button class="filter-btn" data-filter="color" data-value="red">🔴 红卡</button>
         <button class="filter-btn" data-filter="color" data-value="yellow">🟡 黄卡</button>
         <button class="filter-btn" data-filter="color" data-value="green">🟢 绿卡</button>
       </div>
     </div>
     <div class="filter-group">
-      <div class="filter-title">章节筛选</div>
+      <div class="filter-title">章节筛选（可多选）</div>
       <div class="filter-buttons" id="chapterFilters">
-        <button class="filter-btn active" data-filter="chapter" data-value="all">全部章节</button>
       </div>
     </div>
   </div>
@@ -479,8 +575,10 @@
 
   <div class="empty-state" id="emptyState">
     <div class="empty-state-icon">🎉</div>
-    <div class="empty-state-text">今日学习完成!</div>
-    <div class="empty-state-subtext">明天继续加油</div>
+    <div class="empty-state-text" id="emptyStateText">今日学习完成!</div>
+    <div class="empty-state-subtext" id="emptyStateSubtext">明天继续加油</div>
+    <button class="continue-btn" id="continueBtn" style="display:none;" onclick="continueStudy()">继续学习 30 张</button>
+    <button class="end-btn" id="endBtn" style="display:none;" onclick="endStudy()">结束学习</button>
   </div>
 
   <div class="buttons-container" id="buttonsContainer" style="display:none;">
@@ -677,12 +775,25 @@ function getDueCards(cards) {
 }
 
 /**
+ * Fisher-Yates 洗牌算法
+ * @param {Array} arr - 输入数组（会被原地修改）
+ * @returns {Array} 打乱后的数组
+ */
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/**
  * 获取新卡
  * @param {Array} cards - 卡片列表
  * @param {number} limit - 限制数量
  * @returns {Array} 新卡
  */
-function getNewCards(cards, limit = 20) {
+function getNewCards(cards, limit = 30) {
   return cards
     .filter(card => card.state === CardState.NEW)
     .slice(0, limit);
@@ -691,17 +802,20 @@ function getNewCards(cards, limit = 20) {
 /**
  * 构建学习队列
  * @param {Array} cards - 所有卡片
- * @param {number} newCardLimit - 每日新卡限制
- * @returns {Array} 今日学习队列
+ * @param {number} queueLimit - 每批队列总数限制（新卡+复习卡）
+ * @returns {Array} 今日学习队列（随机排列）
  */
-function buildQueue(cards, newCardLimit = 20) {
+function buildQueue(cards, queueLimit = 30) {
   const dueCards = getDueCards(cards).filter(card => card.state !== CardState.NEW);
-  const newCards = getNewCards(cards, newCardLimit);
+  const newCards = getNewCards(cards, queueLimit);
 
-  // 排序: 到期时间越早越靠前
-  dueCards.sort((a, b) => a.nextReview - b.nextReview);
+  // Fisher-Yates 随机打乱复习卡和新卡
+  shuffle(dueCards);
+  shuffle(newCards);
 
-  return [...dueCards, ...newCards];
+  // 合并并限制总数
+  const combined = [...dueCards, ...newCards];
+  return combined.slice(0, queueLimit);
 }
 
 /**
@@ -786,7 +900,8 @@ if (typeof window !== 'undefined') {
     buildQueue,
     updateCardState,
     getStats,
-    getChapters
+    getChapters,
+    shuffle
   };
 }
   </script>
@@ -3654,10 +3769,13 @@ if (typeof window !== 'undefined') {
   <script>
     // 应用逻辑
     const STORAGE_KEY = 'study-cards-state';
+    const QUEUE_SIZE = 30; // 每批学习数量
     let allCards = [];
     let currentQueue = [];
     let currentCardIndex = 0;
     let currentFilters = { colors: [], chapters: [] };
+    let totalStudiedToday = 0; // 今日累计学习数量
+    let excludedCardIds = []; // 本次学习已排除的卡片ID
 
     // 初始化
     function init() {
@@ -3689,8 +3807,8 @@ if (typeof window !== 'undefined') {
         chapterFilters.appendChild(btn);
       });
 
-      // 绑定筛选按钮事件
-      document.querySelectorAll('.filter-btn[data-filter="color"]').forEach(btn => {
+      // 绑定筛选按钮事件（颜色和章节）
+      document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.onclick = handleFilterClick;
       });
 
@@ -3745,18 +3863,39 @@ if (typeof window !== 'undefined') {
     function updateQueue() {
       let filtered = allCards;
 
-      // 应用颜色筛选
-      if (currentFilters.colors.length > 0 && !currentFilters.colors.includes('all')) {
+      // 应用颜色筛选（多选）
+      if (currentFilters.colors.length > 0) {
         filtered = filtered.filter(card => currentFilters.colors.includes(card.color));
       }
 
-      // 应用章节筛选
-      if (currentFilters.chapters.length > 0 && !currentFilters.chapters.includes('all')) {
+      // 应用章节筛选（多选）
+      if (currentFilters.chapters.length > 0) {
         filtered = filtered.filter(card => currentFilters.chapters.includes(card.chapter));
       }
 
-      currentQueue = CardQueue.buildQueue(filtered, 20);
+      // 排除已学习的卡片
+      filtered = filtered.filter(card => !excludedCardIds.includes(card.id));
+
+      currentQueue = CardQueue.buildQueue(filtered, QUEUE_SIZE);
       currentCardIndex = 0;
+
+      // 更新筛选计数
+      updateFilterCount();
+    }
+
+    // 更新筛选计数显示
+    function updateFilterCount() {
+      let filtered = allCards;
+
+      if (currentFilters.colors.length > 0) {
+        filtered = filtered.filter(card => currentFilters.colors.includes(card.color));
+      }
+
+      if (currentFilters.chapters.length > 0) {
+        filtered = filtered.filter(card => currentFilters.chapters.includes(card.chapter));
+      }
+
+      document.getElementById('filterCount').textContent = `${filtered.length} 张卡片`;
     }
 
     // 更新统计
@@ -3866,6 +4005,10 @@ if (typeof window !== 'undefined') {
       // 保存状态
       saveCardState(updatedCard);
 
+      // 记录已学习卡片（用于本次学习排除）
+      excludedCardIds.push(card.id);
+      totalStudiedToday++;
+
       // 下一张
       currentCardIndex++;
       updateStats();
@@ -3876,7 +4019,50 @@ if (typeof window !== 'undefined') {
     function showEmptyState() {
       document.getElementById('cardContainer').style.display = 'none';
       document.getElementById('buttonsContainer').style.display = 'none';
-      document.getElementById('emptyState').style.display = 'flex';
+      const emptyState = document.getElementById('emptyState');
+      emptyState.style.display = 'flex';
+
+      // 检查是否还有可学习的卡片
+      let availableCards = allCards.filter(card => !excludedCardIds.includes(card.id));
+
+      // 应用当前筛选
+      if (currentFilters.colors.length > 0) {
+        availableCards = availableCards.filter(card => currentFilters.colors.includes(card.color));
+      }
+      if (currentFilters.chapters.length > 0) {
+        availableCards = availableCards.filter(card => currentFilters.chapters.includes(card.chapter));
+      }
+
+      const hasMoreCards = CardQueue.buildQueue(availableCards, 1).length > 0;
+
+      if (hasMoreCards) {
+        // 还有卡片可学，显示继续按钮
+        document.getElementById('emptyStateText').textContent = `已完成 ${QUEUE_SIZE} 张卡片!`;
+        document.getElementById('emptyStateSubtext').textContent = `今日已学 ${totalStudiedToday} 张，还有卡片可以继续`;
+        document.getElementById('continueBtn').style.display = 'block';
+        document.getElementById('endBtn').style.display = 'block';
+      } else {
+        // 没有更多卡片了
+        document.getElementById('emptyStateText').textContent = '今日学习完成!';
+        document.getElementById('emptyStateSubtext').textContent = `已学 ${totalStudiedToday} 张，明天继续加油`;
+        document.getElementById('continueBtn').style.display = 'none';
+        document.getElementById('endBtn').style.display = 'none';
+      }
+    }
+
+    // 继续学习
+    function continueStudy() {
+      updateQueue();
+      updateStats();
+      showNextCard();
+    }
+
+    // 结束学习
+    function endStudy() {
+      document.getElementById('emptyStateText').textContent = '学习结束!';
+      document.getElementById('emptyStateSubtext').textContent = `今日已学 ${totalStudiedToday} 张，做得很棒！`;
+      document.getElementById('continueBtn').style.display = 'none';
+      document.getElementById('endBtn').style.display = 'none';
     }
 
     // 切换筛选面板
@@ -3884,23 +4070,49 @@ if (typeof window !== 'undefined') {
       document.getElementById('filterPanel').classList.toggle('active');
     }
 
-    // 处理筛选点击
+    // 处理筛选点击（多选）
     function handleFilterClick(e) {
       const btn = e.target;
       const filterType = btn.getAttribute('data-filter');
       const filterValue = btn.getAttribute('data-value');
 
-      // 更新按钮状态
-      const group = btn.parentElement;
-      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      // 切换按钮激活状态
+      btn.classList.toggle('active');
 
-      // 更新筛选器
+      // 更新筛选器（多选）
       if (filterType === 'color') {
-        currentFilters.colors = filterValue === 'all' ? [] : [filterValue];
+        if (btn.classList.contains('active')) {
+          if (!currentFilters.colors.includes(filterValue)) {
+            currentFilters.colors.push(filterValue);
+          }
+        } else {
+          currentFilters.colors = currentFilters.colors.filter(c => c !== filterValue);
+        }
       } else if (filterType === 'chapter') {
-        currentFilters.chapters = filterValue === 'all' ? [] : [filterValue];
+        if (btn.classList.contains('active')) {
+          if (!currentFilters.chapters.includes(filterValue)) {
+            currentFilters.chapters.push(filterValue);
+          }
+        } else {
+          currentFilters.chapters = currentFilters.chapters.filter(c => c !== filterValue);
+        }
       }
+
+      // 重新构建队列
+      updateQueue();
+      updateStats();
+      showNextCard();
+    }
+
+    // 重置筛选
+    function resetFilters() {
+      currentFilters = { colors: [], chapters: [] };
+      excludedCardIds = [];
+
+      // 重置所有按钮状态
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
 
       // 重新构建队列
       updateQueue();
