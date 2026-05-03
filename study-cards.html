@@ -1187,7 +1187,7 @@ if (typeof window !== 'undefined') {
     "chapter": "1. 软件架构设计",
     "color": "red",
     "front": "面向服务架构: ESB（企业服务总线）核心功能是什么?",
-    "back": "- 消息路由与寻址（位置透明性）",
+    "back": "- 消息路由与寻址（位置透明性）\n- 协议转换\n- 消息转换\n- 服务编排",
     "tags": [
       "面向服务架构"
     ]
@@ -1475,7 +1475,7 @@ if (typeof window !== 'undefined') {
     "chapter": "2. 系统质量属性与架构评估",
     "color": "red",
     "front": "ATAM: 效用树(Utility Tree)是什么?",
-    "back": "- 根节点=整体效用",
+    "back": "- 根节点=整体效用\n- 第二层=质量属性\n- 第三层=细化属性\n- 叶节点=场景（标注优先级和难度）",
     "tags": [
       "ATAM"
     ]
@@ -1484,7 +1484,7 @@ if (typeof window !== 'undefined') {
     "chapter": "2. 系统质量属性与架构评估",
     "color": "red",
     "front": "ATAM: 两轮活动、九个步骤是什么?",
-    "back": "- 第一轮（以架构为中心）：演示商业驱动→演示架构→识别架构方法→生成质量属性效用树→分析架构方法",
+    "back": "- 第一轮（1-5步，以架构为中心）：演示商业驱动→演示架构→识别架构方法→生成质量属性效用树→分析架构方法\n- 第二轮（6-9步，以利益相关者为中心）：头脑风暴场景→分析架构方法→呈现结果→总结",
     "tags": [
       "ATAM"
     ]
@@ -2150,7 +2150,7 @@ if (typeof window !== 'undefined') {
     "chapter": "6. 数据库系统",
     "color": "red",
     "front": "Redis: 缓存问题是什么?",
-    "back": "- 缓存穿透：查询不存在的key → 布隆过滤器/空值缓存",
+    "back": "- 缓存穿透：查询不存在的key → 布隆过滤器/空值缓存\n- 缓存击穿：热点key过期 → 互斥锁/永不过期\n- 缓存雪崩：大量key同时过期 → 随机过期时间",
     "tags": [
       "Redis"
     ]
@@ -2195,7 +2195,7 @@ if (typeof window !== 'undefined') {
     "chapter": "7. 计算机组成与体系结构",
     "color": "red",
     "front": "流水线与加速比: 等时各段公式是什么?",
-    "back": "总时间 = (k + n - 1) × Δt，加速比 = nk/(k+n-1)",
+    "back": "总时间 = (k + n - 1) × Δt（k=段数，n=任务数，Δt=时钟周期），加速比 = nk/(k+n-1)",
     "tags": [
       "流水线与加速比"
     ]
@@ -2771,7 +2771,7 @@ if (typeof window !== 'undefined') {
     "chapter": "15. 新技术专题",
     "color": "red",
     "front": "云计算 / 云原生: 云原生关键技术是什么?",
-    "back": "- 容器化(Docker)",
+    "back": "- 容器化(Docker)\n- 容器编排(Kubernetes)\n- 服务网格(Service Mesh)\n- DevOps/CI/CD\n- 微服务架构",
     "tags": [
       "云计算 / 云原生"
     ]
@@ -2807,7 +2807,7 @@ if (typeof window !== 'undefined') {
     "chapter": "15. 新技术专题",
     "color": "red",
     "front": "大数据架构: Lambda架构是什么?",
-    "back": "（2024上论文题+案例题）",
+    "back": "- 批处理层(Batch Layer)：处理全量历史数据，生成批处理视图\n- 流处理层(Speed Layer)：处理增量实时数据，生成实时视图\n- 服务层(Serving Layer)：合并批处理和实时视图，响应查询\n\n特点：同时处理历史数据和实时数据，保证数据一致性（2024上论文题+案例题）",
     "tags": [
       "大数据架构"
     ]
