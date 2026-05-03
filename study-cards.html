@@ -3127,28 +3127,63 @@ if (typeof window !== 'undefined') {
         return escapeHtml(str).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       }
 
-      // 检测是否是表格
-      if (text.includes('|') && text.split('\n').length > 2) {
+      // 检测是否是表格（含单行表格）
+      const tableLines = text.split('\n').filter(l => l.trim().startsWith('|') && l.trim().endsWith('|'));
+      if (tableLines.length >= 1) {
         const lines = text.split('\n').filter(l => l.trim());
         let html = '<div class="table-wrapper"><table>';
         lines.forEach((line, i) => {
           if (line.match(/^[\s\-|:]+$/)) return; // 跳过分隔行
-
+          if (!line.includes('|')) {
+            // 非表格行，跳过
+            return;
+          }
           const cells = line.split('|').filter(c => c.trim()).map(c => processBold(c.trim()));
-          const tag = i === 0 ? 'th' : 'td';
+          const tag = (i === 0 && tableLines.length > 1) ? 'th' : 'td';
           html += '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
         });
         html += '</table></div>';
+        // 处理表格外的非管道行
+        const nonTableLines = text.split('\n').filter(l => l.trim() && !l.includes('|') && !l.match(/^[\s\-|:]+$/));
+        if (nonTableLines.length > 0) {
+          html += '<br>' + nonTableLines.map(l => processBold(l)).join('<br>');
+        }
         return html;
       }
 
-      // 处理列表
+      // 处理列表（无序 - 和有序 1. 2.）
       let result = text;
-      result = result.replace(/^- (.+)$/gm, (match, p1) => '<li>' + escapeHtml(p1) + '</li>');
-      if (result.includes('<li>')) {
+      const hasUnorderedList = /^- .+$/m.test(result);
+      const hasOrderedList = /^\d+\. .+$/m.test(result);
+
+      if (hasUnorderedList || hasOrderedList) {
+        const lines = result.split('\n');
+        const htmlLines = lines.map(line => {
+          const ulMatch = line.match(/^- (.+)$/);
+          if (ulMatch) {
+            return '<li>' + processBold(ulMatch[1]) + '</li>';
+          }
+          const olMatch = line.match(/^\d+\.\s*(.+)$/);
+          if (olMatch) {
+            return '<oli>' + processBold(olMatch[1]) + '</oli>';
+          }
+          return processBold(line);
+        });
+        result = htmlLines.join('\n');
+        // 包裹无序列表
         result = result.replace(/((?:<li>.+<\/li>\n?)+)/g, '<ul>$1</ul>');
+        // 包裹有序列表（用临时 <oli> 标记）
+        result = result.replace(/((?:<oli>.+<\/oli>\n?)+)/g, function(match) {
+          return '<ol>' + match.replace(/<\/?oli>/g, function(tag) {
+            return tag.replace('oli', 'li');
+          }) + '</ol>';
+        });
+      } else {
+        result = processBold(result);
       }
-      result = processBold(result);
+      // 清理列表标签之间的换行，避免多余 <br>
+      result = result.replace(/<\/li>\n<li>/g, '</li><li>');
+      result = result.replace(/<\/li>\n<oli>/g, '</li><oli>');
       result = result.replace(/\n/g, '<br>');
       return result;
     }
