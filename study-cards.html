@@ -203,7 +203,6 @@
       padding: 20px 16px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
     }
 
     .card-front {
@@ -217,7 +216,8 @@
       -webkit-transform: rotateY(180deg);
       justify-content: flex-start;
       align-items: stretch;
-      overflow: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       padding-top: 40px;
     }
 
@@ -257,10 +257,7 @@
     .card-back .card-content {
       font-size: 14px;
       text-align: left;
-      overflow-y: auto;
-      overflow-x: hidden;
       flex: 1;
-      -webkit-overflow-scrolling: touch;
     }
 
     /* 竖向块布局（3列+表格） */
