@@ -1,0 +1,2959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>系统架构设计师 - 闪卡学习</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --text-primary: #000000;
+      --text-secondary: #666666;
+      --border-color: #dddddd;
+      --button-bg: #007aff;
+      --button-text: #ffffff;
+      --red-card: #ff6b6b;
+      --yellow-card: #ffd43b;
+      --green-card: #51cf66;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #1c1c1e;
+        --bg-secondary: #2c2c2e;
+        --text-primary: #ffffff;
+        --text-secondary: #adadad;
+        --border-color: #3a3a3c;
+        --button-bg: #0a84ff;
+        --shadow: rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--bg-secondary);
+      z-index: 1000;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--red-card), var(--yellow-card), var(--green-card));
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .stats-panel {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      right: 0;
+      background: var(--bg-primary);
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px var(--shadow);
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .stats-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stats-label {
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+
+    .stats-value {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .filter-panel {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: var(--bg-primary);
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px var(--shadow);
+      z-index: 998;
+      display: none;
+    }
+
+    .filter-panel.active {
+      display: block;
+    }
+
+    .filter-group {
+      margin-bottom: 12px;
+    }
+
+    .filter-title {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      background: var(--button-bg);
+      color: var(--button-text);
+      border-color: var(--button-bg);
+    }
+
+    .card-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 600px;
+      height: 60vh;
+      max-height: 500px;
+      perspective: 1000px;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px var(--shadow);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+    }
+
+    .card-front {
+      z-index: 2;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    .card-color-indicator {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .card-chapter {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-align: right;
+      max-width: 60%;
+    }
+
+    .card-content {
+      font-size: 20px;
+      line-height: 1.6;
+      text-align: center;
+      width: 100%;
+    }
+
+    .card-back .card-content {
+      font-size: 16px;
+      text-align: left;
+    }
+
+    .card-back table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 13px;
+    }
+
+    .card-back th,
+    .card-back td {
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      text-align: left;
+    }
+
+    .card-back th {
+      background: var(--bg-secondary);
+      font-weight: 600;
+    }
+
+    .buttons-container {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .action-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px var(--shadow);
+      color: var(--button-text);
+    }
+
+    .btn-again {
+      background: #ff6b6b;
+    }
+
+    .btn-hard {
+      background: #ffa94d;
+    }
+
+    .btn-good {
+      background: #51cf66;
+    }
+
+    .btn-easy {
+      background: #339af0;
+    }
+
+    .action-btn:active {
+      transform: scale(0.95);
+    }
+
+    .fab-menu {
+      position: fixed;
+      bottom: 120px;
+      right: 20px;
+      z-index: 1001;
+    }
+
+    .fab-button {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .fab-button:active {
+      transform: scale(0.9);
+    }
+
+    .empty-state {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .empty-state-text {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .empty-state-subtext {
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .stats-item {
+        font-size: 12px;
+      }
+
+      .stats-value {
+        font-size: 14px;
+      }
+
+      .card-content {
+        font-size: 18px;
+      }
+
+      .action-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+
+      .buttons-container {
+        gap: 8px;
+        bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+
+  <div class="stats-panel">
+    <div class="stats-item">
+      <span class="stats-label">今日</span>
+      <span class="stats-value" id="statToday">0</span>
+    </div>
+    <div class="stats-item">
+      <span class="stats-label">待复习</span>
+      <span class="stats-value" id="statDue">0</span>
+    </div>
+    <div class="stats-item">
+      <span class="stats-label">新卡</span>
+      <span class="stats-value" id="statNew">0</span>
+    </div>
+    <div class="stats-item">
+      <span class="stats-label">已掌握</span>
+      <span class="stats-value" id="statMastery">0%</span>
+    </div>
+  </div>
+
+  <div class="filter-panel" id="filterPanel">
+    <div class="filter-group">
+      <div class="filter-title">颜色筛选</div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="color" data-value="all">全部</button>
+        <button class="filter-btn" data-filter="color" data-value="red">🔴 红卡</button>
+        <button class="filter-btn" data-filter="color" data-value="yellow">🟡 黄卡</button>
+        <button class="filter-btn" data-filter="color" data-value="green">🟢 绿卡</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-title">章节筛选</div>
+      <div class="filter-buttons" id="chapterFilters">
+        <button class="filter-btn active" data-filter="chapter" data-value="all">全部章节</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-container" id="cardContainer" style="display:none;">
+    <div class="card" id="card">
+      <div class="card-face card-front">
+        <div class="card-color-indicator" id="colorIndicator"></div>
+        <div class="card-chapter" id="cardChapter"></div>
+        <div class="card-content" id="cardFront"></div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-color-indicator" id="colorIndicatorBack"></div>
+        <div class="card-chapter" id="cardChapterBack"></div>
+        <div class="card-content" id="cardBack"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <div class="empty-state-icon">🎉</div>
+    <div class="empty-state-text">今日学习完成!</div>
+    <div class="empty-state-subtext">明天继续加油</div>
+  </div>
+
+  <div class="buttons-container" id="buttonsContainer" style="display:none;">
+    <button class="action-btn btn-again" onclick="rateCard(1)">
+      忘了<br><small>1分钟</small>
+    </button>
+    <button class="action-btn btn-hard" onclick="rateCard(2)">
+      困难<br><small>今天</small>
+    </button>
+    <button class="action-btn btn-good" onclick="rateCard(3)">
+      良好<br><small id="goodInterval">6天</small>
+    </button>
+    <button class="action-btn btn-easy" onclick="rateCard(4)">
+      简单<br><small id="easyInterval">10天</small>
+    </button>
+  </div>
+
+  <div class="fab-menu">
+    <button class="fab-button" onclick="toggleFilter()">⚙️</button>
+  </div>
+
+  <script>
+    /**
+ * SM-2 间隔重复算法
+ * https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
+ */
+
+/**
+ * 计算下次复习间隔
+ * @param {number} quality - 评分 0-5 (0=完全忘记, 3=困难, 4=容易, 5=非常容易)
+ * @param {number} repetitions - 连续正确次数
+ * @param {number} easeFactor - 容易度因子(>=1.3)
+ * @param {number} interval - 当前间隔(天)
+ * @returns {{interval: number, repetitions: number, easeFactor: number}}
+ */
+function calculateSM2(quality, repetitions, easeFactor, interval) {
+  // 输入验证
+  if (quality < 0 || quality > 5) {
+    throw new Error('Quality must be between 0 and 5');
+  }
+  if (easeFactor < 1.3) {
+    easeFactor = 1.3;
+  }
+
+  let newRepetitions = repetitions;
+  let newEaseFactor = easeFactor;
+  let newInterval = interval;
+
+  // 评分 < 3: 重新开始
+  if (quality < 3) {
+    newRepetitions = 0;
+    newInterval = 1; // 1天后重新学习
+  } else {
+    // 评分 >= 3: 继续复习
+    if (repetitions === 0) {
+      newInterval = 1;
+    } else if (repetitions === 1) {
+      newInterval = 6;
+    } else {
+      newInterval = Math.round(interval * easeFactor);
+    }
+    newRepetitions = repetitions + 1;
+  }
+
+  // 更新容易度因子
+  newEaseFactor = easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+  if (newEaseFactor < 1.3) {
+    newEaseFactor = 1.3;
+  }
+
+  return {
+    interval: newInterval,
+    repetitions: newRepetitions,
+    easeFactor: parseFloat(newEaseFactor.toFixed(2))
+  };
+}
+
+/**
+ * 映射 Anki 风格按钮到 SM-2 评分
+ * @param {number} buttonType - 1=忘了, 2=困难, 3=良好, 4=简单
+ * @returns {number} SM-2 quality (0-5)
+ */
+function mapButtonToQuality(buttonType) {
+  const mapping = {
+    1: 0, // 忘了 -> 完全忘记
+    2: 3, // 困难 -> 勉强记得
+    3: 4, // 良好 -> 正确但费力
+    4: 5  // 简单 -> 完美回忆
+  };
+  return mapping[buttonType] !== undefined ? mapping[buttonType] : 3;
+}
+
+/**
+ * 计算下次复习时间(毫秒时间戳)
+ * @param {number} intervalDays - 间隔天数
+ * @returns {number} 时间戳
+ */
+function getNextReviewDate(intervalDays) {
+  const now = Date.now();
+  return now + intervalDays * 24 * 60 * 60 * 1000;
+}
+
+/**
+ * 判断是否到期需要复习
+ * @param {number} nextReview - 下次复习时间戳
+ * @returns {boolean}
+ */
+function isDue(nextReview) {
+  return Date.now() >= nextReview;
+}
+
+// 浏览器全局变量
+
+if (typeof window !== 'undefined') {
+  window.SM2 = {
+    calculateSM2,
+    mapButtonToQuality,
+    getNextReviewDate,
+    isDue
+  };
+}
+  </script>
+
+  <script>
+    /**
+ * 卡片队列管理
+ * 负责筛选、排序、状态追踪
+ */
+
+/**
+ * 卡片状态
+ */
+const CardState = {
+  NEW: 'new',           // 新卡
+  LEARNING: 'learning', // 学习中
+  REVIEW: 'review',     // 复习
+  MATURE: 'mature'      // 已掌握 (interval >= 21天)
+};
+
+/**
+ * 初始化卡片状态
+ * @param {Object} card - 卡片数据
+ * @returns {Object} 带状态的卡片
+ */
+function initCardState(card) {
+  return {
+    ...card,
+    id: card.id || generateId(card),
+    state: CardState.NEW,
+    repetitions: 0,
+    easeFactor: 2.5,
+    interval: 0,
+    nextReview: Date.now(), // 新卡立即可学
+    lastReview: null,
+    reviewCount: 0
+  };
+}
+
+/**
+ * 生成卡片ID
+ */
+function generateId(card) {
+  return `${card.chapter}-${card.front.substring(0, 20)}`.replace(/[^a-zA-Z0-9-]/g, '');
+}
+
+/**
+ * 筛选卡片
+ * @param {Array} cards - 卡片列表
+ * @param {Object} filters - {colors: ['red'], chapters: ['1. xxx']}
+ * @returns {Array} 筛选后的卡片
+ */
+function filterCards(cards, filters) {
+  let result = cards;
+
+  if (filters.colors && filters.colors.length > 0) {
+    result = result.filter(card => filters.colors.includes(card.color));
+  }
+
+  if (filters.chapters && filters.chapters.length > 0) {
+    result = result.filter(card => filters.chapters.includes(card.chapter));
+  }
+
+  return result;
+}
+
+/**
+ * 获取到期卡片
+ * @param {Array} cards - 卡片列表
+ * @returns {Array} 到期卡片
+ */
+function getDueCards(cards) {
+  const now = Date.now();
+  return cards.filter(card => card.nextReview <= now);
+}
+
+/**
+ * 获取新卡
+ * @param {Array} cards - 卡片列表
+ * @param {number} limit - 限制数量
+ * @returns {Array} 新卡
+ */
+function getNewCards(cards, limit = 20) {
+  return cards
+    .filter(card => card.state === CardState.NEW)
+    .slice(0, limit);
+}
+
+/**
+ * 构建学习队列
+ * @param {Array} cards - 所有卡片
+ * @param {number} newCardLimit - 每日新卡限制
+ * @returns {Array} 今日学习队列
+ */
+function buildQueue(cards, newCardLimit = 20) {
+  const dueCards = getDueCards(cards).filter(card => card.state !== CardState.NEW);
+  const newCards = getNewCards(cards, newCardLimit);
+
+  // 排序: 到期时间越早越靠前
+  dueCards.sort((a, b) => a.nextReview - b.nextReview);
+
+  return [...dueCards, ...newCards];
+}
+
+/**
+ * 更新卡片状态
+ * @param {Object} card - 卡片
+ * @param {Object} sm2Result - SM-2算法结果 {interval, repetitions, easeFactor}
+ * @param {number} nextReview - 下次复习时间戳
+ * @returns {Object} 更新后的卡片
+ */
+function updateCardState(card, sm2Result, nextReview) {
+  const newCard = {
+    ...card,
+    repetitions: sm2Result.repetitions,
+    easeFactor: sm2Result.easeFactor,
+    interval: sm2Result.interval,
+    nextReview: nextReview,
+    lastReview: Date.now(),
+    reviewCount: card.reviewCount + 1
+  };
+
+  // 更新状态
+  if (sm2Result.repetitions === 0) {
+    newCard.state = CardState.LEARNING;
+  } else if (sm2Result.interval >= 21) {
+    newCard.state = CardState.MATURE;
+  } else {
+    newCard.state = CardState.REVIEW;
+  }
+
+  return newCard;
+}
+
+/**
+ * 统计数据
+ * @param {Array} cards - 卡片列表
+ * @returns {Object} 统计结果
+ */
+function getStats(cards) {
+  const total = cards.length;
+  const byState = {
+    new: cards.filter(c => c.state === CardState.NEW).length,
+    learning: cards.filter(c => c.state === CardState.LEARNING).length,
+    review: cards.filter(c => c.state === CardState.REVIEW).length,
+    mature: cards.filter(c => c.state === CardState.MATURE).length
+  };
+  const due = getDueCards(cards).length;
+  const reviewedToday = cards.filter(c => {
+    if (!c.lastReview) return false;
+    const today = new Date().setHours(0, 0, 0, 0);
+    return c.lastReview >= today;
+  }).length;
+
+  return {
+    total,
+    byState,
+    due,
+    reviewedToday,
+    masteryRate: total > 0 ? ((byState.mature / total) * 100).toFixed(1) : 0
+  };
+}
+
+/**
+ * 获取所有章节列表
+ * @param {Array} cards - 卡片列表
+ * @returns {Array} 章节列表
+ */
+function getChapters(cards) {
+  const chapters = new Set();
+  cards.forEach(card => chapters.add(card.chapter));
+  return Array.from(chapters).sort();
+}
+
+// 浏览器全局变量
+
+if (typeof window !== 'undefined') {
+  window.CardQueue = {
+    CardState,
+    initCardState,
+    filterCards,
+    getDueCards,
+    getNewCards,
+    buildQueue,
+    updateCardState,
+    getStats,
+    getChapters
+  };
+}
+  </script>
+
+  <script>
+    const CARDS_DATA = [
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "五大架构风格的对比/分类是什么?",
+    "back": "| 风格分类 | 子风格 | 核心特征 | 适用场景 |\n|---------|--------|---------|---------|\n| **数据流风格** | 批处理序列 | 每步必须前一步完成，数据以整体传递 | 数据处理流水线 |\n| | 管道/过滤器 | 构件=过滤器，每个有输入输出，增量处理 | 编译器、Unix管道 |\n| **调用/返回风格** | 主程序/子程序 | 层次分解，逐步求精 | 传统结构化程序 |\n| | 面向对象 | 数据+操作封装为对象 | OOP系统 |\n| | 层次结构 | 每层为上层服务，作下层客户 | 网络协议、OS |\n| **独立构件风格** | 进程通信 | 构件=进程，通过消息传递交互 | 分布式系统 |\n| | 事件驱动(隐式调用) | 触发/广播事件，不直接调用 | GUI、消息系统 |\n| **虚拟机风格** | 解释器 | 四部分：程序+解释引擎+程序内部状态+被解释程序当前状态 | 脚本语言、规则引擎 |\n| | 基于规则的系统 | 规则集+推理引擎+工作内存 | 专家系统、AI推理 |\n| **仓库/数据共享风格** | 数据库系统 | 构件控制共享数据=传统数据库 | 信息管理系统 |\n| | 黑板系统 | 知识源(KS)响应黑板变化，控制器决定哪个KS执行 | 语音识别、信号处理 |",
+    "tags": [
+      "五大架构风格"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "C/S 与 B/S 架构的对比/分类是什么?",
+    "back": "| 对比维度 | C/S | B/S |\n|---------|-----|-----|\n| 客户端 | 需安装专用客户端 | 浏览器即可 |\n| 维护成本 | 高（需更新客户端） | 低（服务端更新） |\n| 安全性 | 较高 | 较低 |\n| 性能 | 客户端可分担计算 | 服务器压力大 |\n| 三层C/S | 表示层-功能层-数据层 | 浏览器-Web服务器-数据库 |",
+    "tags": [
+      "C/S 与 B/S 架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "面向服务架构: 三大角色是什么?",
+    "back": "服务提供者、服务请求者、服务注册中心",
+    "tags": [
+      "面向服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "面向服务架构: 三大操作是什么?",
+    "back": "发布(UDDI)、发现(UDDI)、绑定(SOAP)",
+    "tags": [
+      "面向服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "面向服务架构: WSDL是什么?",
+    "back": "描述服务接口",
+    "tags": [
+      "面向服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "面向服务架构: ESB（企业服务总线）核心功能是什么?",
+    "back": "- 消息路由与寻址（位置透明性）",
+    "tags": [
+      "面向服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "什么是面向服务架构?",
+    "back": "三大角色：服务提供者、服务请求者、服务注册中心",
+    "tags": [
+      "面向服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "微服务架构的对比/分类是什么?",
+    "back": "| 对比维度 | SOA | 微服务 |\n|---------|-----|-------|\n| 服务粒度 | 粗粒度 | 细粒度 |\n| 通信 | ESB（重量级） | RESTful/轻量级消息 |\n| 数据管理 | 共享数据库 | 每个服务独立数据库 |\n| 治理 | 集中治理 | 去中心化治理 |",
+    "tags": [
+      "微服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "微服务架构: 核心思想是什么?",
+    "back": "将单体应用拆分为一组小型服务，每个服务独立部署、独立进程",
+    "tags": [
+      "微服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "微服务架构: 与SOA对比是什么?",
+    "back": "| 对比维度 | SOA | 微服务 |",
+    "tags": [
+      "微服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "微服务架构: 关键技术是什么?",
+    "back": "服务注册发现、API网关、熔断器(Circuit Breaker)、负载均衡、配置中心",
+    "tags": [
+      "微服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "微服务架构: 服务网格(Service Mesh)是什么?",
+    "back": "2024-2025新增考点，Sidecar模式",
+    "tags": [
+      "微服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "什么是微服务架构?",
+    "back": "核心思想：将单体应用拆分为一组小型服务，每个服务独立部署、独立进程",
+    "tags": [
+      "微服务架构"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "MVC 模式: Model（模型）是什么?",
+    "back": "业务数据和业务逻辑，响应状态查询，通知视图更新",
+    "tags": [
+      "MVC 模式"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "MVC 模式: View（视图）是什么?",
+    "back": "显示模型状态，接受用户交互",
+    "tags": [
+      "MVC 模式"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "MVC 模式: Controller（控制器）是什么?",
+    "back": "接受用户输入，调用模型，选择视图",
+    "tags": [
+      "MVC 模式"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "MVC 模式: 变体是什么?",
+    "back": "MVP（Presenter替代Controller，2024上考过）、MVVM",
+    "tags": [
+      "MVC 模式"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "red",
+    "front": "什么是MVC 模式?",
+    "back": "Model（模型）：业务数据和业务逻辑，响应状态查询，通知视图更新",
+    "tags": [
+      "MVC 模式"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "yellow",
+    "front": "什么是C2 风格?",
+    "back": "通过连接件绑定的并行构件网络",
+    "tags": [
+      "C2 风格"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "yellow",
+    "front": "DSSA: 三个基本活动是什么?",
+    "back": "领域分析→领域设计→领域实现",
+    "tags": [
+      "DSSA"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "yellow",
+    "front": "DSSA: 参与人员是什么?",
+    "back": "领域专家、领域分析师、领域设计人员、领域实现人员",
+    "tags": [
+      "DSSA"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "yellow",
+    "front": "什么是DSSA?",
+    "back": "三个基本活动：领域分析→领域设计→领域实现",
+    "tags": [
+      "DSSA"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "yellow",
+    "front": "ABSD: 架构复审是什么?",
+    "back": "由**外部人员**参加（用户代表、领域专家）",
+    "tags": [
+      "ABSD"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "yellow",
+    "front": "什么是ABSD?",
+    "back": "架构驱动，强调由商业、质量和功能需求的组合驱动",
+    "tags": [
+      "ABSD"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "green",
+    "front": "什么是REST 架构风格?",
+    "back": "资源通过 URI 标识",
+    "tags": [
+      "REST 架构风格"
+    ]
+  },
+  {
+    "chapter": "1. 软件架构设计",
+    "color": "green",
+    "front": "什么是CBAM?",
+    "back": "用于在架构决策中考虑经济因素",
+    "tags": [
+      "CBAM"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "red",
+    "front": "六大质量属性的对比/分类是什么?",
+    "back": "| 质量属性 | 定义 | 关键架构策略 |\n|---------|------|------------|\n| **性能(Performance)** | 响应时间/吞吐量 | 增加计算资源、减少计算开销、引入并发、资源调度 |\n| **可用性(Availability)** | 系统正常运行时间比例 | 心跳检测、Ping/Echo、主动冗余、被动冗余、选举 |\n| **安全性(Security)** | 抵抗未授权访问能力 | 入侵检测、用户认证、用户授权、追踪审计 |\n| **可修改性(Modifiability)** | 修改的难易程度 | 接口-实现分离、信息隐藏、抽象、限制通信路径 |\n| **可靠性(Reliability)** | 无故障运行能力 | 容错、冗余、检错 |\n| **可测试性(Testability)** | 测试发现缺陷的难易 | 记录/回放、接口与实现分离、内置监控 |",
+    "tags": [
+      "六大质量属性"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "red",
+    "front": "质量属性场景六要素的对比/分类是什么?",
+    "back": "| 要素 | 说明 | 示例 |\n|-----|------|------|\n| **刺激源(Source)** | 产生刺激的实体 | 用户、外部系统、攻击者 |\n| **刺激(Stimulus)** | 到达系统的事件 | 请求、故障、攻击 |\n| **环境(Environment)** | 刺激发生时系统状态 | 正常运行、过载、启动中 |\n| **制品(Artifact)** | 被刺激影响的部分 | 系统、子系统、构件 |\n| **响应(Response)** | 系统的反应 | 处理请求、记录日志、通知 |\n| **响应度量(Measure)** | 可度量的响应指标 | 延迟<2s、可用性99.99% |",
+    "tags": [
+      "质量属性场景六要素"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "red",
+    "front": "敏感点、权衡点、风险点的对比/分类是什么?",
+    "back": "| 概念 | 定义 | 举例 |\n|-----|------|-----|\n| **敏感点(Sensitivity Point)** | 一个或多个构件的特性，影响**某个**质量属性 | 加密级别影响安全性和性能 |\n| **权衡点(Tradeoff Point)** | 影响**多个**质量属性的敏感点 | 加密级别同时影响安全性↑和性能↓ |\n| **风险点(Risk)** | 潜在问题的架构决策 | 某组件故障可能导致全系统不可用 |\n| **非风险点(Non-risk)** | 经分析可接受的架构决策 | 冗余设计已覆盖该故障场景 |",
+    "tags": [
+      "敏感点、权衡点、风险点"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "red",
+    "front": "ATAM: 目的是什么?",
+    "back": "评估架构决策的质量属性之间的权衡",
+    "tags": [
+      "ATAM"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "red",
+    "front": "ATAM: 产出是什么?",
+    "back": "质量属性效用树、风险/非风险、敏感点/权衡点",
+    "tags": [
+      "ATAM"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "red",
+    "front": "ATAM: 效用树(Utility Tree)是什么?",
+    "back": "- 根节点=整体效用",
+    "tags": [
+      "ATAM"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "red",
+    "front": "ATAM: 两轮活动、九个步骤是什么?",
+    "back": "- 第一轮（以架构为中心）：演示商业驱动→演示架构→识别架构方法→生成质量属性效用树→分析架构方法",
+    "tags": [
+      "ATAM"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "red",
+    "front": "什么是ATAM?",
+    "back": "目的：评估架构决策的质量属性之间的权衡",
+    "tags": [
+      "ATAM"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "yellow",
+    "front": "什么是SAAM?",
+    "back": "最初用于分析架构可修改性，后扩展到其他质量属性",
+    "tags": [
+      "SAAM"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "green",
+    "front": "CBAM / ARID: CBAM是什么?",
+    "back": "成本效益分析法，在ATAM基础上加入成本因素",
+    "tags": [
+      "CBAM / ARID"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "green",
+    "front": "CBAM / ARID: ARID是什么?",
+    "back": "活动评审中间设计，结合ATAM和ADR",
+    "tags": [
+      "CBAM / ARID"
+    ]
+  },
+  {
+    "chapter": "2. 系统质量属性与架构评估",
+    "color": "green",
+    "front": "什么是CBAM / ARID?",
+    "back": "CBAM：成本效益分析法，在ATAM基础上加入成本因素",
+    "tags": [
+      "CBAM / ARID"
+    ]
+  },
+  {
+    "chapter": "3. 设计模式",
+    "color": "red",
+    "front": "设计模式分类与高频模式的对比/分类是什么?",
+    "back": "| 模式 | 意图 | 频率 |\n|-----|------|------|\n| **工厂方法(Factory Method)** | 定义创建对象的接口，让子类决定实例化哪个类 | 🔴 |\n| **抽象工厂(Abstract Factory)** | 创建一系列相关对象，不指定具体类 | 🔴 |\n| **单例(Singleton)** | 保证一个类只有一个实例 | 🔴 |\n| 建造者(Builder) | 将复杂对象的构建与表示分离 | 🟡 |\n| 原型(Prototype) | 通过复制原型创建新对象 | 🟢 |\n| 模式 | 意图 | 频率 |\n|-----|------|------|\n| **适配器(Adapter)** | 将一个类的接口转换为客户期望的另一个接口 | 🔴 |\n| **代理(Proxy)** | 为其他对象提供一种代理以控制访问 | 🔴 |\n| **外观(Facade)** | 为子系统提供统一的高层接口 | 🟡 |\n| **装饰(Decorator)** | 动态地给对象添加额外职责 | 🟡 |\n| 桥接(Bridge) | 将抽象与实现分离，使二者独立变化 | 🟡 |\n| 组合(Composite) | 将对象组合成树形结构表示\"部分-整体\"层次 | 🟢 |\n| 享元(Flyweight) | 运用共享技术有效支持大量细粒度对象 | 🟢 |\n| 模式 | 意图 | 频率 |\n|-----|------|------|\n| **观察者(Observer)** | 定义一对多依赖，状态改变时通知所有依赖者 | 🔴 |\n| **策略(Strategy)** | 定义一系列算法，将每一个封装起来，使它们可以互相替换 | 🔴 |\n| **模板方法(Template Method)** | 定义算法骨架，将某些步骤延迟到子类 | 🟡 |\n| **状态(State)** | 允许对象在内部状态改变时改变它的行为 | 🟡 |\n| 命令(Command) | 将请求封装成对象 | 🟡 |\n| 中介者(Mediator) | 用一个中介对象封装一系列对象交互 | 🟢 |\n| 迭代器(Iterator) | 提供一种方法顺序访问聚合对象中各元素 | 🟢 |\n| 职责链(Chain of Responsibility) | 将请求沿着处理者链传递 | 🟢 |\n| 备忘录(Memento) | 捕获对象内部状态以便恢复 | 🟢 |\n| 访问者(Visitor) | 在不改变类的前提下定义新操作 | 🟢 |\n| 解释器(Interpreter) | 给定一个语言，定义文法表示和解释器 | 🟢 |",
+    "tags": [
+      "设计模式分类与高频模式"
+    ]
+  },
+  {
+    "chapter": "3. 设计模式",
+    "color": "red",
+    "front": "设计模式七大原则的对比/分类是什么?",
+    "back": "| 原则 | 核心思想 |\n|-----|---------|\n| **开闭原则(OCP)** | 对扩展开放，对修改关闭 |\n| **里氏替换(LSP)** | 子类必须能替换父类 |\n| **依赖倒置(DIP)** | 依赖抽象，不依赖具体 |\n| **接口隔离(ISP)** | 使用多个专门接口而非单一总接口 |\n| **单一职责(SRP)** | 一个类只有一个引起变化的原因 |\n| **迪米特法则(LoD)** | 最少知识原则，只与直接朋友通信 |\n| **组合/聚合复用** | 优先使用组合而非继承 |",
+    "tags": [
+      "设计模式七大原则"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "red",
+    "front": "类之间的关系的对比/分类是什么?",
+    "back": "| 关系 | 符号 | 强度 | 说明 |\n|-----|------|------|------|\n| **依赖** | - - - -> | 最弱 | 使用关系，临时的 |\n| **关联** | ——— | 中 | 结构关系，长期的 |\n| **聚合** | ◇——— | 较强 | 整体-部分，可分离(has-a) |\n| **组合** | ◆——— | 强 | 整体-部分，不可分离，同生共死 |\n| **泛化** | ——▷ | 强 | 继承关系(is-a) |\n| **实现** | - - -▷ | 强 | 接口实现 |",
+    "tags": [
+      "类之间的关系"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "red",
+    "front": "用例图关系: 包含(include)是什么?",
+    "back": "基用例 --include--> 被包含用例（必然执行）",
+    "tags": [
+      "用例图关系"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "red",
+    "front": "用例图关系: 扩展(extend)是什么?",
+    "back": "扩展用例 --extend--> 基用例（条件执行）",
+    "tags": [
+      "用例图关系"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "red",
+    "front": "用例图关系: 泛化(generalization)是什么?",
+    "back": "子用例 ——▷ 父用例",
+    "tags": [
+      "用例图关系"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "red",
+    "front": "什么是用例图关系?",
+    "back": "包含(include)：基用例 --include--> 被包含用例（必然执行）",
+    "tags": [
+      "用例图关系"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "yellow",
+    "front": "4+1 视图模型的对比/分类是什么?",
+    "back": "| 视图 | 关注点 | 受众 |\n|-----|--------|------|\n| 逻辑视图 | 功能需求 → 类、对象 | 最终用户 |\n| 进程视图 | 并发、同步 | 系统集成者 |\n| 开发视图 | 软件组织结构 | 开发人员 |\n| 物理视图 | 软硬件映射、部署 | 系统工程师 |\n| 场景(+1) | 用例驱动，其他视图的冗余 | 所有人 |",
+    "tags": [
+      "4+1 视图模型"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "yellow",
+    "front": "顺序图 vs 通信图: 顺序图(Sequence Diagram)是什么?",
+    "back": "强调消息的时间顺序，有生命线",
+    "tags": [
+      "顺序图 vs 通信图"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "yellow",
+    "front": "顺序图 vs 通信图: 通信图(Communication Diagram)是什么?",
+    "back": "强调对象间的组织结构",
+    "tags": [
+      "顺序图 vs 通信图"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "yellow",
+    "front": "什么是顺序图 vs 通信图?",
+    "back": "顺序图(Sequence Diagram)：强调消息的时间顺序，有生命线",
+    "tags": [
+      "顺序图 vs 通信图"
+    ]
+  },
+  {
+    "chapter": "4. UML 建模",
+    "color": "green",
+    "front": "什么是状态图?",
+    "back": "描述对象的生命周期中的状态序列",
+    "tags": [
+      "状态图"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "软件开发模型的对比/分类是什么?",
+    "back": "| 模型 | 特点 | 适用场景 |\n|-----|------|---------|\n| **瀑布模型** | 线性顺序，文档驱动，阶段结束才进入下一阶段 | 需求明确、变更少 |\n| **原型模型** | 快速构建原型→用户评估→迭代 | 需求不明确 |\n| **螺旋模型** | 瀑布+原型+**风险分析**，每轮迭代都有风险评估 | 大型、高风险项目 |\n| **增量模型** | 分批次交付，每次增加功能 | 需求可分解 |\n| **迭代模型** | 每次迭代产出可运行版本 | 需求渐进明确 |\n| **V模型** | 开发与测试对应（需求→验收，设计→集成，编码→单元） | 强调测试 |\n| **喷泉模型** | 面向对象，各阶段无明显边界 | OO开发 |",
+    "tags": [
+      "软件开发模型"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "敏捷开发方法: 核心价值观是什么?",
+    "back": "个体和互动 > 过程和工具；可工作的软件 > 文档；客户合作 > 合同谈判；响应变化 > 遵循计划",
+    "tags": [
+      "敏捷开发方法"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "敏捷开发方法: XP（极限编程）12个实践是什么?",
+    "back": "结对编程、持续集成、测试驱动、简单设计、重构、小版本发布、代码集体所有制、现场客户、40小时工作、系统隐喻、编码标准、计划游戏",
+    "tags": [
+      "敏捷开发方法"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "敏捷开发方法: Scrum是什么?",
+    "back": "Sprint（冲刺）、Product Backlog、Sprint Backlog、每日站会、Sprint评审、Sprint回顾",
+    "tags": [
+      "敏捷开发方法"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "敏捷开发方法: 特点是什么?",
+    "back": "适应性（非预设性）、面向人（非面向过程）",
+    "tags": [
+      "敏捷开发方法"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "什么是敏捷开发方法?",
+    "back": "核心价值观：个体和互动 > 过程和工具；可工作的软件 > 文档；客户合作 > 合同谈判；响应变化 > 遵循计划",
+    "tags": [
+      "敏捷开发方法"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "软件测试的对比/分类是什么?",
+    "back": "| 类别 | 方法 | 说明 |\n|-----|------|------|\n| **黑盒测试** | 等价类划分、边界值分析、因果图、错误推测 | 不看代码，只看功能 |\n| **白盒测试** | 语句覆盖、判定覆盖、条件覆盖、路径覆盖 | 看代码结构 |\n| **测试阶段** | 单元→集成→系统→验收 | 从小到大 |\n| **覆盖强度** | 语句<判定<条件<判定-条件<路径 | 越强发现缺陷越多 |",
+    "tags": [
+      "软件测试"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "软件测试: 回归测试是什么?",
+    "back": "修改后重新执行之前的测试用例",
+    "tags": [
+      "软件测试"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "red",
+    "front": "什么是软件测试?",
+    "back": "回归测试：修改后重新执行之前的测试用例",
+    "tags": [
+      "软件测试"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "yellow",
+    "front": "需求工程: 需求开发是什么?",
+    "back": "获取→分析→定义→验证",
+    "tags": [
+      "需求工程"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "yellow",
+    "front": "需求工程: 需求管理是什么?",
+    "back": "变更控制、版本控制、跟踪",
+    "tags": [
+      "需求工程"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "yellow",
+    "front": "需求工程: 需求分类是什么?",
+    "back": "功能需求、非功能需求(质量属性)、设计约束",
+    "tags": [
+      "需求工程"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "yellow",
+    "front": "什么是需求工程?",
+    "back": "需求开发：获取→分析→定义→验证",
+    "tags": [
+      "需求工程"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "yellow",
+    "front": "CMM/CMMI的对比/分类是什么?",
+    "back": "| 等级 | 名称 | 特征 |\n|-----|------|------|\n| 1 | 初始级 | 混乱、无序 |\n| 2 | 管理级/可重复级 | 有基本项目管理 |\n| 3 | 已定义级 | 组织级标准过程 |\n| 4 | 量化管理级 | 量化度量、统计分析 |\n| 5 | 优化级 | 持续改进 |",
+    "tags": [
+      "CMM/CMMI"
+    ]
+  },
+  {
+    "chapter": "5. 软件工程",
+    "color": "green",
+    "front": "什么是RUP 统一过程?",
+    "back": "四个阶段：初始→细化→构建→交付",
+    "tags": [
+      "RUP 统一过程"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "数据库范式的对比/分类是什么?",
+    "back": "| 范式 | 要求 | 解决的问题 |\n|-----|------|-----------|\n| **1NF** | 属性不可分（原子性） | 消除重复组 |\n| **2NF** | 非主属性完全函数依赖于候选键 | 消除部分依赖 |\n| **3NF** | 非主属性不传递依赖于候选键 | 消除传递依赖 |\n| **BCNF** | 每个决定因素都包含候选键 | 消除主属性对候选键的部分/传递依赖 |",
+    "tags": [
+      "数据库范式"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "数据库范式: 关系是什么?",
+    "back": "1NF ⊇ 2NF ⊇ 3NF ⊇ BCNF ⊇ 4NF ⊇ 5NF",
+    "tags": [
+      "数据库范式"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "什么是数据库范式?",
+    "back": "关系：1NF ⊇ 2NF ⊇ 3NF ⊇ BCNF ⊇ 4NF ⊇ 5NF",
+    "tags": [
+      "数据库范式"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "事务 ACID 特性的对比/分类是什么?",
+    "back": "| 特性 | 含义 |\n|-----|------|\n| **原子性(Atomicity)** | 事务中的操作要么全做，要么全不做 |\n| **一致性(Consistency)** | 事务执行前后数据库保持一致 |\n| **隔离性(Isolation)** | 多个事务并发执行互不干扰 |\n| **持久性(Durability)** | 事务提交后结果永久保存 |",
+    "tags": [
+      "事务 ACID 特性"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "Redis: 五大数据结构是什么?",
+    "back": "String、List、Hash、Set、Sorted Set(ZSet)",
+    "tags": [
+      "Redis"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "Redis: 持久化是什么?",
+    "back": "RDB（快照）vs AOF（追加日志）",
+    "tags": [
+      "Redis"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "Redis: 主从复制是什么?",
+    "back": "读写分离",
+    "tags": [
+      "Redis"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "Redis: 分布式锁是什么?",
+    "back": "SETNX + 过期时间（2024上考过）",
+    "tags": [
+      "Redis"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "Redis: 缓存策略是什么?",
+    "back": "Cache-Aside、Read-Through、Write-Through、Write-Behind",
+    "tags": [
+      "Redis"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "Redis: 缓存问题是什么?",
+    "back": "- 缓存穿透：查询不存在的key → 布隆过滤器/空值缓存",
+    "tags": [
+      "Redis"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "red",
+    "front": "什么是Redis?",
+    "back": "五大数据结构：String、List、Hash、Set、Sorted Set(ZSet)",
+    "tags": [
+      "Redis"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "yellow",
+    "front": "什么是E-R 模型?",
+    "back": "矩形→实体集、菱形→联系集、椭圆→属性、线段→连接",
+    "tags": [
+      "E-R 模型"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "yellow",
+    "front": "NoSQL 数据库的对比/分类是什么?",
+    "back": "| 类型 | 代表 | 特点 |\n|-----|------|------|\n| 键值型 | Redis | 高性能读写 |\n| 文档型 | MongoDB | 灵活Schema，JSON存储 |\n| 列族型 | HBase | 大规模分布式存储 |\n| 图数据库 | Neo4j | 关系查询高效 |",
+    "tags": [
+      "NoSQL 数据库"
+    ]
+  },
+  {
+    "chapter": "6. 数据库系统",
+    "color": "green",
+    "front": "什么是SQL 基础?",
+    "back": "INSERT、SELECT、GROUP BY、JOIN 等基本语法",
+    "tags": [
+      "SQL 基础"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "red",
+    "front": "流水线与加速比: 等时各段公式是什么?",
+    "back": "总时间 = (k + n - 1) × Δt，加速比 = nk/(k+n-1)",
+    "tags": [
+      "流水线与加速比"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "red",
+    "front": "流水线与加速比: Amdahl 定律是什么?",
+    "back": "加速比 = 1 / [(1-P) + P/S]，其中P=可并行比例，S=并行加速倍数",
+    "tags": [
+      "流水线与加速比"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "red",
+    "front": "什么是流水线与加速比?",
+    "back": "流水线周期 = 最慢段的执行时间",
+    "tags": [
+      "流水线与加速比"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "yellow",
+    "front": "存储体系: 层次结构是什么?",
+    "back": "寄存器→Cache→主存→辅存",
+    "tags": [
+      "存储体系"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "yellow",
+    "front": "存储体系: 虚拟存储器是什么?",
+    "back": "页式、段式、段页式",
+    "tags": [
+      "存储体系"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "yellow",
+    "front": "什么是存储体系?",
+    "back": "层次结构：寄存器→Cache→主存→辅存",
+    "tags": [
+      "存储体系"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "yellow",
+    "front": "编码与校验: 曼彻斯特编码是什么?",
+    "back": "每位中间有跳变，自带时钟同步",
+    "tags": [
+      "编码与校验"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "yellow",
+    "front": "编码与校验: 海明码是什么?",
+    "back": "检错纠错，校验位数 k 满足 2^k ≥ n+k+1",
+    "tags": [
+      "编码与校验"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "yellow",
+    "front": "编码与校验: CRC校验是什么?",
+    "back": "循环冗余校验，用于数据传输",
+    "tags": [
+      "编码与校验"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "yellow",
+    "front": "什么是编码与校验?",
+    "back": "曼彻斯特编码：每位中间有跳变，自带时钟同步",
+    "tags": [
+      "编码与校验"
+    ]
+  },
+  {
+    "chapter": "7. 计算机组成与体系结构",
+    "color": "green",
+    "front": "RISC vs CISC的对比/分类是什么?",
+    "back": "| 对比 | RISC | CISC |\n|-----|------|------|\n| 指令 | 定长、简单、少 | 变长、复杂、多 |\n| 寻址方式 | 少 | 多 |\n| 寄存器 | 多 | 少 |\n| 实现方式 | 硬布线 | 微程序 |",
+    "tags": [
+      "RISC vs CISC"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "red",
+    "front": "进程管理 / PV 操作: PV操作是什么?",
+    "back": "S=资源可用数，P(S)=申请一个资源(S-1)，V(S)=释放一个资源(S+1)",
+    "tags": [
+      "进程管理 / PV 操作"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "red",
+    "front": "进程管理 / PV 操作: 死锁条件是什么?",
+    "back": "互斥、占有等待、不剥夺、循环等待（四个同时满足）",
+    "tags": [
+      "进程管理 / PV 操作"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "red",
+    "front": "进程管理 / PV 操作: 死锁预防是什么?",
+    "back": "破坏四个条件之一",
+    "tags": [
+      "进程管理 / PV 操作"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "red",
+    "front": "进程管理 / PV 操作: 银行家算法是什么?",
+    "back": "安全序列判定",
+    "tags": [
+      "进程管理 / PV 操作"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "red",
+    "front": "什么是进程管理 / PV 操作?",
+    "back": "PV操作：S=资源可用数，P(S)=申请一个资源(S-1)，V(S)=释放一个资源(S+1)",
+    "tags": [
+      "进程管理 / PV 操作"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "yellow",
+    "front": "存储管理: 页式管理是什么?",
+    "back": "物理地址=页框号×页大小+页内偏移",
+    "tags": [
+      "存储管理"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "yellow",
+    "front": "存储管理: 页面置换算法是什么?",
+    "back": "FIFO、LRU、OPT、Clock",
+    "tags": [
+      "存储管理"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "yellow",
+    "front": "存储管理: 段式管理是什么?",
+    "back": "按逻辑段分配，段表(段号, 段长, 基地址)",
+    "tags": [
+      "存储管理"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "yellow",
+    "front": "什么是存储管理?",
+    "back": "页式管理：物理地址=页框号×页大小+页内偏移",
+    "tags": [
+      "存储管理"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "yellow",
+    "front": "文件管理: 索引文件是什么?",
+    "back": "直接索引、一级间接、二级间接、三级间接",
+    "tags": [
+      "文件管理"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "yellow",
+    "front": "文件管理: 位示图是什么?",
+    "back": "用位表示磁盘块是否空闲",
+    "tags": [
+      "文件管理"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "yellow",
+    "front": "什么是文件管理?",
+    "back": "索引文件：直接索引、一级间接、二级间接、三级间接",
+    "tags": [
+      "文件管理"
+    ]
+  },
+  {
+    "chapter": "8. 操作系统",
+    "color": "green",
+    "front": "什么是进程调度算法?",
+    "back": "FCFS、SJF、RR（时间片轮转）、优先级调度、多级反馈队列",
+    "tags": [
+      "进程调度算法"
+    ]
+  },
+  {
+    "chapter": "9. 计算机网络",
+    "color": "red",
+    "front": "OSI 七层 / TCP/IP 模型的对比/分类是什么?",
+    "back": "| OSI七层 | 功能 | 对应协议 | TCP/IP |\n|--------|------|---------|--------|\n| 应用层 | 用户接口 | HTTP/FTP/SMTP/DNS | 应用层 |\n| 表示层 | 数据格式转换/加密 | JPEG/ASCII | 应用层 |\n| 会话层 | 会话管理 | RPC/NFS | 应用层 |\n| 传输层 | 端到端可靠传输 | TCP/UDP | 传输层 |\n| 网络层 | 路由选择 | IP/ICMP/ARP | 网络层 |\n| 数据链路层 | 帧传输/差错控制 | PPP/HDLC | 数据链路层 |\n| 物理层 | 比特流传输 | RS-232 | 物理层 |",
+    "tags": [
+      "OSI 七层 / TCP/IP 模型"
+    ]
+  },
+  {
+    "chapter": "9. 计算机网络",
+    "color": "yellow",
+    "front": "子网划分与IP计算: 子网掩码是什么?",
+    "back": "确定网络号和主机号的边界",
+    "tags": [
+      "子网划分与IP计算"
+    ]
+  },
+  {
+    "chapter": "9. 计算机网络",
+    "color": "yellow",
+    "front": "子网划分与IP计算: CIDR是什么?",
+    "back": "无类域间路由，如 192.168.1.0/24",
+    "tags": [
+      "子网划分与IP计算"
+    ]
+  },
+  {
+    "chapter": "9. 计算机网络",
+    "color": "yellow",
+    "front": "什么是子网划分与IP计算?",
+    "back": "子网掩码：确定网络号和主机号的边界",
+    "tags": [
+      "子网划分与IP计算"
+    ]
+  },
+  {
+    "chapter": "9. 计算机网络",
+    "color": "yellow",
+    "front": "什么是信道容量计算?",
+    "back": "奈奎斯特定理（无噪声）：C = 2W × log₂V (bps)，W=带宽Hz，V=信号状态数",
+    "tags": [
+      "信道容量计算"
+    ]
+  },
+  {
+    "chapter": "9. 计算机网络",
+    "color": "green",
+    "front": "什么是常用协议端口?",
+    "back": "HTTP:80, HTTPS:443, FTP:20/21, SSH:22, SMTP:25, DNS:53, Telnet:23",
+    "tags": [
+      "常用协议端口"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "red",
+    "front": "加密算法分类的对比/分类是什么?",
+    "back": "| 类型 | 算法 | 密钥 | 特点 |\n|-----|------|------|------|\n| **对称加密** | DES、3DES、AES、RC4、IDEA | 加密解密同一密钥 | 速度快，密钥分发难 |\n| **非对称加密** | RSA、ECC、DSA | 公钥+私钥 | 速度慢，密钥管理方便 |\n| **摘要/哈希** | MD5、SHA-1、SHA-256 | 无密钥 | 不可逆，验证完整性 |",
+    "tags": [
+      "加密算法分类"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "red",
+    "front": "加密算法分类: 数字签名是什么?",
+    "back": "发送方用**私钥签名**，接收方用**公钥验证**",
+    "tags": [
+      "加密算法分类"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "red",
+    "front": "加密算法分类: 数字信封是什么?",
+    "back": "用对称密钥加密数据，用接收方公钥加密对称密钥",
+    "tags": [
+      "加密算法分类"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "red",
+    "front": "什么是加密算法分类?",
+    "back": "数字签名：发送方用私钥签名，接收方用公钥验证",
+    "tags": [
+      "加密算法分类"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "red",
+    "front": "PKI 体系: CA（证书颁发机构）是什么?",
+    "back": "签发数字证书",
+    "tags": [
+      "PKI 体系"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "red",
+    "front": "PKI 体系: RA（注册机构）是什么?",
+    "back": "审核证书申请",
+    "tags": [
+      "PKI 体系"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "red",
+    "front": "PKI 体系: 证书内容是什么?",
+    "back": "公钥、持有者信息、有效期、CA签名",
+    "tags": [
+      "PKI 体系"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "red",
+    "front": "什么是PKI 体系?",
+    "back": "CA（证书颁发机构）：签发数字证书",
+    "tags": [
+      "PKI 体系"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "yellow",
+    "front": "网络安全协议的对比/分类是什么?",
+    "back": "| 协议 | 层次 | 功能 |\n|-----|------|------|\n| IPSec | 网络层 | IP数据包加密认证 |\n| SSL/TLS | 传输层 | HTTPS基础 |\n| SSH | 应用层 | 远程安全登录 |\n| Kerberos | 应用层 | 身份认证 |",
+    "tags": [
+      "网络安全协议"
+    ]
+  },
+  {
+    "chapter": "10. 信息安全",
+    "color": "green",
+    "front": "什么是零信任架构?",
+    "back": "核心原则：永不信任，始终验证",
+    "tags": [
+      "零信任架构"
+    ]
+  },
+  {
+    "chapter": "11. 系统可靠性设计",
+    "color": "red",
+    "front": "可靠性计算的对比/分类是什么?",
+    "back": "| 结构 | 可靠度公式 | 说明 |\n|-----|-----------|------|\n| **串联** | R = R₁ × R₂ × ... × Rn | 全部正常才正常 |\n| **并联** | R = 1-(1-R₁)(1-R₂)...(1-Rn) | 一个正常就正常 |\n| **混联** | 先算局部再组合 | 分解为串并联组合 |",
+    "tags": [
+      "可靠性计算"
+    ]
+  },
+  {
+    "chapter": "11. 系统可靠性设计",
+    "color": "yellow",
+    "front": "容错设计技术的对比/分类是什么?",
+    "back": "| 技术 | 说明 |\n|-----|------|\n| **N版本程序设计** | N个团队独立开发同一功能，多数表决 |\n| **恢复块** | 主程序→验收测试→失败则切换备份程序 |\n| **冗余设计** | 硬件冗余、软件冗余、信息冗余、时间冗余 |\n| **检错技术** | 检测到错误后采取措施（如重试、报警） |",
+    "tags": [
+      "容错设计技术"
+    ]
+  },
+  {
+    "chapter": "11. 系统可靠性设计",
+    "color": "green",
+    "front": "可靠性指标: MTTF是什么?",
+    "back": "平均无故障时间",
+    "tags": [
+      "可靠性指标"
+    ]
+  },
+  {
+    "chapter": "11. 系统可靠性设计",
+    "color": "green",
+    "front": "可靠性指标: MTTR是什么?",
+    "back": "平均修复时间",
+    "tags": [
+      "可靠性指标"
+    ]
+  },
+  {
+    "chapter": "11. 系统可靠性设计",
+    "color": "green",
+    "front": "什么是可靠性指标?",
+    "back": "MTTF：平均无故障时间",
+    "tags": [
+      "可靠性指标"
+    ]
+  },
+  {
+    "chapter": "12. 项目管理基础",
+    "color": "yellow",
+    "front": "PERT 图 / 关键路径: 关键路径是什么?",
+    "back": "从起点到终点最长路径，决定项目最短工期",
+    "tags": [
+      "PERT 图 / 关键路径"
+    ]
+  },
+  {
+    "chapter": "12. 项目管理基础",
+    "color": "yellow",
+    "front": "什么是PERT 图 / 关键路径?",
+    "back": "关键路径：从起点到终点最长路径，决定项目最短工期",
+    "tags": [
+      "PERT 图 / 关键路径"
+    ]
+  },
+  {
+    "chapter": "12. 项目管理基础",
+    "color": "yellow",
+    "front": "什么是风险管理?",
+    "back": "风险识别→风险分析（定性+定量）→风险规划→风险监控",
+    "tags": [
+      "风险管理"
+    ]
+  },
+  {
+    "chapter": "12. 项目管理基础",
+    "color": "green",
+    "front": "什么是软件估算?",
+    "back": "功能点分析(FP)",
+    "tags": [
+      "软件估算"
+    ]
+  },
+  {
+    "chapter": "13. 数学与算法",
+    "color": "yellow",
+    "front": "排序算法复杂度的对比/分类是什么?",
+    "back": "| 算法 | 平均时间 | 最坏时间 | 空间 | 稳定 |\n|-----|---------|---------|------|------|\n| 冒泡 | O(n²) | O(n²) | O(1) | ✅ |\n| 快排 | O(nlogn) | O(n²) | O(logn) | ❌ |\n| 归并 | O(nlogn) | O(nlogn) | O(n) | ✅ |\n| 堆排 | O(nlogn) | O(nlogn) | O(1) | ❌ |\n| 插入 | O(n²) | O(n²) | O(1) | ✅ |\n| 选择 | O(n²) | O(n²) | O(1) | ❌ |",
+    "tags": [
+      "排序算法复杂度"
+    ]
+  },
+  {
+    "chapter": "13. 数学与算法",
+    "color": "yellow",
+    "front": "什么是树与图基础?",
+    "back": "二叉树遍历：前序(根左右)、中序(左根右)、后序(左右根)",
+    "tags": [
+      "树与图基础"
+    ]
+  },
+  {
+    "chapter": "13. 数学与算法",
+    "color": "green",
+    "front": "什么是数学基础?",
+    "back": "排列组合",
+    "tags": [
+      "数学基础"
+    ]
+  },
+  {
+    "chapter": "14. 知识产权与标准化",
+    "color": "yellow",
+    "front": "知识产权保护期限的对比/分类是什么?",
+    "back": "| 权利 | 保护期 | 说明 |\n|-----|--------|------|\n| 著作权（署名权等人身权） | 永久 | 不受时间限制 |\n| 著作权（财产权） | 作者终生+死后50年 | 单位作品为发表后50年 |\n| 发明专利 | 20年（从申请日算） | 需审查 |\n| 实用新型专利 | 10年 | 初步审查 |\n| 外观设计专利 | 15年（2021.6.1后申请；之前为10年） | 初步审查 |\n| 商标权 | 10年（可续展） | 每次续展10年 |",
+    "tags": [
+      "知识产权保护期限"
+    ]
+  },
+  {
+    "chapter": "14. 知识产权与标准化",
+    "color": "yellow",
+    "front": "什么是软件著作权?",
+    "back": "软件著作权自开发完成之日起自动产生",
+    "tags": [
+      "软件著作权"
+    ]
+  },
+  {
+    "chapter": "14. 知识产权与标准化",
+    "color": "green",
+    "front": "什么是标准化知识?",
+    "back": "国际标准(ISO)→国家标准(GB)→行业标准→地方标准→企业标准",
+    "tags": [
+      "标准化知识"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "云计算 / 云原生: 服务模型是什么?",
+    "back": "IaaS(基础设施) → PaaS(平台) → SaaS(软件)",
+    "tags": [
+      "云计算 / 云原生"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "云计算 / 云原生: 部署模型是什么?",
+    "back": "公有云、私有云、混合云、社区云",
+    "tags": [
+      "云计算 / 云原生"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "云计算 / 云原生: 云原生关键技术是什么?",
+    "back": "- 容器化(Docker)",
+    "tags": [
+      "云计算 / 云原生"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "云计算 / 云原生: Serverless（无服务器架构）是什么?",
+    "back": "FaaS + BaaS，按需计算，2025下论文题",
+    "tags": [
+      "云计算 / 云原生"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "云计算 / 云原生: CloudOps（云上自动化运维）是什么?",
+    "back": "2024上论文题",
+    "tags": [
+      "云计算 / 云原生"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "什么是云计算 / 云原生?",
+    "back": "服务模型：IaaS(基础设施) → PaaS(平台) → SaaS(软件)",
+    "tags": [
+      "云计算 / 云原生"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "大数据架构: Lambda架构是什么?",
+    "back": "（2024上论文题+案例题）",
+    "tags": [
+      "大数据架构"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "大数据架构: Kappa架构是什么?",
+    "back": "只用流处理层（简化Lambda）",
+    "tags": [
+      "大数据架构"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "大数据架构: 核心组件是什么?",
+    "back": "Hadoop(HDFS+MapReduce)、Spark、Kafka、Flink、Hive",
+    "tags": [
+      "大数据架构"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "大数据架构: MongoDB矢量存储是什么?",
+    "back": "2024上案例题",
+    "tags": [
+      "大数据架构"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "red",
+    "front": "什么是大数据架构?",
+    "back": "Lambda架构：（2024上论文题+案例题）",
+    "tags": [
+      "大数据架构"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "人工智能 / 机器学习: 机器学习分类是什么?",
+    "back": "监督学习、无监督学习、强化学习",
+    "tags": [
+      "人工智能 / 机器学习"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "人工智能 / 机器学习: 深度学习是什么?",
+    "back": "CNN(图像)、RNN/LSTM(序列)、Transformer(NLP)",
+    "tags": [
+      "人工智能 / 机器学习"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "人工智能 / 机器学习: 大模型是什么?",
+    "back": "GPT、BERT等",
+    "tags": [
+      "人工智能 / 机器学习"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "人工智能 / 机器学习: AI驱动性能测试是什么?",
+    "back": "2025下论文题",
+    "tags": [
+      "人工智能 / 机器学习"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "什么是人工智能 / 机器学习?",
+    "back": "机器学习分类：监督学习、无监督学习、强化学习",
+    "tags": [
+      "人工智能 / 机器学习"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "物联网(IoT): 三层架构是什么?",
+    "back": "感知层→网络层→应用层",
+    "tags": [
+      "物联网(IoT)"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "物联网(IoT): 关键技术是什么?",
+    "back": "RFID、传感器、ZigBee、LoRa、MQTT",
+    "tags": [
+      "物联网(IoT)"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "物联网(IoT): 边缘计算是什么?",
+    "back": "数据就近处理",
+    "tags": [
+      "物联网(IoT)"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "什么是物联网(IoT)?",
+    "back": "三层架构：感知层→网络层→应用层",
+    "tags": [
+      "物联网(IoT)"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "区块链: 核心特性是什么?",
+    "back": "去中心化、不可篡改、可追溯",
+    "tags": [
+      "区块链"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "区块链: 共识机制是什么?",
+    "back": "PoW、PoS、DPoS、PBFT",
+    "tags": [
+      "区块链"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "yellow",
+    "front": "什么是区块链?",
+    "back": "核心特性：去中心化、不可篡改、可追溯",
+    "tags": [
+      "区块链"
+    ]
+  },
+  {
+    "chapter": "15. 新技术专题",
+    "color": "green",
+    "front": "什么是数字孪生?",
+    "back": "物理实体的数字镜像",
+    "tags": [
+      "数字孪生"
+    ]
+  },
+  {
+    "chapter": "16. 案例分析高频专题",
+    "color": "red",
+    "front": "选答题高频方向的对比/分类是什么?",
+    "back": "| 方向 | 出现次数 | 具体考题 |\n|-----|---------|---------|\n| **Redis/缓存** | 5/5 | 数据结构、分布式锁、缓存策略、主从 |\n| **UML图** | 4/5 | 类图、顺序图、用例图、交互图类型辨析 |\n| **数据库设计** | 3/5 | ER图转关系模式、范式判断、SQL |\n| **大数据/NoSQL** | 3/5 | MongoDB、Lambda架构、MapReduce |\n| **云计算** | 3/5 | 云部署方案、微服务、容器化 |\n| **嵌入式系统** | 2/5 | 嵌入式实时系统、调度算法 |\n| **分布式系统** | 2/5 | 分布式锁、一致性 |",
+    "tags": [
+      "选答题高频方向"
+    ]
+  },
+  {
+    "chapter": "17. 论文写作高频主题",
+    "color": "red",
+    "front": "论文热门主题趋势的对比/分类是什么?",
+    "back": "| 主题类别 | 考察频率 | 关键词 |\n|---------|---------|--------|\n| **云原生/云计算** | 每次至少1题 | Serverless、K8s、云原生数据库、CloudOps |\n| **架构设计方法** | 每次至少1题 | SOA、微服务、事件驱动、MDA |\n| **\"三高\"设计** | 2025开始出现 | 秒杀、高并发、高可用、高性能 |\n| **新技术应用** | 逐年增加 | AI测试、大数据Lambda、区块链 |\n| **质量保障** | 偶尔出现 | 测试方法、可靠性设计 |",
+    "tags": [
+      "论文热门主题趋势"
+    ]
+  },
+  {
+    "chapter": "18. 企业架构框架",
+    "color": "red",
+    "front": "TOGAF的对比/分类是什么?",
+    "back": "| 阶段 | 名称 | 核心任务 |\n|------|------|---------|\n| 预备阶段 | Preliminary | 确定架构能力、原则、工具 |\n| A | 架构愿景 | 确定范围、利益相关者、约束 |\n| B | 业务架构 | 描述基线和目标业务架构 |\n| C | 信息系统架构 | 数据架构 + 应用架构 |\n| D | 技术架构 | 描述支撑信息系统的技术基础设施 |\n| E | 机会与解决方案 | 识别交付手段（项目/程序） |\n| F | 迁移规划 | 制定详细实施计划和迁移路线图 |\n| G | 实施治理 | 对实施进行架构合规监督 |\n| H | 架构变更管理 | 管理架构生命周期中的变更 |",
+    "tags": [
+      "TOGAF"
+    ]
+  },
+  {
+    "chapter": "18. 企业架构框架",
+    "color": "yellow",
+    "front": "Zachman 框架的对比/分类是什么?",
+    "back": "| 对比维度 | TOGAF | Zachman |\n|---------|-------|---------|\n| 本质 | 方法论（How to do） | 分类本体（What is） |\n| 核心 | ADM 9阶段 | 6×6 矩阵 |\n| 是否提供过程指导 | ✅ 有详细步骤 | ❌ 只分类不指导 |\n| 架构域 | 4个（BDAT） | 6列（5W1H） |\n| 适用 | 架构开发全过程 | 架构制品的组织归类 |",
+    "tags": [
+      "Zachman 框架"
+    ]
+  },
+  {
+    "chapter": "18. 企业架构框架",
+    "color": "green",
+    "front": "其他企业架构框架的对比/分类是什么?",
+    "back": "| 框架 | 来源 | 特点 |\n|------|------|------|\n| FEAF | 美国联邦政府 | 政府级EA框架 |\n| DoDAF | 美国国防部 | 军事系统架构 |\n| FEA | 美国联邦 | 五参考模型 |",
+    "tags": [
+      "其他企业架构框架"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "CAP 定理的对比/分类是什么?",
+    "back": "| 组合 | 说明 | 代表系统 |\n|------|------|---------|\n| **CP** | 保证一致性+分区容错，牺牲可用性 | ZooKeeper、HBase、Redis Cluster |\n| **AP** | 保证可用性+分区容错，牺牲强一致 | Cassandra、DynamoDB、Eureka |\n| **CA** | 保证一致性+可用性（理论上网络不分区才可能） | 单机关系数据库 |",
+    "tags": [
+      "CAP 定理"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "CAP 定理: C（Consistency，一致性）是什么?",
+    "back": "所有节点在同一时间看到相同数据",
+    "tags": [
+      "CAP 定理"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "CAP 定理: A（Availability，可用性）是什么?",
+    "back": "每个请求都能收到非错误响应",
+    "tags": [
+      "CAP 定理"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "CAP 定理: P（Partition tolerance，分区容错性）是什么?",
+    "back": "网络分区时系统仍能运行",
+    "tags": [
+      "CAP 定理"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "BASE 理论的对比/分类是什么?",
+    "back": "| 要素 | 英文 | 含义 |\n|------|------|------|\n| **BA** | Basically Available | 基本可用：出现故障时允许响应时间增加或降级服务 |\n| **S** | Soft State | 软状态：允许数据存在中间状态（不同节点数据暂时不一致） |\n| **E** | Eventually Consistent | 最终一致性：经过一段时间后数据达到一致 |",
+    "tags": [
+      "BASE 理论"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "分布式一致性协议: 阶段1（Prepare/投票）是什么?",
+    "back": "协调者询问参与者是否可以提交",
+    "tags": [
+      "分布式一致性协议"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "分布式一致性协议: 阶段2（Commit/提交）是什么?",
+    "back": "协调者根据投票结果通知提交或中止",
+    "tags": [
+      "分布式一致性协议"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "分布式一致性协议: 缺点是什么?",
+    "back": "同步阻塞、单点故障、数据不一致风险",
+    "tags": [
+      "分布式一致性协议"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "分布式一致性协议: 优点是什么?",
+    "back": "减少阻塞（参与者超时默认提交）",
+    "tags": [
+      "分布式一致性协议"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "分布式一致性协议: 缺点是什么?",
+    "back": "网络分区时仍可能不一致",
+    "tags": [
+      "分布式一致性协议"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "分布式一致性协议: 代表实现是什么?",
+    "back": "etcd、Consul",
+    "tags": [
+      "分布式一致性协议"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "分布式一致性协议: 适用是什么?",
+    "back": "对一致性要求高的业务场景（如转账）",
+    "tags": [
+      "分布式一致性协议"
+    ]
+  },
+  {
+    "chapter": "19. 分布式一致性",
+    "color": "red",
+    "front": "分布式一致性协议: 适用是什么?",
+    "back": "微服务间的长业务流程",
+    "tags": [
+      "分布式一致性协议"
+    ]
+  },
+  {
+    "chapter": "20. 软件度量",
+    "color": "red",
+    "front": "七种耦合的对比/分类是什么?",
+    "back": "| 排序 | 耦合类型 | 定义 | 示例 |\n|------|---------|------|------|\n| 1（最弱） | **非直接耦合** | 两个模块之间没有直接关系 | 模块各自独立 |\n| 2 | **数据耦合** | 通过参数传递简单数据 | 传递整数、字符串 |\n| 3 | **标记耦合(印记耦合)** | 通过参数传递数据结构（记录/结构体） | 传递一个结构体 |\n| 4 | **控制耦合** | 传递控制信息（标志、开关） | 传递 flag 决定对方行为 |\n| 5 | **外部耦合** | 共享外部数据格式、通信协议或设备 | 共享文件格式 |\n| 6 | **公共耦合(公共环境耦合)** | 共享全局数据区/公共变量 | 共享全局变量 |\n| 7（最强） | **内容耦合** | 一个模块直接访问/修改另一个模块的内部数据或代码 | 直接 GOTO 到另一模块内部 |",
+    "tags": [
+      "七种耦合"
+    ]
+  },
+  {
+    "chapter": "20. 软件度量",
+    "color": "red",
+    "front": "七种内聚的对比/分类是什么?",
+    "back": "| 排序 | 内聚类型 | 定义 | 示例 |\n|------|---------|------|------|\n| 1（最弱） | **偶然内聚** | 模块内各元素无实质联系，只是碰巧放在一起 | 工具箱式模块 |\n| 2 | **逻辑内聚** | 逻辑上相关的功能放在一起，通过参数选择执行哪个 | 一个模块处理所有I/O |\n| 3 | **时间内聚** | 需要在同一时间段执行的功能放在一起 | 初始化模块 |\n| 4 | **过程内聚** | 按特定次序执行的功能放在一起 | 按流程图中的顺序 |\n| 5 | **通信内聚** | 使用相同输入数据或产生相同输出数据的功能 | 在同一数据上的不同操作 |\n| 6 | **顺序内聚** | 一个功能的输出是另一个功能的输入 | 流水线式处理 |\n| 7（最强） | **功能内聚** | 模块内所有元素共同完成一个且仅一个功能 | sin()函数 |",
+    "tags": [
+      "七种内聚"
+    ]
+  },
+  {
+    "chapter": "21. 架构描述语言",
+    "color": "yellow",
+    "front": "ADL 三要素的对比/分类是什么?",
+    "back": "| 要素 | 英文 | 定义 |\n|------|------|------|\n| **构件(Component)** | Component | 系统中执行特定功能的独立单元，通过**端口(Port)**与外部交互 |\n| **连接件(Connector)** | Connector | 定义构件之间的交互规则，通过**角色(Role)**连接端口 |\n| **架构配置(Configuration)** | Configuration | 描述构件和连接件的组织方式和拓扑结构 |",
+    "tags": [
+      "ADL 三要素"
+    ]
+  },
+  {
+    "chapter": "22. 面向方面编程",
+    "color": "yellow",
+    "front": "AOP 核心概念的对比/分类是什么?",
+    "back": "| 概念 | 英文 | 定义 |\n|------|------|------|\n| **切面(Aspect)** | Aspect | 横切关注点的模块化（如日志、事务、安全） |\n| **连接点(Join Point)** | Join Point | 程序执行中的某个点（如方法调用、异常抛出） |\n| **切入点(Pointcut)** | Pointcut | 匹配连接点的规则/表达式 |\n| **通知/增强(Advice)** | Advice | 在连接点执行的动作（Before/After/Around） |\n| **织入(Weaving)** | Weaving | 将切面代码插入目标对象的过程 |",
+    "tags": [
+      "AOP 核心概念"
+    ]
+  },
+  {
+    "chapter": "23. 嵌入式实时调度算法",
+    "color": "yellow",
+    "front": "RMS的对比/分类是什么?",
+    "back": "| n | 上界 |\n|---|------|\n| 1 | 1.000 |\n| 2 | 0.828 |\n| 3 | 0.780 |\n| n→∞ | ln2 ≈ 0.693 |",
+    "tags": [
+      "RMS"
+    ]
+  },
+  {
+    "chapter": "23. 嵌入式实时调度算法",
+    "color": "yellow",
+    "front": "RMS: 调度策略是什么?",
+    "back": "优先级固定，**周期越短优先级越高**",
+    "tags": [
+      "RMS"
+    ]
+  },
+  {
+    "chapter": "23. 嵌入式实时调度算法",
+    "color": "yellow",
+    "front": "什么是RMS?",
+    "back": "调度策略：优先级固定，周期越短优先级越高",
+    "tags": [
+      "RMS"
+    ]
+  },
+  {
+    "chapter": "23. 嵌入式实时调度算法",
+    "color": "yellow",
+    "front": "EDF的对比/分类是什么?",
+    "back": "| 对比 | RMS | EDF |\n|------|-----|-----|\n| 优先级 | 静态（固定） | 动态（运行时变化） |\n| 最优性 | 静态优先级最优 | 动态优先级最优 |\n| CPU利用率上界 | n(2^(1/n)-1) ≈ 69.3% | 100% |\n| 实现复杂度 | 简单 | 较复杂 |\n| 过载行为 | 可预测 | 不可预测（多米诺效应） |",
+    "tags": [
+      "EDF"
+    ]
+  },
+  {
+    "chapter": "23. 嵌入式实时调度算法",
+    "color": "yellow",
+    "front": "EDF: 调度策略是什么?",
+    "back": "动态优先级，**截止时间越近优先级越高**",
+    "tags": [
+      "EDF"
+    ]
+  },
+  {
+    "chapter": "23. 嵌入式实时调度算法",
+    "color": "yellow",
+    "front": "EDF: 可调度充要条件是什么?",
+    "back": "$\\sum_{i=1}^{n} \\frac{C_i}{T_i} \\leq 1$",
+    "tags": [
+      "EDF"
+    ]
+  },
+  {
+    "chapter": "23. 嵌入式实时调度算法",
+    "color": "yellow",
+    "front": "EDF: EDF vs RMS是什么?",
+    "back": "| 对比 | RMS | EDF |",
+    "tags": [
+      "EDF"
+    ]
+  },
+  {
+    "chapter": "23. 嵌入式实时调度算法",
+    "color": "yellow",
+    "front": "什么是EDF?",
+    "back": "调度策略：动态优先级，截止时间越近优先级越高",
+    "tags": [
+      "EDF"
+    ]
+  },
+  {
+    "chapter": "24. 中间件技术",
+    "color": "yellow",
+    "front": "消息中间件的对比/分类是什么?",
+    "back": "| 对比 | Kafka | RabbitMQ | RocketMQ |\n|------|-------|----------|----------|\n| 模型 | 发布/订阅（Pull） | AMQP（Push/Pull） | 发布/订阅（Pull） |\n| 吞吐量 | 极高（百万/秒） | 中（万/秒） | 高（十万/秒） |\n| 延迟 | 毫秒级 | 微秒级 | 毫秒级 |\n| 消息可靠性 | 高（ISR机制） | 高（确认机制） | 高（同步刷盘） |\n| 适用场景 | 日志收集、大数据流 | 企业集成、复杂路由 | 电商交易、金融 |\n| 消息顺序 | 分区内有序 | 不保证 | 支持全局顺序 |",
+    "tags": [
+      "消息中间件"
+    ]
+  },
+  {
+    "chapter": "24. 中间件技术",
+    "color": "green",
+    "front": "RPC 框架的对比/分类是什么?",
+    "back": "| 框架 | 特点 |\n|------|------|\n| Dubbo | 阿里开源，Java生态，支持多种序列化 |\n| gRPC | Google开源，基于HTTP/2 + Protobuf，多语言 |",
+    "tags": [
+      "RPC 框架"
+    ]
+  },
+  {
+    "chapter": "25. 构件技术",
+    "color": "yellow",
+    "front": "三大构件标准的对比/分类是什么?",
+    "back": "| 标准 | 提出者 | 平台 | 关键特性 |\n|------|--------|------|---------|\n| **CORBA** | OMG | 跨平台跨语言 | ORB(对象请求代理)、IDL接口定义语言 |\n| **COM/DCOM/.NET** | Microsoft | Windows | COM+ → .NET组件，二进制兼容 |\n| **EJB** | Sun/Oracle | Java | 运行在EJB容器中，三种Bean(Session/Entity/MDB) |",
+    "tags": [
+      "三大构件标准"
+    ]
+  },
+  {
+    "chapter": "26. DevOps 与 CI/CD",
+    "color": "green",
+    "front": "DevOps 核心概念的对比/分类是什么?",
+    "back": "| 概念 | 说明 |\n|------|------|\n| **CI（持续集成）** | 频繁将代码合并到主干，每次合并自动构建+测试 |\n| **CD（持续交付）** | CI基础上，代码随时可部署到生产环境（需手动触发） |\n| **CD（持续部署）** | 持续交付的进一步，自动部署到生产环境 |\n| **Infrastructure as Code** | 基础设施代码化管理（Terraform/Ansible） |\n| **蓝绿部署** | 两套环境交替上线 |\n| **金丝雀发布** | 小比例流量先切新版，验证后全量 |\n| **滚动更新** | 逐步替换旧版本实例 |",
+    "tags": [
+      "DevOps 核心概念"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "red",
+    "front": "预测1：大模型/AI Agent 在软件工程中的应用的对比/分类是什么?",
+    "back": "| 方向 | 应用 | 技术 |\n|------|------|------|\n| AI辅助编码 | 代码补全、代码审查 | LLM、RAG |\n| AI辅助测试 | 测试用例生成、缺陷预测 | ML分类模型 |\n| AI Agent | 自动化运维、故障自愈 | Agent架构、Tool Use |\n| AI辅助架构 | 架构推荐、技术选型 | 知识图谱+LLM |",
+    "tags": [
+      "预测1：大模型/AI Agent 在软件工程中的应用"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "red",
+    "front": "预测2：架构迁移: 绞杀者模式(Strangler Fig)是什么?",
+    "back": "逐步替换旧系统功能",
+    "tags": [
+      "预测2：架构迁移"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "red",
+    "front": "预测2：架构迁移: 防腐层(Anti-Corruption Layer)是什么?",
+    "back": "新旧系统间的适配层",
+    "tags": [
+      "预测2：架构迁移"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "red",
+    "front": "预测2：架构迁移: 分支抽象(Branch by Abstraction)是什么?",
+    "back": "通过抽象层渐进替换",
+    "tags": [
+      "预测2：架构迁移"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "red",
+    "front": "预测2：架构迁移: 迁移策略是什么?",
+    "back": "拆分优先级（按业务域/按数据/按团队）",
+    "tags": [
+      "预测2：架构迁移"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "red",
+    "front": "预测2：架构迁移: 数据迁移是什么?",
+    "back": "共享数据库→数据库拆分→事件同步",
+    "tags": [
+      "预测2：架构迁移"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测3：云原生可观测性: 三大支柱是什么?",
+    "back": "Metrics（指标）、Logs（日志）、Traces（链路追踪）",
+    "tags": [
+      "预测3：云原生可观测性"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测3：云原生可观测性: OpenTelemetry是什么?",
+    "back": "统一的遥测数据采集标准",
+    "tags": [
+      "预测3：云原生可观测性"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测3：云原生可观测性: Prometheus + Grafana是什么?",
+    "back": "指标监控",
+    "tags": [
+      "预测3：云原生可观测性"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测3：云原生可观测性: ELK/EFK是什么?",
+    "back": "日志分析",
+    "tags": [
+      "预测3：云原生可观测性"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测3：云原生可观测性: Jaeger/Zipkin是什么?",
+    "back": "分布式链路追踪",
+    "tags": [
+      "预测3：云原生可观测性"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测4：低代码/无代码平台架构: 低代码平台架构是什么?",
+    "back": "可视化设计器 + 模型引擎 + 代码生成器 + 运行时引擎",
+    "tags": [
+      "预测4：低代码/无代码平台架构"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测4：低代码/无代码平台架构: 元数据驱动是什么?",
+    "back": "通过元数据描述应用行为",
+    "tags": [
+      "预测4：低代码/无代码平台架构"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测4：低代码/无代码平台架构: 与传统开发对比是什么?",
+    "back": "开发效率↑、灵活性↓、适合CRUD类应用",
+    "tags": [
+      "预测4：低代码/无代码平台架构"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测4：低代码/无代码平台架构: 安全隐患是什么?",
+    "back": "Shadow IT、代码质量不可控",
+    "tags": [
+      "预测4：低代码/无代码平台架构"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测5：数据中台/数据治理: 数据中台是什么?",
+    "back": "连接数据前台（应用）和后台（数据源）的中间层",
+    "tags": [
+      "预测5：数据中台/数据治理"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测5：数据中台/数据治理: 核心能力是什么?",
+    "back": "数据采集、数据开发、数据资产管理、数据服务",
+    "tags": [
+      "预测5：数据中台/数据治理"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测5：数据中台/数据治理: 数据治理是什么?",
+    "back": "数据标准、数据质量、元数据管理、数据安全",
+    "tags": [
+      "预测5：数据中台/数据治理"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测5：数据中台/数据治理: 数据湖 vs 数据仓库是什么?",
+    "back": "Schema-on-Read vs Schema-on-Write",
+    "tags": [
+      "预测5：数据中台/数据治理"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测6：信创/国产化替代架构: 信创体系是什么?",
+    "back": "芯片(鲲鹏/飞腾)→OS(麒麟/统信)→数据库(达梦/人大金仓/OceanBase)→中间件(东方通/宝兰德)→应用",
+    "tags": [
+      "预测6：信创/国产化替代架构"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测6：信创/国产化替代架构: 迁移挑战是什么?",
+    "back": "兼容性、性能差异、生态不完善",
+    "tags": [
+      "预测6：信创/国产化替代架构"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测6：信创/国产化替代架构: 架构适配是什么?",
+    "back": "多芯片适配、国密算法(SM2/SM3/SM4)替换",
+    "tags": [
+      "预测6：信创/国产化替代架构"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测7：软件供应链安全: SBOM（软件物料清单）是什么?",
+    "back": "记录软件中所有组件信息",
+    "tags": [
+      "预测7：软件供应链安全"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测7：软件供应链安全: 供应链攻击类型是什么?",
+    "back": "依赖混淆、恶意包注入、构建系统渗透",
+    "tags": [
+      "预测7：软件供应链安全"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "yellow",
+    "front": "预测7：软件供应链安全: 防护措施是什么?",
+    "back": "依赖签名验证、SBOM管理、安全审计",
+    "tags": [
+      "预测7：软件供应链安全"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "green",
+    "front": "预测8：平台工程 / 内部开发者平台: 平台工程是什么?",
+    "back": "为开发者构建自助服务平台，减少认知负担",
+    "tags": [
+      "预测8：平台工程 / 内部开发者平台"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "green",
+    "front": "预测8：平台工程 / 内部开发者平台: IDP 核心能力是什么?",
+    "back": "应用脚手架、CI/CD自动化、基础设施自助、可观测性集成",
+    "tags": [
+      "预测8：平台工程 / 内部开发者平台"
+    ]
+  },
+  {
+    "chapter": "28. 2026上半年考试预测专题",
+    "color": "green",
+    "front": "预测8：平台工程 / 内部开发者平台: 与DevOps关系是什么?",
+    "back": "DevOps → 平台工程（从文化到产品化）",
+    "tags": [
+      "预测8：平台工程 / 内部开发者平台"
+    ]
+  }
+];
+  </script>
+
+  <script>
+    // 应用逻辑
+    const STORAGE_KEY = 'study-cards-state';
+    let allCards = [];
+    let currentQueue = [];
+    let currentCardIndex = 0;
+    let currentFilters = { colors: [], chapters: [] };
+
+    // 初始化
+    function init() {
+      // 加载卡片数据
+      allCards = CARDS_DATA.map(card => {
+        const stored = getStoredCardState(card);
+        return stored || SM2.initCardState ? CardQueue.initCardState(card) : {...card, ...{
+          id: card.chapter + '-' + card.front.substring(0, 20),
+          state: 'new',
+          repetitions: 0,
+          easeFactor: 2.5,
+          interval: 0,
+          nextReview: Date.now(),
+          lastReview: null,
+          reviewCount: 0
+        }};
+      });
+
+      // 构建章节筛选按钮
+      const chapters = CardQueue.getChapters(allCards);
+      const chapterFilters = document.getElementById('chapterFilters');
+      chapters.forEach(chapter => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.setAttribute('data-filter', 'chapter');
+        btn.setAttribute('data-value', chapter);
+        btn.textContent = chapter.length > 20 ? chapter.substring(0, 20) + '...' : chapter;
+        btn.onclick = handleFilterClick;
+        chapterFilters.appendChild(btn);
+      });
+
+      // 绑定筛选按钮事件
+      document.querySelectorAll('.filter-btn[data-filter="color"]').forEach(btn => {
+        btn.onclick = handleFilterClick;
+      });
+
+      // 绑定卡片点击事件
+      document.getElementById('card').onclick = flipCard;
+
+      // 更新队列和UI
+      updateQueue();
+      updateStats();
+      showNextCard();
+    }
+
+    // 获取存储的卡片状态
+    function getStoredCardState(card) {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return null;
+
+      try {
+        const data = JSON.parse(stored);
+        const id = card.chapter + '-' + card.front.substring(0, 20);
+        return data[id];
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // 保存卡片状态
+    function saveCardState(card) {
+      let data = {};
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) data = JSON.parse(stored);
+      } catch (e) {}
+
+      data[card.id] = card;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // 更新队列
+    function updateQueue() {
+      let filtered = allCards;
+
+      // 应用颜色筛选
+      if (currentFilters.colors.length > 0 && !currentFilters.colors.includes('all')) {
+        filtered = filtered.filter(card => currentFilters.colors.includes(card.color));
+      }
+
+      // 应用章节筛选
+      if (currentFilters.chapters.length > 0 && !currentFilters.chapters.includes('all')) {
+        filtered = filtered.filter(card => currentFilters.chapters.includes(card.chapter));
+      }
+
+      currentQueue = CardQueue.buildQueue(filtered, 20);
+      currentCardIndex = 0;
+    }
+
+    // 更新统计
+    function updateStats() {
+      const stats = CardQueue.getStats(allCards);
+      document.getElementById('statToday').textContent = stats.reviewedToday;
+      document.getElementById('statDue').textContent = stats.due;
+      document.getElementById('statNew').textContent = stats.byState.new;
+      document.getElementById('statMastery').textContent = stats.masteryRate + '%';
+
+      // 更新进度条
+      const progress = currentQueue.length > 0
+        ? ((currentCardIndex / currentQueue.length) * 100)
+        : 0;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+
+    // 显示下一张卡片
+    function showNextCard() {
+      if (currentCardIndex >= currentQueue.length) {
+        showEmptyState();
+        return;
+      }
+
+      const card = currentQueue[currentCardIndex];
+
+      // 更新卡片内容
+      document.getElementById('cardFront').textContent = card.front;
+      document.getElementById('cardBack').innerHTML = formatBack(card.back);
+      document.getElementById('cardChapter').textContent = card.chapter;
+      document.getElementById('cardChapterBack').textContent = card.chapter;
+
+      // 更新颜色指示器
+      const color = card.color === 'red' ? '#ff6b6b' : card.color === 'yellow' ? '#ffd43b' : '#51cf66';
+      document.getElementById('colorIndicator').style.background = color;
+      document.getElementById('colorIndicatorBack').style.background = color;
+
+      // 更新间隔预览
+      updateIntervalPreview(card);
+
+      // 显示UI
+      document.getElementById('cardContainer').style.display = 'block';
+      document.getElementById('buttonsContainer').style.display = 'flex';
+      document.getElementById('emptyState').style.display = 'none';
+
+      // 重置翻转状态
+      document.getElementById('card').classList.remove('flipped');
+    }
+
+    // 格式化背面内容
+    function formatBack(text) {
+      // 检测是否是表格
+      if (text.includes('|') && text.split('\n').length > 2) {
+        const lines = text.split('\n').filter(l => l.trim());
+        let html = '<table>';
+        lines.forEach((line, i) => {
+          if (i === 1 && line.match(/^[\s\-|:]+$/)) return; // 跳过分隔行
+
+          const cells = line.split('|').filter(c => c.trim()).map(c => c.trim());
+          const tag = i === 0 ? 'th' : 'td';
+          html += '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
+        });
+        html += '</table>';
+        return html;
+      }
+
+      return text.replace(/\n/g, '<br>');
+    }
+
+    // 更新间隔预览
+    function updateIntervalPreview(card) {
+      const goodResult = SM2.calculateSM2(SM2.mapButtonToQuality(3), card.repetitions, card.easeFactor, card.interval);
+      const easyResult = SM2.calculateSM2(SM2.mapButtonToQuality(4), card.repetitions, card.easeFactor, card.interval);
+
+      document.getElementById('goodInterval').textContent = goodResult.interval + '天';
+      document.getElementById('easyInterval').textContent = easyResult.interval + '天';
+    }
+
+    // 翻转卡片
+    function flipCard() {
+      document.getElementById('card').classList.toggle('flipped');
+    }
+
+    // 评分卡片
+    function rateCard(buttonType) {
+      const card = currentQueue[currentCardIndex];
+      const quality = SM2.mapButtonToQuality(buttonType);
+      const sm2Result = SM2.calculateSM2(quality, card.repetitions, card.easeFactor, card.interval);
+      const nextReview = SM2.getNextReviewDate(sm2Result.interval);
+
+      // 更新卡片状态
+      const updatedCard = CardQueue.updateCardState(card, sm2Result, nextReview);
+
+      // 更新 allCards 中对应的卡片
+      const cardIndex = allCards.findIndex(c => c.id === card.id);
+      if (cardIndex !== -1) {
+        allCards[cardIndex] = updatedCard;
+      }
+
+      // 保存状态
+      saveCardState(updatedCard);
+
+      // 下一张
+      currentCardIndex++;
+      updateStats();
+      showNextCard();
+    }
+
+    // 显示空状态
+    function showEmptyState() {
+      document.getElementById('cardContainer').style.display = 'none';
+      document.getElementById('buttonsContainer').style.display = 'none';
+      document.getElementById('emptyState').style.display = 'block';
+    }
+
+    // 切换筛选面板
+    function toggleFilter() {
+      document.getElementById('filterPanel').classList.toggle('active');
+    }
+
+    // 处理筛选点击
+    function handleFilterClick(e) {
+      const btn = e.target;
+      const filterType = btn.getAttribute('data-filter');
+      const filterValue = btn.getAttribute('data-value');
+
+      // 更新按钮状态
+      const group = btn.parentElement;
+      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // 更新筛选器
+      if (filterType === 'color') {
+        currentFilters.colors = filterValue === 'all' ? [] : [filterValue];
+      } else if (filterType === 'chapter') {
+        currentFilters.chapters = filterValue === 'all' ? [] : [filterValue];
+      }
+
+      // 重新构建队列
+      updateQueue();
+      updateStats();
+      showNextCard();
+    }
+
+    // 启动应用
+    init();
+  </script>
+</body>
+</html>

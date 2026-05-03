@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>系统架构设计师 - 闪卡学习</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --text-primary: #000000;
+      --text-secondary: #666666;
+      --border-color: #dddddd;
+      --button-bg: #007aff;
+      --button-text: #ffffff;
+      --red-card: #ff6b6b;
+      --yellow-card: #ffd43b;
+      --green-card: #51cf66;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #1c1c1e;
+        --bg-secondary: #2c2c2e;
+        --text-primary: #ffffff;
+        --text-secondary: #adadad;
+        --border-color: #3a3a3c;
+        --button-bg: #0a84ff;
+        --shadow: rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--bg-secondary);
+      z-index: 1000;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--red-card), var(--yellow-card), var(--green-card));
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .stats-panel {
+      position: fixed;
+      top: 4px;
+      left: 0;
+      right: 0;
+      background: var(--bg-primary);
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px var(--shadow);
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .stats-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stats-label {
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+
+    .stats-value {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .filter-panel {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: var(--bg-primary);
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px var(--shadow);
+      z-index: 998;
+      display: none;
+    }
+
+    .filter-panel.active {
+      display: block;
+    }
+
+    .filter-group {
+      margin-bottom: 12px;
+    }
+
+    .filter-title {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      background: var(--button-bg);
+      color: var(--button-text);
+      border-color: var(--button-bg);
+    }
+
+    .card-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 600px;
+      height: 60vh;
+      max-height: 500px;
+      perspective: 1000px;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px var(--shadow);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+    }
+
+    .card-front {
+      z-index: 2;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    .card-color-indicator {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .card-chapter {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-align: right;
+      max-width: 60%;
+    }
+
+    .card-content {
+      font-size: 20px;
+      line-height: 1.6;
+      text-align: center;
+      width: 100%;
+    }
+
+    .card-back .card-content {
+      font-size: 16px;
+      text-align: left;
+    }
+
+    .card-back table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 13px;
+    }
+
+    .card-back th,
+    .card-back td {
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      text-align: left;
+    }
+
+    .card-back th {
+      background: var(--bg-secondary);
+      font-weight: 600;
+    }
+
+    .buttons-container {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .action-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px var(--shadow);
+      color: var(--button-text);
+    }
+
+    .btn-again {
+      background: #ff6b6b;
+    }
+
+    .btn-hard {
+      background: #ffa94d;
+    }
+
+    .btn-good {
+      background: #51cf66;
+    }
+
+    .btn-easy {
+      background: #339af0;
+    }
+
+    .action-btn:active {
+      transform: scale(0.95);
+    }
+
+    .fab-menu {
+      position: fixed;
+      bottom: 120px;
+      right: 20px;
+      z-index: 1001;
+    }
+
+    .fab-button {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .fab-button:active {
+      transform: scale(0.9);
+    }
+
+    .empty-state {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .empty-state-text {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .empty-state-subtext {
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .stats-item {
+        font-size: 12px;
+      }
+
+      .stats-value {
+        font-size: 14px;
+      }
+
+      .card-content {
+        font-size: 18px;
+      }
+
+      .action-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+
+      .buttons-container {
+        gap: 8px;
+        bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+
+  <div class="stats-panel">
+    <div class="stats-item">
+      <span class="stats-label">今日</span>
+      <span class="stats-value" id="statToday">0</span>
+    </div>
+    <div class="stats-item">
+      <span class="stats-label">待复习</span>
+      <span class="stats-value" id="statDue">0</span>
+    </div>
+    <div class="stats-item">
+      <span class="stats-label">新卡</span>
+      <span class="stats-value" id="statNew">0</span>
+    </div>
+    <div class="stats-item">
+      <span class="stats-label">已掌握</span>
+      <span class="stats-value" id="statMastery">0%</span>
+    </div>
+  </div>
+
+  <div class="filter-panel" id="filterPanel">
+    <div class="filter-group">
+      <div class="filter-title">颜色筛选</div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="color" data-value="all">全部</button>
+        <button class="filter-btn" data-filter="color" data-value="red">🔴 红卡</button>
+        <button class="filter-btn" data-filter="color" data-value="yellow">🟡 黄卡</button>
+        <button class="filter-btn" data-filter="color" data-value="green">🟢 绿卡</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-title">章节筛选</div>
+      <div class="filter-buttons" id="chapterFilters">
+        <button class="filter-btn active" data-filter="chapter" data-value="all">全部章节</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-container" id="cardContainer" style="display:none;">
+    <div class="card" id="card">
+      <div class="card-face card-front">
+        <div class="card-color-indicator" id="colorIndicator"></div>
+        <div class="card-chapter" id="cardChapter"></div>
+        <div class="card-content" id="cardFront"></div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-color-indicator" id="colorIndicatorBack"></div>
+        <div class="card-chapter" id="cardChapterBack"></div>
+        <div class="card-content" id="cardBack"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <div class="empty-state-icon">🎉</div>
+    <div class="empty-state-text">今日学习完成!</div>
+    <div class="empty-state-subtext">明天继续加油</div>
+  </div>
+
+  <div class="buttons-container" id="buttonsContainer" style="display:none;">
+    <button class="action-btn btn-again" onclick="rateCard(1)">
+      忘了<br><small>1分钟</small>
+    </button>
+    <button class="action-btn btn-hard" onclick="rateCard(2)">
+      困难<br><small>今天</small>
+    </button>
+    <button class="action-btn btn-good" onclick="rateCard(3)">
+      良好<br><small id="goodInterval">6天</small>
+    </button>
+    <button class="action-btn btn-easy" onclick="rateCard(4)">
+      简单<br><small id="easyInterval">10天</small>
+    </button>
+  </div>
+
+  <div class="fab-menu">
+    <button class="fab-button" onclick="toggleFilter()">⚙️</button>
+  </div>
+
+  <script>
+    // INJECT_SM2_HERE
+  </script>
+
+  <script>
+    // INJECT_QUEUE_HERE
+  </script>
+
+  <script>
+    // INJECT_CARDS_DATA_HERE
+  </script>
+
+  <script>
+    // 应用逻辑
+    const STORAGE_KEY = 'study-cards-state';
+    let allCards = [];
+    let currentQueue = [];
+    let currentCardIndex = 0;
+    let currentFilters = { colors: [], chapters: [] };
+
+    // 初始化
+    function init() {
+      // 加载卡片数据
+      allCards = CARDS_DATA.map(card => {
+        const stored = getStoredCardState(card);
+        return stored || SM2.initCardState ? CardQueue.initCardState(card) : {...card, ...{
+          id: card.chapter + '-' + card.front.substring(0, 20),
+          state: 'new',
+          repetitions: 0,
+          easeFactor: 2.5,
+          interval: 0,
+          nextReview: Date.now(),
+          lastReview: null,
+          reviewCount: 0
+        }};
+      });
+
+      // 构建章节筛选按钮
+      const chapters = CardQueue.getChapters(allCards);
+      const chapterFilters = document.getElementById('chapterFilters');
+      chapters.forEach(chapter => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.setAttribute('data-filter', 'chapter');
+        btn.setAttribute('data-value', chapter);
+        btn.textContent = chapter.length > 20 ? chapter.substring(0, 20) + '...' : chapter;
+        btn.onclick = handleFilterClick;
+        chapterFilters.appendChild(btn);
+      });
+
+      // 绑定筛选按钮事件
+      document.querySelectorAll('.filter-btn[data-filter="color"]').forEach(btn => {
+        btn.onclick = handleFilterClick;
+      });
+
+      // 绑定卡片点击事件
+      document.getElementById('card').onclick = flipCard;
+
+      // 更新队列和UI
+      updateQueue();
+      updateStats();
+      showNextCard();
+    }
+
+    // 获取存储的卡片状态
+    function getStoredCardState(card) {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return null;
+
+      try {
+        const data = JSON.parse(stored);
+        const id = card.chapter + '-' + card.front.substring(0, 20);
+        return data[id];
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // 保存卡片状态
+    function saveCardState(card) {
+      let data = {};
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) data = JSON.parse(stored);
+      } catch (e) {}
+
+      data[card.id] = card;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // 更新队列
+    function updateQueue() {
+      let filtered = allCards;
+
+      // 应用颜色筛选
+      if (currentFilters.colors.length > 0 && !currentFilters.colors.includes('all')) {
+        filtered = filtered.filter(card => currentFilters.colors.includes(card.color));
+      }
+
+      // 应用章节筛选
+      if (currentFilters.chapters.length > 0 && !currentFilters.chapters.includes('all')) {
+        filtered = filtered.filter(card => currentFilters.chapters.includes(card.chapter));
+      }
+
+      currentQueue = CardQueue.buildQueue(filtered, 20);
+      currentCardIndex = 0;
+    }
+
+    // 更新统计
+    function updateStats() {
+      const stats = CardQueue.getStats(allCards);
+      document.getElementById('statToday').textContent = stats.reviewedToday;
+      document.getElementById('statDue').textContent = stats.due;
+      document.getElementById('statNew').textContent = stats.byState.new;
+      document.getElementById('statMastery').textContent = stats.masteryRate + '%';
+
+      // 更新进度条
+      const progress = currentQueue.length > 0
+        ? ((currentCardIndex / currentQueue.length) * 100)
+        : 0;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+
+    // 显示下一张卡片
+    function showNextCard() {
+      if (currentCardIndex >= currentQueue.length) {
+        showEmptyState();
+        return;
+      }
+
+      const card = currentQueue[currentCardIndex];
+
+      // 更新卡片内容
+      document.getElementById('cardFront').textContent = card.front;
+      document.getElementById('cardBack').innerHTML = formatBack(card.back);
+      document.getElementById('cardChapter').textContent = card.chapter;
+      document.getElementById('cardChapterBack').textContent = card.chapter;
+
+      // 更新颜色指示器
+      const color = card.color === 'red' ? '#ff6b6b' : card.color === 'yellow' ? '#ffd43b' : '#51cf66';
+      document.getElementById('colorIndicator').style.background = color;
+      document.getElementById('colorIndicatorBack').style.background = color;
+
+      // 更新间隔预览
+      updateIntervalPreview(card);
+
+      // 显示UI
+      document.getElementById('cardContainer').style.display = 'block';
+      document.getElementById('buttonsContainer').style.display = 'flex';
+      document.getElementById('emptyState').style.display = 'none';
+
+      // 重置翻转状态
+      document.getElementById('card').classList.remove('flipped');
+    }
+
+    // 格式化背面内容
+    function formatBack(text) {
+      // 检测是否是表格
+      if (text.includes('|') && text.split('\n').length > 2) {
+        const lines = text.split('\n').filter(l => l.trim());
+        let html = '<table>';
+        lines.forEach((line, i) => {
+          if (i === 1 && line.match(/^[\s\-|:]+$/)) return; // 跳过分隔行
+
+          const cells = line.split('|').filter(c => c.trim()).map(c => c.trim());
+          const tag = i === 0 ? 'th' : 'td';
+          html += '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
+        });
+        html += '</table>';
+        return html;
+      }
+
+      return text.replace(/\n/g, '<br>');
+    }
+
+    // 更新间隔预览
+    function updateIntervalPreview(card) {
+      const goodResult = SM2.calculateSM2(SM2.mapButtonToQuality(3), card.repetitions, card.easeFactor, card.interval);
+      const easyResult = SM2.calculateSM2(SM2.mapButtonToQuality(4), card.repetitions, card.easeFactor, card.interval);
+
+      document.getElementById('goodInterval').textContent = goodResult.interval + '天';
+      document.getElementById('easyInterval').textContent = easyResult.interval + '天';
+    }
+
+    // 翻转卡片
+    function flipCard() {
+      document.getElementById('card').classList.toggle('flipped');
+    }
+
+    // 评分卡片
+    function rateCard(buttonType) {
+      const card = currentQueue[currentCardIndex];
+      const quality = SM2.mapButtonToQuality(buttonType);
+      const sm2Result = SM2.calculateSM2(quality, card.repetitions, card.easeFactor, card.interval);
+      const nextReview = SM2.getNextReviewDate(sm2Result.interval);
+
+      // 更新卡片状态
+      const updatedCard = CardQueue.updateCardState(card, sm2Result, nextReview);
+
+      // 更新 allCards 中对应的卡片
+      const cardIndex = allCards.findIndex(c => c.id === card.id);
+      if (cardIndex !== -1) {
+        allCards[cardIndex] = updatedCard;
+      }
+
+      // 保存状态
+      saveCardState(updatedCard);
+
+      // 下一张
+      currentCardIndex++;
+      updateStats();
+      showNextCard();
+    }
+
+    // 显示空状态
+    function showEmptyState() {
+      document.getElementById('cardContainer').style.display = 'none';
+      document.getElementById('buttonsContainer').style.display = 'none';
+      document.getElementById('emptyState').style.display = 'block';
+    }
+
+    // 切换筛选面板
+    function toggleFilter() {
+      document.getElementById('filterPanel').classList.toggle('active');
+    }
+
+    // 处理筛选点击
+    function handleFilterClick(e) {
+      const btn = e.target;
+      const filterType = btn.getAttribute('data-filter');
+      const filterValue = btn.getAttribute('data-value');
+
+      // 更新按钮状态
+      const group = btn.parentElement;
+      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // 更新筛选器
+      if (filterType === 'color') {
+        currentFilters.colors = filterValue === 'all' ? [] : [filterValue];
+      } else if (filterType === 'chapter') {
+        currentFilters.chapters = filterValue === 'all' ? [] : [filterValue];
+      }
+
+      // 重新构建队列
+      updateQueue();
+      updateStats();
+      showNextCard();
+    }
+
+    // 启动应用
+    init();
+  </script>
+</body>
+</html>
