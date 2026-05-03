@@ -794,6 +794,7 @@ if (typeof window !== 'undefined') {
   window.CardQueue = {
     CardState,
     initCardState,
+    generateId,
     filterCards,
     getDueCards,
     getNewCards,
@@ -912,10 +913,11 @@ if (typeof window !== 'undefined') {
       setTimeout(setIOSHeight, 100);
     });
 
-    // Prevent iOS rubber-band scrolling on body
-    document.addEventListener('touchmove', function(e) {
-      if (e.target.closest('.card-back') || e.target.closest('.filter-panel')) return;
-      e.preventDefault();
+    // Prevent iOS rubber-band scrolling on body (only on body itself)
+    document.body.addEventListener('touchmove', function(e) {
+      if (e.target === document.body) {
+        e.preventDefault();
+      }
     }, { passive: false });
 
     const CARDS_DATA = [
@@ -2939,22 +2941,14 @@ if (typeof window !== 'undefined') {
     let currentQueue = [];
     let currentCardIndex = 0;
     let currentFilters = { colors: [], chapters: [] };
+    let swipeCleanup = null;
 
     // 初始化
     function init() {
       // 加载卡片数据
       allCards = CARDS_DATA.map(card => {
         const stored = getStoredCardState(card);
-        return stored || SM2.initCardState ? CardQueue.initCardState(card) : {...card, ...{
-          id: card.chapter + '-' + card.front.substring(0, 20),
-          state: 'new',
-          repetitions: 0,
-          easeFactor: 2.5,
-          interval: 0,
-          nextReview: Date.now(),
-          lastReview: null,
-          reviewCount: 0
-        }};
+        return stored ? stored : CardQueue.initCardState(card);
       });
 
       // 构建章节筛选按钮
@@ -2980,7 +2974,7 @@ if (typeof window !== 'undefined') {
 
       // 绑定滑动手势
       if (typeof Swipe !== 'undefined') {
-        Swipe.createSwipeHandler(
+        swipeCleanup = Swipe.createSwipeHandler(
           document.getElementById('card'),
           {
             onSwipeLeft: () => rateCard(1),  // 左滑 = 忘了
@@ -3003,9 +2997,21 @@ if (typeof window !== 'undefined') {
 
       try {
         const data = JSON.parse(stored);
-        const id = card.chapter + '-' + card.front.substring(0, 20);
-        return data[id];
+        const id = CardQueue.generateId ? CardQueue.generateId(card) : (card.chapter + '-' + card.front.substring(0, 20)).replace(/[^a-zA-Z0-9-]/g, '');
+        const storedCard = data[id];
+
+        // 验证数据结构并设置默认值
+        if (!storedCard || typeof storedCard !== 'object') return null;
+        if (typeof storedCard.state !== 'string') return null;
+        if (typeof storedCard.repetitions !== 'number') return null;
+        if (typeof storedCard.easeFactor !== 'number') return null;
+
+        // 为旧数据添加缺失字段
+        if (storedCard.reviewCount === undefined) storedCard.reviewCount = 0;
+
+        return storedCard;
       } catch (e) {
+        console.warn('Failed to parse stored state:', e);
         return null;
       }
     }
@@ -3016,10 +3022,21 @@ if (typeof window !== 'undefined') {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) data = JSON.parse(stored);
-      } catch (e) {}
-
-      data[card.id] = card;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        data[card.id] = card;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (e) {
+        if (e.name === 'QuotaExceededError') {
+          console.warn('localStorage quota exceeded, clearing old data');
+          try {
+            // 只保留当前卡片
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ [card.id]: card }));
+          } catch (retryError) {
+            console.error('Failed to save even after clearing:', retryError);
+          }
+        } else {
+          console.error('Failed to save card state:', e);
+        }
+      }
     }
 
     // 更新队列
@@ -3096,9 +3113,16 @@ if (typeof window !== 'undefined') {
 
     // 格式化背面内容
     function formatBack(text) {
-      // Handle markdown bold
+      // HTML转义函数防止XSS
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      // Handle markdown bold (先转义再添加允许的HTML)
       function processBold(str) {
-        return str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        return escapeHtml(str).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       }
 
       // 检测是否是表格
@@ -3118,7 +3142,7 @@ if (typeof window !== 'undefined') {
 
       // 处理列表
       let result = text;
-      result = result.replace(/^- (.+)$/gm, '<li>$1</li>');
+      result = result.replace(/^- (.+)$/gm, (match, p1) => '<li>' + escapeHtml(p1) + '</li>');
       if (result.includes('<li>')) {
         result = result.replace(/((?:<li>.+<\/li>\n?)+)/g, '<ul>$1</ul>');
       }
@@ -3175,9 +3199,10 @@ if (typeof window !== 'undefined') {
     const LEARNING_STEPS = [1, 10]; // 分钟
 
     function rateCard(buttonType) {
+      if (currentCardIndex >= currentQueue.length) return; // 防止索引越界
       const card = currentQueue[currentCardIndex];
-      // 保存当前状态用于撤销
-      lastCardState = { ...card };
+      // 保存当前状态用于撤销(深拷贝)
+      lastCardState = JSON.parse(JSON.stringify(card));
       document.getElementById('undoBtn').style.display = 'flex';
 
       let updatedCard;
@@ -3305,6 +3330,11 @@ if (typeof window !== 'undefined') {
       updateStats();
       showNextCard();
     }
+
+    // 清理事件监听器
+    window.addEventListener('beforeunload', () => {
+      if (swipeCleanup) swipeCleanup();
+    });
 
     // 启动应用
     init();
