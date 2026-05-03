@@ -214,11 +214,19 @@
     .card-back {
       transform: rotateY(180deg);
       -webkit-transform: rotateY(180deg);
-      justify-content: flex-start;
-      align-items: stretch;
+      padding: 0;
+    }
+
+    .scroll-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding-top: 40px;
+      overscroll-behavior: contain;
+      padding: 40px 16px 16px;
     }
 
     .card-color-indicator {
@@ -522,9 +530,11 @@
         <div class="flip-hint">👆 点击翻转</div>
       </div>
       <div class="card-face card-back">
-        <div class="card-color-indicator" id="colorIndicatorBack"></div>
-        <div class="card-chapter" id="cardChapterBack"></div>
-        <div class="card-content" id="cardBack"></div>
+        <div class="scroll-inner">
+          <div class="card-color-indicator" id="colorIndicatorBack"></div>
+          <div class="card-chapter" id="cardChapterBack"></div>
+          <div class="card-content" id="cardBack"></div>
+        </div>
       </div>
     </div>
   </div>
