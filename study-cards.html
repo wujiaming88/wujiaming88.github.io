@@ -218,22 +218,30 @@
     }
 
     .card-back .card-content {
-      font-size: 16px;
+      font-size: 15px;
       text-align: left;
+      overflow-x: auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
     }
 
     .card-back table {
       width: 100%;
       border-collapse: collapse;
       margin: 8px 0;
-      font-size: 13px;
+      font-size: 12px;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .card-back th,
     .card-back td {
-      padding: 8px;
+      padding: 6px 8px;
       border: 1px solid var(--border-color);
       text-align: left;
+      white-space: nowrap;
     }
 
     .card-back th {
@@ -343,7 +351,20 @@
       }
 
       .card-content {
-        font-size: 18px;
+        font-size: 16px;
+      }
+
+      .card-back .card-content {
+        font-size: 13px;
+      }
+
+      .card-back table {
+        font-size: 11px;
+      }
+
+      .card-back th,
+      .card-back td {
+        padding: 4px 6px;
       }
 
       .action-btn {
