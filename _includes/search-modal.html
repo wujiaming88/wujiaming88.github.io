@@ -212,10 +212,24 @@
   border: 2px solid transparent;
 }
 
-.search-result-item:hover,
-.search-result-item.highlighted {
+.search-result-item:hover {
   background: var(--bg-tertiary);
+}
+
+.search-result-item.highlighted {
+  background: var(--accent);
+  color: #fff;
   border-color: var(--accent);
+  transform: scale(1.01);
+}
+
+.search-result-item.highlighted .search-result-title {
+  color: #fff;
+}
+
+.search-result-item.highlighted .search-result-meta,
+.search-result-item.highlighted .search-result-excerpt {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .search-result-title {
@@ -499,7 +513,7 @@
       const url = result.url || '#';
 
       html += `
-        <a href="${url}" class="search-result-item" data-index="${index}">
+        <a href="${url}" class="search-result-item${index === 0 ? ' highlighted' : ''}" data-index="${index}">
           <div class="search-result-title">${title}</div>
           ${date || category ? `<div class="search-result-meta">${date}${date && category ? ' · ' : ''}${category}</div>` : ''}
           ${excerpt ? `<div class="search-result-excerpt">${excerpt}</div>` : ''}
@@ -508,11 +522,11 @@
     });
 
     searchResults.innerHTML = html;
+    highlightedIndex = 0; // 自动高亮第一条
 
     // 绑定点击事件
     searchResults.querySelectorAll('.search-result-item').forEach(item => {
       item.addEventListener('click', (e) => {
-        // 让浏览器处理默认的链接跳转
         closeSearchModal();
       });
     });
@@ -557,7 +571,9 @@
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (highlightedIndex >= 0 && items[highlightedIndex]) {
-        items[highlightedIndex].click();
+        window.location.href = items[highlightedIndex].href;
+      } else if (items.length > 0) {
+        window.location.href = items[0].href;
       }
     } else if (e.key === 'Escape') {
       e.preventDefault();
