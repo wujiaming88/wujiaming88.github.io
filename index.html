@@ -483,17 +483,52 @@ body.home-page .container {
     box-shadow: 0 4px 12px rgba(99,102,241,0.25);
 }
 
-/* 文章网格：自适应多列，宽屏 3 列，充分利用页面宽度 */
+/* 文章网格：Bento 马赛克布局——首卡放大，打破均匀框格的死板感 */
 .post-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 22px;
 }
 
-@media (min-width: 1180px) {
-    .post-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+/* 首卡：跨 2 列×两行的大头条 */
+.post-grid .post-card:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+.post-grid .post-card:first-child .post-card-img { height: 100%; min-height: 300px; }
+.post-grid .post-card:first-child .post-card-link { display: flex; flex-direction: column; height: 100%; }
+.post-grid .post-card:first-child .post-card-title { font-size: 1.5rem; -webkit-line-clamp: 3; }
+.post-grid .post-card:first-child .post-card-excerpt { -webkit-line-clamp: 4; font-size: 0.95rem; }
+.post-grid .post-card:first-child .post-card-body { padding: 22px 24px; }
+
+/* 第 2/3 张：各跨 2 列的横向中卡（图左文右） */
+.post-grid .post-card:nth-child(2),
+.post-grid .post-card:nth-child(3) {
+    grid-column: span 2;
+    flex-direction: row;
+}
+.post-grid .post-card:nth-child(2) .post-card-link,
+.post-grid .post-card:nth-child(3) .post-card-link { display: flex; height: 100%; }
+.post-grid .post-card:nth-child(2) .post-card-img,
+.post-grid .post-card:nth-child(3) .post-card-img { width: 42%; height: auto; min-height: 150px; flex-shrink: 0; }
+.post-grid .post-card:nth-child(2) .post-card-body,
+.post-grid .post-card:nth-child(3) .post-card-body { flex: 1; }
+
+/* 其余：每张跨 2 列的标准卡（一行两个） */
+.post-grid .post-card:nth-child(n+4) {
+    grid-column: span 2;
+}
+
+@media (max-width: 980px) {
+    .post-grid { grid-template-columns: repeat(2, 1fr); }
+    .post-grid .post-card:first-child,
+    .post-grid .post-card:nth-child(2),
+    .post-grid .post-card:nth-child(3),
+    .post-grid .post-card:nth-child(n+4) { grid-column: span 1; grid-row: auto; flex-direction: column; }
+    .post-grid .post-card:nth-child(2) .post-card-img,
+    .post-grid .post-card:nth-child(3) .post-card-img { width: 100%; height: 190px; }
+    .post-grid .post-card:first-child .post-card-title { font-size: 1.15rem; }
 }
 
 .post-card {
@@ -684,6 +719,14 @@ body.home-page .container {
     .post-grid {
         grid-template-columns: 1fr;
     }
+    .post-grid .post-card:first-child,
+    .post-grid .post-card:nth-child(2),
+    .post-grid .post-card:nth-child(3),
+    .post-grid .post-card:nth-child(n+4) { grid-column: auto; grid-row: auto; }
+    .post-grid .post-card:nth-child(2) .post-card-link,
+    .post-grid .post-card:nth-child(3) .post-card-link { flex-direction: column; }
+    .post-grid .post-card:nth-child(2) .post-card-img,
+    .post-grid .post-card:nth-child(3) .post-card-img { width: 100%; height: 190px; }
 
     .featured-card {
         flex-direction: column;
