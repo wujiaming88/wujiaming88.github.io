@@ -131,10 +131,15 @@ title: W.ai - 深度技术研究博客
    首页样式
    ============================================ */
 
+/* 首页加宽容器：覆盖全局 1100px 限制，提升页面利用率 */
+body.home-page .container {
+    max-width: 1320px;
+}
+
 /* Hero */
 .hero-section {
     text-align: center;
-    padding: 48px 20px 32px;
+    padding: 56px 20px 36px;
 }
 
 /* Hero 大 Logo */
@@ -314,8 +319,9 @@ title: W.ai - 深度技术研究博客
     text-decoration: none;
     color: inherit;
     transition: all 0.3s ease;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
     position: relative;
+    min-height: 320px;
 }
 
 .featured-card::before {
@@ -340,8 +346,8 @@ title: W.ai - 深度技术研究博客
 }
 
 .featured-img {
-    width: 45%;
-    min-height: 260px;
+    width: 52%;
+    min-height: 320px;
     background: linear-gradient(135deg, var(--accent), var(--accent-light), var(--accent-cyan));
     position: relative;
     overflow: hidden;
@@ -428,11 +434,17 @@ title: W.ai - 深度技术研究博客
     gap: 10px;
 }
 
-/* 文章网格 */
+/* 文章网格：自适应多列，宽屏 3 列，充分利用页面宽度 */
 .post-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+@media (min-width: 1180px) {
+    .post-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .post-card {
@@ -456,7 +468,7 @@ title: W.ai - 深度技术研究博客
 }
 
 .post-card-img {
-    height: 160px;
+    height: 190px;
     overflow: hidden;
     background: var(--bg-tertiary);
     position: relative;
