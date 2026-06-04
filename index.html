@@ -72,12 +72,26 @@ title: W.ai - 深度技术研究博客
         <span><span id="postListTitle">最新文章</span></span>
         <span class="more" id="postCount">{{ site.posts.size }} 篇</span>
     </div>
-    
-    <!-- 搜索结果提示 -->
-    
+
+    <!-- 分类筛选条 -->
+    {% assign cat_string = "" %}
+    {% for post in site.posts %}
+      {% if post.categories.size > 0 %}
+        {% assign cat_string = cat_string | append: post.categories.first | downcase | append: "|" %}
+      {% endif %}
+    {% endfor %}
+    {% assign cat_list = cat_string | split: "|" | uniq | sort %}
+    <div class="filter-bar" id="filterBar">
+        <button class="filter-chip active" data-cat="all" onclick="filterPosts(this,'all')">全部</button>
+        {% for c in cat_list %}
+        {% case c %}{% when 'ai' %}{% assign label = 'AI' %}{% when 'openclaw' %}{% assign label = 'OpenClaw' %}{% when 'mcp' %}{% assign label = 'MCP' %}{% else %}{% assign label = c | capitalize %}{% endcase %}
+        <button class="filter-chip" data-cat="{{ c }}" onclick="filterPosts(this,'{{ c }}')">{{ label }}</button>
+        {% endfor %}
+    </div>
+
     <div class="post-grid" id="postList">
         {% for post in site.posts %}
-        <article class="post-card" data-url="{{ post.url | relative_url }}">
+        <article class="post-card" data-url="{{ post.url | relative_url }}" data-category="{% if post.categories.size > 0 %}{{ post.categories.first | downcase }}{% endif %}">
             <a href="{{ post.url | relative_url }}" class="post-card-link">
                 <div class="post-card-img">
                     {% if post.header.overlay_image %}
@@ -434,6 +448,41 @@ body.home-page .container {
     gap: 10px;
 }
 
+/* 分类筛选条 */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.filter-chip {
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    padding: 7px 18px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    line-height: 1.2;
+}
+
+.filter-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.filter-chip.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.25);
+}
+
 /* 文章网格：自适应多列，宽屏 3 列，充分利用页面宽度 */
 .post-grid {
     display: grid;
@@ -452,14 +501,17 @@ body.home-page .container {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .post-card:hover {
     border-color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
 }
+
+.post-card.is-hidden { display: none; }
 
 .post-card-link {
     display: block;
@@ -668,6 +720,24 @@ body.home-page .container {
     }
 }
 </style>
+
+<script>
+function filterPosts(btn, cat) {
+    document.querySelectorAll('#filterBar .filter-chip').forEach(function(c){ c.classList.remove('active'); });
+    btn.classList.add('active');
+    var cards = document.querySelectorAll('#postList .post-card');
+    var shown = 0;
+    cards.forEach(function(card){
+        var match = (cat === 'all') || (card.getAttribute('data-category') === cat);
+        card.classList.toggle('is-hidden', !match);
+        if (match) shown++;
+    });
+    var titleEl = document.getElementById('postListTitle');
+    var countEl = document.getElementById('postCount');
+    if (titleEl) titleEl.textContent = (cat === 'all') ? '最新文章' : btn.textContent + ' 文章';
+    if (countEl) countEl.textContent = shown + ' 篇';
+}
+</script>
 
 
 
