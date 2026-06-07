@@ -71,6 +71,7 @@ NVIDIA 以 RTX Spark 杀入 PC、Vera 量产卡数据中心、Jetson Thor + Isaa
 > 🔥重大 ｜ 🟢一般 ｜ 🟡边缘 ｜ ⚪️静默
 
 ### 🧠 大模型基座
+
 | 对象 | 本周 | 一句话 |
 |------|------|--------|
 | Google DeepMind | 🔥 | Gemma 4 12B：encoder-free 统一多模态，16GB 笔记本可跑 |
@@ -85,6 +86,7 @@ NVIDIA 以 RTX Spark 杀入 PC、Vera 量产卡数据中心、Jetson Thor + Isaa
 | 字节跳动 | ⚪️ | 静默期，弹药集中到 6 月中 Force 大会 |
 
 ### 🤖 垂直 Agent 产品
+
 | 对象 | 本周 | 一句话 |
 |------|------|--------|
 | Anysphere (Cursor) | 🔥 | 3.7 版 Design Mode 多选元素 + 语音输入 + SDK 升级 |
@@ -96,6 +98,7 @@ NVIDIA 以 RTX Spark 杀入 PC、Vera 量产卡数据中心、Jetson Thor + Isaa
 | Sierra | ⚪️ | 5 月 megaround 后消化期，无新公开动作 |
 
 ### 🇨🇳 中国公司
+
 | 对象 | 本周 | 一句话 |
 |------|------|--------|
 | MiniMax | 🔥 | M3 发布，国内首个集齐三项能力的开源模型（详见 TOP 5） |
@@ -105,6 +108,7 @@ NVIDIA 以 RTX Spark 杀入 PC、Vera 量产卡数据中心、Jetson Thor + Isaa
 | 腾讯 (混元) | ⚪️ | "先偿内债"，4 月混元 3.0 后内部落地期 |
 
 ### 🛠️ Agent 框架工具
+
 | 对象 | 本周 | 一句话 |
 |------|------|--------|
 | Claude Code | 🔥 | 每日发布：fallbackModel、managed settings 版本锁定、跨会话安全 |
@@ -119,6 +123,7 @@ NVIDIA 以 RTX Spark 杀入 PC、Vera 量产卡数据中心、Jetson Thor + Isaa
 | SSI | ⚪️ | 零产品纯研究，仅外部估值梳理（$32B） |
 
 ### ⚡ 算力云硬件
+
 | 对象 | 本周 | 一句话 |
 |------|------|--------|
 | NVIDIA | 🔥 | GTC Taipei：RTX Spark + Vera 量产 + Isaac GR00T（详见 TOP 5） |
@@ -126,6 +131,7 @@ NVIDIA 以 RTX Spark 杀入 PC、Vera 量产卡数据中心、Jetson Thor + Isaa
 | Azure | 🔥 | Build 推自研 MAI 去 OpenAI 依赖（详见 TOP 5） |
 
 ### 🦾 具身机器人
+
 | 对象 | 本周 | 一句话 |
 |------|------|--------|
 | 宇树 Unitree | 🔥 | 产能破万 + IPO 过会 + 英伟达联姻（详见 TOP 5） |
@@ -134,7 +140,9 @@ NVIDIA 以 RTX Spark 杀入 PC、Vera 量产卡数据中心、Jetson Thor + Isaa
 
 ---
 
-## 🧠 大模型基座 · 深度正文
+## 📚 赛道深度正文
+
+### 🧠 大模型基座
 
 **Google DeepMind · Gemma 4 12B（6/3）**
 本周 DeepMind 的核心动作是发布 **Gemma 4 12B**——一款"无编码器（encoder-free）的统一多模态开放模型"，定位"把 agentic 多模态智能直接带到笔记本电脑"。架构创新：摒弃传统多模态模型的独立视觉/音频编码器，视觉用"单次矩阵乘法 + 位置嵌入 + 归一化"的轻量 embedding 模块替代，音频则完全移除编码器、把原始音频信号直接投射到与文本 token 相同的维度空间，由 LLM 主干统一处理（降低延迟与内存占用）。它填补了边缘端 E4B 与更强 26B MoE 之间的空档，是 Gemma 系列首个具备原生音频输入的中型模型。性能上标准 benchmark "接近其 26B MoE 模型"，但总内存占用不到一半，可在仅 **16GB VRAM/统一内存**的消费级笔记本本地运行。生态：Apache 2.0 许可证开源，内置 Multi-Token Prediction（MTP）drafter 降低延迟；官方称 Gemma 4 系列累计下载已突破 **1.5 亿次**，已上线 LM Studio、Ollama、Google AI Edge Gallery。背景：Gemma 4 初代于 2026-03-31 发布；6/11 还将在 London Tech Week 办"Gemma 4 Startups"活动（含 Gemini 3.1、Genie、Veo 预告）。encoder-free 统一多模态是端侧 AI 的范式转变，瞄准"本地笔记本跑 agent"场景，是 Google 在开源端侧与 Meta Llama、Qwen 正面竞争的关键落子。
@@ -176,7 +184,7 @@ NVIDIA 以 RTX Spark 杀入 PC、Vera 量产卡数据中心、Jetson Thor + Isaa
 
 ---
 
-## 🤖 垂直 Agent 产品 · 深度正文
+### 🤖 垂直 Agent 产品
 
 **Anysphere (Cursor) · 3.7 版 Design Mode（6/5）**
 本周 Cursor 发布 3.7 版本，核心是"Design Mode（设计模式）"的重大增强，让开发者可在 Cursor 浏览器中直接对实时运行的应用做可视化操作：①**多选元素**——同时点选两个或以上 UI 元素，Cursor 能读取所选元素的代码、周边布局及视觉关系，可让 agent"把 A 改成和 B 一致"、批量调整一组组件；②**语音输入**——通过 Design Mode 浮层用语音口述改动，且 agent 运行中麦克风保持可用，可语音排队下一个改动。配套更新：**Cursor SDK 升级（TS/Python）**，新增自定义工具（通过 local.customTools 把自有函数作为 MCP 工具暴露）、auto-review（本地 headless agent 的工具调用经分类器审核）、JSONL 持久化、可无限嵌套的 subagent；**Canvas Design Mode** + 上下文用量报告（拆解 token 在 system prompt/tool 定义/rules/skills 等处的分布）；**Enterprise Organizations**（企业版组织管理，支持多 Team 多 Group 的安全/治理/预算/功能分权，已对所有企业客户 GA）。Cursor 正从"代码编辑器"全面转向"agent 编排平台"——Design Mode 把前端可视化操作纳入 agent 闭环，SDK 的嵌套 subagent + 自定义工具是在搭建生产级 agent 基础设施。背景：据 Wikipedia 摘要 Cursor 估值达数百亿美元、ARR 超 30 亿美元。
@@ -206,7 +214,7 @@ Glean 官方发布新增对 **NVIDIA Nemotron 3 Ultra 开源模型**的支持，
 
 ---
 
-## 🇨🇳 中国公司 · 深度正文
+### 🇨🇳 中国公司
 
 **MiniMax · M3 发布**（详见 TOP 5）
 补充技术细节：M3 官方六大关键词为 Coding 能力、1M 上下文、原生多模态、Computer Use、低价 Token Plan、开源。此前能集齐"前沿 Coding + 1M 上下文 + 原生多模态"三项的仅 Claude Opus 4.7、Gemini 3.1 Pro、GPT-5.5 等海外闭源旗舰。完整 benchmark：SWE-Bench Pro 59.0%、Terminal Bench 2.1 66.0%、SWE-fficiency 34.8%、KernelBench Hard 28.8%、MCP Atlas 74.2%；SVG-Bench 超 Opus 4.7；多模态 OmniDocBench 超 Gemini 3.1 Pro；Claw-Eval 拿最高分。同日 MiniMax Code 更新（Agent Team 可将大任务拆解为多阶段可并发 Workflow）。背景：截至 5/28 全球企业开发者客户超百万、全球用户约 3 亿、过去两月 ARR 增长超 100%。
@@ -223,7 +231,7 @@ Glean 官方发布新增对 **NVIDIA Nemotron 3 Ultra 开源模型**的支持，
 
 ---
 
-## 🛠️ Agent 框架工具 · 深度正文
+### 🛠️ Agent 框架工具
 
 **Claude Code · 高频发布周（5/31–6/6）**
 本周是 Claude Code 的高频发布周，节奏接近每日一发。核心新功能：①**fallbackModel 设置**（6/6）——可配置最多三个 fallback 模型，主模型过载/不可用时按序尝试，--fallback-model 现也作用于交互式会话；②**deny 规则支持 glob 通配**——deny 规则工具名位置支持 "*"（拒绝所有工具）；③**跨会话消息安全加固**——经 SendMessage 从其他 Claude 会话转发的消息不再携带 user authority，接收方拒绝转发的权限请求；④**managed settings 强化**（6/4）——新增 requiredMinimumVersion/requiredMaximumVersion，版本越界则拒绝启动；新增 /plugin list 命令；⑤**思考控制**——MAX_THINKING_TOKENS=0 现可关闭默认思考的模型；⑥触发词从 workflow 改为 **ultracode**（6/2）。另有大量 background agents 稳定性、Windows 权限规则反斜杠匹配、MCP 密钥脱敏、OTEL 指标维度切片修复。Claude Code 本周明显聚焦"企业治理 + 模型容错 + 多会话/后台 agent 编排稳定性"，正从单机编码工具向团队级、可治理、多 agent 并行的工程平台演进。
@@ -260,7 +268,7 @@ Cohere 发布开源数据可视化工具 **co/plot**。该工具由 Cohere Labs 
 
 ---
 
-## ⚡ 算力云硬件 · 深度正文
+### ⚡ 算力云硬件
 
 **NVIDIA · GTC Taipei 大爆发周**（详见 TOP 5）
 补充：6/2 黄仁勋对外表态 NVIDIA "有足够产能支撑 CPU/GPU 强劲增长"，回应供给约束担忧。Jetson AGX Thor T5000 规格：Blackwell GPU、2070 FP4 TFLOPS AI 算力、14 核 Arm CPU、128GB 统一内存、40–130W 可配置功耗。Vera CPU 全面量产，被定位为"新的主要增长驱动力"。NVIDIA 从云端 GPU 单点垄断走向"端-边-云"全栈通吃，RTX Spark 把战火烧到 PC 芯片，直接动 Intel/AMD 蛋糕。
@@ -274,7 +282,9 @@ AWS 本周核心动作是把 OpenAI 前沿模型全面接入 Bedrock——**GPT-
 补充：MAI-Thinking-1 跑在 Azure 自有基础设施上，直接改善 Azure AI 的毛利结构；Azure AI Agent Service（托管调度/记忆/工具调用/多 agent 协同）首日开放注册、首小时超 1 万开发团队报名。背景：Anthropic 6/1 已秘密递交 IPO；微软已投 OpenAI 130 亿美元、Anthropic 50 亿美元。这是微软 AI 战略的关键拐点——从深度绑定 OpenAI 转向"自研 MAI + 多供应商并行"，既降本又夺回模型层控制权。
 [CNBC](https://www.cnbc.com/2026/06/02/microsoft-unveils-new-ai-models-lessen-reliance-on-openai-lower-costs.html) · [WindowsNews](https://windowsnews.ai/article/microsoft-build-2026-windows-becomes-the-home-for-ai-agents.423082)
 
-## 🦾 具身机器人 · 深度正文
+---
+
+### 🦾 具身机器人
 
 **宇树 Unitree · 三喜临门**（详见 TOP 5）
 补充：宇树 2025 年纯人形出货超 5500 台、全球份额约 32.4%、居全球第一（高工机器人/IDC）。被英伟达选为首个开放人形参考设计本体（H2 Plus），"身体来自宇树、大脑来自英伟达"的分工绑定全球 AI 算力龙头。NVIDIA-宇树"美脑中身"组合，在中美科技博弈背景下耐人寻味——英伟达同时强调将与美欧厂商合作，留有对冲。
