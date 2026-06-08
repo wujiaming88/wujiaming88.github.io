@@ -1,6 +1,6 @@
 ---
 title: "WTF Is a Loop？拆解 2026 年初 AI Coding 圈最火的一场嘴仗"
-date: 2026-06-09
+date: 2026-06-09 07:00:00 +0800
 categories: [AI]
 tags: [AI Coding, Agentic Loop, Harness Engineering, Claude Code, Codex, OpenClaw, Peter Steinberger, Boris Cherny, 行业观察]
 header:

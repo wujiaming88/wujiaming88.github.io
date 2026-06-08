@@ -3,6 +3,7 @@
 title: W.ai
 description: W.ai的深度技术研究博客 | AI技术、深度学习、工程实践
 lang: zh-CN
+timezone: Asia/Shanghai # 与博客作者时区一致,避免UTC时差导致当日文章被当成future post而不生成
 url: "https://wujiaming88.github.io" # GitHub Pages默认域名
 baseurl: "" # 如果博客不在根目录，设置为子目录路径
 
