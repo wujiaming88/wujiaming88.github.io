@@ -201,6 +201,31 @@ function shareToX() {
     var tocNav = document.getElementById('post-toc');
     if (!tocBody || !tocNav) return;
 
+    // 移动端：把目录从「标题之上」移到「封面图之后、正文之前」，避免挤在导航栏与标题之间
+    function placeTocForViewport() {
+        var isMobile = window.matchMedia('(max-width: 1199px)').matches;
+        var article = document.querySelector('article.post');
+        if (!article) return;
+        if (isMobile) {
+            var cover = article.querySelector('.post-cover');
+            var anchor = cover || article.querySelector('.post-header');
+            if (anchor && tocNav.previousElementSibling !== anchor) {
+                anchor.insertAdjacentElement('afterend', tocNav);
+            }
+        } else {
+            // 桌面端：恢复为 article 之前的固定左侧目录
+            if (article.parentNode && tocNav.nextElementSibling !== article) {
+                article.parentNode.insertBefore(tocNav, article);
+            }
+        }
+    }
+    placeTocForViewport();
+    var _tocResizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(_tocResizeTimer);
+        _tocResizeTimer = setTimeout(placeTocForViewport, 200);
+    });
+
     var content = document.querySelector('.post-content');
     if (!content) return;
 
