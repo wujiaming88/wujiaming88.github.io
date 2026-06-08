@@ -521,7 +521,7 @@ body.home-page .container {
 }
 
 @media (max-width: 980px) {
-    .post-grid { grid-template-columns: repeat(2, 1fr); }
+    .post-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
     .post-grid .post-card:first-child,
     .post-grid .post-card:nth-child(2),
     .post-grid .post-card:nth-child(3),
@@ -718,6 +718,7 @@ body.home-page .container {
 
     .post-grid {
         grid-template-columns: 1fr;
+        grid-auto-rows: auto;
     }
     .post-grid .post-card:first-child,
     .post-grid .post-card:nth-child(2),
