@@ -43,7 +43,7 @@
   --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
   --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
 
-  --navbar-bg: rgba(255,255,255,0.92);
+  --navbar-bg: rgba(255,255,255,0.98);
   --navbar-mobile-bg: rgba(255,255,255,0.98);
   --blockquote-text: #4b5563;
   --blockquote-bg: rgba(99,102,241,0.04);
@@ -137,6 +137,17 @@ img {
   height: 60px;
   display: flex;
   align-items: center;
+}
+
+/* Fallback: browsers without backdrop-filter (e.g. Telegram in-app webview)
+   must use a fully opaque navbar, otherwise scrolling content bleeds through
+   the semi-transparent bar and overlaps the brand/title. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .navbar { background: #ffffff; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  html[data-theme="dark"] .navbar,
+  body.dark .navbar { background: #0a0a0b; }
 }
 
 .navbar-content {
@@ -514,7 +525,7 @@ img {
   --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
   --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
 
-  --navbar-bg: rgba(10,10,11,0.85);
+  --navbar-bg: rgba(10,10,11,0.96);
   --navbar-mobile-bg: rgba(20,20,21,0.98);
   --blockquote-text: #a1a1aa;
   --blockquote-bg: rgba(99,102,241,0.06);
