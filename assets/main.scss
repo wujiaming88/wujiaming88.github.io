@@ -205,20 +205,37 @@ img {
 .navbar-nav {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease;
+  position: relative;
+}
+
+.nav-link .caret {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  transform: translateY(1px);
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1);
 }
 
 .nav-link:hover {
@@ -226,10 +243,131 @@ img {
   background: var(--bg-tertiary);
 }
 
+.nav-has-dropdown:hover > .nav-link .caret,
+.nav-has-dropdown.clicked-open > .nav-link .caret {
+  transform: rotate(180deg);
+}
+
+/* 选中态：底部胶囊式高亮，比纯下划线更显眼但不喧宾夺主 */
 .nav-link.active {
   color: var(--accent);
-  background: var(--tag-bg);
   font-weight: 600;
+}
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.nav-actions {
+  margin-left: 8px;
+  gap: 6px;
+}
+
+.nav-icon-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text-secondary);
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.nav-icon-btn:hover {
+  border-color: var(--accent);
+  background: var(--tag-bg);
+  color: var(--accent);
+}
+
+/* 二级下拉菜单 */
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 200px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+  z-index: 1100;
+}
+
+.nav-dropdown li { list-style: none; }
+
+.nav-dropdown-link {
+  display: block;
+  padding: 8px 12px;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.nav-dropdown-link:hover {
+  background: var(--bg-tertiary);
+  color: var(--accent);
+}
+.nav-dropdown-link.active {
+  background: var(--tag-bg);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* 桌面：hover 或显式点击展开 */
+@media (min-width: 769px) {
+  .nav-has-dropdown:hover > .nav-dropdown,
+  .nav-has-dropdown:focus-within > .nav-dropdown,
+  .nav-has-dropdown.clicked-open > .nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .nav-submenu-toggle { display: none; }
+}
+
+/* 桌面 active section（当前位于该 tab 子页时，主链接显示得更亮） */
+.nav-has-dropdown.is-active-section > .nav-link {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* 移动端 + 号展开按钮（桌面隐藏） */
+.nav-submenu-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-left: auto;
+  transition: transform 0.25s, color 0.2s, border-color 0.2s;
+}
+.nav-submenu-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.nav-has-dropdown.open > .nav-submenu-toggle {
+  transform: rotate(45deg);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* 汉堡菜单 */
@@ -262,6 +400,7 @@ img {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
+/* 移动端：汉堡菜单 + 手风琴二级 */
 @media (max-width: 768px) {
   .navbar {
     height: 52px;
@@ -290,21 +429,90 @@ img {
     flex-direction: column;
     padding: 8px 0;
     gap: 0;
+    align-items: stretch;
+    max-height: calc(100vh - 52px);
+    overflow-y: auto;
   }
 
   .navbar-nav.open {
     display: flex;
   }
 
-  .navbar-nav li {
-    list-style: none;
+  .navbar-nav .nav-item {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
   }
+  .navbar-nav .nav-item:last-child { border-bottom: none; }
 
   .nav-link {
-    display: block;
-    padding: 12px 20px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
     font-size: 0.95rem;
     border-radius: 0;
+    min-height: 44px;
+  }
+  .nav-link .caret { display: none; }
+  .nav-link.active::after { display: none; }
+  .nav-link.active {
+    background: var(--tag-bg);
+  }
+
+  .nav-submenu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .nav-dropdown {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    background: var(--bg-tertiary);
+    padding: 0;
+    opacity: 1;
+    visibility: hidden;
+    transform: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.28s cubic-bezier(0.22,1,0.36,1), visibility 0.28s;
+    flex-basis: 100%;
+  }
+  .nav-has-dropdown.open > .nav-dropdown {
+    visibility: visible;
+    max-height: 480px;
+  }
+
+  .nav-dropdown-link {
+    padding: 12px 20px 12px 44px;
+    font-size: 0.9rem;
+    border-radius: 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-actions {
+    justify-content: flex-end;
+    padding: 10px 16px;
+    margin-left: 0;
+    gap: 10px;
+  }
+  .nav-icon-btn {
+    padding: 8px 12px;
+    font-size: 16px;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

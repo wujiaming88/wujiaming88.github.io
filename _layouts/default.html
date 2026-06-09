@@ -6,25 +6,56 @@
 {% include head.html %}
 <body class="{% if page.url == '/' %}home-page{% endif %}">
     <!-- 导航栏 -->
+    {%- assign in_articles = false -%}{%- if page.url contains '/articles/' -%}{%- assign in_articles = true -%}{%- endif -%}
+    {%- assign in_weekly = false -%}{%- if page.url contains '/weekly/' -%}{%- assign in_weekly = true -%}{%- endif -%}
+    {%- assign in_about = false -%}{%- if page.url contains '/about' -%}{%- assign in_about = true -%}{%- endif -%}
     <nav class="navbar">
         <div class="navbar-content">
-            <a href="{{ '/' | relative_url }}" class="navbar-brand">
+            <a href="{{ '/' | relative_url }}" class="navbar-brand" aria-label="W.ai 首页">
                 <span class="brand-w">W</span><span class="brand-dot"></span><span class="brand-ai">ai</span>
             </a>
-            
+
             <!-- 汉堡菜单按钮（手机端） -->
-            <button class="navbar-toggle" id="navbar-toggle" aria-label="菜单" onclick="toggleNav()">
+            <button class="navbar-toggle" id="navbar-toggle" aria-label="菜单" aria-expanded="false" onclick="toggleNav()">
                 <span></span><span></span><span></span>
             </button>
-            
+
             <ul class="navbar-nav" id="navbar-nav">
-                <li><a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' %}active{% endif %}">首页</a></li>
-                <li><a href="{{ '/archives/' | relative_url }}" class="nav-link {% if page.url contains 'archives' %}active{% endif %}">归档</a></li>
-                <li><a href="{{ '/categories/' | relative_url }}" class="nav-link {% if page.url contains 'categories' %}active{% endif %}">分类</a></li>
-                <li><a href="{{ '/about/' | relative_url }}" class="nav-link {% if page.url contains 'about' %}active{% endif %}">关于</a></li>
-                <li>
-                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="切换主题">
-                        <span class="theme-icon">🌙</span>
+                <li class="nav-item nav-has-dropdown {% if in_articles %}is-active-section{% endif %}">
+                    <a href="{{ '/articles/' | relative_url }}" class="nav-link {% if in_articles %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                        文章<span class="caret" aria-hidden="true">▾</span>
+                    </a>
+                    <button type="button" class="nav-submenu-toggle" aria-label="展开 文章 子菜单" aria-expanded="false">＋</button>
+                    <ul class="nav-dropdown" role="menu">
+                        <li><a href="{{ '/articles/' | relative_url }}" class="nav-dropdown-link {% if page.url == '/articles/' %}active{% endif %}">全部文章</a></li>
+                        <li><a href="{{ '/articles/agent/' | relative_url }}" class="nav-dropdown-link {% if page.url contains '/articles/agent' %}active{% endif %}">Agent 与协议</a></li>
+                        <li><a href="{{ '/articles/openclaw/' | relative_url }}" class="nav-dropdown-link {% if page.url contains '/articles/openclaw' %}active{% endif %}">OpenClaw 实践</a></li>
+                        <li><a href="{{ '/articles/llm/' | relative_url }}" class="nav-dropdown-link {% if page.url contains '/articles/llm' %}active{% endif %}">大模型与研究</a></li>
+                        <li><a href="{{ '/articles/business/' | relative_url }}" class="nav-dropdown-link {% if page.url contains '/articles/business' %}active{% endif %}">趋势与商业</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-has-dropdown {% if in_weekly %}is-active-section{% endif %}">
+                    <a href="{{ '/weekly/' | relative_url }}" class="nav-link {% if in_weekly %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                        周报<span class="caret" aria-hidden="true">▾</span>
+                    </a>
+                    <button type="button" class="nav-submenu-toggle" aria-label="展开 周报 子菜单" aria-expanded="false">＋</button>
+                    <ul class="nav-dropdown" role="menu">
+                        <li><a href="{{ '/weekly/' | relative_url }}" class="nav-dropdown-link {% if page.url == '/weekly/' %}active{% endif %}">全部周报</a></li>
+                        <li><a href="{{ '/weekly/dynamic/' | relative_url }}" class="nav-dropdown-link {% if page.url contains '/weekly/dynamic' %}active{% endif %}">AI 动态周报</a></li>
+                        <li><a href="{{ '/weekly/agent/' | relative_url }}" class="nav-dropdown-link {% if page.url contains '/weekly/agent' %}active{% endif %}">AI Agent 周报</a></li>
+                        <li><a href="{{ '/weekly/investment/' | relative_url }}" class="nav-dropdown-link {% if page.url contains '/weekly/investment' %}active{% endif %}">AI 投资周报</a></li>
+                        <li><a href="{{ '/weekly/startup/' | relative_url }}" class="nav-dropdown-link {% if page.url contains '/weekly/startup' %}active{% endif %}">AI 创业公司周报</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ '/about/' | relative_url }}" class="nav-link {% if in_about %}active{% endif %}">关于</a>
+                </li>
+                <li class="nav-item nav-actions">
+                    <button class="nav-icon-btn" id="navSearchBtn" onclick="if(window.openSearchModal){openSearchModal()}" aria-label="搜索">
+                        <span aria-hidden="true">🔍</span>
+                    </button>
+                    <button class="nav-icon-btn theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="切换主题">
+                        <span class="theme-icon" aria-hidden="true">🌙</span>
                     </button>
                 </li>
             </ul>
@@ -181,17 +212,72 @@
         function toggleNav() {
             var nav = document.getElementById('navbar-nav');
             var btn = document.getElementById('navbar-toggle');
-            nav.classList.toggle('open');
-            btn.classList.toggle('open');
+            var open = !nav.classList.contains('open');
+            nav.classList.toggle('open', open);
+            btn.classList.toggle('open', open);
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (!open) {
+                document.querySelectorAll('.navbar-nav .nav-item.open').forEach(function(li) {
+                    li.classList.remove('open');
+                    var t = li.querySelector('.nav-submenu-toggle');
+                    if (t) t.setAttribute('aria-expanded', 'false');
+                });
+            }
         }
 
-        // 点击导航链接后自动关闭菜单
-        document.querySelectorAll('.navbar-nav .nav-link').forEach(function(link) {
+        // 子菜单：移动端点击 + 号展开手风琴；桌面端 hover 由 CSS 处理，桌面 + 号被隐藏
+        document.querySelectorAll('.nav-submenu-toggle').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var li = btn.closest('.nav-has-dropdown');
+                if (!li) return;
+                var isOpen = li.classList.toggle('open');
+                btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+        });
+
+        // 桌面：点击主链接也允许展开（点击文字进入聚合页，点击 caret 区域只展开）
+        document.querySelectorAll('.nav-has-dropdown > .nav-link').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                // 桌面 hover 已经能展开；这里仅用于点击外部关闭后强制重展开
+                if (window.matchMedia('(min-width: 769px)').matches) {
+                    var li = link.closest('.nav-has-dropdown');
+                    if (li) li.classList.toggle('clicked-open');
+                }
+            });
+        });
+
+        // 点击空白处关闭桌面下拉
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.navbar')) {
+                document.querySelectorAll('.nav-has-dropdown.clicked-open').forEach(function(li) {
+                    li.classList.remove('clicked-open');
+                });
+            }
+        });
+
+        // 点击 dropdown 里的二级链接后，移动端关闭整个菜单
+        document.querySelectorAll('.navbar-nav .nav-dropdown-link').forEach(function(link) {
             link.addEventListener('click', function() {
-                var nav = document.getElementById('navbar-nav');
-                var btn = document.getElementById('navbar-toggle');
-                nav.classList.remove('open');
-                btn.classList.remove('open');
+                if (!window.matchMedia('(min-width: 769px)').matches) {
+                    var nav = document.getElementById('navbar-nav');
+                    var btn = document.getElementById('navbar-toggle');
+                    if (nav) nav.classList.remove('open');
+                    if (btn) { btn.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+                }
+            });
+        });
+
+        // 点击「关于」、「品牌」等普通链接也关闭移动菜单
+        document.querySelectorAll('.navbar-nav > li > .nav-link:not([aria-haspopup="true"])').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (!window.matchMedia('(min-width: 769px)').matches) {
+                    var nav = document.getElementById('navbar-nav');
+                    var btn = document.getElementById('navbar-toggle');
+                    if (nav) nav.classList.remove('open');
+                    if (btn) { btn.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+                }
             });
         });
 
