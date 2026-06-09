@@ -1,6 +1,6 @@
 ---
 title: "世界模型(World Models)深度研究：从理论到应用的全景拆解"
-date: 2026-06-09 18:00:00 +0800
+date: 2026-06-09 13:00:00 +0800
 categories: [AI]
 tags: [世界模型, World Models, JEPA, Dreamer, Sora, Genie, 具身智能, 空间智能, AGI, 技术研究]
 header:
