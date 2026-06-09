@@ -1,0 +1,21 @@
+{%- comment -%}
+  Classify a weekly post by filename / path:
+    - agent       → 含 "agent-weekly"
+    - investment  → 含 "investment-weekly" 或 "investment"
+    - startup     → 含 "startup-weekly" 或 "startup"
+    - dynamic     → 其它周报（global-ai-weekly / global-ai-tech-news-weekly）
+
+  Output: bucket slug，无前后空白。
+
+  Helper: is_weekly("yes"/"")  via include.post.path 中是否含 "weekly"
+  Usage:
+    {% capture wb %}{% include weekly-category.html post=post %}{% endcapture %}
+    {% assign wb = wb | strip %}
+{%- endcomment -%}
+{%- assign p = include.post.path | downcase -%}
+{%- if p contains "agent-weekly" -%}agent
+{%- elsif p contains "investment-weekly" or p contains "-investment" -%}investment
+{%- elsif p contains "startup-weekly" or p contains "-startup" -%}startup
+{%- elsif p contains "weekly" -%}dynamic
+{%- else -%}none
+{%- endif -%}

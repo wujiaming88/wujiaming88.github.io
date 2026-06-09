@@ -1,0 +1,57 @@
+{%- comment -%}
+  Classify a non-weekly post into a bucket: business / llm / openclaw / agent / other.
+
+  Priority (first hit wins, refined per boss spec):
+    1. business — 投资/IPO/商业/战略/估值/融资/创业/趋势/strategy/companies
+    2. llm     — 世界模型/world-model/大模型/LLM/GPT/论文/paper/research(纯研究)/hallucination/幻觉/AI模型API
+    3. openclaw（强匹配，模块/版本/部署）— Gateway/Plugin 架构/Cron/apply_patch/Fast Mode/虚拟公司搭建/版本更新/release/v2026/env-vars/Node.js+OpenClaw/Lossless-Claw/Pluggable-Context-Engine 等"主旨是 OpenClaw 产品本身"的标识
+    4. agent   — Agent/Claude Code/Codex/Hermes/ACP/MCP/Harness/Loop/协议/多Agent/编排/skill/记忆/memory/session/会话/上下文/context/compaction/sessions_yield/A2A/Symphony/Gemini Agent/system-prompt
+                 -> 这里吃掉了"OpenClaw + 这些 agent 关键词"的大半
+    5. openclaw（兜底）— 仍带 OpenClaw 字样但前面都没命中
+    6. other
+
+  设计要点：仅基于 path（更稳定，文件名直接告知主题）+ title 做匹配，不读 tags（避免 "Two Sessions" → session 这类边界误命中）。
+  Output: bucket slug，无前后空白。
+{%- endcomment -%}
+{%- assign p = include.post.path | downcase -%}
+{%- assign t = include.post.title | default: "" | downcase -%}
+{%- assign hay = p | append: " " | append: t -%}
+{%- assign bucket = "" -%}
+
+{%- assign biz_kws = "investment,ipo,商业,战略,strategy,估值,融资,公司榜,companies,趋势,top30,setr,spacex,github-trend,投资周报,投资研究" | split: "," -%}
+{%- for kw in biz_kws -%}
+  {%- if bucket == "" and hay contains kw -%}{%- assign bucket = "business" -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if bucket == "" -%}
+  {%- assign llm_kws = "world model,世界模型,hallucination,幻觉,大模型,api-formats,api 接口,api 格式,论文,paper,skillsbench,paperclip,openclaw-rl" | split: "," -%}
+  {%- for kw in llm_kws -%}
+    {%- if bucket == "" and hay contains kw -%}{%- assign bucket = "llm" -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- comment -%}
+  OpenClaw 模块/版本/部署强匹配：path 含 openclaw 或 lossless-claw 且命中模块/版本关键词
+{%- endcomment -%}
+{%- if bucket == "" -%}
+  {%- if p contains "openclaw" or p contains "lossless-claw" -%}
+    {%- assign oc_strong = "gateway,plugin-architecture,plugin-externalization,plugin 架构,插件架构,插件革命,cron,apply-patch,apply_patch,fast-mode,fast mode,virtual-company,虚拟公司,env-vars,环境变量,nodejs-memory,node.js,v2026-3-12,v2026-3-22,2026-3-2-update,2026-3-1-update,release-notes,release,update-analysis,update-detail,2026.3.1,2026.3.2,2026.3.12,2026.3.22,lossless-claw,pluggable-context-engine,openviking,volcengine,byteplus,heartbeat-vs-cron,heartbeat,任务执行,task-execution" | split: "," -%}
+    {%- for kw in oc_strong -%}
+      {%- if bucket == "" and hay contains kw -%}{%- assign bucket = "openclaw" -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if bucket == "" -%}
+  {%- assign agent_kws = "agent,claude-code,claude code,codex,hermes,acp,mcp,harness,loop,协议,protocol,multi-bot,多bot,编排,orchestration,skill,记忆,memory,session,会话,上下文,context,compaction,symphony,sessions-yield,sessions_yield,a2a,system-prompt,system prompt,gemini,toolcall,tool-call,tool call,toolcall-stuck" | split: "," -%}
+  {%- for kw in agent_kws -%}
+    {%- if bucket == "" and hay contains kw -%}{%- assign bucket = "agent" -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if bucket == "" and hay contains "openclaw" -%}
+  {%- assign bucket = "openclaw" -%}
+{%- endif -%}
+
+{%- if bucket == "" -%}{%- assign bucket = "other" -%}{%- endif -%}
+{{- bucket -}}

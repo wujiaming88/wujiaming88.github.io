@@ -1,0 +1,136 @@
+---
+layout: default
+---
+
+<div class="content-section list-page">
+    <header class="list-header">
+        <h1 class="list-title">{{ page.title }}</h1>
+        {% if page.description %}<p class="list-desc">{{ page.description }}</p>{% endif %}
+    </header>
+
+    {%- comment -%}
+      过滤逻辑：
+        page.list_kind == "weekly"   → 用 weekly-category.html，按 page.bucket 过滤
+        page.list_kind == "weekly_all" → 用 weekly-category.html，所有非 none 的周报
+        page.list_kind == "article"  → 用 post-category.html，按 page.bucket 过滤；且排除周报
+        page.list_kind == "article_all" → 所有非周报
+    {%- endcomment -%}
+
+    {%- assign filtered = "" | split: "" -%}
+    {%- for post in site.posts -%}
+        {%- capture wb -%}{%- include weekly-category.html post=post -%}{%- endcapture -%}
+        {%- assign wb = wb | strip -%}
+        {%- if page.list_kind == "weekly_all" and wb != "none" -%}
+            {%- assign filtered = filtered | push: post -%}
+        {%- elsif page.list_kind == "weekly" and wb == page.bucket -%}
+            {%- assign filtered = filtered | push: post -%}
+        {%- elsif page.list_kind == "article_all" and wb == "none" -%}
+            {%- assign filtered = filtered | push: post -%}
+        {%- elsif page.list_kind == "article" and wb == "none" -%}
+            {%- capture pb -%}{%- include post-category.html post=post -%}{%- endcapture -%}
+            {%- assign pb = pb | strip -%}
+            {%- if pb == page.bucket -%}{%- assign filtered = filtered | push: post -%}{%- endif -%}
+        {%- endif -%}
+    {%- endfor -%}
+
+    <div class="list-meta">
+        <span class="list-count">{{ filtered.size }} 篇</span>
+    </div>
+
+    {%- if filtered.size == 0 -%}
+    <div class="list-empty">
+        <p>暂无文章</p>
+    </div>
+    {%- else -%}
+    <div class="post-grid list-grid">
+        {%- for post in filtered -%}
+        <article class="post-card">
+            <a href="{{ post.url | relative_url }}" class="post-card-link">
+                <div class="post-card-img">
+                    {% if post.header.overlay_image %}
+                    <img src="{{ post.header.overlay_image }}" alt="{{ post.title }}" loading="lazy">
+                    {% else %}
+                    <div class="post-card-img-placeholder">
+                        <span>{% if post.categories %}{{ post.categories | first }}{% else %}技术{% endif %}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="post-card-body">
+                    <div class="post-card-meta">
+                        <time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%Y.%m.%d' }}</time>
+                        <span class="meta-dot">·</span>
+                        <span class="post-card-cat">{% if post.categories %}{{ post.categories | first }}{% else %}技术{% endif %}</span>
+                    </div>
+                    <h3 class="post-card-title">{{ post.title }}</h3>
+                    <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncate: 100 }}</p>
+                    <div class="post-card-footer">
+                        <span class="read-more">阅读全文 →</span>
+                        {% if post.tags %}
+                        <div class="post-card-tags">
+                            {% for tag in post.tags limit:2 %}
+                            <span class="tag-sm">#{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        </article>
+        {%- endfor -%}
+    </div>
+    {%- endif -%}
+</div>
+
+<style>
+/* 聚合列表页样式 —— 复用 post-card 视觉，统一冷淡极简 */
+.list-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 0 2rem;
+}
+.list-header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.list-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin: 0 0 0.5rem;
+    border: none;
+    padding: 0;
+}
+.list-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0 0 0.5rem;
+}
+.list-meta {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+.list-count {
+    color: var(--text-tertiary);
+    font-size: 0.82rem;
+    background: var(--bg-tertiary);
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-light);
+}
+.list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+}
+.list-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-tertiary);
+}
+@media (max-width: 768px) {
+    .list-page { padding: 1.5rem 0 1rem; }
+    .list-title { font-size: 1.5rem; }
+    .list-grid { grid-template-columns: 1fr; gap: 16px; }
+}
+</style>
