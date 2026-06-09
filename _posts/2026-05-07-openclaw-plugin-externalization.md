@@ -1,6 +1,6 @@
 ---
 title: "OpenClaw 5.x 插件革命：从 Monolithic 到 npm-first 的架构蜕变"
-date: 2026-05-07
+date: 2026-05-07 09:00:00 +0800
 categories: [AI]
 tags: [OpenClaw, Plugin, Architecture, npm]
 toc: true

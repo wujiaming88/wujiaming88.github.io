@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Gemini Enterprise Agent Platform 深度研究：Google 的企业 AI Agent 全栈平台"
-date: 2026-04-27
+date: 2026-04-27 10:00:00 +0800
 categories: [AI, Cloud]
 tags: [Google, Gemini, Agent, Enterprise, Cloud Next 2026]
 author: 五岳团队

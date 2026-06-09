@@ -1,6 +1,6 @@
 ---
 title: "Harness Engineering：让 AI 编码真正可靠的工程"
-date: 2026-06-09 07:00:00 +0800
+date: 2026-06-09 07:30:00 +0800
 categories: [AI]
 tags: [Harness Engineering, AI Coding, Agentic Coding, Claude Code, Codex, Context Engineering, OpenAI, Anthropic, 技术研究]
 header:

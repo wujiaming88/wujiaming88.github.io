@@ -1,6 +1,6 @@
 ---
 title: "全球 AI Agent 周报 · 第 1 期（2026-06-01 ~ 06-07）"
-date: 2026-06-08
+date: 2026-06-08 10:00:00 +0800
 categories: [AI]
 tags: [AI Agent, 周报, Claude Code, Codex, OpenClaw, 开源, Agent框架, 编码Agent, 行业观察]
 header:

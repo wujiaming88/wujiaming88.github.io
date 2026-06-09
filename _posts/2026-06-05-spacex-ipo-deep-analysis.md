@@ -1,6 +1,6 @@
 ---
 title: "SpaceX IPO 深度解读：1.69 万亿美元，史上最大 IPO 背后的帝国级豪赌"
-date: 2026-06-05
+date: 2026-06-05 10:00:00 +0800
 categories: [商业]
 tags: [SpaceX, IPO, 马斯克, Starlink, xAI, 估值分析, 资本市场, 太空经济]
 header:

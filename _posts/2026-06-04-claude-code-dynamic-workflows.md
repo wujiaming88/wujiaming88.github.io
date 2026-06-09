@@ -1,6 +1,6 @@
 ---
 title: "Claude Code 动态工作流：当 AI 学会为每个任务现场组建团队"
-date: 2026-06-04
+date: 2026-06-04 09:00:00 +0800
 categories: [AI]
 tags: [Claude Code, Anthropic, AI Agent, 动态工作流, 多智能体, 编排]
 header:

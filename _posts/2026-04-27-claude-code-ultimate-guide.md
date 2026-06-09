@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Claude Code 完全指南：打造最强 AI 编程环境的实战手册"
-date: 2026-04-27
+date: 2026-04-27 09:00:00 +0800
 categories: [AI, Development]
 tags: [Claude Code, AI 编程, Anthropic, CLAUDE.md, Agent, 开发工具]
 author: 五岳团队

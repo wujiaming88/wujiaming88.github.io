@@ -1,6 +1,6 @@
 ---
 title: "OpenClaw Skill Workshop：让 AI Agent 自己写 SOP"
-date: 2026-05-07
+date: 2026-05-07 10:00:00 +0800
 categories: [AI]
 tags: [OpenClaw, Skill Workshop, Agent Memory, Procedural Learning]
 toc: true

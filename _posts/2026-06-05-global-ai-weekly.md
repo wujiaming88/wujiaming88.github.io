@@ -1,6 +1,6 @@
 ---
 title: "全球 AI 动态周报 · 第 1 期（2026-05-24 ~ 05-30）"
-date: 2026-06-05
+date: 2026-06-05 09:00:00 +0800
 categories: [AI]
 tags: [周报, OpenAI, Google, Anthropic, 大模型, AI Agent, 开源, 具身智能, 国产AI, NVIDIA, 行业观察]
 header:

@@ -1,6 +1,6 @@
 ---
 title: "Agent Client Protocol (ACP) 深度研究：AI 编码 Agent 时代的 LSP"
-date: 2026-06-08
+date: 2026-06-08 09:00:00 +0800
 categories: [AI]
 tags: [ACP, Agent Client Protocol, Zed, MCP, A2A, LSP, AI编码Agent, 开源协议, JSON-RPC, 技术研究]
 header:

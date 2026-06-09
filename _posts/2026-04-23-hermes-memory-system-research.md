@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Hermes Agent 记忆系统深度研究：三层架构如何让 AI 不再失忆"
-date: 2026-04-23
+date: 2026-04-23 09:00:00 +0800
 categories: [ai, research]
 tags: [Hermes Agent, Memory System, AI Agent, Nous Research, OpenClaw]
 author: 五岳团队

@@ -1,6 +1,6 @@
 ---
 title: "OpenClaw 定时机制深度解析：Heartbeat vs Cron，到底该用哪个？"
-date: 2026-03-28
+date: 2026-03-28 09:00:00 +0800
 categories: [AI]
 tags: [OpenClaw, Heartbeat, Cron, 自动化, Agent]
 header:

@@ -1,6 +1,6 @@
 ---
 title: "OpenClaw 多 Agent 配置与通信机制深度研究"
-date: 2026-03-28
+date: 2026-03-28 10:00:00 +0800
 categories: [AI]
 tags: [OpenClaw, 多Agent, 通信机制, 架构设计, Session]
 header:
