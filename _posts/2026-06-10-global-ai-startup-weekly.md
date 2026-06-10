@@ -56,9 +56,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06-03，宣布完成 **3500万美元 A轮**，由 a16z 领投；累计融资达 4700 万美元。
 - 产品深研：Lassie 不卖"总结/起草"这类第一代AI功能，而是卖"执行"——其AI Agent登录保险门户、抓取报销、自动对账、回写系统记录、核验银行到账。这是从"建议动作"到"代替人完成跨遗留系统重复劳动"的第二代垂直AI跃迁。目前已部署于全美49州、700+ 家诊所，每年提供超 25 万小时的劳动替代。本周融资同时宣布产品从医疗向更广义的小企业行政自动化扩张。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投 | 跟投 |
-  |------|------|------|------|------|
-  | A轮 | $35M | 2026-06-03 | Andreessen Horowitz (a16z) | Night Capital、Rahul Vohra、Zach Perret、Taavet Hinrikus、Gokul Rajaram、Brian Balfour |
+
+| 轮次 | 金额 | 时间 | 领投 | 跟投 |
+|------|------|------|------|------|
+| A轮 | $35M | 2026-06-03 | Andreessen Horowitz (a16z) | Night Capital、Rahul Vohra、Zach Perret、Taavet Hinrikus、Gokul Rajaram、Brian Balfour |
+
   累计 $47M。资金用途：扩团队、产品出医疗圈、覆盖更多SMB行政流程。来源：a16z.com/announcement/investing-in-lassie/ (2026-06-03)；businesswire.com 20260603909717 (2026-06-03)。
 - 创始人：天使名单含 Rahul Vohra(Superhuman CEO)、Zach Perret(Plaid CEO)、Taavet Hinrikus(Wise联创)、Gokul Rajaram、Brian Balfour——一线创始人/运营者集体下注，团队执行力背书极强（具体创始人姓名未在本周稿披露，但跟投阵容罕见）。
 - 竞争力：护城河在"脏活"——啃保险门户、遗留系统对账这类高摩擦工作流，复制门槛高。已盈利性指标未披露，但 700+ 诊所、49 州、25万小时/年是硬使用证明。a16z 领投+顶级运营者跟投=分发与背书双buff。风险：医疗行政合规与门户接口脆弱性，横向扩张稀释垂直深度。
@@ -74,10 +76,12 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06-03，Forbes独家披露完成 **9500万美元融资**，由 Redpoint Ventures 领投，估值"接近10亿美元"，累计融资 1.25 亿美元。（接近毕业线，仍计入本期）
 - 产品深研：生命科学公司被监管文书淹没——单份监管申报可达1万页。Collate用LLM解析海量临床数据，把原本7个月的文档压缩到1个月内完成，节省时间50%-90%。关键差异化：准确率90%+(常近97%)，且强制"人工核验后才可导出"，把患者安全放在产品哲学核心。切入时机精准——模型够好、又恰逢药企自建AI受挫转而外包。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 估值 | 领投 |
-  |------|------|------|------|------|
-  | 种子 | $30M | 2025初 | $100M+ | Redpoint、First Round、Conviction |
-  | 本轮(成长) | $95M | 2026-06-03 | 接近$1B | Redpoint Ventures |
+
+| 轮次 | 金额 | 时间 | 估值 | 领投 |
+|------|------|------|------|------|
+| 种子 | $30M | 2025初 | $100M+ | Redpoint、First Round、Conviction |
+| 本轮(成长) | $95M | 2026-06-03 | 接近$1B | Redpoint Ventures |
+
   累计 $125M。资金用途：扩客户与产品。来源：forbes.com/sites/innovationrx/2026/06/03/ai-startup-collate-raises-95-million... (2026-06-03)。
 - 创始人：Surbhi Sarna(40岁)，两次创业者，前YC合伙人，2014福布斯30U30。首家公司NVision Medical(卵巢癌检测,源于自身病痛)2018年以2.75亿美元卖给波士顿科学。联创Nate Smith亦前YC访问合伙人、招聘平台Lever联创。"知道问题在哪、也知道怎么用LLM解"。
 - 竞争力：护城河=领域know-how+早期大客户密度。2025年5月签首单后17个月内已签约50+客户，含大药企、大型医疗器械商、上市biotech。Redpoint合伙人Dharmaraj判断生命科学文书机会比法律更大("在大药企内部像野草一样长")。风险：估值已接近10亿，高预期；准确率/幻觉是行业级红线。
@@ -93,9 +97,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06-03，宣布完成 **4000万美元 B轮**，由 Mouro Capital 领投；据《华尔街日报》估值 2.25 亿美元。
 - 产品深研：Forage解决的是被严重忽视的"政府关联支付�layer"——美国约4000万人依赖SNAP等福利。其技术已落地全美50州、10万+ 门店，包括Dollar General、Gopuff、Save A Lot、DoorDash、Uber Eats。差异化在于监管合规的"护城河效应"：福利支付合规负担极重，反而把抄袭者挡在门外。这不是generative AI故事，而是"嵌在真金白银流里、买家无法容忍宕机/合规失败"的刚需基础设施。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 估值 | 领投 | 跟投 |
-  |------|------|------|------|------|------|
-  | B轮 | $40M | 2026-06-03 | $225M(WSJ) | Mouro Capital | Nyca、PayPal Ventures、Long Journey、Intuit Ventures、NextLadder、Pivotal Ventures、FJ Labs |
+
+| 轮次 | 金额 | 时间 | 估值 | 领投 | 跟投 |
+|------|------|------|------|------|------|
+| B轮 | $40M | 2026-06-03 | $225M(WSJ) | Mouro Capital | Nyca、PayPal Ventures、Long Journey、Intuit Ventures、NextLadder、Pivotal Ventures、FJ Labs |
+
   累计至少 $62M。资金用途：扩展受理网络与消费者App。来源：techstartups.com 2026-06-03 roundup；WSJ估值引用。
 - 创始人：本周稿未点名创始人姓名，但投资人阵容(PayPal Ventures、Intuit Ventures、Nyca、比尔盖茨旗下Pivotal Ventures)显示战略与合规级背书厚实，团队规模未披露。
 - 竞争力：护城河=合规壁垒+10万门店网络+政府关联粘性。2.25亿估值对"数字化巨大且服务不足的支付生态"并不算高。已嵌入Dollar General/DoorDash等头部零售=分发优势。风险：高度依赖政府福利政策与预算，政策变动是系统性风险。
@@ -111,9 +117,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06-08，宣布完成 **6000万美元 B轮**，由 Accel 领投；累计融资达 9600 万美元。
 - 产品深研：PointFive解决的是2026最痛的企业财务黑洞——生成式AI与大模型普及后，云与算力开支从"季节性可预测"变成"不可预测的预算冲击"(如ML训练任务)。其平台把基础设施指标与财务数据关联，自动标记浪费并执行优化。客户已含大型银行、零售商、科技公司。差异化：不是单纯的云监控，而是把"技术开支可见性"做成FinOps级的自动决策层。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投 | 跟投 |
-  |------|------|------|------|------|
-  | B轮 | $60M | 2026-06-08 | Accel | Index Ventures、Salesforce Ventures、Entre Capital、Perpetual Growth、Vesey Ventures、Sheva Ventures |
+
+| 轮次 | 金额 | 时间 | 领投 | 跟投 |
+|------|------|------|------|------|
+| B轮 | $60M | 2026-06-08 | Accel | Index Ventures、Salesforce Ventures、Entre Capital、Perpetual Growth、Vesey Ventures、Sheva Ventures |
+
   累计 $96M(自2023)。资金用途：加速产品研发与国际化。来源：techstartups.com 2026-06-08 roundup。
 - 创始人：本周稿未点名创始人，团队已超100人，分布特拉维夫、伦敦、纽约（以色列裔团队，纽约总部）。
 - 竞争力：护城河=AI驱动的细粒度浪费识别+财务数据关联，切中"企业急于砍runaway spend"的真实预算痛点。Accel领投+Index/Salesforce Ventures跟投=企业渠道与背书。增长指标(ARR)未公开，但客户含头部银行零售。风险：云成本优化赛道拥挤(CloudHealth、Apptio、各云原生FinOps工具)，差异化需持续证明。
@@ -129,9 +137,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06-03，宣布完成 **2000万美元 A轮**，由 Khosla Ventures 领投，必和必拓风投(BHP Ventures)战略投资。
 - 产品深研：Terra AI(帕罗奥图)解决的是矿产与能源行业的核心瓶颈——新矿发现到投产平均耗时17年，巨大的时间与资本负担，也是能源转型与工业供应链反复卡壳的根因。其平台整合多源勘探数据、生成数百万地质模型，帮团队评估不确定性、优化钻探目标、加速项目经济性测算。已在铜/金/稀土/油气项目跑出成效，并向碳封存、增强地热延伸。差异化：把AI从"更好看的地图界面"升级为"压缩长期工业周期"的引擎。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投 | 战略投资 |
-  |------|------|------|------|------|
-  | A轮 | $20M | 2026-06-03 | Khosla Ventures | BHP Ventures(必和必拓) |
+
+| 轮次 | 金额 | 时间 | 领投 | 战略投资 |
+|------|------|------|------|------|
+| A轮 | $20M | 2026-06-03 | Khosla Ventures | BHP Ventures(必和必拓) |
+
   资金用途：加速矿产与储层勘探。来源：prnewswire.com terra-ai-raises-20m... 302789507 (2026-06-03)；techstartups 2026-06-03 roundup。
 - 创始人：本周稿未点名创始人姓名，但Khosla(深科技老手)领投+全球最大矿业巨头BHP战略下注，说明技术与商业落地双重背书；团队规模未披露。
 - 竞争力：护城河=多源地质数据整合+海量模型生成能力，叠加BHP这类industrial buyer的真实数据与场景。市场卡位：AI×关键矿产×能源基础设施交叉点，战略稀缺。风险：勘探周期长、验证慢，AI模型对真实地下的预测精度需长期工程验证；客户集中于大矿企。
@@ -147,9 +157,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06-08，迈阿密的 Lexful 宣布完成 **700万美元种子轮**，由 Top Down Ventures 与 York IE 领投，超额认购。
 - 产品深研：Lexful吸纳IT组织既有的playbook、凭证、架构图与笔记，用AI Agent把"部落知识(tribal knowledge)"转成可即时查询的系统。痛点真实：大量MSP在过时文档与新人onboarding上浪费数小时。差异化：在拥挤的AI赛道里专注"IT运维知识"这一细分——不是又一个聊天机器人，而是技术流程的"单一事实源"。CEO主张AI能吞下全部文档、即时回答复杂"how-to"查询。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投 | 备注 |
-  |------|------|------|------|------|
-  | 种子 | $7M | 2026-06-08 | Top Down Ventures、York IE | 超额认购 |
+
+| 轮次 | 金额 | 时间 | 领投 | 备注 |
+|------|------|------|------|------|
+| 种子 | $7M | 2026-06-08 | Top Down Ventures、York IE | 超额认购 |
+
   累计 $7M(新)。资金用途：建产品、招工程师、获客(中型MSP蓝海)。来源：app.dealroom.co/news/feed/lexful-raises-7m... ；techstartups 2026-06-08 roundup。
 - 创始人：本周稿未给创始人全名，CEO强调MSP在过时文档/onboarding上的痛点。位于迈阿密，是当地科技生态成长的案例。团队规模小(种子期)。
 - 竞争力：护城河=垂直聚焦IT运维知识+AI原生查询，避开通用知识库红海。市场地位：早期种子，超额认购显示早期投资人对其生产力论点的热情。增长指标未披露。风险：$7M体量小、护城河尚浅，通用RAG/知识库工具(Glean等)可能下沉挤压。
@@ -257,10 +269,12 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026年6月3日宣布完成 **$26M（约€24.4M）A轮**融资，由 Plural 领投，2150、Semapa Next 及现有投资方 Planet A Ventures、Cambridge Enterprise Ventures、UCL Technology Fund(AlbionVC与UCL Business管理)、Clean Growth Fund 跟投。累计融资超 **$35M**。多家媒体(Tech.eu/Sifted/Climate Solutions)同日报道，交叉验证一致。
 - 产品深研：Gigaton开发AI驱动的控制软件，可持续优化工厂运行。其平台运行在现有工厂基础设施内，用仿真与预测模型在执行前评估操作决策，能自主调节燃料配比、窑炉转速、氧气水平等参数，同时向操作员展示每个动作背后的推理逻辑。与传统"叠加在现有系统之上"的优化工具不同，Gigaton意在直接替换底层控制栈，并通过对实时工厂数据的再训练持续适应变化的运行条件。技术历时五年与工厂操作员、控制室团队共同打磨。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投 |
-  |------|------|------|------|
-  | 累计(含早期) | >$35M 总额 | — | — |
-  | **A轮(本轮)** | **$26M / €24.4M** | **2026-06-03** | **Plural** |
+
+| 轮次 | 金额 | 时间 | 领投 |
+|------|------|------|------|
+| 累计(含早期) | >$35M 总额 | — | — |
+| **A轮(本轮)** | **$26M / €24.4M** | **2026-06-03** | **Plural** |
+
   本轮来源URL：https://tech.eu/2026/06/03/gigaton-lands-26m-to-scale-autonomous-industrial-control/ ；https://sifted.eu/articles/plural-26m-gigaton-physical-ai
 - 创始人：CEO Josh Vernon（LinkedIn: josh-vernon）。公司由剑桥大学(University of Cambridge)与UCL(伦敦大学学院)技术孵化/spin-out而来，具备深厚学术与工业控制背景。
 - 竞争力：① 五年与真实工厂共研，深扎"最不光鲜但最有价值"的工业控制软件市场；② 不是叠加层而是替换底层控制栈，护城河更深、切换成本高、黏性强；③ 直接绑定降本+减碳双价值主张，契合欧洲能源成本高企与碳约束趋势；④ 学术(剑桥/UCL)+顶级VC(Plural)双背书。
@@ -276,9 +290,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026年6月8日由隐身(stealth)状态高调亮相，宣布完成 **$37M** 融资，由 Lightspeed Venture Partners 与 Cyberstarts 领投，天使投资人阵容含 Wiz CEO Assaf Rapaport、Cyera CEO Yotam Segev、Cerca Partners 等业界顶级人物。Globes/Ynet/JPost/CTech 多源同日报道，交叉验证一致。
 - 产品深研：A Security 构建了一套自主进攻式安全与修复平台，针对"武器化AI"威胁强化组织防线。区别于传统漏洞扫描工具仅识别和排序孤立漏洞，A 的平台以完整上下文感知自主运行，模拟AI攻击者会如何"发现—串联—利用"跨环境弱点，复现真实世界的攻击路径，并帮助企业在被利用之前消除它们。平台目标是构建AI智能体，在自主网络攻击触达企业网络之前进行探测、模拟与拦截。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投 |
-  |------|------|------|------|
-  | **出隐身轮(本轮)** | **$37M** | **2026-06-08** | **Lightspeed + Cyberstarts** |
+
+| 轮次 | 金额 | 时间 | 领投 |
+|------|------|------|------|
+| **出隐身轮(本轮)** | **$37M** | **2026-06-08** | **Lightspeed + Cyberstarts** |
+
   本轮来源URL：https://en.globes.co.il/en/article-israeli-offensive-security-co-a-security-raises-37m-1001545318 ；https://www.globenewswire.com/news-release/2026/06/08/3308079/0/en/A-Security-Emerges-from-Stealth-with-37M-in-Funding-to-Outpace-Weaponized-AI.html
 - 创始人：CEO Yossi Torati、CTO Yuval Itzchakov、CPO Omer Gull——均为以色列安全老兵(security veterans)。天使投资人含Wiz、Cyera两位独角兽CEO，信号极强。
 - 竞争力：① "以AI对抗AI"的进攻式安全定位精准踩中agentic攻击崛起趋势；② 不止识别漏洞而是复现真实exploit path并自动修复，价值闭环更完整；③ 顶级机构(Lightspeed/Cyberstarts)+独角兽CEO天使背书，人才与渠道双优势；④ 以色列网络安全人才与生态深厚。
@@ -294,11 +310,13 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026年6月8日宣布完成 **€7.8M（约$9M）超额认购种子轮**，由德国 Realyze Ventures 与英国 Pi Labs 联合领投，巴黎影响力基金 Asterion Ventures、Übermorgen Ventures、NAP 及现有投资人跟投。累计融资约 **€10M**（含2024年5月的€2.1M）。EU-Startups/TheNextWeb/TechFundingNews/Dealroom 多源同日报道，交叉验证。
 - 产品深研：Companion.energy 把能源合同、实时运营数据与分布式资产整合进一个优化平台。它持续预测用电需求、追踪市场价格敞口，并自动执行能源决策——在电价最低时调度资产用电、在回售电网最划算时卖电。区别于Siemens能源管理软件、Schneider EcoStruxure等"只提供监控看板与周期性报告"的现有玩家，Companion定位为"执行系统(system of execution)"而非"建议引擎"。平台已管理超 2 TWh 年用电量、支持 200MW+ 分布式资产(光伏/风/储/EV充电)。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投 |
-  |------|------|------|------|
-  | 早期 | €2.1M | 2024-05 | — |
-  | **种子轮(本轮)** | **€7.8M / ~$9M** | **2026-06-08** | **Realyze Ventures + Pi Labs** |
-  | 累计 | ~€10M | — | — |
+
+| 轮次 | 金额 | 时间 | 领投 |
+|------|------|------|------|
+| 早期 | €2.1M | 2024-05 | — |
+| **种子轮(本轮)** | **€7.8M / ~$9M** | **2026-06-08** | **Realyze Ventures + Pi Labs** |
+| 累计 | ~€10M | — | — |
+
   本轮来源URL：https://www.eu-startups.com/2026/06/ghents-companion-energy-raises-e7-8-million-to-help-large-enterprises-manage-energy-in-real-time/ ；https://techfundingnews.com/companion-energy-7-8m-seed-pi-labs-totalenergies/
 - 创始人：Thomas Vyncke、Jonas Verstraeten，2022年于根特(Ghent)创立。团队仅19人，却管理约€500M的客户能源支出+营收规模。\n- 竞争力：① 客户阵容极硬——TotalEnergies、KPN、安特卫普-布鲁日港(Port of Antwerp-Bruges)、Interparking、Proximus Group；② 过去一年(2024年5月至本轮)客户与营收增长10倍，ARR突破€1M，单位人效极高(19人撬动€500M能源盘);③ "执行系统"而非"看板"的产品定位形成差异化护城河；④ 踩中欧洲能源价格实时波动+电气化+可再生转型的结构性刚需。
 - 赛道分析：企业能源管理/能源优化是欧洲气候科技的核心赛道。能源价格从季节性波动转为实时波动，企业部署越来越多电池、光伏、EV充电与电气化工业系统，却仍用碎片化工具+表格+静态采购管理——这是Companion切入的痛点。竞品含Siemens、Schneider等巨头及encentive(2025年9月融€6.3M)等新锐。胜负手在于能否真正实现"多资产×多市场"同时优化，以及实时自动化能否成为大企业标准基础设施。
@@ -315,9 +333,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06-04前后宣布完成 1000万美元 A轮融资，由 Baring Private Equity Partners India 与 Z3 Partners 领投，资金用于国际扩张（东南亚、中东、美国）与实时AI视频代理技术研发。
 - 产品深研：TrueFan AI 运营一套企业级生成式AI平台，核心产品 TF Studio 允许企业从单条录制素材生成超个性化、影棚级视频；支持 175+ 种语言的本地化内容，号称借助深度学习模型复刻面部表情、手势与声音，峰值可达每分钟 50 万条视频生成量。平台被 100+ 企业客户用于跨市场规模化视频内容，可部署"数字品牌大使"——以名人虚拟形象、企业领袖或品牌代言人形式生成AI驱动的个性化视频，覆盖批量个性化营销、活动本地化等场景。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投/参投 |
-  |------|------|------|-----------|
-  | A轮 | 1000万美元 | 2026-06（本周公布） | 领投 Baring PE Partners India、Z3 Partners；参投 IAN Alpha Fund、3Lines Venture Capital |
+
+| 轮次 | 金额 | 时间 | 领投/参投 |
+|------|------|------|-----------|
+| A轮 | 1000万美元 | 2026-06（本周公布） | 领投 Baring PE Partners India、Z3 Partners；参投 IAN Alpha Fund、3Lines Venture Capital |
+
   - 本轮：US$10M Series A。来源URL：https://india.entrepreneur.com/business-news/truefan-ai-bags-usd-10-mn-series-a-for-global-expansion
 - 创始人：2020年由 Devender Bindal、Nimish Goel、Nevaid Aggarwal 共同创立，总部位于古尔冈（Gurugram）。
 - 竞争力：客户阵容硬核（HDFC Bank、Bajaj Finance、Zomato、Cipla、BharatPe 等头部品牌），175+ 语言本地化 + 极高生成吞吐量构成规模化壁垒；在印度本土生成式视频赛道已形成企业级营收闭环。
@@ -333,9 +353,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06初宣布完成首轮融资，金额"数千万美元"，由香港 Glowill Capital 领投，投后估值达 2.5 亿美元。资金用于吸引全球顶尖人才、推动用户增长、扩展创作者生态（成长工具、激励、社区支持）与优化推荐/分发系统。
 - 产品深研：Aippy 由 NADA AI 开发，定位"AI原生游戏社区"，核心是把游戏创作门槛降到自然语言提示级别——任何人输入文字即可生成可玩的迷你游戏与互动体验，并在社区内分享、remix、二次创作。平台强调"创意复利"的社区网络效应：用户可基于彼此创意继续构建。其增长依赖推荐与分发系统的个性化，以及创作者激励体系。Discord 社区约 1.5 万成员，活跃交换提示词、展示作品、协作创意。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投/估值 |
-  |------|------|------|-----------|
-  | 首轮 | 数千万美元（tens of millions USD） | 2026-06（本周公布） | 领投 Glowill Capital；投后估值 US$250M |
+
+| 轮次 | 金额 | 时间 | 领投/估值 |
+|------|------|------|-----------|
+| 首轮 | 数千万美元（tens of millions USD） | 2026-06（本周公布） | 领投 Glowill Capital；投后估值 US$250M |
+
   - 本轮：首轮"数千万美元"，投后估值2.5亿美元。来源URL：https://www.prnewswire.com/apac/news-releases/aippy-raises-tens-of-millions-of-dollars-at-a-250-million-valuation-to-build-the-future-of-ai-native-interactive-entertainment-302787864.html
 - 创始人：创始人 Evan Yip；开发主体 NADA AI；公司在新加坡运营、投资方 Glowill Capital 总部位于香港。
 - 竞争力：增长数据扎实——上线（2025年4月）以来全球下载量超 300 万、月活接近 200 万；用户累计创建 200 万+ 游戏，日发布游戏数较年初增长 10 倍；活跃用户日参与率近 50%，30%+ 新用户来自非付费自然渠道。强网络效应+创作者生态构成壁垒。
@@ -351,9 +373,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06-05 宣布完成 3000万美元 B轮融资，由新加坡成长型股权基金 Panthera Growth Partners 领投（含一级+二级交易）。资金用于全球市场扩张、深科技研发、自有 Agentic AI 平台升级、设立"物理AI（机器人）"部门、开发主权AI基础设施；投资方明确表示此轮为潜在IPO铺路。
 - 产品深研：Innefu Labs 成立于2010年，以AI驱动的国家安全与网络情报为核心，自研多模态融合（multi-modal fusion）系统与本土化（indigenous）平台，已在印度国防、情报、执法、税务情报（revenue intelligence）及大型企业客户中部署。技术栈涵盖 OSINT（开源情报）、专有 Agentic AI 平台，未来将拓展物理AI/机器人与"主权AI基础设施"——面向高信任、关键任务场景的安全、领域专用语言模型。强调"国家应掌握自身智能能力"的主权AI叙事。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 领投 |
-  |------|------|------|------|
-  | B轮 | 3000万美元 | 2026-06-05（本周公布） | Panthera Growth Partners（新加坡），含一级+二级交易 |
+
+| 轮次 | 金额 | 时间 | 领投 |
+|------|------|------|------|
+| B轮 | 3000万美元 | 2026-06-05（本周公布） | Panthera Growth Partners（新加坡），含一级+二级交易 |
+
   - 本轮：US$30M Series B。来源URL：https://www.prnewswire.com/apac/news-releases/panthera-growth-partners-invests-usd-30-million-in-innefu-labs-series-b-round-302792309.html
 - 创始人：联合创始人 Tarun Wig（CEO）与 Abhishek Sharma，2010年创立，总部新德里。
 - 竞争力：深耕国防/情报/执法等高壁垒、强黏性政府与关键行业客户，本土化+主权AI叙事在印度"自主可控"政策环境下具备稀缺性；15年积累形成数据与部署护城河；获新加坡机构背书并锁定IPO路径。
@@ -369,9 +393,11 @@ a16z 领投的"AI 替企业跑业务"样板。2026-06-03 完成 3500 万美元 A
 - 本周动态：2026-06初宣布获得 Foras.AI 战略投资（金额未披露），用于打造"首个阿拉伯语AI学习社区"。计划在2026年Q3末前上线100+节AI培训课程，覆盖埃及、沙特、阿联酋、科威特、约旦等阿语市场。
 - 产品深研：Efham.ai 由埃及公司 NixAI 开发，核心定位是阿拉伯语（尤其埃及口语 colloquial Arabic）AI教育平台——用通俗方言简化AI技术概念，降低学习门槛。课程不止于AI基础，更强调实操应用：内容创作、产品开发、创业、融资、以及"用AI创造新收入来源"。瞄准MENA地区AI技能需求激增但缺乏阿语优质教育内容的结构性空白，定位"本地化技术知识+实用教育"。
 - 融资记录：
-  | 轮次 | 金额 | 时间 | 投资方 |
-  |------|------|------|--------|
-  | 战略投资 | 未披露 | 2026-06（本周公布） | Foras.AI |
+
+| 轮次 | 金额 | 时间 | 投资方 |
+|------|------|------|--------|
+| 战略投资 | 未披露 | 2026-06（本周公布） | Foras.AI |
+
   - 本轮：Foras.AI 战略投资，金额未披露。来源URL：https://www.wamda.com/2026/06/efhamai-secures-investment-forasai-democratise-ai-learning-arabic
 - 创始人：开发主体为埃及初创公司 NixAI（具体创始人未在公开稿中披露）；投资方 Foras.AI。
 - 竞争力："阿拉伯语+埃及口语"本地化是显著差异化壁垒——全球AI教育内容多以英语为主，阿语优质内容稀缺；先发占位"首个阿语AI学习社区"，叠加MENA各国对AI技能的政策与市场需求。社区+实操课程模式有望形成内容飞轮。
