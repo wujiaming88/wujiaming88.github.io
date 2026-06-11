@@ -1,6 +1,6 @@
 ---
 title: "Amazon Bedrock AgentCore 全景深度研究：AWS 押注 Agent 时代的「水电煤」底座"
-date: 2026-06-11 13:00:00 +0800
+date: 2026-06-11 13:01:31 +0800
 categories: [AI]
 tags: [Amazon Bedrock, AgentCore, AWS, AI Agent, 企业级 Agent, Serverless, MCP, A2A, Strands Agents, LangGraph, microVM, 云原生, 技术研究]
 header:
