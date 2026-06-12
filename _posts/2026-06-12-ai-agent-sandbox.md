@@ -1,6 +1,6 @@
 ---
 title: "AI Agent 的沙箱战争：从 chroot 到 Firecracker，一文讲透 Agent 安全地基"
-date: 2026-06-12 12:30:00 +0800
+date: 2026-06-12 11:00:00 +0800
 categories: [AI]
 tags: [AI Agent, Sandbox, 沙箱, Codex, Claude Code, OpenClaw, Google ADK, E2B, Firecracker, gVisor, microVM, WASM, seccomp, Landlock, Seatbelt, 安全, MCP, 技术研究]
 header:
