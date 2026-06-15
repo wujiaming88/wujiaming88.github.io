@@ -3,3 +3,7 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+jekyll_server.log
+*.log
+_site_build
+_backup
