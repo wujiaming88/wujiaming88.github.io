@@ -1,0 +1,31 @@
+{%- comment -%}
+  文章元数据徽章：难度 difficulty + 阅读时长 reading_time
+  参数：
+    include.post  —— 文章对象（列表卡场景传 post；文章页可传 page）
+    include.style —— "inline"（列表卡，紧凑）| 默认 "header"（文章页头）
+  机制：
+    - 难度：front matter `difficulty: 入门|进阶|高级`，缺失则不渲染难度徽章（优雅降级）。
+    - 阅读时长：用正文纯文本字符数 / 320 自动估算（中文按字符计），最小 1 分钟，零维护。
+{%- endcomment -%}
+{%- assign p = include.post -%}
+{%- assign body_text = p.content | strip_html | normalize_whitespace -%}
+{%- assign char_count = body_text | size -%}
+{%- assign read_min = char_count | divided_by: 320 -%}
+{%- if read_min < 1 -%}{%- assign read_min = 1 -%}{%- endif -%}
+{%- assign diff = p.difficulty | default: "" | strip -%}
+{%- assign diff_class = "" -%}
+{%- if diff == "入门" -%}{%- assign diff_class = "is-beginner" -%}
+{%- elsif diff == "进阶" -%}{%- assign diff_class = "is-intermediate" -%}
+{%- elsif diff == "高级" -%}{%- assign diff_class = "is-advanced" -%}
+{%- endif -%}
+{%- if include.style == "inline" -%}
+<span class="meta-badges meta-badges--inline">
+  {%- if diff_class != "" -%}<span class="meta-badge meta-badge--diff {{ diff_class }}">{{ diff }}</span>{%- endif -%}
+  <span class="meta-badge meta-badge--time">⏱ {{ read_min }} 分钟</span>
+</span>
+{%- else -%}
+<div class="meta-badges meta-badges--header">
+  {%- if diff_class != "" -%}<span class="meta-badge meta-badge--diff {{ diff_class }}">📊 {{ diff }}</span>{%- endif -%}
+  <span class="meta-badge meta-badge--time">⏱ 约 {{ read_min }} 分钟阅读</span>
+</div>
+{%- endif -%}

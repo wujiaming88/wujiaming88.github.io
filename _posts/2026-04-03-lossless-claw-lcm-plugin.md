@@ -3,6 +3,8 @@ layout: single
 title: "OpenClaw Lossless-Claw：用 DAG 摘要树实现真正的无损上下文管理"
 date: 2026-04-03
 categories: [AI, OpenClaw]
+series: "Agent 记忆系统"
+series_order: 3
 tags: [OpenClaw, LCM, Context Management, Agent, 插件]
 header:
   overlay_image: /assets/images/posts/2026-04-03-lossless-claw-lcm.png

@@ -3,6 +3,8 @@ layout: single
 title: "研究报告：OpenClaw Plugin 架构与原理"
 date: 2026-03-10 05:20:00 +0000
 categories: [AI]
+series: "OpenClaw 架构深潜"
+series_order: 2
 tags: [AI, Agent, OpenClaw, Plugin, 插件架构]
 author: W.ai
 header:

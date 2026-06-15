@@ -52,6 +52,7 @@ layout: default
                     <p class="feed-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
                     <div class="feed-foot">
                         {% if post.tags %}<div class="feed-tags">{% for tag in post.tags limit:3 %}<span class="feed-tag">#{{ tag }}</span>{% endfor %}</div>{% endif %}
+                        {% include post-meta-badges.html post=post style="inline" %}
                         <span class="feed-more">阅读 →</span>
                     </div>
                 </div>

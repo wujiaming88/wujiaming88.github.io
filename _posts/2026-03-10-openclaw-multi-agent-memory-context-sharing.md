@@ -3,6 +3,8 @@ layout: single
 title: "研究报告：OpenClaw 多Agent记忆系统与上下文共享研究报告"
 date: 2026-03-10 16:50:00 +0000
 categories: [AI]
+series: "多 Agent 系统"
+series_order: 3
 tags: [AI, Agent, OpenClaw, Multi-Agent, Memory, 记忆系统, 上下文共享]
 author: W.ai
 header:

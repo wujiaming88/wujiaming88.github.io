@@ -48,6 +48,9 @@
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ '/series/' | relative_url }}" class="nav-link {% if page.url contains '/series' %}active{% endif %}">系列</a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ '/about/' | relative_url }}" class="nav-link {% if in_about %}active{% endif %}">关于</a>
                 </li>
                 <li class="nav-item nav-actions">

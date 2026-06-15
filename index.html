@@ -107,6 +107,7 @@ title: W.ai - 深度技术研究博客
                         <time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%Y.%m.%d' }}</time>
                         <span class="meta-dot">·</span>
                         <span class="post-card-cat">{% if post.categories %}{{ post.categories | first }}{% else %}技术{% endif %}</span>
+                        {% include post-meta-badges.html post=post style="inline" %}
                     </div>
                     <h3 class="post-card-title">{{ post.title }}</h3>
                     <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncate: 100 }}</p>
