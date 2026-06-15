@@ -4,7 +4,7 @@ date: 2026-06-15 10:26:00 +0800
 categories: [AI]
 tags: [AI Agent, 周报, Claude Code, Codex, OpenClaw, 开源, Agent框架, 编码Agent, 行业观察]
 header:
-  overlay_image: /assets/images/posts/symphony-deep-dive-header.png
+  overlay_image: /assets/images/posts/2026-06-15-global-ai-agent-weekly-header.png
   overlay_filter: 0.5
   caption: "聚焦 AI Agent 赛道 · 28 个对象全覆盖 · 严格限定一周时间窗"
 excerpt: "前沿能力跑赢安全护栏被迫暂停（Fable 5）、地缘政治强拆 20 亿美元收购（Manus）、MIT 协议开源接近 Opus 级模型（GLM-5.2）——这一周 Agent 赛道同时被「自主性×治理」和「中美阵营分化」两条主线重塑，编码 Agent 集体长成可托管的后台 Agent OS。"
