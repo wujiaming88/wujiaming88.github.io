@@ -529,20 +529,18 @@ article.post .post-content hr,
 .share-section {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.75rem 1rem;
+  gap: 0.55rem 0.9rem;
 }
 
 .share-label {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--text-tertiary);
-  text-transform: uppercase;
 }
 
 /* 相似文章 */
@@ -940,42 +938,53 @@ article.post .post-content hr,
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
-/* 克制的 ghost 风格：默认中性细边框，品牌色仅作点缀 + hover 才显现 */
-.share-act-btn {
+/* 圆形图标按钮：默认中性淡底，hover 填充品牌色 */
+.share-btn {
+  --brand: var(--accent);
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.85rem;
-  border: 1px solid var(--border-color);
-  border-radius: 7px;
-  background: transparent;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 0.82rem;
-  font-weight: 500;
   font-family: inherit;
-  line-height: 1.4;
-  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
-.share-act-btn .share-ico {
-  font-size: 0.9em;
-  font-weight: 700;
-  opacity: 0.85;
+.share-btn svg { display: block; }
+.share-btn:hover {
+  background: var(--brand);
+  color: #fff;
+  transform: translateY(-2px);
 }
-.share-act-btn:hover {
-  color: var(--brand, var(--accent));
-  border-color: var(--brand, var(--accent));
-  background: color-mix(in srgb, var(--brand, var(--accent)) 8%, transparent);
+.share-btn:active { transform: translateY(0); }
+.share-btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
-.share-act-btn[data-brand="x"]      { --brand: #111; }
-.share-act-btn[data-brand="weibo"]  { --brand: #e6162d; }
-.share-act-btn[data-brand="wechat"] { --brand: #07c160; }
-.share-act-btn[data-brand="xhs"]    { --brand: #ff2442; }
-.share-act-btn[data-brand="copy"]   { --brand: var(--accent); }
-[data-theme="dark"] .share-act-btn[data-brand="x"] { --brand: #e4e4e7; }
+.share-btn[data-brand="x"]      { --brand: #111; }
+.share-btn[data-brand="weibo"]  { --brand: #e6162d; }
+.share-btn[data-brand="wechat"] { --brand: #07c160; }
+.share-btn[data-brand="xhs"]    { --brand: #ff2442; }
+.share-btn[data-brand="copy"]   { --brand: var(--accent); }
+[data-theme="dark"] .share-btn[data-brand="x"]:hover { background: #e4e4e7; color: #111; }
+
+/* 小红书无干净单字图标，用文字胶囊（与圆按钮同高度对齐） */
+.share-btn[data-brand="xhs"] {
+  width: auto;
+  border-radius: 20px;
+  padding: 0 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.share-xhs-text { line-height: 1; }
 
 /* 小红书弹窗里的主 CTA（保留填色强调） */
 .xhs-copy-cta {
@@ -1014,8 +1023,10 @@ article.post .post-content hr,
 #wechat-qrcode img, #xhs-qrcode img,
 #wechat-qrcode svg, #xhs-qrcode svg { background: #fff; padding: 6px; border-radius: 8px; }
 
-/* 移动端触摸点击区 */
+/* 移动端：触摸点击区 + 居中换行 */
 @media (max-width: 768px) {
-  .share-act-btn { min-height: 40px; padding: 0.5rem 0.9rem; }
+  .share-section { gap: 0.5rem 0.75rem; padding: 1.25rem 1rem; }
+  .share-btn { width: 44px; height: 44px; }
+  .share-btn[data-brand="xhs"] { width: auto; height: 44px; padding: 0 1rem; }
   .xhs-copy-cta { min-height: 44px; }
 }
