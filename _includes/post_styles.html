@@ -1,206 +1,194 @@
 <style>
-/* Prism.js 语法高亮主题 - 护眼深色代码块 */
-code[class*="language-"],
-pre[class*="language-"] {
-    color: #c5c8c6;
-    text-shadow: none;
+/* ============================================
+   代码块语法高亮（rouge 服务端高亮配套样式）
+   - rouge 在构建期把代码 token 包成 .highlight 下的 span（.k/.nx/.s 等）
+   - 全站代码块渲染为 <div class="language-xxx highlighter-rouge"><div class="highlight"><pre class="code-content"><code>...
+   - 少数无法识别语言的块渲染为裸 <pre><code class="language-xxx">
+   - 这里统一做：深色护眼配色 + 复制按钮留位（顶部 padding 在 post.css 统一管理）
+   ============================================ */
+
+/* rouge 容器：去掉默认外边距，交给内部 pre 控制 */
+.post-content .highlighter-rouge,
+.post-content div.highlight {
+    margin: 0;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* 行内代码字体（块内代码字体在 post.css 统一定义） */
+.post-content pre code,
+.post-content pre.code-content code {
     font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Consolas, Monaco, monospace;
-    font-size: 0.88rem;
-    direction: ltr;
-    text-align: left;
-    white-space: pre;
-    word-spacing: normal;
-    word-break: normal;
-    line-height: 1.65;
-    tab-size: 4;
-    hyphens: none;
+    color: #c9d1d9;
 }
 
-pre[class*="language-"] {
-    padding: 1.25rem 1.5rem;
-    padding-top: 2.25rem;
-    padding-left: 4rem;
-    margin: 1.5rem 0;
-    overflow: auto;
-    border-radius: 12px;
-    background: #1e1e2e;
-    position: relative;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    border: 1px solid rgba(255,255,255,0.06);
-}
+/* ---------- rouge token 配色（深色，与 #1e1e2e 背景协调）---------- */
+.post-content .highlight .c,
+.post-content .highlight .cm,
+.post-content .highlight .c1,
+.post-content .highlight .cs,
+.post-content .highlight .cd,
+.post-content .highlight .cp { color: #6a737d; font-style: italic; } /* 注释 */
 
-/* 行号 */
-.code-line-numbers {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 3rem;
-    padding: 2.25rem 0.5rem 1.25rem 0;
-    background: rgba(0, 0, 0, 0.2);
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    text-align: right;
-    user-select: none;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: 0.8rem;
-    line-height: 1.65;
-    color: #5c6370;
-    border-radius: 12px 0 0 12px;
-}
+.post-content .highlight .err { color: #f97583; }
 
-.code-line-number {
-    display: block;
-}
+.post-content .highlight .k,
+.post-content .highlight .kc,
+.post-content .highlight .kd,
+.post-content .highlight .kn,
+.post-content .highlight .kp,
+.post-content .highlight .kr { color: #ff7b72; } /* 关键字 */
+.post-content .highlight .kt { color: #ffa657; } /* 类型 */
 
-/* 复制按钮 */
+.post-content .highlight .o,
+.post-content .highlight .ow { color: #ff7b72; } /* 运算符 */
+
+.post-content .highlight .p { color: #c9d1d9; } /* 标点 */
+
+.post-content .highlight .s,
+.post-content .highlight .sa,
+.post-content .highlight .sb,
+.post-content .highlight .sc,
+.post-content .highlight .dl,
+.post-content .highlight .sd,
+.post-content .highlight .s2,
+.post-content .highlight .se,
+.post-content .highlight .sh,
+.post-content .highlight .sx,
+.post-content .highlight .sr,
+.post-content .highlight .s1,
+.post-content .highlight .ss { color: #a5d6ff; } /* 字符串 */
+
+.post-content .highlight .m,
+.post-content .highlight .mb,
+.post-content .highlight .mf,
+.post-content .highlight .mh,
+.post-content .highlight .mi,
+.post-content .highlight .il,
+.post-content .highlight .mo,
+.post-content .highlight .mx { color: #79c0ff; } /* 数字 */
+
+.post-content .highlight .no,
+.post-content .highlight .nb,
+.post-content .highlight .bp { color: #79c0ff; } /* 常量/内建 */
+
+.post-content .highlight .nf,
+.post-content .highlight .fm { color: #d2a8ff; } /* 函数名 */
+
+.post-content .highlight .nc,
+.post-content .highlight .nn { color: #ffa657; } /* 类名/命名空间 */
+
+.post-content .highlight .na,
+.post-content .highlight .nv,
+.post-content .highlight .vc,
+.post-content .highlight .vg,
+.post-content .highlight .vi { color: #79c0ff; } /* 属性/变量 */
+
+.post-content .highlight .nt { color: #7ee787; } /* HTML/XML 标签 */
+
+.post-content .highlight .nx,
+.post-content .highlight .nl,
+.post-content .highlight .nd,
+.post-content .highlight .ni,
+.post-content .highlight .ne,
+.post-content .highlight .py { color: #c9d1d9; }
+
+.post-content .highlight .gd { color: #ffdcd7; background-color: #67060c; }
+.post-content .highlight .gi { color: #aff5b4; background-color: #033a16; }
+.post-content .highlight .gh { color: #79c0ff; font-weight: 600; }
+.post-content .highlight .gu { color: #79c0ff; }
+.post-content .highlight .gs { font-weight: 600; }
+.post-content .highlight .ge { font-style: italic; }
+.post-content .highlight .gp { color: #8b949e; }
+
+/* 行内代码（非块内）保持站点变量配色，由 post.css 统一控制 */
+
+/* ---------- 复制按钮 ---------- */
 .code-copy-btn {
     position: absolute;
-    top: 6px;
+    top: 8px;
     right: 10px;
-    padding: 4px 10px;
+    padding: 4px 12px;
     font-size: 0.72rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
     color: #94a3b8;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
     z-index: 10;
+    opacity: 0;
+}
+
+.post-content pre:hover .code-copy-btn,
+.code-copy-btn:focus {
+    opacity: 1;
+}
+
+/* 触屏设备无 hover，常驻显示 */
+@media (hover: none) {
+    .code-copy-btn { opacity: 0.7; }
 }
 
 .code-copy-btn:hover {
     color: #fff;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.18);
 }
 
 .code-copy-btn.copied {
     color: #22c55e;
     border-color: #22c55e;
-}
-
-/* 行内代码 */
-:not(pre) > code[class*="language-"] {
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    color: var(--inline-code-color, #e879f9);
-    background: var(--bg-tertiary, #f0efec);
-    border: 1px solid var(--border-color, #e5e7eb);
-}
-
-/* Prism 语法高亮 Token */
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-    color: #5c6370;
-}
-
-.token.punctuation {
-    color: #abb2bf;
-}
-
-.token.property,
-.token.tag,
-.token.boolean,
-.token.number,
-.token.constant,
-.token.symbol,
-.token.deleted {
-    color: #e06c75;
-}
-
-.token.selector,
-.token.attr-name,
-.token.string,
-.token.char,
-.token.builtin,
-.token.inserted {
-    color: #98c379;
-}
-
-.token.operator,
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string {
-    color: #56b6c2;
-}
-
-.token.atrule,
-.token.attr-value,
-.token.keyword {
-    color: #c678dd;
-}
-
-.token.function,
-.token.class-name {
-    color: #61afef;
-}
-
-.token.regex,
-.token.important,
-.token.variable {
-    color: #d19a66;
-}
-
-/* 响应式 */
-@media (max-width: 768px) {
-    pre[class*="language-"] {
-        padding: 1rem;
-        padding-top: 2rem;
-        padding-left: 3rem;
-        font-size: 0.82rem;
-    }
-
-    .code-line-numbers {
-        width: 2.5rem;
-        padding: 2rem 0.3rem 1rem 0;
-        font-size: 0.72rem;
-    }
+    opacity: 1;
 }
 </style>
 
-<!-- Prism.js 复制按钮 + 行号生成 -->
+<!-- 代码块复制按钮：对所有 .post-content 内的 <pre> 生效（含 rouge 的 pre.code-content 和裸 pre） -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('pre[class*="language-"]').forEach(function(pre) {
+    var pres = document.querySelectorAll('.post-content pre');
+    pres.forEach(function(pre) {
+        // mermaid 块不加按钮（会被 head.html 转成 .mermaid 容器，但保险起见跳过）
         var code = pre.querySelector('code');
-        if (!code) return;
-        
-        var codeText = code.textContent || code.innerText;
-        var lines = codeText.split('\n');
-        var lineCount = lines.length;
-        
-        // 行号
-        var lineNumbers = document.createElement('div');
-        lineNumbers.className = 'code-line-numbers';
-        for (var i = 1; i <= lineCount; i++) {
-            var lineNum = document.createElement('span');
-            lineNum.className = 'code-line-number';
-            lineNum.textContent = i;
-            lineNumbers.appendChild(lineNum);
-        }
-        pre.appendChild(lineNumbers);
-        
-        // 复制按钮
+        if (code && /language-mermaid/.test(code.className)) return;
+        if (pre.querySelector('.code-copy-btn')) return; // 防重复
+
         var btn = document.createElement('button');
         btn.className = 'code-copy-btn';
+        btn.type = 'button';
         btn.textContent = '复制';
-        
+        btn.setAttribute('aria-label', '复制代码');
+
         btn.addEventListener('click', function() {
-            var text = code.textContent || code.innerText;
-            navigator.clipboard.writeText(text).then(function() {
+            var target = pre.querySelector('code') || pre;
+            var text = target.innerText || target.textContent || '';
+            function done() {
                 btn.textContent = '已复制!';
                 btn.classList.add('copied');
                 setTimeout(function() {
                     btn.textContent = '复制';
                     btn.classList.remove('copied');
                 }, 2000);
-            }).catch(function() {
-                btn.textContent = '复制失败';
-                setTimeout(function() { btn.textContent = '复制'; }, 2000);
-            });
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text, done); });
+            } else {
+                fallbackCopy(text, done);
+            }
         });
-        
+
+        function fallbackCopy(text, cb) {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); cb(); } catch (e) {}
+            document.body.removeChild(ta);
+        }
+
         pre.appendChild(btn);
     });
 });

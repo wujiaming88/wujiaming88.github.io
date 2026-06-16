@@ -89,32 +89,9 @@
         </div>
     </footer>
 
-    <!-- Prism.js 代码高亮 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    
-    <!-- 代码块增强 -->
+    <!-- 代码块增强：表格响应式包裹（代码高亮由 rouge 服务端完成，复制按钮见 post_styles.html） -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // kramdown 生成的代码块添加 Prism 类名
-        document.querySelectorAll('pre > code[class*="language-"]').forEach(function(code) {
-            var lang = code.className.match(/language-(\S+)/);
-            if (lang && lang[1]) {
-                code.parentElement.classList.add('language-' + lang[1]);
-            }
-        });
-        
-        // 没有语言标记的代码块
-        document.querySelectorAll('pre > code:not([class*="language-"])').forEach(function(code) {
-            code.classList.add('language-text');
-            code.parentElement.classList.add('language-text');
-        });
-        
-        // 重新运行 Prism 高亮
-        if (window.Prism) {
-            Prism.highlightAll();
-        }
-        
         // 为表格添加响应式包裹
         document.querySelectorAll('.post-content table').forEach(function(table) {
             if (!table.parentElement.classList.contains('table-wrapper')) {
@@ -194,7 +171,7 @@
         document.body.appendChild(backToTop);
 
         window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
+            if (window.pageYOffset > window.innerHeight) {
                 backToTop.style.opacity = '1';
                 backToTop.style.visibility = 'visible';
             } else {

@@ -27,9 +27,7 @@
   <!-- 样式 -->
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   <link rel="stylesheet" href="{{ "/assets/post.css" | relative_url }}">
-
-  <!-- Prism.js 代码高亮主题 -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  {% if page.url == '/' %}<link rel="stylesheet" href="{{ "/assets/home.css" | relative_url }}">{% endif %}
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/logo/favicon-32.png' | relative_url }}">

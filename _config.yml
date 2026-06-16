@@ -47,8 +47,6 @@ defaults:
     values:
       layout: single
       author: W.ai
-      header:
-        overlay_image: https://picsum.photos/1200/400?random=1
 
 # 排除文件
 exclude:

@@ -5,12 +5,23 @@
     include.style —— "inline"（列表卡，紧凑）| 默认 "header"（文章页头）
   机制：
     - 难度：front matter `difficulty: 入门|进阶|高级`，缺失则不渲染难度徽章（优雅降级）。
-    - 阅读时长：用正文纯文本字符数 / 320 自动估算（中文按字符计），最小 1 分钟，零维护。
+    - 阅读时长：中英文混排加权估算——
+        中文按「非空格字符数 / 350字每分」，英文按「词数(≈空格数) / 220词每分」，
+        二者相加向上取整，最小 1 分钟。比旧版统一 /320 对英文为主文章高估的问题更准。
 {%- endcomment -%}
 {%- assign p = include.post -%}
 {%- assign body_text = p.content | strip_html | normalize_whitespace -%}
-{%- assign char_count = body_text | size -%}
-{%- assign read_min = char_count | divided_by: 320 -%}
+{%- assign total_count = body_text | size -%}
+{%- assign nospace_count = body_text | remove: " " | size -%}
+{%- comment -%} normalize_whitespace 已把连续空白压成单空格，空格数 ≈ 英文词间隔 ≈ 英文词数 {%- endcomment -%}
+{%- assign eng_words = total_count | minus: nospace_count -%}
+{%- comment -%} 英文词平均含 6 个字符（含尾随空格），从非空格总数中扣除得 CJK 字符数 {%- endcomment -%}
+{%- assign eng_chars = eng_words | times: 6 -%}
+{%- assign cjk_chars = nospace_count | minus: eng_chars -%}
+{%- if cjk_chars < 0 -%}{%- assign cjk_chars = 0 -%}{%- endif -%}
+{%- assign t_cjk = cjk_chars | divided_by: 350.0 -%}
+{%- assign t_eng = eng_words | divided_by: 220.0 -%}
+{%- assign read_min = t_cjk | plus: t_eng | ceil -%}
 {%- if read_min < 1 -%}{%- assign read_min = 1 -%}{%- endif -%}
 {%- assign diff = p.difficulty | default: "" | strip -%}
 {%- assign diff_class = "" -%}
