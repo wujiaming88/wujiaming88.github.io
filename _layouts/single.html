@@ -144,13 +144,13 @@ layout: default
 
   <!-- 分享按钮 -->
   <div class="share-section post-bottom-section">
-    <h3>📤 分享这篇文章</h3>
-    <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
-      <button onclick="shareToX()" class="share-act-btn" style="background: #000; color: #fff;">𝕏 分享到 X</button>
-      <button onclick="shareToWeibo()" class="share-act-btn" style="background: #e6162d; color: #fff;">微博 分享</button>
-      <button onclick="shareToWechat()" class="share-act-btn" style="background: #07c160; color: #fff;">微信 扫码</button>
-      <button onclick="shareToXhs()" class="share-act-btn" style="background: #ff2442; color: #fff;">小红书 分享</button>
-      <button onclick="copyToClipboard('{{ site.url }}{{ page.url }}')" class="share-act-btn" style="background: var(--accent); color: #fff;">📋 复制链接</button>
+    <span class="share-label">分享</span>
+    <div class="share-row">
+      <button onclick="shareToX()" class="share-act-btn" data-brand="x" aria-label="分享到 X"><span class="share-ico">𝕏</span>X</button>
+      <button onclick="shareToWeibo()" class="share-act-btn" data-brand="weibo" aria-label="分享到微博"><span class="share-ico">微</span>微博</button>
+      <button onclick="shareToWechat()" class="share-act-btn" data-brand="wechat" aria-label="微信扫码分享"><span class="share-ico">微</span>微信</button>
+      <button onclick="shareToXhs()" class="share-act-btn" data-brand="xhs" aria-label="分享到小红书"><span class="share-ico">小</span>小红书</button>
+      <button onclick="copyToClipboard('{{ site.url }}{{ page.url }}')" class="share-act-btn" data-brand="copy" aria-label="复制链接"><span class="share-ico">🔗</span>复制链接</button>
     </div>
   </div>
 
@@ -170,7 +170,7 @@ layout: default
       <span class="wx-modal-close" role="button" tabindex="0" aria-label="关闭" onclick="closeXhsModal()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeXhsModal();}">&times;</span>
       <h3 id="xhs-modal-title" style="color:#ff2442;">分享到小红书</h3>
       <div id="xhs-qrcode"></div>
-      <button type="button" id="xhs-copy-btn" class="share-act-btn" style="background:#ff2442;color:#fff;margin-top:1rem;" onclick="copyXhsContent()">📋 一键复制标题+链接</button>
+      <button type="button" id="xhs-copy-btn" class="xhs-copy-cta" onclick="copyXhsContent()">📋 一键复制标题+链接</button>
       <p>复制后去小红书粘贴发布，或用手机扫上方二维码打开本页</p>
     </div>
   </div>

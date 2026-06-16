@@ -530,12 +530,19 @@ article.post .post-content hr,
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
 }
 
-.share-section h3 {
-  color: var(--text-heading);
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+.share-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
 }
 
 /* 相似文章 */
@@ -928,11 +935,63 @@ article.post .post-content hr,
 /* ============================================
    分享按钮 + 二维码弹窗（从 single.html 内联抽离）
    ============================================ */
-.share-act-btn {
-  padding: 0.65rem 1.4rem; border: none; border-radius: 8px; cursor: pointer;
-  font-size: 0.9rem; font-weight: 500; font-family: inherit; transition: all 0.2s ease;
+.share-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
-.share-act-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+
+/* 克制的 ghost 风格：默认中性细边框，品牌色仅作点缀 + hover 才显现 */
+.share-act-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1.4;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+.share-act-btn .share-ico {
+  font-size: 0.9em;
+  font-weight: 700;
+  opacity: 0.85;
+}
+.share-act-btn:hover {
+  color: var(--brand, var(--accent));
+  border-color: var(--brand, var(--accent));
+  background: color-mix(in srgb, var(--brand, var(--accent)) 8%, transparent);
+}
+.share-act-btn[data-brand="x"]      { --brand: #111; }
+.share-act-btn[data-brand="weibo"]  { --brand: #e6162d; }
+.share-act-btn[data-brand="wechat"] { --brand: #07c160; }
+.share-act-btn[data-brand="xhs"]    { --brand: #ff2442; }
+.share-act-btn[data-brand="copy"]   { --brand: var(--accent); }
+[data-theme="dark"] .share-act-btn[data-brand="x"] { --brand: #e4e4e7; }
+
+/* 小红书弹窗里的主 CTA（保留填色强调） */
+.xhs-copy-cta {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: #ff2442;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  font-family: inherit;
+  transition: opacity 0.18s ease;
+}
+.xhs-copy-cta:hover { opacity: 0.9; }
 .wx-modal {
   display: none; position: fixed; inset: 0; z-index: 2000;
   background: rgba(0,0,0,0.55); align-items: center; justify-content: center;
@@ -955,7 +1014,8 @@ article.post .post-content hr,
 #wechat-qrcode img, #xhs-qrcode img,
 #wechat-qrcode svg, #xhs-qrcode svg { background: #fff; padding: 6px; border-radius: 8px; }
 
-/* 移动端触摸点击区 ≥44px（share-act-btn） */
+/* 移动端触摸点击区 */
 @media (max-width: 768px) {
-  .share-act-btn { min-height: 44px; }
+  .share-act-btn { min-height: 40px; padding: 0.5rem 0.9rem; }
+  .xhs-copy-cta { min-height: 44px; }
 }
