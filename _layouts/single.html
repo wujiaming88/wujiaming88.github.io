@@ -182,6 +182,7 @@ layout: default
       <button onclick="shareToX()" class="share-act-btn" style="background: #000; color: #fff;">𝕏 分享到 X</button>
       <button onclick="shareToWeibo()" class="share-act-btn" style="background: #e6162d; color: #fff;">微博 分享</button>
       <button onclick="shareToWechat()" class="share-act-btn" style="background: #07c160; color: #fff;">微信 扫码</button>
+      <button onclick="shareToXhs()" class="share-act-btn" style="background: #ff2442; color: #fff;">小红书 分享</button>
       <button onclick="copyToClipboard('{{ site.url }}{{ page.url }}')" class="share-act-btn" style="background: var(--accent); color: #fff;">📋 复制链接</button>
     </div>
   </div>
@@ -193,6 +194,17 @@ layout: default
       <h3>微信扫码分享</h3>
       <div id="wechat-qrcode"></div>
       <p>用微信扫一扫，即可分享给好友或朋友圈</p>
+    </div>
+  </div>
+
+  <!-- 小红书分享弹窗（复制标题+链接 / 扫码，小红书无官方 web 发布 URL） -->
+  <div id="xhs-share-modal" class="wx-modal" onclick="if(event.target===this)closeXhsModal()">
+    <div class="wx-modal-box">
+      <span class="wx-modal-close" onclick="closeXhsModal()">&times;</span>
+      <h3 style="color:#ff2442;">分享到小红书</h3>
+      <div id="xhs-qrcode"></div>
+      <button type="button" id="xhs-copy-btn" class="share-act-btn" style="background:#ff2442;color:#fff;margin-top:1rem;" onclick="copyXhsContent()">📋 一键复制标题+链接</button>
+      <p>复制后去小红书粘贴发布，或用手机扫上方二维码打开本页</p>
     </div>
   </div>
   <style>
@@ -309,8 +321,42 @@ function closeWechatModal() {
     var modal = document.getElementById('wechat-share-modal');
     if (modal) modal.classList.remove('show');
 }
+
+// === 分享到小红书（无官方 web 发布 URL，复用扫码+一键复制方案） ===
+function shareToXhs() {
+    var modal = document.getElementById('xhs-share-modal');
+    var box = document.getElementById('xhs-qrcode');
+    if (!modal || !box) return;
+    box.innerHTML = '';
+    var img = document.createElement('img');
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(shareData.url);
+    img.alt = '文章二维码';
+    img.width = 180; img.height = 180;
+    box.appendChild(img);
+    modal.classList.add('show');
+}
+function copyXhsContent() {
+    var text = shareData.title + '\n' + shareData.url;
+    var btn = document.getElementById('xhs-copy-btn');
+    function done() {
+        if (btn) {
+            var orig = btn.textContent;
+            btn.textContent = '✅ 已复制，去小红书粘贴发布';
+            setTimeout(function() { btn.textContent = orig; }, 2200);
+        }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function() { prompt('请手动复制：', text); });
+    } else {
+        prompt('请手动复制：', text);
+    }
+}
+function closeXhsModal() {
+    var modal = document.getElementById('xhs-share-modal');
+    if (modal) modal.classList.remove('show');
+}
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeWechatModal();
+    if (e.key === 'Escape') { closeWechatModal(); closeXhsModal(); }
 });
 
 // === 自动生成目录 ===
