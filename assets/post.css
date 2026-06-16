@@ -941,7 +941,7 @@ article.post .post-content hr,
   gap: 0.6rem;
 }
 
-/* 圆形图标按钮：默认中性淡底，hover 填充品牌色 */
+/* 圆形图标按钮：默认素净描边，hover 柔和点亮品牌色 */
 .share-btn {
   --brand: var(--accent);
   display: inline-flex;
@@ -950,19 +950,21 @@ article.post .post-content hr,
   width: 40px;
   height: 40px;
   padding: 0;
-  border: none;
+  border: 1px solid var(--border-color);
   border-radius: 50%;
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
+  background: var(--bg-card);
+  color: var(--text-heading);
   cursor: pointer;
   font-family: inherit;
-  transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .share-btn svg { display: block; }
 .share-btn:hover {
   background: var(--brand);
+  border-color: var(--brand);
   color: #fff;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--brand) 35%, transparent);
 }
 .share-btn:active { transform: translateY(0); }
 .share-btn:focus-visible {
@@ -974,13 +976,13 @@ article.post .post-content hr,
 .share-btn[data-brand="wechat"] { --brand: #07c160; }
 .share-btn[data-brand="xhs"]    { --brand: #ff2442; }
 .share-btn[data-brand="copy"]   { --brand: var(--accent); }
-[data-theme="dark"] .share-btn[data-brand="x"]:hover { background: #e4e4e7; color: #111; }
+[data-theme="dark"] .share-btn[data-brand="x"]:hover { background: #e4e4e7; border-color: #e4e4e7; color: #111; }
 
 /* 小红书无干净单字图标，用文字胶囊（与圆按钮同高度对齐） */
 .share-btn[data-brand="xhs"] {
   width: auto;
   border-radius: 20px;
-  padding: 0 0.85rem;
+  padding: 0 0.9rem;
   font-size: 0.8rem;
   font-weight: 600;
 }
