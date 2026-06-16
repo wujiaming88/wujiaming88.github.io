@@ -978,15 +978,7 @@ article.post .post-content hr,
 .share-btn[data-brand="copy"]   { --brand: var(--accent); }
 [data-theme="dark"] .share-btn[data-brand="x"]:hover { background: #e4e4e7; border-color: #e4e4e7; color: #111; }
 
-/* 小红书无干净单字图标，用文字胶囊（与圆按钮同高度对齐） */
-.share-btn[data-brand="xhs"] {
-  width: auto;
-  border-radius: 20px;
-  padding: 0 0.9rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-.share-xhs-text { line-height: 1; }
+/* 小红书现也用矢量图标，与其他圆按钮一致（无需特殊尺寸覆盖）*/
 
 /* 小红书弹窗里的主 CTA（保留填色强调） */
 .xhs-copy-cta {
@@ -1029,6 +1021,6 @@ article.post .post-content hr,
 @media (max-width: 768px) {
   .share-section { gap: 0.5rem 0.75rem; padding: 1.25rem 1rem; }
   .share-btn { width: 44px; height: 44px; }
-  .share-btn[data-brand="xhs"] { width: auto; height: 44px; padding: 0 1rem; }
+  .share-btn[data-brand="xhs"] { width: 44px; height: 44px; padding: 0; }
   .xhs-copy-cta { min-height: 44px; }
 }
