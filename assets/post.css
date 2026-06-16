@@ -257,8 +257,7 @@ article.post .post-content code:not(pre code),
 /* 代码块 - 深色主题 */
 /* ==================== */
 article.post .post-content pre,
-.post-content pre,
-pre[class*="language-"] {
+.post-content pre {
   background: #1e1e2e;
   border-radius: var(--radius-lg);
   overflow-x: auto;
@@ -270,8 +269,7 @@ pre[class*="language-"] {
 }
 
 article.post .post-content pre code,
-.post-content pre code,
-pre[class*="language-"] code {
+.post-content pre code {
   background: transparent !important;
   padding: 0 !important;
   border: none !important;
@@ -279,7 +277,7 @@ pre[class*="language-"] code {
   font-size: 0.85rem;
   line-height: 1.7;
   color: #e2e8f0;
-  font-family: 'JetBrains Mono', 'Fira Code', var(--font-mono);
+  font-family: var(--font-mono);
   display: block;
   white-space: pre;
   tab-size: 4;
@@ -829,8 +827,7 @@ article.post .post-content hr,
   article.post .post-content h3, .post-content h3 { font-size: 1.15rem; }
 
   article.post .post-content pre,
-  .post-content pre,
-  pre[class*="language-"] {
+  .post-content pre {
     padding: 1rem 1rem;
     font-size: 0.8rem;
     border-radius: var(--radius-sm);
@@ -908,3 +905,57 @@ article.post .post-content hr,
 .post-subscribe-lite{text-align:center;margin:2rem auto 0;padding:.6rem;font-size:.85rem;color:var(--text-secondary,#9ca3af)}
 .post-subscribe-lite a{color:var(--accent,#2563eb);text-decoration:none;font-weight:500}
 .post-subscribe-lite a:hover{text-decoration:underline}
+/* ============================================
+   阅读进度条（从 single.html 内联抽离）
+   ============================================ */
+.reading-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 1001;
+  pointer-events: none;
+}
+.reading-progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light, var(--accent)), var(--accent-cyan, var(--accent)));
+  border-radius: 0 2px 2px 0;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 6px rgba(99,102,241,0.4);
+}
+
+/* ============================================
+   分享按钮 + 二维码弹窗（从 single.html 内联抽离）
+   ============================================ */
+.share-act-btn {
+  padding: 0.65rem 1.4rem; border: none; border-radius: 8px; cursor: pointer;
+  font-size: 0.9rem; font-weight: 500; font-family: inherit; transition: all 0.2s ease;
+}
+.share-act-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+.wx-modal {
+  display: none; position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.55); align-items: center; justify-content: center;
+}
+.wx-modal.show { display: flex; }
+.wx-modal-box {
+  background: var(--bg-card); color: var(--text-primary);
+  padding: 1.75rem 2rem; border-radius: 14px; text-align: center;
+  position: relative; max-width: 300px; box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  border: 1px solid var(--border-color);
+}
+.wx-modal-box h3 { margin: 0 0 1rem; font-size: 1.05rem; color: var(--text-heading); }
+.wx-modal-box p { margin: 1rem 0 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+.wx-modal-close {
+  position: absolute; top: 8px; right: 14px; font-size: 24px;
+  cursor: pointer; color: var(--text-secondary); line-height: 1;
+}
+#wechat-qrcode, #xhs-qrcode { display: flex; justify-content: center; }
+/* 暗色主题下二维码默认透明会黑底黑码扫不出，强制白底 */
+#wechat-qrcode img, #xhs-qrcode img,
+#wechat-qrcode svg, #xhs-qrcode svg { background: #fff; padding: 6px; border-radius: 8px; }
+
+/* 移动端触摸点击区 ≥44px（share-act-btn） */
+@media (max-width: 768px) {
+  .share-act-btn { min-height: 44px; }
+}

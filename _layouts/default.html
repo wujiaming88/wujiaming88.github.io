@@ -149,6 +149,8 @@
         // 返回顶部按钮
         const backToTop = document.createElement('button');
         backToTop.textContent = '↑';
+        backToTop.type = 'button';
+        backToTop.setAttribute('aria-label', '返回顶部');
         backToTop.style.cssText = `
             position: fixed;
             bottom: 1.5rem;
@@ -170,7 +172,8 @@
 
         document.body.appendChild(backToTop);
 
-        window.addEventListener('scroll', () => {
+        var _bttTicking = false;
+        function _bttUpdate() {
             if (window.pageYOffset > window.innerHeight) {
                 backToTop.style.opacity = '1';
                 backToTop.style.visibility = 'visible';
@@ -178,7 +181,13 @@
                 backToTop.style.opacity = '0';
                 backToTop.style.visibility = 'hidden';
             }
-        });
+        }
+        window.addEventListener('scroll', function() {
+            if (!_bttTicking) {
+                requestAnimationFrame(function() { _bttUpdate(); _bttTicking = false; });
+                _bttTicking = true;
+            }
+        }, { passive: true });
 
         backToTop.addEventListener('click', () => {
             window.scrollTo({

@@ -10,7 +10,14 @@
         二者相加向上取整，最小 1 分钟。比旧版统一 /320 对英文为主文章高估的问题更准。
 {%- endcomment -%}
 {%- assign p = include.post -%}
-{%- assign body_text = p.content | strip_html | normalize_whitespace -%}
+{%- comment -%} 先剔除 <pre>...</pre> 代码块，避免千行配置代码虚增阅读时长（Liquid 无正则，用 split 模拟） {%- endcomment -%}
+{%- assign _clean = "" -%}
+{%- assign _pre_parts = p.content | split: "</pre>" -%}
+{%- for _part in _pre_parts -%}
+  {%- assign _seg = _part | split: "<pre" -%}
+  {%- assign _clean = _clean | append: _seg.first -%}
+{%- endfor -%}
+{%- assign body_text = _clean | strip_html | normalize_whitespace -%}
 {%- assign total_count = body_text | size -%}
 {%- assign nospace_count = body_text | remove: " " | size -%}
 {%- comment -%} normalize_whitespace 已把连续空白压成单空格，空格数 ≈ 英文词间隔 ≈ 英文词数 {%- endcomment -%}

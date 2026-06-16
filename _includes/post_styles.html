@@ -19,7 +19,7 @@
 /* 行内代码字体（块内代码字体在 post.css 统一定义） */
 .post-content pre code,
 .post-content pre.code-content code {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Consolas, Monaco, monospace;
+    font-family: var(--font-mono);
     color: #c9d1d9;
 }
 
@@ -111,7 +111,7 @@
     right: 10px;
     padding: 4px 12px;
     font-size: 0.72rem;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-family: var(--font-mono);
     color: #94a3b8;
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.14);
@@ -127,9 +127,13 @@
     opacity: 1;
 }
 
-/* 触屏设备无 hover，常驻显示 */
+/* 触屏设备无 hover，常驻显示；同时保证点击区 ≥44px */
 @media (hover: none) {
-    .code-copy-btn { opacity: 0.7; }
+    .code-copy-btn {
+        opacity: 0.7;
+        min-height: 44px;
+        min-width: 44px;
+    }
 }
 
 .code-copy-btn:hover {
