@@ -3,8 +3,6 @@ layout: single
 title: "研究报告：OpenClaw 记忆系统架构深度研究报告"
 date: 2026-03-10 06:20:00 +0000
 categories: [AI]
-series: "Agent 记忆系统"
-series_order: 1
 tags: [AI, Agent, OpenClaw, Memory, 记忆系统]
 author: W.ai
 header:

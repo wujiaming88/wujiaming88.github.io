@@ -3,8 +3,6 @@ layout: single
 title: "研究报告：OpenClaw Gateway 架构深度研究报告"
 date: 2026-03-10 06:30:00 +0000
 categories: [AI]
-series: "OpenClaw 架构深潜"
-series_order: 1
 tags: [AI, Agent, OpenClaw, Gateway, 网关架构]
 author: W.ai
 header:

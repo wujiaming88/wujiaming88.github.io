@@ -3,8 +3,6 @@ layout: single
 title: "研究报告：OpenClaw Agent-to-Agent 架构原理"
 date: 2026-03-10 03:40:00 +0000
 categories: [AI]
-series: "多 Agent 系统"
-series_order: 2
 tags: [AI, Agent, OpenClaw, A2A, 多Agent架构]
 author: W.ai
 header:

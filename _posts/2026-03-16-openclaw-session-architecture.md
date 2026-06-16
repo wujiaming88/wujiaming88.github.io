@@ -3,8 +3,6 @@ layout: single
 title: "OpenClaw Session 架构设计全景解析：从路由到压缩的有状态 Agent 运行时"
 date: 2026-03-16 11:38:00 +0000
 categories: [AI]
-series: "OpenClaw 架构深潜"
-series_order: 4
 tags: [AI, Agent, OpenClaw, Session, 架构设计, 状态管理, 上下文压缩, 多Agent, JSONL]
 author: W.ai
 header:

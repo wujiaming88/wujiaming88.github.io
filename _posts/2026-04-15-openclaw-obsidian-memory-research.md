@@ -3,8 +3,6 @@ layout: single
 title: "OpenClaw + Obsidian 记忆方案深度调研：知识检索 ≠ 会话记忆"
 date: 2026-04-15
 categories: [ai, research]
-series: "Agent 记忆系统"
-series_order: 4
 tags: [OpenClaw, Obsidian, AI Memory, RAG, Knowledge Base]
 author: 五岳团队
 header:

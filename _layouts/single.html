@@ -36,17 +36,6 @@ layout: default
       {% endif %}
     </div>
     {% include post-meta-badges.html post=page style="header" %}
-    {%- if page.series -%}
-    {%- assign series_posts = site.posts | where: "series", page.series | sort: "series_order" -%}
-    {%- assign series_total = series_posts | size -%}
-    <div class="post-series-banner">
-      <span class="post-series-icon">📚</span>
-      <span class="post-series-text">本文属于系列
-        <a href="{{ '/series/' | relative_url }}#{{ page.series | slugify }}">《{{ page.series }}》</a>
-        {%- if page.series_order and series_total > 0 %} 第 {{ page.series_order }}/{{ series_total }} 篇{%- elsif series_total > 0 %}（共 {{ series_total }} 篇）{%- endif -%}
-      </span>
-    </div>
-    {%- endif -%}
     {% if page.tags %}
     <div class="post-tags" style="display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center;">
       {% for tag in page.tags %}
@@ -71,23 +60,13 @@ layout: default
     {{ content }}
   </div>
 
-  <!-- 相似文章推荐（F4：同系列优先 > 共享tag最多 > 同category）-->
-  {% if page.tags or page.series or page.categories %}
+  <!-- 相似文章推荐（共享tag最多 > 同category）-->
+  {% if page.tags or page.categories %}
   <div class="related-posts post-bottom-section">
     <h3>📖 相关阅读</h3>
     {% assign related_posts = '' | split: '' %}
 
-    {%- comment -%} 1) 同系列其它文章（按 series_order） {%- endcomment -%}
-    {% if page.series %}
-      {% assign sps = site.posts | where: "series", page.series | sort: "series_order" %}
-      {% for sp in sps %}
-        {% if sp.url != page.url %}
-          {% assign related_posts = related_posts | push: sp %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-
-    {%- comment -%} 2) 共享 tag 的文章 {%- endcomment -%}
+    {%- comment -%} 1) 共享 tag 的文章 {%- endcomment -%}
     {% if page.tags %}
       {% for tag in page.tags %}
         {% assign tag_posts = site.tags[tag] %}
@@ -99,7 +78,7 @@ layout: default
       {% endfor %}
     {% endif %}
 
-    {%- comment -%} 3) 同 category 兜底 {%- endcomment -%}
+    {%- comment -%} 2) 同 category 兜底 {%- endcomment -%}
     {% if page.categories %}
       {% assign cat = page.categories | first %}
       {% for post in site.categories[cat] %}
@@ -119,9 +98,7 @@ layout: default
         <a href="{{ post.url | relative_url }}" class="related-post-card">
           <div class="related-post-title">{{ post.title }}</div>
           <div class="related-post-meta">
-            {% if post.series %}
-            <span class="related-post-category related-post-series">📚 {{ post.series }}</span>
-            {% elsif post.categories %}
+            {% if post.categories %}
             <span class="related-post-category">{{ post.categories | first }}</span>
             {% endif %}
             <span>{{ post.date | date: '%Y/%m/%d' }}</span>
@@ -140,36 +117,6 @@ layout: default
 
   <!-- 文章导航 -->
   <div class="post-nav post-bottom-section">
-    {%- assign prev_in_series = nil -%}
-    {%- assign next_in_series = nil -%}
-    {%- if page.series and page.series_order -%}
-    {%- assign sps = site.posts | where: "series", page.series | sort: "series_order" -%}
-    {%- for sp in sps -%}
-      {%- if sp.series_order < page.series_order -%}{%- assign prev_in_series = sp -%}{%- endif -%}
-      {%- if sp.series_order > page.series_order and next_in_series == nil -%}{%- assign next_in_series = sp -%}{%- endif -%}
-    {%- endfor -%}
-    {%- endif -%}
-    {%- if prev_in_series or next_in_series -%}
-    <div class="post-nav-container">
-      {% if prev_in_series %}
-      <div class="post-nav-item left">
-        <a href="{{ prev_in_series.url | relative_url }}">
-          <div class="post-nav-label">◀ 系列上一篇（第 {{ prev_in_series.series_order }} 篇）</div>
-          <div class="post-nav-title">{{ prev_in_series.title }}</div>
-        </a>
-      </div>
-      <div class="post-nav-divider"></div>
-      {% endif %}
-      {% if next_in_series %}
-      <div class="post-nav-item right">
-        <a href="{{ next_in_series.url | relative_url }}">
-          <div class="post-nav-label">系列下一篇（第 {{ next_in_series.series_order }} 篇）▶</div>
-          <div class="post-nav-title">{{ next_in_series.title }}</div>
-        </a>
-      </div>
-      {% endif %}
-    </div>
-    {%- else -%}
     <div class="post-nav-container">
       {% if page.previous %}
       <div class="post-nav-item left">
@@ -189,7 +136,6 @@ layout: default
       </div>
       {% endif %}
     </div>
-    {%- endif -%}
   </div>
 
   <!-- 分享按钮 -->

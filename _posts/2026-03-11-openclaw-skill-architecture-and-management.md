@@ -3,8 +3,6 @@ layout: single
 title: "研究报告：OpenClaw Skill 模块架构、机制与管理深度研究报告"
 date: 2026-03-11 05:35:00 +0000
 categories: [AI]
-series: "OpenClaw 架构深潜"
-series_order: 3
 tags: [AI, Agent, OpenClaw, Skill, AgentSkills, ClawHub, 架构]
 author: W.ai
 header:

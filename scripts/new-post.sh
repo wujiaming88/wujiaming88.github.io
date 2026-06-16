@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # new-post.sh — 新建博客文章脚手架
-# 自动生成符合规范的 front matter（含 series / series_order / difficulty），保障"内容体系化覆盖率"。
+# 自动生成符合规范的 front matter（含 difficulty）。
 # 用法：
 #   ./scripts/new-post.sh                      # 全交互
 #   ./scripts/new-post.sh "文章标题"           # 传标题，其余交互
@@ -19,21 +19,6 @@ ask() { # ask "提示" "默认值"
   else read -r -p "$prompt: " ans; echo "$ans"; fi
 }
 
-list_series() {
-  grep -h '^series:' "$POSTS_DIR"/*.md 2>/dev/null | sed 's/^series: *//; s/^"//; s/"$//' | sort -u
-}
-
-next_order() { # next_order "系列名" -> 该系列当前最大 series_order + 1
-  local s="$1" maxo=0 o
-  for f in "$POSTS_DIR"/*.md; do
-    if grep -q "^series: *\"\?$s\"\?\s*$" "$f" 2>/dev/null; then
-      o=$(grep '^series_order:' "$f" 2>/dev/null | head -1 | sed 's/[^0-9]//g')
-      [ -n "$o" ] && [ "$o" -gt "$maxo" ] && maxo=$o
-    fi
-  done
-  echo $((maxo + 1))
-}
-
 # ---------- 1. 标题 ----------
 TITLE="${1:-}"
 [ -z "$TITLE" ] && TITLE=$(ask "📝 文章标题")
@@ -50,24 +35,7 @@ SLUG=$(echo "$SLUG" | tr 'A-Z' 'a-z' | sed 's/[^a-z0-9-]/-/g; s/-\+/-/g; s/^-//;
 # ---------- 3. 分类 ----------
 CATEGORY=$(ask "📂 分类 categories" "AI")
 
-# ---------- 4. 系列（可选，支持选已有）----------
-echo ""
-echo "📚 已有系列："
-EXISTING=$(list_series)
-if [ -n "$EXISTING" ]; then echo "$EXISTING" | sed 's/^/   - /'; else echo "   （暂无）"; fi
-echo "   （留空 = 本文不属于任何系列）"
-SERIES=$(ask "选择/输入系列名" "")
-
-SERIES_LINE=""
-ORDER_LINE=""
-if [ -n "$SERIES" ]; then
-  DEF_ORDER=$(next_order "$SERIES")
-  ORDER=$(ask "   该系列序号 series_order" "$DEF_ORDER")
-  SERIES_LINE="series: \"$SERIES\""
-  ORDER_LINE="series_order: $ORDER"
-fi
-
-# ---------- 5. 难度 ----------
+# ---------- 4. 难度 ----------
 echo ""
 echo "📊 难度 difficulty：1)入门  2)进阶  3)高级  4)不设置"
 DIFF_CHOICE=$(ask "选择" "2")
@@ -77,11 +45,11 @@ esac
 DIFF_LINE=""
 [ -n "$DIFF" ] && DIFF_LINE="difficulty: $DIFF"
 
-# ---------- 6. 标签 ----------
+# ---------- 5. 标签 ----------
 TAGS=$(ask "🏷️ 标签（逗号分隔，如 AI,Agent,OpenClaw）" "AI, Agent")
 TAGS_FMT="[$(echo "$TAGS" | sed 's/ *, */, /g')]"
 
-# ---------- 7. 生成文件 ----------
+# ---------- 6. 生成文件 ----------
 DATE_FULL=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S +0800')
 DATE_DAY=$(TZ=Asia/Shanghai date '+%Y-%m-%d')
 FILE="$POSTS_DIR/${DATE_DAY}-${SLUG}.md"
@@ -93,8 +61,6 @@ FILE="$POSTS_DIR/${DATE_DAY}-${SLUG}.md"
   echo "title: \"$TITLE\""
   echo "date: $DATE_FULL"
   echo "categories: [$CATEGORY]"
-  [ -n "$SERIES_LINE" ] && echo "$SERIES_LINE"
-  [ -n "$ORDER_LINE" ] && echo "$ORDER_LINE"
   [ -n "$DIFF_LINE" ] && echo "$DIFF_LINE"
   echo "tags: $TAGS_FMT"
   echo "author: W.ai"
@@ -116,7 +82,6 @@ FILE="$POSTS_DIR/${DATE_DAY}-${SLUG}.md"
 echo ""
 echo "✅ 已创建：$FILE"
 echo "   标题：$TITLE"
-[ -n "$SERIES" ] && echo "   系列：《$SERIES》第 ${ORDER} 篇" || echo "   系列：无（普通文章）"
 [ -n "$DIFF" ] && echo "   难度：$DIFF"
 echo ""
 echo "👉 下一步：① 写正文  ② 生成配图替换 overlay_image  ③ 填 caption/excerpt  ④ bundle exec jekyll build 预览  ⑤ git push"

@@ -906,14 +906,7 @@ article.post .post-content hr,
   .meta-badges--header .meta-badge { font-size: 0.74rem; }
 }
 
-/* ===== MVP升级：系列 banner（文章页顶部）===== */
-.post-series-banner{display:flex;align-items:center;gap:.5rem;justify-content:center;margin:.75rem auto 0;padding:.5rem 1rem;background:var(--tag-bg,#eef2ff);border-radius:8px;font-size:.9rem;max-width:fit-content}
-.post-series-banner a{color:var(--accent,#2563eb);font-weight:600;text-decoration:none}
-.post-series-banner a:hover{text-decoration:underline}
-.post-series-icon{font-size:1rem}
 /* ===== MVP升级：轻量 RSS 订阅条（文章底部）===== */
 .post-subscribe-lite{text-align:center;margin:2rem auto 0;padding:.6rem;font-size:.85rem;color:var(--text-secondary,#9ca3af)}
 .post-subscribe-lite a{color:var(--accent,#2563eb);text-decoration:none;font-weight:500}
 .post-subscribe-lite a:hover{text-decoration:underline}
-/* ===== MVP升级：相关推荐 series 标记 ===== */
-.related-post-series{background:var(--accent,#2563eb)!important;color:#fff!important}

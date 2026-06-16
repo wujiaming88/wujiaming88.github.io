@@ -3,8 +3,6 @@ layout: single
 title: "OpenClaw 新记忆特性深度研究：Active Memory / Dreaming / Memory Wiki"
 date: 2026-04-13
 categories: [ai, research]
-series: "Agent 记忆系统"
-series_order: 2
 tags: [OpenClaw, AI Memory, Active Memory, Dreaming, Memory Wiki]
 author: 五岳团队
 header:
