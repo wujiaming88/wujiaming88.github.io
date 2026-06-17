@@ -6,7 +6,7 @@ tags: [agent, harness, context-compaction, claude-code, prompt-cache, cache-econ
 header:
   overlay_image: /assets/images/posts/2026-06-17-barazany-claude-compaction-header.png
   overlay_filter: 0.45
-excerpt: "深读 Jonathan Barazany 用泄漏源码验证 Claude Code 压缩引擎的名篇，并结合本地 clone 的真实 harness 源码，把三层架构、cache_edits 外科手术式删除、缓存经济学讲到原理层。"
+excerpt: "深读 Jonathan Barazany 验证 Claude Code 压缩引擎的名篇，并基于社区从 v2.1.88 npm 包反混淆的还原源码逐行确证：三层架构、cache_edits 外科手术式删除、缓存经济学，再补全博客没讲的 API microcompact(180K/40K)、时间维度 microcompact、API-round 分组、skill 跨压缩存活、Session Memory 实验、cache-sharing fork 等 6 个机制。"
 toc: true
 toc_sticky: true
 ---
@@ -19,7 +19,8 @@ toc_sticky: true
 >
 > **方法与边界声明**：
 > - 原文核心论点、章节结构、关键数字均来自上述原文，本报告逐节高保真覆盖后，在每节追加【技术展开】做原理级深挖。
-> - **Claude Code 本身是闭源产品**。原文基于「公开泄漏的仓库 + 作者让 Claude 自析其压缩源码」，因此对 Claude Code 内部的所有陈述都属于**逆向/二手性质**，本报告不假装握有 Claude Code 一手源码。
+> - **本次升级**：本报告在原文逆向论述之上，**引入一份社区从 Claude Code `v2.1.88` npm 发布包反混淆得到的「还原源码」**，对压缩引擎逐行核对，把原文中大量「逆向推测/作者自析」的表述**就地改写为带真实「文件:行号 + 常量名/注释」的源码确证**——精确度比博客的逆向高一个量级。
+> - **这份还原源码仍属社区逆向**：它来自对发布包的反混淆/重命名，**并非 Anthropic 官方一手源码**；变量名、注释、常量值可能随版本演进而变化，本报告所引行号锚定在 v2.1.88 这一快照。凡涉及服务端（API 侧）行为，源码只暴露**客户端发出的契约**，服务端实现仍属合理推断。
 > - 为佐证 Barazany 论点的**普适性**，本报告用三个**真实可见的一手开源实现**做横向交叉印证：`openai/codex`（Rust）、`sst/opencode`（TypeScript / Effect-TS）、`NousResearch/hermes-agent`（Python）。所有引用均标注真实文件路径/行号。
 > - 本文亦与笔者同主题的另一篇深度研究相互参照。
 
@@ -93,6 +94,21 @@ Claude Code 的压缩不是单一机制，而是**三层按序施加、一层比
 产出**结构化 9 段摘要**：intent（意图）/ technical concepts（技术概念）/ files touched（涉及文件）/ errors and fixes（错误与修复）/ all user messages（所有用户消息）/ pending tasks（待办）/ current work（当前工作）等。模型在产出摘要前，先用一个 **chain-of-thought scratchpad（思维链草稿纸）** 把整段对话推理一遍，**草稿纸事后被剥除**（stripped afterward）。作者评价：精巧（sophisticated），但也是最后手段。
 
 作者点题：这套架构正好印证第一篇的论断——**摘要昂贵且有损，只有当其它一切都跑过之后才动用它**。
+
+### 【源码确证】把"逆向推测"钉到真实常量
+
+还原源码把原文这些靠观察得出的描述，逐条钉到了真实文件与常量上（v2.1.88 还原源码，社区逆向）：
+
+| 原文表述（逆向） | 还原源码确证（文件:行号 + 常量/注释） |
+|---|---|
+| Tier 3 摘要为"最后手段"，需为输出预留空间 | `autoCompact.ts:30` `MAX_OUTPUT_TOKENS_FOR_SUMMARY = 20_000`，注释 `Based on p99.99 of compact summary output being 17,387 tokens` |
+| 触发压缩的阈值 = 有效窗口减去一段缓冲 | `autoCompact.ts:62` `AUTOCOMPACT_BUFFER_TOKENS = 13_000`；`autoCompact.ts:73` `getAutoCompactThreshold = getEffectiveContextWindowSize(model) - AUTOCOMPACT_BUFFER_TOKENS` |
+| "有效窗口" = 模型窗口减输出预留 | `autoCompact.ts:33` `getEffectiveContextWindowSize()` = `contextWindow - min(getMaxOutputTokensForModel, 20_000)` |
+| Tier 1 占位符字面量 | `microCompact.ts:36` `TIME_BASED_MC_CLEARED_MESSAGE = '[Old tool result content cleared]'`（与原文逐字一致） |
+
+还有一处原文完全没提、但极具说服力的**生产事故注释**——它证明这份代码是真在线上跑、被真实数据打磨过的：`autoCompact.ts:67-70` 给压缩失败加了"熔断器"，`MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES = 3`，注释直书 `BQ 2026-03-10: 1,279 sessions had 50+ consecutive failures (up to 3,272) in a single session, wasting ~250K API calls/day globally`。即：曾有 1,279 个会话连续压缩失败 50+ 次（最高 3,272 次），每天白烧约 25 万次 API 调用，于是加了"连失 3 次就停"的熔断。另一条 `autoCompact.ts:300` 注释 `BQ 2026-03-01: missing this made 20% of tengu_prompt_cache_break events` 同样把缓存失效量化到了 20%。**这种带日期、带数量级的事故注释，是逆向 + 自析永远拿不到、只有还原源码才能看见的"一手证据"。**
+
+> 注意：上表的 `20_000`/`13_000` 等是"客户端"侧 autocompact 的常量；服务端 microcompact 另有 `180_000`/`40_000` 一套（见 §七）。两套不要混淆。
 
 ### 【技术展开】"成本阶梯"的工程美学，与 scratchpad 的取舍
 
@@ -177,7 +193,7 @@ Transformer 推理时，每个 token 在每一层都会算出一对向量 **(Key
 
 换句话说：**矛盾的本质是"我既想删掉旧工具结果（省窗口），又想保住缓存前缀（省钱）"——这两个目标在朴素方案里是直接对立的。`cache_edits` 通过"把删除下推到服务端、以 ID 定向、不重写前缀字节流"把对立解开了。** 这是同时满足"删旧"与"保缓存"的关键支点。
 
-> 注：以上对 `cache_edits` 服务端机制的描述，结合了 Barazany 原文 + 我们此前研究 `2026-06-16-agent-context-compaction.md` 对 Claude Code/OpenClaw "cache_edits" 的理解。由于 Claude Code 闭源，服务端如何在 KV 层"剔除一个块"属于合理推断，而非可见源码。但其**外部契约（按 tool_use_id 定向删除、不动前缀）是原文明确陈述的**。
+> **【源码确证·本次升级】** 原文只说"有个 `cache_edits` 机制"，本报告上一版对它还属"合理推断"。还原源码把客户端侧的这条路径**钉死为可见代码**：`microCompact.ts:52` 有专门的 `--- Cached microcompact state (ant-only, gated by feature('CACHED_MICROCOMPACT')) ---` 模块；`microCompact.ts:84-118` 导出 `getPendingCacheEdits()`/`getPinnedCacheEdits()`/`pinCacheEdit(userMessageIndex, block)` 一组 API；`microCompact.ts:295-301` 注释直述 `Cached microcompact path - uses cache editing API to remove tool results without invalidating the cached prefix`，并明言 `Does NOT modify local message content (cache_reference and cache_edits are added at API layer)`。`microCompact.ts:330-336` 的 `getToolResultsToDelete(state)` → `createCacheEditsBlock(state, toolsToDelete)` → `pendingCacheEdits = cacheEdits`，完整展示了"按 `tool_use_id` 收集要删的块 → 生成 cache_edits 块 → 排队给 API 层"的全链路。**因此"按 tool_use_id 定向删除、不改本地消息、随请求发给服务端"不再是推断，而是源码确证的客户端契约。** 仅服务端如何在 KV 层"旁路一个块"仍属推断（这部分代码不在发布包里）。另：该路径由 `feature('CACHED_MICROCOMPACT')`（`microCompact.ts:276`）门控，且仅 ant-内部、主线程生效。
 
 **4）一手开源印证："宁可少删，也要保前缀"是普适直觉。**
 
@@ -259,6 +275,8 @@ Claude Code 的解法把摘要调用**当作主对话的一次普通延续**：
 
 并且，**如果压缩发生前 agent 正在自主运行**，会有一条 **continuation message** 告诉它（作者原话大意）：**"你本来就在干活——别确认这个摘要、别复述（don't acknowledge the summary, don't recap），直接继续。"** 整个会话体验被设计成**无缝（seamless）**——不只对旁观的用户无缝，对正在执行的 agent 也无缝。
 
+> **【源码确证】** 原文只是转述这条 message 的大意，还原源码里它是一段**逐字可引的真实拼接串**：`prompt.ts:358-359` 把 continuation 拼为 `${baseSummary}` + 一段指令，原文为 `Continue the conversation from where it left off without asking the user any further questions. Resume directly — do not acknowledge the summary, do not recap what was happening, do not preface with "I'll continue" or similar. Pick up the last task as if the break never happened.`。注意连 `do not preface with "I'll continue" or similar`（连"我来继续一下"这种开场白都禁止）这种细节原文都没点出——这才是工程上真正压住"摘要污染行为"的完整措辞。
+
 作者点题（金句，原话大意）：**这正是"能用的压缩系统"与"技术上能跑、却在任务中途悄悄搞砸"的分水岭。**
 
 ### 【技术展开】为什么"重读最近 5 文件"必要，以及 continuation message 的注意力学
@@ -271,6 +289,8 @@ Claude Code 的解法把摘要调用**当作主对话的一次普通延续**：
 - **重新去读一遍文件**——但这浪费一个往返，且 agent 未必知道该读哪些。
 
 所以"主动把最近读过的 5 个文件的**真实最新内容**重新注入"是关键的**确定性 curation**——它把"文件最新版本"这条第一篇就强调的不变量，在压缩边界处**强制兑现**。**50K token 上限**则是工程上的"安全阀"：避免 5 个超大文件把刚腾出来的窗口又一次撑爆，与压缩目的冲突。这是典型的"保真"与"窗口预算"之间的硬约束折中。
+
+> **【源码确证】** 这组常量不是逆向猜测，而是在 `compact.ts:122-124` 三行并列定义：`POST_COMPACT_MAX_FILES_TO_RESTORE = 5`、`POST_COMPACT_TOKEN_BUDGET = 50_000`、`POST_COMPACT_MAX_TOKENS_PER_FILE = 5_000`。原文只说了"5 个文件 / 50K 上限"，还原源码多括出了一条原文未提的**单文件 5K 上限**（`compact.ts:1441` 调用处 `maxTokens: POST_COMPACT_MAX_TOKENS_PER_FILE`）——即不仅总量封顶 50K，每个文件还单独封顶 5K，防止单个巨文件吞掉全部预算。重建顺序也有源码为据：`compact.ts:328-341` `buildPostCompactMessages` 注释明列 `Order: boundaryMarker, summaryMessages, messagesToKeep, attachments, hookResults`，与原文的重建清单逐项对应。
 
 这条在一手源码里有直接同构物：
 
@@ -349,7 +369,74 @@ Hermes 的 `prompt_caching.py` 把这套经济学写成了**纯函数**：只用
 
 ---
 
-## 七、横向印证：三个一手开源 harness 如何为 Barazany 论点背书
+## 七、博客之外：还原源码揭示的更多机制
+
+Barazany 原文聚焦"三层架构 + 缓存经济学"这条主线，但 v2.1.88 还原源码里，`src/services/compact/` 目录下还躺着一批**原文完全没讲、却同样精妙**的机制。本节点名列出 6 个，均标真实文件:行号——它们把"压缩引擎"的版图扩出原文一大块。
+
+### 7.1 服务端 API microcompact：另一套 180K / 40K 阈值
+
+原文讲的 Tier 1 microcompact 是**客户端**清理；但还原源码里还有一条**服务端原生上下文管理**路径，常量与客户端**刻意对齐却数值不同**：`apiMicrocompact.ts:15-17`
+
+```
+const DEFAULT_MAX_INPUT_TOKENS = 180_000 // Typical warning threshold
+const DEFAULT_TARGET_INPUT_TOKENS = 40_000 // Keep last 40k tokens like client-side
+```
+
+它不是改本地消息，而是给 API 下发一组"上下文编辑策略"。`apiMicrocompact.ts:34-55` 定义了两种策略类型：`clear_tool_uses_20250919`（按 `input_tokens` 触发、按 `tool_uses` 个数保留、可选 `clear_tool_inputs`/`exclude_tools`/`clear_at_least`）和 `clear_thinking_20251015`（按 `thinking_turns` 清 thinking）。可被服务端清结果的工具白名单 `TOOLS_CLEARABLE_RESULTS`（`apiMicrocompact.ts:18-25`）涵盖 shell / glob / grep / 文件读 / web fetch / web search。**这等于把"保留最近 N 个工具结果"的逻辑下推到 API 端原生执行**——比客户端字符串抹除更彻底，且日期化的策略名（`20250919`/`20251015`）暗示这是按版本演进的服务端契约。
+
+### 7.2 时间维度的 microcompact：靠"间隔"而非"token"触发
+
+原文的三层全是**按 token 量**触发的；还原源码却有一条**按时间间隔**触发的 microcompact，原文只字未提。`timeBasedMCConfig.ts:18-34` 定义配置：`gapThresholdMinutes`（默认 `60`）、`keepRecent`（默认 `5`）、`enabled`（默认 `false`）。触发逻辑在 `microCompact.ts:402-443`：当"距上一条主循环 assistant 消息的间隔（分钟）"超过阈值就清旧工具结果。
+
+它的设计动机写在 `timeBasedMCConfig.ts:21-24` 注释里——**和服务端缓存 TTL 对齐**：
+
+> `60 是安全选择：服务端 1h 缓存 TTL 对所有用户都已保证过期，所以我们绝不会强制一次本不会发生的 miss。`
+
+换句话说：**既然 prompt cache 反正已经凉了、整条前缀本就要重写，那就趁这次重写顺便把旧工具结果清掉**，让被重写的内容更少。`microCompact.ts:261-269` 还点明它**优先于**普通 microcompact 短路执行。清理后写入的占位符正是那条 `[Old tool result content cleared]`（`microCompact.ts:36`、`483`）。这是把"缓存经济学"用到极致的一笔：**连缓存失效的时机都被拿来做顺手的免费清理**。
+
+### 7.3 grouping：从"human-turn 分组"升级到"API-round 边界"
+
+压缩要把消息切成组再处理，**切在哪**很关键。`grouping.ts:22` 的 `groupMessagesByApiRound()` 用一条规则建组：**每个 API 往返一组，边界在"出现一个新的 assistant 响应（`message.id` 与上一条 assistant 不同）"时触发**。它**取代了旧的 human-turn 分组**——`grouping.ts:13-16` 注释直言：
+
+> `Replaces the prior human-turn grouping (boundaries only at real user prompts) with finer-grained API-round grouping, allowing reactive compact to operate on single-prompt agentic sessions...`
+
+为什么要改？因为 SDK/CCR/eval 这类调用，**整个工作负载可能就是一个 human turn**（用户只发了一句"帮我把这个项目重构完"，后面全是 agent 自主跑几百轮）。旧的 human-turn 分组在这种会话里**只有一个组**，reactive compact 根本无从下手；改成 API-round 边界后，每一轮 agent 自主往返都成了可压缩的切点。`grouping.ts:34-42` 还解释了为何不追踪未闭合的 `tool_use`：良构会话里 API 契约保证每个 `tool_use` 在下一个 assistant turn 前必被解决，所以 `lastAssistantId` 单独就是充分的边界判据；malformed 输入则交给 fork 的 `ensureToolResultPairing` 在 API 时修复。
+
+### 7.4 postCompactCleanup：skill 内容"故意"跨多次压缩存活
+
+压缩后要清各种缓存，但 `postCompactCleanup.ts` 里有一条**反直觉的"故意不清"**注释，原文从未提及。`postCompactCleanup.ts:17-20`：
+
+> `Note: We intentionally do NOT clear invoked skill content here. Skill content must survive across multiple compactions so that createSkillAttachmentIfNeeded() can include the full skill text in subsequent compaction attachments.`
+
+即：**被调用过的 skill 全文，必须跨多次压缩存活**，否则压缩后的附件里就拼不回完整 skill 文本。`postCompactCleanup.ts:65-69` 进一步解释为何也**不**重置 `sentSkillNames`：压缩后重新注入约 4K token 的 `skill_listing` 纯属 `cache_creation` 浪费，模型 schema 里还留着 `SkillTool`、`invoked_skills` 也保留了已用 skill，没必要重发。
+
+这里还藏着一个**主线程 vs 子 agent 的并发陷阱**，对我们这种多 agent 系统极有参考价值：`postCompactCleanup.ts:31-49` 说明，子 agent（`agent:*`）和主线程**跑在同一进程、共享模块级状态**（context-collapse store、getMemoryFiles 钩子标志、getUserContext 缓存）；如果子 agent 压缩时去重置这些，会**污染主线程状态**。所以 `runPostCompactCleanup(querySource)` 用 `querySource` 区分，只有主线程压缩（`repl_main_thread*` / `sdk` / `undefined`）才重置这些共享态。
+
+### 7.5 Session Memory Compact 还是个 EXPERIMENT
+
+还原源码里有整整一个 `sessionMemoryCompact.ts`（630 行），但它**第一行就标着实验**：`sessionMemoryCompact.ts:1-3`
+
+```
+/**
+ * EXPERIMENT: Session memory compaction
+ */
+```
+
+它的思路是把"会话记忆"持久化、压缩时用 `createCompactBoundaryMessage`（`sessionMemoryCompact.ts:11`、`447`）造边界标记，再把截断后的 session memory 注回。阈值配置 `DEFAULT_SM_COMPACT_CONFIG`（`sessionMemoryCompact.ts:55-60`）：`minTokens: 10_000`、`minTextBlockMessages: 5`、`maxTokens: 40_000`。是否启用由两个 GrowthBook flag 同时为真决定（`shouldUse = sessionMemoryFlag && smCompactFlag`，`sessionMemoryCompact.ts:412-420`）。**点出"它仍是实验"很重要**：博客读者容易把所有看到的机制当成稳定生产特性，而还原源码诚实地告诉我们——这条线还在灰度。
+
+### 7.6 cache-sharing fork + Sonnet 4.6 的真实兜底数据
+
+原文说摘要调用"复用主对话缓存"，还原源码进一步揭示这是一条 **cache-sharing fork** 路径，且带着一组**只有线上数据才知道的兜底率**。`prompt.ts:11-17` 注释：
+
+> `The cache-sharing fork path inherits the parent's full tool set (required for cache-key match), and on Sonnet 4.6+ adaptive-thinking models the model sometimes attempts a tool call despite the weaker trailer instruction. With maxTurns: 1, a denied tool call means no text output → falls through to the streaming fallback (2.79% on 4.6 vs 0.01% on 4.5).`
+
+拆开看这条机制：为了缓存命中，fork 出来的摘要调用**必须继承父对话的完整工具集**（否则 cache key 不匹配）。但工具集在场 + Sonnet 4.6 的自适应思考特性，会让模型**偶尔无视"别调工具"的尾部指令、真去发起一次 tool call**；而 `maxTurns: 1` 下这次调用被拒 = 这一轮没有文本产出 = 只能落到流式兜底。真实兜底率：**Sonnet 4.6 上 2.79%，4.5 上仅 0.01%**——**新模型把这个失败率抬高了近 280 倍**。于是源码把那段"禁止调工具"的 `NO_TOOLS_PREAMBLE`（`prompt.ts:19-26`）**前置并写得极硬**（"工具调用会被拒绝、会浪费你唯一的一轮、你会任务失败"），就是为了把这 2.79% 压回去。**这种"模型升级反而带出新失败模式、再用 prompt 工程补救"的真实拉锯，是逆向和自析都给不出的一手细节。**
+
+> **小结**：以上 6 个机制——服务端 API microcompact(180K/40K)、时间维度 microcompact(gap 触发)、API-round grouping、skill 跨压缩存活、Session Memory 实验、cache-sharing fork + Sonnet 4.6 兜底数据——**全部是 Barazany 原文未覆盖、靠还原源码才看见的版图**。它们和原文的三层主线拼在一起，才是 Claude Code 压缩引擎在 v2.1.88 这一快照下的较完整面貌。再次提醒：这仍是社区从发布包反混淆的还原源码，命名/数值可能随版本变化。
+
+---
+
+## 八、横向印证：三个一手开源 harness 如何为 Barazany 论点背书
 
 Barazany 谈的是闭源 Claude Code（逆向 + 自析）。为检验其论点是否"普适"还是"孤例"，下表用三个**可见源码**的 harness 逐条对照。结论：**原文每一个核心论点，都能在至少一个一手开源实现里找到同向证据。**
 
@@ -367,7 +454,7 @@ Barazany 谈的是闭源 Claude Code（逆向 + 自析）。为检验其论点�
 
 ---
 
-## 八、洞察升华
+## 九、洞察升华
 
 **1）压缩的真正难点不是"压"，是"在成本约束下压且不破坏任务"。**
 Barazany 全文最大的认知升级，是把"context engineering"重新定义为"**context engineering under a cost constraint**"。脱离缓存经济学谈压缩，就像脱离散热谈超频——能跑，但活不久。三层架构、cache_edits、摘要复用前缀，没有一个是为了"压得更狠"，全都是为了"压得**更省**且**不掉链子**"。
@@ -386,13 +473,16 @@ Barazany 全文最大的认知升级，是把"context engineering"重新定义�
 
 ---
 
-## 九、参考来源
+## 十、参考来源
 
 **主文献（本报告剖析对象）**
 - Jonathan Barazany，《Claude Code's Compaction Engine: What the Source Code Actually Reveals》，barazany.dev，<https://barazany.dev/blog/claude-codes-compaction-engine>（作者第二篇）
 - Jonathan Barazany，《Context Engineering — What Keeps AI Agents From Losing Their Minds》，barazany.dev（作者第一篇，原文反复引用）
 
-**一手开源源码（本地 clone，交叉印证，真实路径/行号）**
+**还原源码（本次逐行确证的核心资源，社区逆向、非官方）**
+- Claude Code `v2.1.88` 社区从 npm 发布包反混淆得到的还原源码，`src/services/compact/` 目录：`autoCompact.ts:30,33,62,67-70,73,300`、`apiMicrocompact.ts:15-17,18-25,34-55`、`microCompact.ts:36,52,84-118,261-269,276,295-336,402-443`、`timeBasedMCConfig.ts:18-34`、`grouping.ts:13-16,22,34-42`、`postCompactCleanup.ts:17-20,31-49,65-69`、`sessionMemoryCompact.ts:1-3,11,55-60,412-420`、`prompt.ts:11-26,358-359`、`compact.ts:122-124,328-341,1441`。**声明：这是社区反混淆的还原源码，非 Anthropic 官方一手源码，命名/数值可能随版本变化。**
+
+**一手开源源码（交叉印证，真实路径/行号）**
 - `openai/codex`（Rust）：`codex-rs/core/src/compact.rs:54-76,258-262,489`；`codex-rs/core/src/client.rs:152,486`
 - `sst/opencode`（TS/Effect-TS）：`packages/core/src/session/compaction.ts:13-52,166,182-186,236-238`；`packages/core/src/session/message.ts:120`
 - `NousResearch/hermes-agent`（Python）：`agent/prompt_caching.py:5-7,49-86`；`agent/context_compressor.py:150,675-676,1278,1305`
@@ -408,4 +498,4 @@ Barazany 全文最大的认知升级，是把"context engineering"重新定义�
 
 ---
 
-> **再次声明**：本文为对 Jonathan Barazany 原文的**深度剖析与技术延展**，原文要点版权归原作者所有；对 Claude Code 内部机制的陈述均属**逆向/二手性质**（Claude Code 闭源），本报告以三个一手开源 harness 的可见源码予以交叉印证并标明边界。原文出处：<https://barazany.dev/blog/claude-codes-compaction-engine>。
+> **再次声明**：本文为对 Jonathan Barazany 原文的**深度剖析与技术延展**，原文要点版权归原作者所有；本次在原文逆向之上引入社区从 **v2.1.88 npm 发布包反混淆的还原源码**逐行确证（比原文逆向精确一个量级），但**仍属社区逆向、非 Anthropic 官方一手源码**，命名/数值可能随版本变化；服务端（API侧）实现仍属合理推断。本报告另以三个一手开源 harness 的可见源码交叉印证并标明边界。原文出处：<https://barazany.dev/blog/claude-codes-compaction-engine>。
