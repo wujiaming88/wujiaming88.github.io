@@ -146,6 +146,49 @@
     border-color: #22c55e;
     opacity: 1;
 }
+/* ---------- 表格复制按钮 ---------- */
+.table-copy-wrapper {
+    position: relative;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+.table-copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    color: var(--text-secondary, #64748b);
+    background: rgba(255,255,255,0.85);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    opacity: 0;
+    backdrop-filter: blur(4px);
+}
+.table-copy-wrapper:hover .table-copy-btn,
+.table-copy-btn:focus {
+    opacity: 1;
+}
+@media (hover: none) {
+    .table-copy-btn {
+        opacity: 0.8;
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+.table-copy-btn:hover {
+    background: rgba(255,255,255,0.95);
+    border-color: var(--accent, #6366f1);
+    color: var(--accent, #6366f1);
+}
+.table-copy-btn.copied {
+    color: #22c55e;
+    border-color: #22c55e;
+    opacity: 1;
+}
 </style>
 
 <!-- 代码块复制按钮：对所有 .post-content 内的 <pre> 生效（含 rouge 的 pre.code-content 和裸 pre） -->
@@ -194,6 +237,57 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         pre.appendChild(btn);
+    });
+
+    // ============================================================
+    // 表格复制按钮
+    // ============================================================
+    var tables = document.querySelectorAll('.post-content table');
+    tables.forEach(function(table) {
+        if (table.dataset.copyDone === '1') return;
+        table.dataset.copyDone = '1';
+        var wrapper = document.createElement('div');
+        wrapper.className = 'table-copy-wrapper';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+        var btn = document.createElement('button');
+        btn.className = 'table-copy-btn';
+        btn.type = 'button';
+        btn.textContent = '\uD83D\uDCCB 复制';
+        btn.setAttribute('aria-label', '复制表格');
+        wrapper.appendChild(btn);
+        btn.addEventListener('click', function() {
+            var rows = table.querySelectorAll('tr');
+            var tsv = [];
+            rows.forEach(function(tr) {
+                var cells = tr.querySelectorAll('th, td');
+                var line = [];
+                cells.forEach(function(c) {
+                    line.push((c.innerText || '').replace(/[\t\r\n]+/g, ' ').trim());
+                });
+                tsv.push(line.join('\t'));
+            });
+            var text = tsv.join('\n');
+            var html = table.outerHTML;
+            function done() {
+                btn.textContent = '\u2705 已复制';
+                btn.classList.add('copied');
+                setTimeout(function() { btn.textContent = '\uD83D\uDCCB 复制'; btn.classList.remove('copied'); }, 2000);
+            }
+            if (navigator.clipboard && window.ClipboardItem) {
+                try {
+                    var item = new ClipboardItem({
+                        'text/plain': new Blob([text], {type:'text/plain'}),
+                        'text/html': new Blob([html], {type:'text/html'})
+                    });
+                    navigator.clipboard.write([item]).then(done).catch(function() { fallbackCopy(text, done); });
+                    return;
+                } catch(e) {}
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text, done); });
+            } else { fallbackCopy(text, done); }
+        });
     });
 });
 </script>
