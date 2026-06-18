@@ -45,5 +45,9 @@
 <div class="meta-badges meta-badges--header">
   {%- if diff_class != "" -%}<span class="meta-badge meta-badge--diff {{ diff_class }}">📊 {{ diff }}</span>{%- endif -%}
   <span class="meta-badge meta-badge--time">⏱ 约 {{ read_min }} 分钟阅读</span>
+  {%- comment -%} 阅读量徽章：默认隐藏，pageviews.js 取到数据后才显示（优雅降级） {%- endcomment -%}
+  {%- if site.pageview_api and include.style != "inline" -%}
+  <span class="meta-badge meta-badge--pv" style="display:none;">👁 阅读 <span id="pv-count" data-pv-path="{{ p.url }}">…</span> 次</span>
+  {%- endif -%}
 </div>
 {%- endif -%}

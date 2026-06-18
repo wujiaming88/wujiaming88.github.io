@@ -386,3 +386,9 @@ function toggleToc() {
     }
 }
 </script>
+
+<!-- 文章阅读量统计（C1：Cloudflare Worker + KV）。API 地址在 _config.yml 的 pageview_api 配置；未配置则不加载 -->
+{% if site.pageview_api %}
+<script>document.body.setAttribute('data-pv-api', {{ site.pageview_api | jsonify }});</script>
+<script src="{{ '/assets/js/pageviews.js' | relative_url }}" defer></script>
+{% endif %}

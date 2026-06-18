@@ -893,6 +893,8 @@ article.post .post-content hr,
 }
 .meta-badges--header .meta-badge { font-size: 0.8rem; padding: 3px 12px; }
 .meta-badge--time { color: var(--text-secondary); }
+.meta-badge--pv { color: var(--text-secondary); }
+.meta-badge--pv #pv-count { font-variant-numeric: tabular-nums; }
 .meta-badge--diff.is-beginner { background: rgba(34,197,94,0.12); color: #16a34a; border-color: rgba(34,197,94,0.3); }
 .meta-badge--diff.is-intermediate { background: rgba(234,179,8,0.14); color: #ca8a04; border-color: rgba(234,179,8,0.3); }
 .meta-badge--diff.is-advanced { background: rgba(239,68,68,0.12); color: #dc2626; border-color: rgba(239,68,68,0.3); }
