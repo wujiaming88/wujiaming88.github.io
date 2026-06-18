@@ -38,8 +38,9 @@ layout: default
         <span>•</span>
         <span data-pagefind-meta="category">📂 {{ page.categories | join: ', ' }}</span>
       {% endif %}
+      <span>•</span>
+      {% include post-meta-badges.html post=page style="header" %}
     </div>
-    {% include post-meta-badges.html post=page style="header" %}
   </header>
 
   <!-- 封面图片 -->
