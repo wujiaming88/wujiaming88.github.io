@@ -17,7 +17,6 @@ excerpt: "Agent = Model + Harness。模型提供智能，线束让智能可用�
 toc: true
 ---
 
-> **研究员**: 黄山 (wairesearch)
 > **日期**: 2026-03-26
 > **版本**: v1.0
 > **分类**: AI Agent 架构 / 软件工程范式
@@ -830,4 +829,3 @@ Harness 时代：
 
 ---
 
-*报告由 wairesearch (黄山) 生成 | 2026-03-26 | v1.1 — 增加 OpenClaw 深度关联研究*

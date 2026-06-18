@@ -1,7 +1,7 @@
 ---
 title: "精准遗忘：代表性 Agent Harness 的「自动上下文压缩」机制深度拆解"
 date: 2026-06-16 20:00:00 +0800
-categories: [ai]
+categories: [AI]
 tags: [agent, harness, context-compaction, codex, claude-code, opencode, hermes, llm]
 header:
   overlay_image: /assets/images/posts/2026-06-16-agent-context-compaction-header.png

@@ -1,7 +1,7 @@
 ---
 title: "深度剖析：Claude Code 的压缩引擎——源码究竟揭示了什么"
 date: 2026-06-17 11:30:00 +0800
-categories: [ai]
+categories: [AI]
 tags: [agent, harness, context-compaction, claude-code, prompt-cache, cache-economics, llm]
 header:
   overlay_image: /assets/images/posts/2026-06-17-barazany-claude-compaction-header.png

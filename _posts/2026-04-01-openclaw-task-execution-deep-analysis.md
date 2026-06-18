@@ -1,7 +1,7 @@
 ---
 title: "OpenClaw 任务执行机制深度解析"
 date: 2026-04-01
-categories: ai
+categories: [AI]
 tags: [OpenClaw, Agent, 任务执行, 架构分析]
 header:
   overlay_image: /assets/images/posts/openclaw-task-execution-header.png
@@ -1193,4 +1193,3 @@ User          Telegram        Gateway         Queue          Agent Runtime      
 
 ---
 
-*报告由 wairesearch (黄山) 基于官方文档 + 源码分析编写 | 2026-04-01*

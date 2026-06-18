@@ -12,7 +12,6 @@ header:
 # OpenClaw Skill 模块架构、机制与管理深度研究报告
 
 > 研究日期：2026-03-11
-> 研究员：黄山 (wairesearch)
 > 数据来源：OpenClaw 官方文档、AgentSkills 规范、ClawHub、DigitalOcean 开发者指南
 
 ---

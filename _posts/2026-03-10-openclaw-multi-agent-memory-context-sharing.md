@@ -12,7 +12,6 @@ header:
 # OpenClaw 多Agent记忆系统与上下文共享研究报告
 
 > 研究日期：2026-03-10
-> 研究员：黄山 (wairesearch)
 > 数据来源：OpenClaw 官方文档（本地 `/usr/lib/node_modules/openclaw/docs/`）
 
 ---

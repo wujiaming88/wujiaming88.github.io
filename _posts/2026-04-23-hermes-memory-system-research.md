@@ -2,9 +2,9 @@
 layout: single
 title: "Hermes Agent 记忆系统深度研究：三层架构如何让 AI 不再失忆"
 date: 2026-04-23 09:00:00 +0800
-categories: [ai, research]
+categories: [AI, Research]
 tags: [Hermes Agent, Memory System, AI Agent, Nous Research, OpenClaw]
-author: 五岳团队
+author: W.ai
 header:
   overlay_image: /assets/images/posts/2026-04-23-hermes-memory-system-research.png
   overlay_filter: 0.4
@@ -13,7 +13,6 @@ toc_sticky: true
 excerpt: "深度拆解 Hermes Agent 的多层记忆系统——从冻结快照到 FTS5 会话搜索，从辩证用户建模到 8 大外部记忆插件，一篇文章讲透 AI Agent 记忆的工程实现与设计哲学。"
 ---
 
-> **研究员**：黄山（wairesearch）| **日期**：2026-04-23 | **版本**：1.0
 
 ---
 

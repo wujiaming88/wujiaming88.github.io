@@ -2,9 +2,9 @@
 layout: single
 title: "OpenClaw 自我进化方案深度调研：从 Hermes 到 Symbolic Learning 的全链路解析"
 date: 2026-04-25
-categories: [ai, research]
+categories: [AI, Research]
 tags: [OpenClaw, Self-Evolving Agent, Hermes Agent, Symbolic Learning, AI Agent, Nous Research, Voyager, EvoAgentX]
-author: 五岳团队
+author: W.ai
 header:
   overlay_image: /assets/images/posts/2026-04-25-openclaw-self-evolution-research.png
   overlay_filter: 0.4
@@ -13,7 +13,6 @@ toc_sticky: true
 excerpt: "系统调研 AI Agent 自我进化领域——深度解析 Hermes Agent 闭环学习机制、六大核心范式对比、12 篇关键论文精读，并提出 OpenClaw 落地自我进化的分阶段路径。"
 ---
 
-> **研究员**: 黄山 (wairesearch)
 > **日期**: 2026-04-25
 > **时效性**: 本报告数据截至 2026 年 4 月，AI Agent 领域发展迅速，建议 3 个月内复核关键结论
 
@@ -634,5 +633,3 @@ interface SelfEvaluateParams {
 ---
 
 > **研究完成时间**: 2026-04-25 23:30 CST
-> **研究员**: 黄山 (wairesearch)
-> **下一步建议**: 将本报告转交 waicode 进行 MVP 原型开发

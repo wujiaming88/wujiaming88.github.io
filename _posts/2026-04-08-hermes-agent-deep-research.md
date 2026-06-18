@@ -13,7 +13,6 @@ header:
 
 # Hermes Agent 深度研究：会自我进化的 AI Agent
 
-> **研究员**：黄山（wairesearch）| **日期**：2026-04-08 | **版本**：1.0
 
 ---
 

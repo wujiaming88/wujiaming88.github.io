@@ -1550,4 +1550,3 @@ type PluginHookName =
 
 ---
 
-*文档结束。如有疑问请联系 wairesearch。*

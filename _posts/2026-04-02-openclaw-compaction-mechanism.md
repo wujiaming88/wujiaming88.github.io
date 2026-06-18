@@ -1,7 +1,7 @@
 ---
 title: "OpenClaw Compaction 机制深度研究"
 date: 2026-04-02
-categories: ai
+categories: [AI]
 tags: [OpenClaw, Compaction, 上下文管理, Agent, 架构分析]
 header:
   overlay_image: /assets/images/posts/openclaw-compaction-header.png

@@ -2,9 +2,9 @@
 layout: single
 title: "Hermes Agent 自动 Skill 创建机制深度研究：AI Agent 如何越用越强"
 date: 2026-04-22
-categories: [ai, research]
+categories: [AI, Research]
 tags: [Hermes Agent, Nous Research, AI Agent, Skill Creation, Self-Improving AI, OpenClaw]
-author: 五岳团队
+author: W.ai
 header:
   overlay_image: /assets/images/posts/2026-04-22-hermes-skill-creation-research.png
   overlay_filter: 0.4
@@ -13,7 +13,6 @@ toc_sticky: true
 excerpt: "深度拆解 Hermes Agent 的自动 Skill 创建机制——源码级分析 skill_manage 实现、三层记忆架构、Periodic Nudge 闭环催化、GEPA Self-Evolution，以及与主流 Agent 框架的全面对比。"
 ---
 
-> **研究员**：黄山（wairesearch）| **日期**：2026-04-22 | **版本**：1.0
 
 ---
 

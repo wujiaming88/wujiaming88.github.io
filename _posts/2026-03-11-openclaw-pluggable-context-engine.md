@@ -12,7 +12,6 @@ header:
 # OpenClaw Pluggable Context Engine 研究报告
 
 > 研究日期：2026-03-11
-> 研究员：黄山 (wairesearch)
 > 版本：OpenClaw 2026.3.7（发布于 2026-03-07）
 > 数据来源：OpenClaw 官方文档、GitHub Release Notes、lossless-claw 仓库、36kr 量子位解读
 

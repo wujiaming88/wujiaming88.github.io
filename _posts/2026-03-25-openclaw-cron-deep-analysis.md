@@ -20,7 +20,6 @@ toc: true
 
 # OpenClaw 定时任务（Cron）机制深度解析
 
-> **研究员**: 黄山 (wairesearch)
 > **日期**: 2026-03-25
 > **来源**: 官方文档 + 源码分析（gateway-cli-CuZs0RlJ.js）
 
@@ -855,4 +854,3 @@ async function sweepCronRunSessions(params) {
 | **LLM 超时** | 默认使用 agent 级别超时，可通过 `timeoutSeconds` 覆盖 |
 
 
-> 📝 研究完成于 2026-03-25，黄山 (wairesearch)

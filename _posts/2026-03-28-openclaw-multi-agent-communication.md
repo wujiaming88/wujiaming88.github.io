@@ -422,6 +422,5 @@ Agent B 读取 ← shared/data/report.json
 
 ---
 
-*文档由 wairesearch (黄山) 生成 | 2026-03-28*
 *基于 OpenClaw 最新官方文档（v2026.3.22+）*
 *来源：channel-routing.md, multi-agent.md, subagents.md, session-tool.md, broadcast-groups.md*

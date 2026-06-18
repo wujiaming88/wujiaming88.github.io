@@ -4,7 +4,7 @@ title: "Gemini Enterprise Agent Platform 深度研究：Google 的企业 AI Agen
 date: 2026-04-27 10:00:00 +0800
 categories: [AI, Cloud]
 tags: [Google, Gemini, Agent, Enterprise, Cloud Next 2026]
-author: 五岳团队
+author: W.ai
 toc: true
 toc_sticky: true
 header:
@@ -309,4 +309,3 @@ Gemini Enterprise Agent Platform 是 Google 在企业 AI 领域最完整的一�
 
 *数据来源：Google Cloud Blog、Forbes、TheNextWeb、GitHub、ADK 官方文档 (adk.dev)、Gartner、tech-insider.org 等。*
 
-*研究时间：2026-04-27 · 研究员：黄山（wairesearch）· 编辑：五岳团队*

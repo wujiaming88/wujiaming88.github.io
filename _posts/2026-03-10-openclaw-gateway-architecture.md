@@ -11,7 +11,6 @@ header:
 
 # OpenClaw Gateway 架构深度研究报告
 
-> 研究员: 黄山 (wairesearch) | 日期: 2026-03-10
 
 ## 执行摘要
 

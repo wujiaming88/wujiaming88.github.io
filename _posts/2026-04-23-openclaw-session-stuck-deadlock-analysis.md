@@ -2,9 +2,9 @@
 layout: single
 title: "OpenClaw Session 卡死与死锁深度分析：从状态机到排查手册"
 date: 2026-04-23 10:00:00 +0800
-categories: [ai, openclaw]
+categories: [AI, OpenClaw]
 tags: [OpenClaw, Session Management, Stuck Session, Deadlock, Debug, AI Agent]
-author: 五岳团队
+author: W.ai
 header:
   overlay_image: /assets/images/posts/2026-04-23-openclaw-session-stuck-analysis.png
   overlay_filter: 0.4
@@ -13,7 +13,6 @@ toc_sticky: true
 excerpt: "你的 OpenClaw Bot 突然不回消息了？Session 卡死是 AI Agent 平台最头疼的问题之一。本文从源码和 GitHub Issues 出发，系统梳理 7 种 Stuck 模式、3 种死锁场景，并提供完整的排查手册和配置调优方案。"
 ---
 
-> **研究员**：黄山（wairesearch）| **日期**：2026-04-23 | **版本**：1.0
 >
 > 基于 OpenClaw v2026.4.12 源码 + 官方文档 + GitHub Issues
 

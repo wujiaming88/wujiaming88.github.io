@@ -1,7 +1,7 @@
 ---
 title: "深度解读《Shedding Heavy Memories》——Codex / Claude Code / OpenCode 三家上下文压缩机制的技术展开"
 date: 2026-06-16 22:00:00 +0800
-categories: [ai]
+categories: [AI]
 tags: [agent, harness, context-compaction, codex, claude-code, opencode, prompt-cache, llm]
 header:
   overlay_image: /assets/images/posts/2026-06-16-justin3go-compaction-header.png

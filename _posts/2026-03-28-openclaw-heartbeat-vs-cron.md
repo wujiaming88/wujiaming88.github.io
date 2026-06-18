@@ -300,5 +300,4 @@ Cron 每天 18:00 ────────────────────�
 
 ---
 
-*文档由 wairesearch (黄山) 研究整理 | 2026-03-28*
 *基于 OpenClaw 官方文档 + 源码分析（system-events.ts / cron scheduler）*

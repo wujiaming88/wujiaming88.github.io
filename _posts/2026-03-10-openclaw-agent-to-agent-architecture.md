@@ -11,7 +11,6 @@ header:
 
 # OpenClaw Agent-to-Agent 架构原理研究报告
 
-**研究员**: 黄山 (wairesearch)  
 **日期**: 2026-03-10
 
 ---

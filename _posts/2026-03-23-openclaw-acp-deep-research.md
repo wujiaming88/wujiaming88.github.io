@@ -20,7 +20,6 @@ toc: true
 
 > **版本**: v1.0
 > **日期**: 2026-03-23
-> **作者**: 黄山 (wairesearch) · 卷王小组
 > **研究范围**: ACP 协议规范 + OpenClaw ACP 实现 + 架构演进计划
 
 ---
@@ -773,4 +772,3 @@ openclaw config set plugins.entries.acpx.config.permissionMode approve-all
 
 ---
 
-> **文档结束** · 卷王小组 · wairesearch · 2026-03-23

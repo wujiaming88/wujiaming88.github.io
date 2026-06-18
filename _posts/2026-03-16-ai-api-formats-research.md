@@ -9,7 +9,6 @@ header:
   overlay_image: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=400&fit=crop
 ---
 
-> 研究员：黄山 (wairesearch) · 日期：2026-03-16
 
 ## 执行摘要
 

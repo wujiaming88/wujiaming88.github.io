@@ -1,7 +1,7 @@
 ---
 title: "从源码深挖 Claude Code 的 cache_edits：一次「既删旧又保缓存」的外科手术"
 date: 2026-06-17 12:30:00 +0800
-categories: [ai]
+categories: [AI]
 tags: [agent, harness, claude-code, cache-edits, prompt-cache, context-compaction, llm]
 header:
   overlay_image: /assets/images/posts/2026-06-17-cache-edits-deepdive-header.png

@@ -2,9 +2,9 @@
 layout: single
 title: "Claude Code 深度研究：解剖 512K 行的 Agentic Coding Tool"
 date: 2026-04-10 09:00:00 +0800
-categories: [ai, research]
+categories: [AI, Research]
 tags: [Claude Code, Anthropic, AI Agent, Coding Agent, 架构分析]
-author: 五岳团队
+author: W.ai
 header:
   overlay_image: /assets/images/posts/2026-04-10-claude-code.png
   overlay_filter: 0.4
@@ -12,7 +12,6 @@ toc: true
 toc_sticky: true
 ---
 
-> **研究员**：黄山（wairesearch）| **日期**：2026-04-10 | **版本**：1.0
 
 ---
 

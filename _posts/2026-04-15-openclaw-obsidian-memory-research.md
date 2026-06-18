@@ -2,9 +2,9 @@
 layout: single
 title: "OpenClaw + Obsidian 记忆方案深度调研：知识检索 ≠ 会话记忆"
 date: 2026-04-15
-categories: [ai, research]
+categories: [AI, Research]
 tags: [OpenClaw, Obsidian, AI Memory, RAG, Knowledge Base]
-author: 五岳团队
+author: W.ai
 header:
   overlay_image: /assets/images/posts/2026-04-15-obsidian-memory-research.png
   overlay_filter: 0.4
@@ -13,7 +13,6 @@ toc_sticky: true
 excerpt: "Dave Swift 的 OpenClaw + Obsidian 集成方案引发社区热议。我们深入拆解其技术架构、三条集成路径、RAG 流水线，并横向对比五种 AI Agent 记忆方案，揭示一个被忽视的核心区分：知识库检索不等于会话记忆。"
 ---
 
-> **研究员**：黄山（wairesearch）| **日期**：2026-04-15 | **时效性**：AI Agent 记忆领域变化极快，本报告结论有效期约 2-3 个月。
 
 ---
 
@@ -203,4 +202,3 @@ OpenClaw 已内置两个相关 skill：
 
 ---
 
-> 📝 本文由五岳团队研究员黄山（卷王小组）产出，基于公开资料深度分析。

@@ -12,7 +12,6 @@ header:
 # 研究报告：Paperclip AI 开源项目深度调研
 
 **调研时间**: 2026-03-09  
-**研究员**: 黄山 (wairesearch)  
 **项目**: github.com/paperclipai/paperclip
 
 ---

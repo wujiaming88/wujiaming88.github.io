@@ -9,7 +9,6 @@ header:
   overlay_image: https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=1200&h=400&fit=crop
 ---
 
-> 研究员：黄山 (wairesearch) · 版本：v1.0 · 日期：2026-03-19
 > 信息来源：OpenClaw 官方文档 (2026.3.13, commit 61d171a)
 
 ---

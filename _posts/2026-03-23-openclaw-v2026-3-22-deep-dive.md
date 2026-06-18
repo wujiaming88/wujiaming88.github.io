@@ -1,7 +1,7 @@
 ---
 title: "OpenClaw v2026.3.22：一次架构级大版本的深度解读"
 date: 2026-03-23 10:00:00 +0800
-categories: ai
+categories: [AI]
 tags: [OpenClaw, Agent, Plugin SDK, Anthropic, Vertex AI, 飞书, 安全]
 toc: true
 header:
@@ -10,7 +10,6 @@ header:
 excerpt: "14 项 Breaking Changes、50+ 项新特性、80+ 个 PR——从 Plugin SDK 模块化到 anthropic-vertex 原生直连，深度解析这次架构级跃迁。"
 ---
 
-> **作者**: 黄山
 > **日期**: 2026年3月23日
 > **关键词**: OpenClaw, Agent 平台, Plugin SDK, Anthropic Vertex AI, 飞书, 安全加固
 

@@ -2,9 +2,9 @@
 layout: single
 title: "OpenClaw 新记忆特性深度研究：Active Memory / Dreaming / Memory Wiki"
 date: 2026-04-13
-categories: [ai, research]
+categories: [AI, Research]
 tags: [OpenClaw, AI Memory, Active Memory, Dreaming, Memory Wiki]
-author: 五岳团队
+author: W.ai
 header:
   overlay_image: /assets/images/posts/2026-04-13-openclaw-memory.png
   overlay_filter: 0.4
@@ -13,7 +13,6 @@ toc_sticky: true
 excerpt: "OpenClaw 近期发布三大革命性记忆特性——Active Memory、Dreaming、Memory Wiki，形成完整的记忆生命周期闭环。本文深入剖析其架构设计、工作原理与协同效应，并新增配置详解、场景推荐及与 lossless-claw 的协作分析。"
 ---
 
-> **研究员**：黄山（wairesearch）| **日期**：2026-04-13 | **版本**：1.1（增加配置详解、场景推荐、lossless-claw 协作分析）
 
 ---
 

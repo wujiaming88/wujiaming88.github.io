@@ -2,9 +2,9 @@
 layout: single
 title: "Harness Engineering 双雄研读：OpenAI vs Anthropic 的 Agent 工程哲学"
 date: 2026-04-10 10:00:00 +0800
-categories: [ai, research]
+categories: [AI, Research]
 tags: [Harness Engineering, OpenAI, Anthropic, AI Agent, Codex, Claude Code, 工程哲学]
-author: 五岳团队
+author: W.ai
 header:
   overlay_image: /assets/images/posts/2026-04-10-harness-engineering.png
   overlay_filter: 0.4
@@ -12,7 +12,6 @@ toc: true
 toc_sticky: true
 ---
 
-> **研究员**：黄山（wairesearch）| **日期**：2026-04-10 | **版本**：1.0
 
 ---
 
