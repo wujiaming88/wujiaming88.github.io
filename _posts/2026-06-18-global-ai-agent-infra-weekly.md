@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "全球 AI Agent 基础设施研究周报 · 第 1 期（2026-06-11 ~ 06-17）"
-date: 2026-06-18 10:30:00 +0800
+date: 2026-06-18 10:05:00 +0800
 categories: [AI]
 tags: [AIAgent, Agent基础设施, 云计算, AgentCore, Vertex AI, Foundry, Anthropic, Databricks, Coze, 行业观察]
 header:
