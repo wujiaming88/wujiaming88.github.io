@@ -1224,34 +1224,34 @@ html { scroll-behavior: smooth; }
    依据老板三条要求：表格防挤压 / 减少线条 / 少用徽章
    ============================================================ */
 
-/* —— A. 表格防挤压：自动列宽 + 窄屏横向滚动而非压字 —— */
+/* —— A. 表格自适应：原生 auto 列宽，内容多的列自动占更多宽度 —— */
 .post-content table {
-  display: block;          /* 让表格可横向滚动，不再硬压列宽 */
-  width: max-content;      /* 内容多时按内容宽，可触发横向滚动 */
-  min-width: 100%;         /* 内容少时也撑满容器，消除右侧空白 */
+  display: table;          /* 恢复原生表格布局，让浏览器智能分配列宽 */
+  table-layout: auto;      /* 关键：按内容自动分配——文本多的列自动变宽 */
+  width: 100%;             /* 撑满容器，消除右侧空白 */
   max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   border-collapse: separate;
   border-spacing: 0;
-  white-space: normal;
   scrollbar-width: thin;
 }
-.post-content table > * { white-space: normal; }
 .post-content th,
 .post-content td {
-  white-space: normal;      /* 单元格内允许换行，避免被压成竖排 */
-  word-break: break-word;
-  min-width: 6.5em;         /* 给每列一个舒适下限，宁可滚动不挤压 */
+  white-space: normal;      /* 允许换行，但交给 auto 布局决定何时换 */
+  overflow-wrap: break-word;
+  word-break: normal;       /* 不强制断词，避免汉字/短词被零碎切割 */
   vertical-align: top;
   line-height: 1.6;
 }
-/* 末列吃掉剩余宽度，避免内容少时右侧留白 */
-.post-content td:last-child,
-.post-content th:last-child { width: 100%; }
-/* 首列（常是名称/维度）给更宽下限 */
-.post-content td:first-child,
-.post-content th:first-child { min-width: 8em; }
+/* 窄屏（手机）：宽表改为横向滚动，不压字（桌面端仍用上面的 auto 自适应）*/
+@media (max-width: 768px) {
+  .post-content table {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
 /* 表格滚动条更精致 */
 .post-content table::-webkit-scrollbar { height: 6px; }
 .post-content table::-webkit-scrollbar-thumb {
