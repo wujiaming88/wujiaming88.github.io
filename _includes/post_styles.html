@@ -146,48 +146,57 @@
     border-color: #22c55e;
     opacity: 1;
 }
-/* ---------- 表格复制按钮 ---------- */
+/* ---------- 表格复制按钮（移到表格外右上方，不遮挡内容） ---------- */
 .table-copy-wrapper {
     position: relative;
-    overflow-x: auto;
     margin: 1.5rem 0;
+    /* 顶部留出按钮的位置，按钮悬浮在表格上方外侧 */
+    padding-top: 1.9rem;
+}
+/* 表格本身的横向滚动交给内层容器，避免按钮被裁掉 */
+.table-copy-wrapper > table {
+    display: block;
+    overflow-x: auto;
+    margin: 0;
 }
 .table-copy-btn {
     position: absolute;
-    top: 6px;
-    right: 8px;
-    padding: 4px 10px;
-    font-size: 0.72rem;
-    color: var(--text-secondary, #64748b);
-    background: rgba(255,255,255,0.85);
+    top: 0;
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    color: var(--text-secondary, #94a3b8);
+    background: transparent;
     border: 1px solid var(--border-color, #e2e8f0);
-    border-radius: 6px;
+    border-radius: 999px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 10;
+    transition: color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+    z-index: 5;
     opacity: 0;
-    backdrop-filter: blur(4px);
 }
 .table-copy-wrapper:hover .table-copy-btn,
-.table-copy-btn:focus {
-    opacity: 1;
+.table-copy-btn:focus-visible {
+    opacity: 0.7;
 }
+.table-copy-wrapper:hover .table-copy-btn:hover {
+    opacity: 1;
+    color: var(--accent, #6366f1);
+    border-color: var(--accent, #6366f1);
+}
+/* 触屏设备无 hover：常驻但极淡、小巧，绝不遮挡表格 */
 @media (hover: none) {
     .table-copy-btn {
-        opacity: 0.8;
-        min-height: 44px;
-        min-width: 44px;
+        opacity: 0.55;
     }
 }
-.table-copy-btn:hover {
-    background: rgba(255,255,255,0.95);
-    border-color: var(--accent, #6366f1);
-    color: var(--accent, #6366f1);
-}
 .table-copy-btn.copied {
+    opacity: 1;
     color: #22c55e;
     border-color: #22c55e;
-    opacity: 1;
 }
 </style>
 
