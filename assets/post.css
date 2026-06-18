@@ -1056,16 +1056,10 @@ article.post .post-content hr,
 }
 /* 段落首字母不下沉，但首段左侧加一道极细 accent 引导线 */
 .post-content > p:first-of-type {
-  position: relative;
-  padding-left: 1.1rem;
+  position: static;
+  padding-left: 0;
 }
-.post-content > p:first-of-type::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0.15em; bottom: 0.15em;
-  width: 3px; border-radius: 3px;
-  background: linear-gradient(180deg, var(--accent), var(--accent-cyan));
-}
+.post-content > p:first-of-type::before { content: none; }
 
 /* —— 2. 标题：干净克制（去渐变方点/柔光/渐变描边，老板反馈太花）—— */
 .post-content h2 {
@@ -1127,17 +1121,9 @@ article.post .post-content hr,
 .post-content pre {
   box-shadow: var(--shadow-float);
   border: 1px solid rgba(255,255,255,0.06);
-  padding-top: 2.6rem;
+  padding-top: 1.5rem;
 }
-.post-content pre::before {
-  content: '';
-  position: absolute;
-  top: 1rem; left: 1.25rem;
-  width: 11px; height: 11px; border-radius: 50%;
-  background: #ff5f56;
-  box-shadow: 18px 0 0 #ffbd2e, 36px 0 0 #27c93f;
-  opacity: 0.9;
-}
+.post-content pre::before { content: none; }
 
 /* —— 6. 引用块：精致左栏 + 柔光，去掉廉价大引号 —— */
 .post-content blockquote {
@@ -1179,14 +1165,14 @@ article.post .post-content hr,
   border: 1px solid var(--border-light);
 }
 
-/* —— 9. 分隔线：中央菱形点缀 —— */
+/* —— 9. 分隔线：纯净单线，去菱形点缀 —— */
 .post-content hr {
   position: relative;
   margin: 3.2rem 0;
-  background: linear-gradient(90deg, transparent, var(--border-color) 30%, var(--border-color) 70%, transparent);
+  background: linear-gradient(90deg, transparent, var(--hairline) 30%, var(--hairline) 70%, transparent);
 }
 .post-content hr::after {
-  content: '';
+  content: none;
   position: absolute;
   top: 50%; left: 50%;
   width: 7px; height: 7px;
