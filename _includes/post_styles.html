@@ -151,13 +151,19 @@
     position: relative;
     overflow-x: auto;
     margin: 1.5rem 0;
-    /* 宽度收缩到表格实际宽度，让按钮能贴到表格右上角而不是文章栏右边缘 */
-    width: -moz-fit-content;
-    width: fit-content;
-    max-width: 100%;
+    /* 默认满宽 + 横向滚动，保证窄屏表格不被压扁（移动端友好） */
+    width: 100%;
 }
 .table-copy-wrapper > table {
     margin: 0;
+}
+/* 仅桌面（有 hover 的指针设备）才收缩容器宽度，让复制按钮贴到表格右上角而非文章栏右边缘 */
+@media (hover: hover) and (min-width: 768px) {
+    .table-copy-wrapper {
+        width: -moz-fit-content;
+        width: fit-content;
+        max-width: 100%;
+    }
 }
 .table-copy-btn {
     position: absolute;
