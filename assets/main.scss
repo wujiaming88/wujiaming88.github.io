@@ -68,6 +68,46 @@
   --shadow-float: 0 2px 8px rgba(17,24,39,0.06), 0 8px 24px rgba(17,24,39,0.07);
   --shadow-card: 0 1px 3px rgba(17,24,39,0.05), 0 6px 16px rgba(17,24,39,0.06);
   --accent-glow: rgba(79,70,229,0.16);
+
+  /* ===== 设计系统 Tokens（单一真相源，2026-06-18）===== */
+  /* 主色阶 indigo 50-900 */
+  --c-accent-50:  #eef2ff;
+  --c-accent-100: #e0e7ff;
+  --c-accent-200: #c7d2fe;
+  --c-accent-300: #a5b4fc;
+  --c-accent-400: #818cf8;
+  --c-accent-500: #6366f1;
+  --c-accent-600: #4f46e5;
+  --c-accent-700: #4338ca;
+  --c-accent-800: #3730a3;
+  --c-accent-900: #312e81;
+  /* 语义色 */
+  --c-success: #16a34a;  --c-success-bg: rgba(34,197,94,0.10);
+  --c-warn:    #ca8a04;  --c-warn-bg:    rgba(234,179,8,0.12);
+  --c-danger:  #dc2626;  --c-danger-bg:  rgba(239,68,68,0.10);
+  --c-info:    #0891b2;  --c-info-bg:    rgba(6,182,212,0.10);
+  /* 字号阶梯（模块化比例 ~1.2）*/
+  --fs-xs:   0.78rem;
+  --fs-sm:   0.88rem;
+  --fs-base: 1rem;
+  --fs-md:   1.15rem;
+  --fs-lg:   1.32rem;
+  --fs-xl:   1.55rem;
+  --fs-2xl:  1.9rem;
+  --fs-3xl:  2.2rem;
+  /* 间距系统（8px 网格）*/
+  --sp-1: 0.25rem; --sp-2: 0.5rem;  --sp-3: 0.75rem; --sp-4: 1rem;
+  --sp-5: 1.5rem;  --sp-6: 2rem;    --sp-7: 2.5rem;  --sp-8: 3rem;
+  /* 圆角阶 */
+  --radius-xs: 4px; --radius-pill: 999px;
+  /* 动效 */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.15s; --dur: 0.25s; --dur-slow: 0.4s;
+  /* 内容容器宽度（全站统一）*/
+  --container-text: 760px;   /* 正文阅读宽度 */
+  --container-wide: 1100px;  /* 列表/首页宽度 */
+  /* 描边（统一“少线条”基调：更淡）*/
+  --hairline: rgba(17,24,39,0.07);
 }
 
 /* ============================================
@@ -799,6 +839,17 @@ img {
   --toc-label: #71717a;
   --share-modal-bg: #141415;
   --inline-code-color: #e879f9;
+
+  /* 深色主题：新 token 对齐 */
+  --shadow-soft: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.35);
+  --shadow-float: 0 2px 8px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.45);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.35), 0 6px 16px rgba(0,0,0,0.4);
+  --accent-glow: rgba(109,108,232,0.28);
+  --hairline: rgba(255,255,255,0.08);
+  --c-success-bg: rgba(34,197,94,0.16);
+  --c-warn-bg: rgba(234,179,8,0.16);
+  --c-danger-bg: rgba(239,68,68,0.16);
+  --c-info-bg: rgba(6,182,212,0.16);
 
   color-scheme: dark;
 }

@@ -1253,3 +1253,79 @@ html { scroll-behavior: smooth; }
   .post-content { font-size: 16px; line-height: 1.8; }
   .post-content h2 { font-size: 1.32rem; }
 }
+
+/* ============================================================
+   ✨ 标准风格模版 · 全站精修补丁 (2026-06-18 P2)
+   依据老板三条要求：表格防挤压 / 减少线条 / 少用徽章
+   ============================================================ */
+
+/* —— A. 表格防挤压：自动列宽 + 窄屏横向滚动而非压字 —— */
+.post-content table {
+  display: block;          /* 让表格可横向滚动，不再硬压列宽 */
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: separate;
+  border-spacing: 0;
+  white-space: normal;
+  scrollbar-width: thin;
+}
+.post-content table > * { white-space: normal; }
+.post-content th,
+.post-content td {
+  white-space: normal;      /* 单元格内允许换行，避免被压成竖排 */
+  word-break: break-word;
+  min-width: 6.5em;         /* 给每列一个舒适下限，宁可滚动不挤压 */
+  vertical-align: top;
+  line-height: 1.6;
+}
+/* 首列（常是名称/维度）给更宽下限 */
+.post-content td:first-child,
+.post-content th:first-child { min-width: 8em; }
+/* 表格滚动条更精致 */
+.post-content table::-webkit-scrollbar { height: 6px; }
+.post-content table::-webkit-scrollbar-thumb {
+  background: var(--c-accent-200); border-radius: 3px;
+}
+
+/* —— B. 减少线条：去掉密集横线，改"斑马底 + 极淡分隔" —— */
+.post-content td { border-bottom: none; }              /* 去掉每行下横线 */
+.post-content tbody tr:nth-child(even) td {
+  background: rgba(99,102,241,0.035);                  /* 斑马底替代横线 */
+}
+.post-content tbody tr:nth-child(odd) td { background: transparent; }
+.post-content th {
+  border-bottom: 1px solid var(--hairline);            /* 仅表头一条极淡线 */
+  background: linear-gradient(180deg, var(--c-accent-50), transparent);
+  color: var(--c-accent-700);
+  text-transform: none;                                /* 去大写，更柔和 */
+  letter-spacing: 0;
+}
+.post-content table { border: 1px solid var(--hairline); box-shadow: var(--shadow-soft); }
+
+/* h2 下方的淡出线：保留但更淡（减少线条感） */
+.post-content h2::after { background: linear-gradient(90deg, var(--hairline), transparent 55%); }
+/* h3 左竖条改极细、低饱和 */
+.post-content h3 { border-left-width: 2px; border-left-color: var(--c-accent-300); }
+/* 分隔线整体更淡 */
+.post-content hr { background: linear-gradient(90deg, transparent, var(--hairline) 30%, var(--hairline) 70%, transparent); }
+/* 卡片/区块统一极淡描边（替代原 --border-color 偏重的灰线） */
+.post-bottom-section,
+.related-post-card,
+.post-nav,
+.share-section,
+.related-posts { border-color: var(--hairline) !important; }
+
+/* —— C. 少用徽章：正文头部只留"阅读时长"，难度/阅读量徽章弱化 —— */
+/* 难度徽章默认隐藏（标准模版里不在正文头堆徽章；如需可单篇开启） */
+.meta-badges--header .meta-badge--diff { display: none; }
+/* 头部徽章整体更轻：去边框、降存在感，像元信息而非标签 */
+.meta-badges--header .meta-badge {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+.meta-badges--header { gap: 4px 14px; }
