@@ -24,10 +24,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- 样式 -->
-  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
-  <link rel="stylesheet" href="{{ "/assets/post.css" | relative_url }}">
-  {% if page.url == '/' %}<link rel="stylesheet" href="{{ "/assets/home.css" | relative_url }}">{% endif %}
+  <!-- 样式（带 cache-busting 版本戳：每次构建变化，浏览器自动拉新 CSS，永不吃旧缓存） -->
+  {% assign css_v = site.time | date: '%s' %}
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}?v={{ css_v }}">
+  <link rel="stylesheet" href="{{ "/assets/post.css" | relative_url }}?v={{ css_v }}">
+  {% if page.url == '/' %}<link rel="stylesheet" href="{{ "/assets/home.css" | relative_url }}?v={{ css_v }}">{% endif %}
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/logo/favicon-32.png' | relative_url }}">
