@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title: "全球 AI Agent 基础设施研究周报 · 第 1 期（2026-06-11 ~ 06-17）"
 date: 2026-06-18 10:05:00 +0800
 categories: [AI]
