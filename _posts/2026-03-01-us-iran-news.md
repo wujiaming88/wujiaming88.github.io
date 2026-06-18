@@ -4,7 +4,7 @@ date: 2026-03-01 15:00:00 +0000
 categories: [News]
 tags: [International News, Military, Iran, United States]
 header:
-  overlay_image: https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-04-08-hermes-agent.png
   overlay_filter: 0.6
   caption: "国际新闻"
 ---

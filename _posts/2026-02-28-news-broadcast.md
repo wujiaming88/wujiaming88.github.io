@@ -4,7 +4,7 @@ date: 2026-02-28 19:00:00 +0000
 categories: [News]
 tags: [News Broadcast, Politics]
 header:
-  overlay_image: https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-04-03-lossless-claw-lcm.png
   overlay_filter: 0.6
   caption: "新闻联播"
 ---

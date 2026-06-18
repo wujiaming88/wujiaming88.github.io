@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, A2A, 多Agent架构]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1545987796-200677ee1011?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-05-spacex-ipo-header.png
 ---
 
 # OpenClaw Agent-to-Agent 架构原理研究报告

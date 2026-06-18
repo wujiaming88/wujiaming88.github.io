@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, RL, 强化学习, 论文研究, OPD, PRM]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1509228468518-180dd4864904?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-11-amazon-bedrock-agentcore-header.png
 ---
 
 # OpenClaw-RL 深度论文研究报告：通过对话训练任何 Agent

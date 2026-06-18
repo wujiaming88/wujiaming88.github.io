@@ -5,7 +5,7 @@ categories: [AI]
 tags: [OpenClaw, Agent, Plugin SDK, Anthropic, Vertex AI, 飞书, 安全]
 toc: true
 header:
-  overlay_image: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-16-justin3go-compaction-header.png
   overlay_filter: 0.4
 excerpt: "14 项 Breaking Changes、50+ 项新特性、80+ 个 PR——从 Plugin SDK 模块化到 anthropic-vertex 原生直连，深度解析这次架构级跃迁。"
 ---

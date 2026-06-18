@@ -13,7 +13,7 @@ tags:
   - Agent
 excerpt: "深度解析 OpenClaw 内置 Cron 调度器的架构设计：事件驱动定时器模型、确定性错峰机制、Main/Isolated 双模式执行、重试容错策略、Session 生命周期管理，以及投递机制的完整实现原理。"
 header:
-  overlay_image: https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-17-cache-edits-deepdive-header.png
   overlay_filter: 0.5
 toc: true
 ---

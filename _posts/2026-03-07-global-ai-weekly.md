@@ -4,7 +4,7 @@ date: 2026-03-07 12:00:00 +0000
 categories: [周报]
 tags: [AI, 人工智能, 周报, 全球AI动态]
 header:
-  overlay_image: https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-04-27-gemini-agent-platform-architecture.png
   overlay_filter: 0.6
   caption: "全球AI动态周报 (2026.03.01-03.07)"
 ---

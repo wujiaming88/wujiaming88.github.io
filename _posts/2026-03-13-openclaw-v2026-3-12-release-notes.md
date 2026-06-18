@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Release, 版本更新, 安全]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-11-coding-agents-on-agentcore-header.png
 ---
 
 # OpenClaw v2026.3.12 Release Notes

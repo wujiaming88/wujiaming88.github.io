@@ -11,7 +11,7 @@ tags:
   - 多Agent协作
 excerpt: "ACP 之于 AI 编码代理，就像 LSP 之于语言服务器。本文深度解析 Agent Client Protocol 协议规范、OpenClaw 的双重角色实现、架构演进路线图，以及在 SaaS 平台中的落地策略。"
 header:
-  overlay_image: https://images.unsplash.com/photo-1545987796-200677ee1011?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-16-global-ai-investment-weekly-header.png
   overlay_filter: 0.5
 toc: true
 ---

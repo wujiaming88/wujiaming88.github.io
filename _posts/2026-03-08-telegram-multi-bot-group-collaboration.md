@@ -4,7 +4,7 @@ date:   2026-03-08 14:45:00 +0800
 categories: [OpenClaw]
 tags: [Telegram, OpenClaw, 多Bot, 群组协作, 配置]
 header:
-  overlay_image: https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-04-setr2026-tech-strategy-header.png
   overlay_filter: 0.6
   caption: "Telegram Multi-Bot Group Collaboration"
 ---

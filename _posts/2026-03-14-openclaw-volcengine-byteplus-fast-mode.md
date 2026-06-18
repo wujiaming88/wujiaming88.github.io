@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Fast Mode, Volcengine, BytePlus, 火山引擎, 技术方案]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-12-ai-agent-sandbox-header.png
 ---
 
 > 📅 日期：2026-03-14  

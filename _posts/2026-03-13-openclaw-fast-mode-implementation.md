@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Fast Mode, 源码分析, 架构]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-11-agentcore-harness-header.png
 ---
 
 # OpenClaw v2026.3.12 Fast Mode 实现深度研究报告

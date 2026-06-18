@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Gateway, 网关架构]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-07-global-ai-weekly-header.png
 ---
 
 # OpenClaw Gateway 架构深度研究报告

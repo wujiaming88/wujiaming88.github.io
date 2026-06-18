@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Context Engine, 可插拔架构, lossless-claw]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1537884944318-390069bb8665?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-09-world-models-header.png
 ---
 
 # OpenClaw Pluggable Context Engine 研究报告

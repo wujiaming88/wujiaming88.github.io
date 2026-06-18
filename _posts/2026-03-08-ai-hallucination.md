@@ -4,7 +4,7 @@ date: 2026-03-08 16:17:00 +0000
 categories: [AI]
 tags: [AI, ChatGPT, Hallucination, 幻觉, 论文解读]
 header:
-  overlay_image: https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-02-openclaw-mcp-deep-dive-header.png
   overlay_filter: 0.6
   caption: "AI 幻觉背后的真相"
 ---

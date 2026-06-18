@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, API, OpenAI, Anthropic, Google Gemini, Meta Llama, Mistral, Amazon Bedrock, Azure, OpenRouter, Chat Completions, Responses API, MCP, Agent]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-14-global-ai-weekly-header.png
 ---
 
 

@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Session, 架构设计, 状态管理, 上下文压缩, 多Agent, JSONL]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-15-global-ai-agent-weekly-header.png
 ---
 
 

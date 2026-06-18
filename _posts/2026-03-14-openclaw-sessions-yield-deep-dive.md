@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Multi-Agent, Orchestration, sessions_yield, 事件驱动, 多Agent编排]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-11-wuhan-guanggu-weekly.png
 ---
 
 

@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Gateway, 架构设计, WebSocket, 安全, 鉴权, 沙箱, 多Agent]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-16-agent-context-compaction-header.png
 ---
 
 > 信息来源：OpenClaw 官方文档 (2026.3.13, commit 61d171a)

@@ -6,7 +6,7 @@ categories: [AI]
 tags: [AI, Agent, OpenClaw, Memory, 记忆系统]
 author: W.ai
 header:
-  overlay_image: https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-08-acp-deep-research-header.png
 ---
 
 # OpenClaw 记忆系统架构深度研究报告

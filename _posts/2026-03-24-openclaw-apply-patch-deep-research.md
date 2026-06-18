@@ -12,7 +12,7 @@ tags:
   - AI编程
 excerpt: "apply_patch 是 OpenClaw 的实验性文件编辑工具，源自 OpenAI Codex，使用结构化补丁格式在单次调用中完成多文件、多位置的批量修改。本文深度解析其补丁语法、四级渐进匹配算法、安全机制与最佳实践。"
 header:
-  overlay_image: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=400&fit=crop
+  overlay_image: /assets/images/posts/2026-06-17-barazany-claude-compaction-header.png
   overlay_filter: 0.5
 toc: true
 ---
