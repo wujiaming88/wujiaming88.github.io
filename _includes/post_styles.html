@@ -194,10 +194,32 @@
     color: var(--accent, #6366f1);
     border-color: var(--accent, #6366f1);
 }
-/* 触屏设备无 hover：常驻但淡，小巧贴角 */
+/* 触屏设备无 hover：复制按钮隐藏（手机上无 hover、按钮鸡肋且易挡，表格改为横向滚动查看） */
 @media (hover: none) {
     .table-copy-btn {
-        opacity: 0.6;
+        display: none;
+    }
+}
+/* 窄屏表格横向滚动：高特异性覆盖历史 overflow:hidden，让表格不挤压、可横滑
+   （结构：.table-copy-wrapper > .table-wrapper > table） */
+@media (max-width: 768px) {
+    .post-content .table-copy-wrapper,
+    .post-content .table-copy-wrapper > .table-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+    .post-content .table-copy-wrapper table {
+        display: block;
+        width: -moz-max-content;
+        width: max-content;
+        min-width: 100%;
+        max-width: none;
+        overflow: visible !important;
+    }
+    .post-content .table-copy-wrapper table th,
+    .post-content .table-copy-wrapper table td {
+        white-space: nowrap !important;
     }
 }
 .table-copy-btn.copied {
