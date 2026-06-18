@@ -1032,3 +1032,224 @@ article.post .post-content hr,
   .share-btn[data-brand="xhs"] { width: auto; height: 44px; padding: 0 0.85rem; }
   .xhs-copy-cta { min-height: 44px; }
 }
+
+/* ============================================================
+   ✨ 文章详情·精致升级层 (2026-06-18)
+   精致 = 细节密度 + 精雕节奏 + 层次质感（非做减法）
+   本层置于文件末尾，覆盖前述基础规则
+   ============================================================ */
+
+/* —— 1. 正文排版：更舒展、更顺眼的中英文混排 —— */
+.post-content {
+  font-size: 16.5px;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.post-content p { margin-bottom: 1.35rem; }
+.post-content > p:first-of-type {
+  font-size: 1.08em;
+  line-height: 1.8;
+  color: var(--text-heading);
+}
+/* 段落首字母不下沉，但首段左侧加一道极细 accent 引导线 */
+.post-content > p:first-of-type {
+  position: relative;
+  padding-left: 1.1rem;
+}
+.post-content > p:first-of-type::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0.15em; bottom: 0.15em;
+  width: 3px; border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-cyan));
+}
+
+/* —— 2. 标题：精雕节奏，编号感 + 克制装饰但有层次 —— */
+.post-content h2 {
+  font-size: 1.5rem;
+  margin: 2.6rem 0 1rem;
+  padding-left: 0;
+  border-left: none;
+  position: relative;
+  letter-spacing: -0.015em;
+}
+.post-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 0.55em; height: 0.55em;
+  margin-right: 0.55rem;
+  border-radius: 3px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
+  transform: translateY(-0.08em);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+.post-content h2::after {
+  content: '';
+  display: block;
+  margin-top: 0.65rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-color), transparent 60%);
+}
+.post-content h3 {
+  font-size: 1.22rem;
+  margin: 1.9rem 0 0.7rem;
+  padding-left: 0.85rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 1px;
+}
+.post-content h1 {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, var(--accent), var(--accent-cyan) 50%, transparent) 1;
+  padding-bottom: 0.45rem;
+}
+
+/* 标题锚点：hover 显示 # —— 精致细节 */
+.post-content h2, .post-content h3 { scroll-margin-top: 90px; }
+
+/* —— 3. 链接：精致的渐显下划线动效 —— */
+.post-content a {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1.5px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  border-bottom: none;
+  transition: background-size 0.3s cubic-bezier(0.4,0,0.2,1), color 0.2s;
+}
+.post-content a:hover {
+  background-size: 100% 1.5px;
+  border-bottom: none;
+}
+
+/* —— 4. 行内代码：更精致的胶囊 —— */
+.post-content code:not(pre code) {
+  background: linear-gradient(180deg, rgba(99,102,241,0.08), rgba(99,102,241,0.05));
+  border: 1px solid rgba(99,102,241,0.16);
+  padding: 0.12rem 0.45rem;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+/* —— 5. 代码块：柔和分层阴影 + 顶部三色点（macOS 窗口感） —— */
+.post-content pre {
+  box-shadow: var(--shadow-float);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding-top: 2.6rem;
+}
+.post-content pre::before {
+  content: '';
+  position: absolute;
+  top: 1rem; left: 1.25rem;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: #ff5f56;
+  box-shadow: 18px 0 0 #ffbd2e, 36px 0 0 #27c93f;
+  opacity: 0.9;
+}
+
+/* —— 6. 引用块：精致左栏 + 柔光，去掉廉价大引号 —— */
+.post-content blockquote {
+  background: linear-gradient(180deg, rgba(99,102,241,0.06), rgba(6,182,212,0.03));
+  border-left: 3px solid;
+  border-image: linear-gradient(180deg, var(--accent), var(--accent-cyan)) 1;
+  border-radius: 0 12px 12px 0;
+  box-shadow: var(--shadow-soft);
+  padding: 1.25rem 1.6rem;
+}
+.post-content blockquote::before { display: none; }
+
+/* —— 7. 表格：精致表头 + 柔和分隔 + 圆角描边 —— */
+.post-content table {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  font-size: 0.92rem;
+}
+.post-content th {
+  background: linear-gradient(180deg, rgba(99,102,241,0.10), rgba(99,102,241,0.06));
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid rgba(99,102,241,0.18);
+}
+.post-content td { padding: 0.78rem 1.1rem; border-bottom: 1px solid var(--border-light); }
+.post-content tr:last-child td { border-bottom: none; }
+.post-content tbody tr { transition: background 0.15s; }
+
+/* —— 8. 图片/封面：柔和分层阴影 + 描边 —— */
+.post-content img {
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-light);
+}
+.post-cover {
+  box-shadow: var(--shadow-float);
+  border: 1px solid var(--border-light);
+}
+
+/* —— 9. 分隔线：中央菱形点缀 —— */
+.post-content hr {
+  position: relative;
+  margin: 3.2rem 0;
+  background: linear-gradient(90deg, transparent, var(--border-color) 30%, var(--border-color) 70%, transparent);
+}
+.post-content hr::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 7px; height: 7px;
+  transform: translate(-50%,-50%) rotate(45deg);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--bg-primary), 0 2px 10px var(--accent-glow);
+}
+
+/* —— 10. 标题分割线下的标题区 + 标签精修 —— */
+.post-header h1, .post-header .post-title { letter-spacing: -0.025em; }
+.post-header .post-tags span {
+  background: linear-gradient(180deg, rgba(99,102,241,0.10), rgba(99,102,241,0.05));
+  border: 1px solid rgba(99,102,241,0.18);
+  transition: all 0.2s;
+}
+.post-header .post-tags span:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+/* —— 11. 选中高亮色（精致细节）—— */
+.post-content ::selection { background: rgba(99,102,241,0.18); }
+
+/* —— 12. 列表标记精修 —— */
+.post-content ul > li::marker { color: var(--accent); }
+.post-content ol > li::marker { color: var(--accent); font-weight: 700; }
+.post-content li { margin-bottom: 0.55rem; }
+
+/* —— 13. 卡片类区块统一柔和阴影 —— */
+.post-bottom-section,
+.related-post-card { box-shadow: var(--shadow-soft); }
+.related-post-card:hover { box-shadow: var(--shadow-float); transform: translateY(-3px); }
+
+/* —— 14. TOC 精修：active 项左侧高亮条 —— */
+.toc-body a.toc-active {
+  position: relative;
+  font-weight: 600;
+}
+.toc-body a.toc-active::before {
+  content: '';
+  position: absolute;
+  left: -10px; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 1em;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-cyan));
+}
+
+/* 全站平滑滚动 */
+html { scroll-behavior: smooth; }
+
+@media (max-width: 768px) {
+  .post-content { font-size: 16px; line-height: 1.8; }
+  .post-content h2 { font-size: 1.32rem; }
+}
