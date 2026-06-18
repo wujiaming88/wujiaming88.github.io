@@ -1067,7 +1067,7 @@ article.post .post-content hr,
   background: linear-gradient(180deg, var(--accent), var(--accent-cyan));
 }
 
-/* —— 2. 标题：精雕节奏，编号感 + 克制装饰但有层次 —— */
+/* —— 2. 标题：干净克制（去渐变方点/柔光/渐变描边，老板反馈太花）—— */
 .post-content h2 {
   font-size: 1.5rem;
   margin: 2.6rem 0 1rem;
@@ -1076,37 +1076,28 @@ article.post .post-content hr,
   position: relative;
   letter-spacing: -0.015em;
 }
-.post-content h2::before {
-  content: '';
-  display: inline-block;
-  width: 0.55em; height: 0.55em;
-  margin-right: 0.55rem;
-  border-radius: 3px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
-  transform: translateY(-0.08em);
-  box-shadow: 0 2px 8px var(--accent-glow);
-}
+.post-content h2::before { content: none; }
 .post-content h2::after {
   content: '';
   display: block;
-  margin-top: 0.65rem;
+  margin-top: 0.55rem;
   height: 1px;
-  background: linear-gradient(90deg, var(--border-color), transparent 60%);
+  background: var(--hairline);
 }
 .post-content h3 {
   font-size: 1.22rem;
   margin: 1.9rem 0 0.7rem;
-  padding-left: 0.85rem;
-  border-left: 3px solid var(--accent);
-  border-radius: 1px;
+  padding-left: 0;
+  border-left: none;
+  border-radius: 0;
 }
 .post-content h1 {
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(90deg, var(--accent), var(--accent-cyan) 50%, transparent) 1;
-  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--hairline);
+  border-image: none;
+  padding-bottom: 0.5rem;
 }
 
-/* 标题锚点：hover 显示 # —— 精致细节 */
+/* 标题锚点滑动偏移 */
 .post-content h2, .post-content h3 { scroll-margin-top: 90px; }
 
 /* —— 3. 链接：精致的渐显下划线动效 —— */
@@ -1304,10 +1295,9 @@ html { scroll-behavior: smooth; }
 }
 .post-content table { border: 1px solid var(--hairline); box-shadow: var(--shadow-soft); }
 
-/* h2 下方的淡出线：保留但更淡（减少线条感） */
-.post-content h2::after { background: linear-gradient(90deg, var(--hairline), transparent 55%); }
-/* h3 左竖条改极细、低饱和 */
-.post-content h3 { border-left-width: 2px; border-left-color: var(--c-accent-300); }
+/* h2 下方淡出线：保留极淡一条 */
+.post-content h2::after { background: var(--hairline); }
+/* h3 保持干净无竖条 */
 /* 分隔线整体更淡 */
 .post-content hr { background: linear-gradient(90deg, transparent, var(--hairline) 30%, var(--hairline) 70%, transparent); }
 /* 卡片/区块统一极淡描边（替代原 --border-color 偏重的灰线） */
