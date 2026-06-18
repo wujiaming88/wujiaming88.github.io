@@ -1227,7 +1227,8 @@ html { scroll-behavior: smooth; }
 /* —— A. 表格防挤压：自动列宽 + 窄屏横向滚动而非压字 —— */
 .post-content table {
   display: block;          /* 让表格可横向滚动，不再硬压列宽 */
-  width: 100%;
+  width: max-content;      /* 内容多时按内容宽，可触发横向滚动 */
+  min-width: 100%;         /* 内容少时也撑满容器，消除右侧空白 */
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -1245,6 +1246,9 @@ html { scroll-behavior: smooth; }
   vertical-align: top;
   line-height: 1.6;
 }
+/* 末列吃掉剩余宽度，避免内容少时右侧留白 */
+.post-content td:last-child,
+.post-content th:last-child { width: 100%; }
 /* 首列（常是名称/维度）给更宽下限 */
 .post-content td:first-child,
 .post-content th:first-child { min-width: 8em; }
