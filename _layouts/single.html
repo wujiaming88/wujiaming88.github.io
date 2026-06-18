@@ -40,13 +40,6 @@ layout: default
       {% endif %}
     </div>
     {% include post-meta-badges.html post=page style="header" %}
-    {% if page.tags %}
-    <div class="post-tags" style="display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center;">
-      {% for tag in page.tags %}
-      <span style="background: var(--tag-bg); color: var(--tag-color); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem;" data-pagefind-filter="tag">#{{ tag }}</span>
-      {% endfor %}
-    </div>
-    {% endif %}
   </header>
 
   <!-- 封面图片 -->
@@ -63,6 +56,16 @@ layout: default
   <div class="post-content e-content" itemprop="articleBody" data-pagefind-body>
     {{ content }}
   </div>
+
+  <!-- 文章标签（移至正文末尾，避免首屏拥挤）-->
+  {% if page.tags %}
+  <div class="post-tags post-bottom-section" style="display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center;">
+    <span style="font-size: 0.85rem; color: var(--text-muted, #888); margin-right: 0.3rem;">🏷️ 标签：</span>
+    {% for tag in page.tags %}
+    <span style="background: var(--tag-bg); color: var(--tag-color); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem;" data-pagefind-filter="tag">#{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
 
   <!-- 相似文章推荐（共享tag最多 > 同category）-->
   {% if page.tags or page.categories %}
