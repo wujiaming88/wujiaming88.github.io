@@ -17,6 +17,7 @@ minimal_style: true
 # 部署好 Worker 后，把下面这行取消注释并填成你的 Worker 地址（不带末尾斜杠）。
 # 留空/注释 = 阅读量功能关闭，徽章不显示，对站点零影响。
 # pageview_api: "https://你的worker.子域.workers.dev"
+pageview_api: "https://my-blog-worker.garming-wu.workers.dev"
 
 # 分类和标签配置
 permalink: /:year/:month/:day/:title.html
