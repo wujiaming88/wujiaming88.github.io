@@ -1059,13 +1059,7 @@ article.post .post-content hr,
   letter-spacing: -0.015em;
 }
 .post-content h2::before { content: none; }
-.post-content h2::after {
-  content: '';
-  display: block;
-  margin-top: 0.55rem;
-  height: 1px;
-  background: var(--hairline);
-}
+.post-content h2::after { content: none; }
 .post-content h3 {
   font-size: 1.22rem;
   margin: 1.9rem 0 0.7rem;
@@ -1273,8 +1267,8 @@ html { scroll-behavior: smooth; }
 }
 .post-content table { border: 1px solid var(--hairline); box-shadow: var(--shadow-soft); }
 
-/* h2 下方淡出线：保留极淡一条 */
-.post-content h2::after { background: var(--hairline); }
+/* h2 下方横线已全站移除 */
+.post-content h2::after { content: none; background: none; }
 /* h3 保持干净无竖条 */
 /* 分隔线整体更淡 */
 .post-content hr { background: linear-gradient(90deg, transparent, var(--hairline) 30%, var(--hairline) 70%, transparent); }
