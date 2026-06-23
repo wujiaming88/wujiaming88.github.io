@@ -1292,8 +1292,19 @@ html { scroll-behavior: smooth; }
 }
 .meta-badges--header { gap: 4px 14px; }
 
-/* —— 全局隐藏正文分隔线（老板要求 2026-06-23：去掉每个 H2 标题上方的 <hr> 细线，段间 --- 不再渲染成横线）—— */
+/* —— 全局隐藏正文分隔线（老板要求 2026-06-23：去掉每个 H2 标题上方的 <hr> 细线，段间 --- 不再渲染成横线）
+   保留语义（不从无障碍树摘除）但视觉与占位归零，无需 !important —— */
 article.post .post-content hr,
 .post-content hr {
-  display: none !important;
+  border: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+}
+article.post .post-content hr::before,
+article.post .post-content hr::after,
+.post-content hr::before,
+.post-content hr::after {
+  content: none;
 }

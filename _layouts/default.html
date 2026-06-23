@@ -97,7 +97,6 @@
             if (!table.parentElement.classList.contains('table-wrapper')) {
                 var wrapper = document.createElement('div');
                 wrapper.className = 'table-wrapper';
-                wrapper.style.overflowX = 'auto';
                 table.parentNode.insertBefore(wrapper, table);
                 wrapper.appendChild(table);
             }

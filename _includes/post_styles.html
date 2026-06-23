@@ -163,13 +163,16 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
-.table-copy-scroll > table,
-.table-copy-scroll .table-wrapper,
-.table-copy-scroll .table-wrapper > table {
-    margin: 0 !important;
+/* 清零表格及中间包裹层的 margin（用 article.post .post-content 链路提特异性，压过全局表格 margin，无需 !important） */
+article.post .post-content .table-copy-scroll,
+article.post .post-content .table-copy-scroll > table,
+article.post .post-content .table-copy-scroll .table-wrapper,
+article.post .post-content .table-copy-scroll .table-wrapper > table {
+    margin: 0;
 }
-.table-copy-scroll .table-wrapper {
-    overflow: visible !important;
+/* 中间 .table-wrapper 不再叠加横滚（滚动交由外层 .table-copy-scroll 负责） */
+article.post .post-content .table-copy-scroll .table-wrapper {
+    overflow: visible;
 }
 .table-copy-btn {
     position: absolute;
