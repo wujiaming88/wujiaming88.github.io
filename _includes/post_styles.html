@@ -153,11 +153,12 @@
 /* 滚动容器紧包表格，作为定位上下文 + 收缩到表格实际宽度，保证按钮铉表格右上角 */
 .table-copy-scroll {
     position: relative;
-    display: inline-block;
+    display: block;
+    width: -moz-fit-content;
+    width: fit-content;
     max-width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    vertical-align: top;
 }
 .table-copy-scroll > table {
     margin: 0;
