@@ -148,23 +148,23 @@
 }
 /* ---------- 表格复制按钮（铉在表格右上角内侧，视觉上绝不超出表格区域） ---------- */
 .table-copy-wrapper {
-    position: relative;
-    /* inline-block 收缩到表格实际宽度 + 可靠的定位上下文，保证按钮铉在表格右上角 */
-    display: inline-block;
     margin: 1.5rem 0;
-    max-width: 100%;
-    vertical-align: top;
 }
+/* 滚动容器紧包表格，作为定位上下文 + 收缩到表格实际宽度，保证按钮铉表格右上角 */
 .table-copy-scroll {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    vertical-align: top;
 }
 .table-copy-scroll > table {
     margin: 0;
 }
 .table-copy-btn {
     position: absolute;
-    /* 铉表格右上角内侧，贴表格表头行，不悬空在表格上方 */
+    /* 铉表格右上角内侧，贴表头行，不悬空 */
     top: 4px;
     right: 4px;
     display: inline-flex;
@@ -286,19 +286,19 @@ document.addEventListener('DOMContentLoaded', function() {
         wrapper.className = 'table-copy-wrapper';
         table.parentNode.insertBefore(wrapper, table);
 
-        // 滚动容器包表格
+        // 滚动容器紧包表格（定位上下文）
         var scroll = document.createElement('div');
         scroll.className = 'table-copy-scroll';
         wrapper.appendChild(scroll);
         scroll.appendChild(table);
 
-        // 复制按钮：直接放 wrapper（absolute 铉表格右上角内侧）
+        // 复制按钮：放进滚动容器（absolute 铉表格右上角内侧）
         var btn = document.createElement('button');
         btn.className = 'table-copy-btn';
         btn.type = 'button';
         btn.textContent = '\uD83D\uDCCB 复制';
         btn.setAttribute('aria-label', '复制表格');
-        wrapper.appendChild(btn);
+        scroll.appendChild(btn);
 
         btn.addEventListener('click', function() {
             var rows = table.querySelectorAll('tr');
