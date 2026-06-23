@@ -146,16 +146,19 @@
     border-color: #22c55e;
     opacity: 1;
 }
-/* ---------- 表格复制按钮（铉在表格右上角内侧，视觉上绝不超出表格区域） ---------- */
+/* ---------- 表格复制按钮（钉在表格右上角内侧，视觉上绝不超出表格区域） ---------- */
 .table-copy-wrapper {
-    margin: 1.5rem 0;
-}
-/* 滚动容器紧包表格，作为定位上下文 + 收缩到表格实际宽度，保证按钮铉表格右上角 */
-.table-copy-scroll {
+    /* 外层非滚动容器作定位锚 + 收缩到表格实际宽度：按钮锚此处，横向滚动时不漂移 */
     position: relative;
     display: block;
     width: -moz-fit-content;
     width: fit-content;
+    max-width: 100%;
+    margin: 1.5rem 0;
+}
+/* 滚动容器紧包表格，仅负责横向滚动，不再是定位上下文 */
+.table-copy-scroll {
+    display: block;
     max-width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -236,6 +239,20 @@
 <!-- 代码块复制按钮：对所有 .post-content 内的 <pre> 生效（含 rouge 的 pre.code-content 和裸 pre） -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // 共享的复制兑底（提升到 DOMContentLoaded 作用域，代码块与表格两处处理器均可调用）
+    function fallbackCopy(text, onOk, onFail) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (ok) { if (onOk) onOk(); } else { if (onFail) onFail(); }
+    }
+
     var pres = document.querySelectorAll('.post-content pre');
     pres.forEach(function(pre) {
         // mermaid 块不加按钮（会被 head.html 转成 .mermaid 容器，但保险起见跳过）
@@ -260,23 +277,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     btn.classList.remove('copied');
                 }, 2000);
             }
+            function fail() {
+                btn.textContent = '复制失败';
+                setTimeout(function() { btn.textContent = '复制'; }, 2000);
+            }
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text, done); });
+                navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text, done, fail); });
             } else {
-                fallbackCopy(text, done);
+                fallbackCopy(text, done, fail);
             }
         });
-
-        function fallbackCopy(text, cb) {
-            var ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            try { document.execCommand('copy'); cb(); } catch (e) {}
-            document.body.removeChild(ta);
-        }
 
         pre.appendChild(btn);
     });
@@ -298,13 +308,13 @@ document.addEventListener('DOMContentLoaded', function() {
         wrapper.appendChild(scroll);
         scroll.appendChild(table);
 
-        // 复制按钮：放进滚动容器（absolute 铉表格右上角内侧）
+        // 复制按钮：挂到外层 wrapper（非滚动容器），absolute 钉表格右上角，横向滚动时不漂移
         var btn = document.createElement('button');
         btn.className = 'table-copy-btn';
         btn.type = 'button';
         btn.textContent = '\uD83D\uDCCB 复制';
         btn.setAttribute('aria-label', '复制表格');
-        scroll.appendChild(btn);
+        wrapper.appendChild(btn);
 
         btn.addEventListener('click', function() {
             var rows = table.querySelectorAll('tr');
@@ -324,19 +334,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.classList.add('copied');
                 setTimeout(function() { btn.textContent = '\uD83D\uDCCB 复制'; btn.classList.remove('copied'); }, 2000);
             }
+            function fail() {
+                btn.textContent = '\u274C 复制失败';
+                setTimeout(function() { btn.textContent = '\uD83D\uDCCB 复制'; }, 2000);
+            }
             if (navigator.clipboard && window.ClipboardItem) {
                 try {
                     var item = new ClipboardItem({
                         'text/plain': new Blob([text], {type:'text/plain'}),
                         'text/html': new Blob([html], {type:'text/html'})
                     });
-                    navigator.clipboard.write([item]).then(done).catch(function() { fallbackCopy(text, done); });
+                    navigator.clipboard.write([item]).then(done).catch(function() { fallbackCopy(text, done, fail); });
                     return;
                 } catch(e) {}
             }
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text, done); });
-            } else { fallbackCopy(text, done); }
+                navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text, done, fail); });
+            } else { fallbackCopy(text, done, fail); }
         });
     });
 });
