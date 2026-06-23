@@ -160,8 +160,13 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
-.table-copy-scroll > table {
+.table-copy-scroll > table,
+.table-copy-scroll .table-wrapper,
+.table-copy-scroll .table-wrapper > table {
     margin: 0 !important;
+}
+.table-copy-scroll .table-wrapper {
+    overflow: visible !important;
 }
 .table-copy-btn {
     position: absolute;
