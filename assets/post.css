@@ -1291,3 +1291,9 @@ html { scroll-behavior: smooth; }
   font-weight: 500;
 }
 .meta-badges--header { gap: 4px 14px; }
+
+/* —— 全局隐藏正文分隔线（老板要求 2026-06-23：去掉每个 H2 标题上方的 <hr> 细线，段间 --- 不再渲染成横线）—— */
+article.post .post-content hr,
+.post-content hr {
+  display: none !important;
+}
