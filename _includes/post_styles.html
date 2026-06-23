@@ -149,10 +149,11 @@
 /* ---------- 表格复制按钮（铉在表格右上角内侧，视觉上绝不超出表格区域） ---------- */
 .table-copy-wrapper {
     position: relative;
-    /* 容器收缩到表格实际宽度，保证右上角按钮 = 表格右上角，不飘到文章栏右边缘 */
-    display: table;
+    /* inline-block 收缩到表格实际宽度 + 可靠的定位上下文，保证按钮铉在表格右上角 */
+    display: inline-block;
     margin: 1.5rem 0;
     max-width: 100%;
+    vertical-align: top;
 }
 .table-copy-scroll {
     overflow-x: auto;
@@ -163,8 +164,9 @@
 }
 .table-copy-btn {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    /* 铉表格右上角内侧，贴表格表头行，不悬空在表格上方 */
+    top: 4px;
+    right: 4px;
     display: inline-flex;
     align-items: center;
     gap: 4px;
