@@ -1308,3 +1308,73 @@ article.post .post-content hr::after,
 .post-content hr::after {
   content: none;
 }
+
+/* ============================================================
+   ✨ 表格样式最终收口 (2026-07-06)
+   第一性原理：挤压 = 列宽需求 > 容器宽度。根治 = 宽表横向滚动，
+   而非硬压逐字换行。此段为全站表格最终规则，优先级最高，收口
+   此前多段叠加补丁（尤其解除 overflow:hidden 对横滑的干扰）。
+   目标：桌面智能分配列宽、窄屏整表横滑、关键列不逐字断、零信息损失。
+   ============================================================ */
+
+/* 1) 用滚动容器包裹表格：解除 overflow:hidden，恢复横向滚动能力 */
+.post-content table {
+  display: block;                 /* block + overflow-x 才能横滑 */
+  overflow-x: auto;               /* 关键：宽表横向滚动，不再硬压 */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0;
+  /* 右侧渐隐提示"可横滑"：内容超宽时右缘出现柔和阴影 */
+  background:
+    linear-gradient(90deg, var(--c-bg, #fff) 30%, rgba(255,255,255,0)) left center / 24px 100% no-repeat,
+    linear-gradient(90deg, rgba(255,255,255,0), var(--c-bg, #fff) 70%) right center / 24px 100% no-repeat,
+    radial-gradient(farthest-side at 0 50%, rgba(0,0,0,0.10), transparent) left center / 12px 100% no-repeat,
+    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.10), transparent) right center / 12px 100% no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* 2) 内部用原生表格布局：按内容智能分配列宽（文本多的列自动变宽）*/
+.post-content table > thead,
+.post-content table > tbody {
+  display: table;
+  width: 100%;
+  table-layout: auto;             /* 智能列宽，撑满不留白 */
+}
+
+/* 3) 单元格断行策略：默认按词/整体断，不逐字切碎 */
+.post-content th,
+.post-content td {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;             /* 不强制断词，避免中文逐字换行 */
+  vertical-align: top;
+  line-height: 1.65;
+  min-width: 4.5em;               /* 每列最小宽度，短列也不被压成竖条 */
+  padding: 0.7rem 0.95rem;
+}
+
+/* 4) 首列（通常是主体名/维度）不换行，作为稳定的行锚点 */
+.post-content table td:first-child,
+.post-content table th:first-child {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* 5) 窄屏(手机)：整表横滑，列不被压扁 */
+@media (max-width: 768px) {
+  .post-content table { font-size: 0.86rem; }
+  .post-content th,
+  .post-content td { min-width: 5.5em; padding: 0.6rem 0.7rem; }
+  /* 评级星号等短列保持不换行 */
+  .post-content td:last-child { white-space: nowrap; }
+}
+
+/* 6) 滚动条精致化 */
+.post-content table::-webkit-scrollbar { height: 6px; }
+.post-content table::-webkit-scrollbar-thumb {
+  background: var(--c-accent-200, #c7d2fe); border-radius: 3px;
+}
+.post-content table::-webkit-scrollbar-track { background: transparent; }
