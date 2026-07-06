@@ -89,20 +89,7 @@
         </div>
     </footer>
 
-    <!-- 代码块增强：表格响应式包裹（代码高亮由 rouge 服务端完成，复制按钮见 post_styles.html） -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 为表格添加响应式包裹
-        document.querySelectorAll('.post-content table').forEach(function(table) {
-            if (!table.parentElement.classList.contains('table-wrapper')) {
-                var wrapper = document.createElement('div');
-                wrapper.className = 'table-wrapper';
-                table.parentNode.insertBefore(wrapper, table);
-                wrapper.appendChild(table);
-            }
-        });
-    });
-    </script>
+    <!-- 代码块增强：表格响应式包裹已统一交由 post_styles.html 处理（.table-copy-wrapper > .table-copy-scroll > table），此处旧的 .table-wrapper 包裹已移除，避免双重包裹导致横向滚动失效 -->
 
     {% include search-modal.html %}
 

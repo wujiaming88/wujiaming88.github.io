@@ -1310,74 +1310,59 @@ article.post .post-content hr::after,
 }
 
 /* ============================================================
-   ✨ 表格横向滚动·根治 (2026-07-06 v2)
-   问题实测：table 落在 .table-wrapper 内且 overflow-x 被覆盖为 visible，
-   scrollLeft 无法改变 → 手机端滑不动。
-   根因：两套包裹 JS(.table-wrapper / .table-copy-scroll)叠加 + 主题
-   高特异性规则把 overflow 覆盖回 visible。
-   根治：不改 JS，直接给"所有可能的滚动容器"用最高特异性 + !important
-   强制赋予横向滚动能力；table 保持原生 table 布局(不改 display，避免
-   破坏 thead/tbody 结构)。
+   ✨ 表格横向滚动·最终版 (2026-07-06 v3)
+   前提：已删除 default.html 里冗余的 .table-wrapper 包裹 JS，
+   现在全站只剩一套 post_styles.html 的包裹：
+       .table-copy-wrapper > .table-copy-scroll > table
+   职责分离：.table-copy-scroll 负责横滑；table 负责原生列宽；单元格负责断行。
    ============================================================ */
 
-/* 1) 三种可能的包裹容器一律可横滑（谁当父层都能滚）*/
-article.post .post-content .table-wrapper,
-article.post .post-content .table-copy-scroll,
-.post-content .table-wrapper,
+/* 1) 唯一滚动容器：.table-copy-scroll 横向滚动 */
 .post-content .table-copy-scroll {
-  display: block !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  -webkit-overflow-scrolling: touch !important;
-  max-width: 100% !important;
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
 }
-
-/* 2) 万一 table 没有被 JS 包裹（裸 table），table 自身也能横滑 */
-.post-content > table,
-article.post .post-content > table {
-  display: block !important;
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  max-width: 100% !important;
-}
-
-/* 3) 被包裹时 table 用原生布局，按内容智能分配列宽，宽度可超容器以触发滚动 */
-article.post .post-content .table-wrapper > table,
-article.post .post-content .table-copy-scroll > table,
-.post-content .table-wrapper > table,
-.post-content .table-copy-scroll > table {
-  display: table !important;
-  width: auto !important;          /* 关键：按内容撑宽，超出容器→触发横滑 */
-  min-width: 100% !important;      /* 内容少时也撑满容器 */
-  max-width: none !important;      /* 解除 100% 上限，允许超宽 */
-  table-layout: auto !important;
-  overflow: visible !important;    /* 滚动交给外层容器，table 本身不再截断 */
-}
-
-/* 4) 断行策略：不逐字切碎中文；首列/末列(评级)不换行作锚点 */
-.post-content th,
-.post-content td {
-  white-space: normal;
-  overflow-wrap: break-word;
-  word-break: normal;
-  vertical-align: top;
-  line-height: 1.65;
-}
-.post-content table td:first-child,
-.post-content table th:first-child { white-space: nowrap; font-weight: 600; }
-
-@media (max-width: 768px) {
-  .post-content table { font-size: 0.86rem; }
-  .post-content th, .post-content td { padding: 0.6rem 0.7rem; }
-  .post-content td:last-child { white-space: nowrap; }  /* 星级评级列不换行 */
-}
-
-/* 5) 滚动条精致化（放外层容器上）*/
-.post-content .table-wrapper::-webkit-scrollbar,
-.post-content .table-copy-scroll::-webkit-scrollbar,
-.post-content > table::-webkit-scrollbar { height: 7px; }
-.post-content .table-wrapper::-webkit-scrollbar-thumb,
-.post-content .table-copy-scroll::-webkit-scrollbar-thumb,
-.post-content > table::-webkit-scrollbar-thumb {
+.post-content .table-copy-scroll::-webkit-scrollbar { height: 7px; }
+.post-content .table-copy-scroll::-webkit-scrollbar-thumb {
   background: var(--c-accent-200, #c7d2fe); border-radius: 4px;
+}
+
+/* 2) 容器内 table：原生布局，按内容撑宽（超出容器 → 触发滚动）*/
+.post-content .table-copy-scroll > table {
+  display: table;
+  width: auto;            /* 按内容撑开，不再被 100% 压缩 */
+  min-width: 100%;        /* 内容少时也撑满 */
+  max-width: none;
+  table-layout: auto;
+  margin: 0;
+}
+
+/* 3) 单元格断行：中文按整体/词换行，绝不逐字竖排 */
+.post-content .table-copy-scroll th,
+.post-content .table-copy-scroll td {
+  white-space: normal;
+  overflow-wrap: normal;      /* 不在任意字符断，避免逐字 */
+  word-break: keep-all;       /* CJK 不按单字断 */
+  hyphens: none;
+  vertical-align: top;
+  line-height: 1.6;
+  min-width: 6em;             /* 每列最小宽度，短列不被压成竖条 */
+}
+
+/* 4) 首列(主体名)不换行作锚点；末列(评级星)不换行 */
+.post-content .table-copy-scroll td:first-child,
+.post-content .table-copy-scroll th:first-child {
+  white-space: nowrap; font-weight: 600;
+}
+.post-content .table-copy-scroll td:last-child { white-space: nowrap; }
+
+/* 5) 手机端微调 */
+@media (max-width: 768px) {
+  .post-content .table-copy-scroll th,
+  .post-content .table-copy-scroll td {
+    font-size: 0.86rem; padding: 0.55rem 0.7rem; min-width: 6.5em;
+  }
 }
