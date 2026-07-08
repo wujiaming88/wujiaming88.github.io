@@ -8,16 +8,19 @@ title: W.ai - 深度技术研究博客
     <div class="hero-content">
         <h1 class="hero-title">深度技术研究</h1>
         <p class="hero-subtitle">探索 AI 前沿 · 记录工程实践</p>
-        
-        <!-- 搜索框 -->
+
+        <!-- 搜索框：点击整块打开搜索弹窗（openSearchModal），⌘K 亦可唤起 -->
         <div class="search-wrapper">
-            <div class="search-box" onclick="openSearchModal()">
-                <span class="search-icon">🔍</span>
+            <div class="search-box" onclick="openSearchModal()" aria-label="搜索文章">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
                 <input type="text" class="search-input" placeholder="搜索文章标题和内容..." readonly onclick="openSearchModal()">
-                <span class="search-shortcut">⌘K</span>
+                <kbd class="search-shortcut"><span class="key-cmd">⌘</span>K</kbd>
             </div>
         </div>
-        
+
     </div>
 </div>
 
