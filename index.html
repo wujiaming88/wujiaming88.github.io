@@ -123,19 +123,14 @@ title: W.ai - 深度技术研究博客
         </article>
         {% endfor %}
     </div>
-    
-    <!-- 分页 -->
-    {% if paginator.total_pages > 1 %}
-    <nav class="pagination">
-        {% if paginator.previous_page %}
-        <a href="{{ paginator.previous_page_path | relative_url }}" class="page-btn">← 上一页</a>
-        {% endif %}
-        <span class="page-info">{{ paginator.page }} / {{ paginator.total_pages }}</span>
-        {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path | relative_url }}" class="page-btn">下一页 →</a>
-        {% endif %}
-    </nav>
-    {% endif %}
+
+    <!-- 说明：首页故意整篇渲染 site.posts（含全部封面图，均 loading="lazy" 延迟加载），
+         因为上方分类筛选条 filterPosts() 依赖所有卡片在 DOM 中就地隐藏/显示。
+         因此这里不再渲染会误导用户的 paginator 分页导航（点进 /page/2/ 只会重复整份列表）。
+         需要真正的分页归档请见 /articles/。 -->
+    <div class="home-archive-link">
+        <a href="{{ '/articles/' | relative_url }}" class="page-btn">查看全部文章归档 →</a>
+    </div>
 </div>
 
 

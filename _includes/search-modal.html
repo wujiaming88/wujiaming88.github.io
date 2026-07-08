@@ -1,16 +1,16 @@
 <!-- Pagefind 搜索 Modal -->
 <div class="search-modal" id="searchModal">
   <div class="search-modal-overlay" onclick="closeSearchModal()"></div>
-  <div class="search-modal-container">
+  <div class="search-modal-container" role="dialog" aria-modal="true" aria-label="站内搜索">
     <div class="search-modal-header">
-      <span class="search-modal-icon">🔍</span>
+      <span class="search-modal-icon" aria-hidden="true">🔍</span>
       <input
         type="text"
         id="searchModalInput"
         class="search-modal-input"
         placeholder="搜索文章标题和内容..."
         autocomplete="off"
-        autofocus
+        aria-label="搜索文章标题和内容"
       >
       <button class="search-modal-close" onclick="closeSearchModal()" aria-label="关闭搜索">✕</button>
     </div>
@@ -257,7 +257,7 @@
 }
 
 .search-result-excerpt mark {
-  background: rgba(99, 102, 241, 0.2);
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
   color: var(--accent);
   padding: 0 2px;
   border-radius: 2px;
@@ -357,6 +357,17 @@
   let currentResults = [];
   let highlightedIndex = -1;
   let debounceTimer = null;
+  let lastFocusedBeforeOpen = null;   // 打开前的焦点元素，关闭时还原
+
+  // 返回 modal 内当前可聚焦的元素（用于焦点陷阱）
+  function getFocusable() {
+    if (!searchModal) return [];
+    var sel = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    return Array.prototype.filter.call(
+      searchModal.querySelectorAll(sel),
+      function (el) { return el.offsetParent !== null || el === document.activeElement; }
+    );
+  }
 
   // 初始化 Pagefind
   async function initPagefind() {
@@ -368,7 +379,6 @@
         excerptLength: 15,
         highlightParam: 'highlight'
       });
-      console.log('Pagefind initialized');
     } catch (e) {
       console.error('Failed to load Pagefind:', e);
     }
@@ -377,6 +387,8 @@
   // 打开搜索 Modal
   function openSearchModal() {
     if (!searchModal) return;
+    // 记录触发前的焦点，便于关闭后还原
+    lastFocusedBeforeOpen = document.activeElement;
     searchModal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
@@ -404,6 +416,12 @@
     showHint();
     currentResults = [];
     highlightedIndex = -1;
+
+    // 还原焦点到打开前的元素（无障碍：焦点不遗失在被隐藏的 modal 内）
+    if (lastFocusedBeforeOpen && typeof lastFocusedBeforeOpen.focus === 'function') {
+      lastFocusedBeforeOpen.focus();
+    }
+    lastFocusedBeforeOpen = null;
   }
 
   // 显示提示
@@ -615,14 +633,38 @@
     // 键盘导航
     searchInput.addEventListener('keydown', handleKeyDown);
 
+    // 焦点陷阱：Tab / Shift+Tab 在 modal 内循环；Esc 关闭
+    searchModal.addEventListener('keydown', function(e) {
+      if (!searchModal.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeSearchModal();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      var focusable = getFocusable();
+      if (focusable.length === 0) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first || !searchModal.contains(document.activeElement)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
     // 全局快捷键
     document.addEventListener('keydown', handleGlobalKeyDown);
 
     // 导出全局函数供外部调用
     window.openSearchModal = openSearchModal;
     window.closeSearchModal = closeSearchModal;
-
-    console.log('Search modal initialized');
   });
 })();
 </script>

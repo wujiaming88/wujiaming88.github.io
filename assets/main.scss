@@ -89,7 +89,7 @@
   /* 字号阶梯（模块化比例 ~1.2）*/
   --fs-xs:   0.78rem;
   --fs-sm:   0.88rem;
-  --fs-base: 1rem;
+  --fs-base: 1.03125rem;   /* =16.5px，正文基准（与 style-guide 一致）*/
   --fs-md:   1.15rem;
   --fs-lg:   1.32rem;
   --fs-xl:   1.55rem;
@@ -879,4 +879,18 @@ html *:not(pre):not(code):not(img):not(video):not(canvas):not(svg):not(pre *) {
 .theme-toggle:hover {
   border-color: var(--accent);
   background: var(--tag-bg);
+}
+
+/* ============================================
+   无障碍：动效降级（尊重系统"减少动态效果"偏好）
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

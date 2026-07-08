@@ -13,9 +13,9 @@ article.post {
 /* 文章头部 */
 /* ==================== */
 article.post .post-header {
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--sp-7);   /* 2.5rem */
   text-align: center;
-  padding: 3rem 0 0;
+  padding: var(--sp-8) 0 0;     /* 3rem */
   border-bottom: none;
   position: relative;
 }
@@ -60,7 +60,7 @@ article.post .post-header .post-tags span {
   border-radius: 20px;
   font-size: 0.78rem;
   font-weight: 500;
-  border: 1px solid rgba(99,102,241,0.12);
+  border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 /* ==================== */
@@ -249,8 +249,8 @@ article.post .post-content pre,
   background: #1e1e2e;
   border-radius: var(--radius-lg);
   overflow-x: auto;
-  margin: 2rem 0;
-  padding: 1.5rem 1.75rem;
+  margin: var(--sp-6) 0;
+  padding: var(--sp-5) 1.75rem;
   position: relative;
   box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   border: 1px solid rgba(255,255,255,0.08);
@@ -277,7 +277,7 @@ article.post .post-content pre code,
 article.post .post-content blockquote,
 .post-content blockquote {
   border-left: 4px solid var(--accent);
-  background: linear-gradient(135deg, rgba(99,102,241,0.04), rgba(99,102,241,0.02));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 4%, transparent), color-mix(in srgb, var(--accent) 2%, transparent));
   padding: 1.5rem 1.75rem;
   margin: 2rem 0;
   border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
@@ -323,7 +323,7 @@ article.post .post-content table,
 
 article.post .post-content th,
 .post-content th {
-  background: rgba(99,102,241,0.06);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
   padding: 0.7rem 1rem;
   text-align: left;
   font-weight: 700;
@@ -341,18 +341,15 @@ article.post .post-content td,
 }
 
 article.post .post-content tr:nth-child(even) td {
-  background: rgba(99,102,241,0.02);
+  background: color-mix(in srgb, var(--accent) 2%, transparent);
 }
 
 article.post .post-content tr:hover td {
-  background: rgba(99,102,241,0.04);
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
 }
 
-.table-wrapper {
-  overflow-x: auto;
-  margin: 1.5rem 0;
-  border-radius: var(--radius-sm);
-}
+/* 旧的 .table-wrapper 规则已移除：表格横向滚动统一交由 post_styles.html 的
+   .table-copy-wrapper > .table-copy-scroll 包裹处理，此类名不再由任何代码生成。 */
 
 /* ==================== */
 /* 图片 */
@@ -396,22 +393,8 @@ article.post .post-content figcaption,
   transform: scale(1.05);
 }
 
-/* ==================== */
-/* 分隔线 */
-/* ==================== */
-article.post .post-content hr,
-.post-content hr {
-  border: none;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--border-color) 20%,
-    var(--border-color) 80%,
-    transparent
-  );
-  margin: 3rem 0;
-}
+/* 分隔线（<hr> 与段间 --- ）的唯一权威规则在文件末尾"全局隐藏正文分隔线"处，
+   此处旧的渐变分隔线定义已移除，避免覆盖战。 */
 
 /* ==================== */
 /* 视频 */
@@ -783,7 +766,7 @@ article.post .post-content hr,
 
 .toc-body > ul > li > ul > li > a:hover {
   color: var(--accent);
-  border-left-color: rgba(99,102,241,0.4);
+  border-left-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 /* H4 级目录 */
@@ -917,7 +900,7 @@ article.post .post-content hr,
   background: linear-gradient(90deg, var(--accent), var(--accent-light, var(--accent)), var(--accent-cyan, var(--accent)));
   border-radius: 0 2px 2px 0;
   transition: width 0.1s linear;
-  box-shadow: 0 0 6px rgba(99,102,241,0.4);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 /* ============================================
@@ -1029,7 +1012,7 @@ article.post .post-content hr,
 
 /* —— 1. 正文排版：更舒展、更顺眼的中英文混排 —— */
 .post-content {
-  font-size: 16.5px;
+  font-size: var(--fs-base);
   line-height: 1.85;
   letter-spacing: 0.01em;
   text-rendering: optimizeLegibility;
@@ -1092,8 +1075,8 @@ article.post .post-content hr,
 
 /* —— 4. 行内代码：更精致的胶囊 —— */
 .post-content code:not(pre code) {
-  background: linear-gradient(180deg, rgba(99,102,241,0.08), rgba(99,102,241,0.05));
-  border: 1px solid rgba(99,102,241,0.16);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, transparent), color-mix(in srgb, var(--accent) 5%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
   padding: 0.12rem 0.45rem;
   font-size: 0.85em;
   font-weight: 500;
@@ -1109,7 +1092,7 @@ article.post .post-content hr,
 
 /* —— 6. 引用块：精致左栏 + 柔光，去掉廉价大引号 —— */
 .post-content blockquote {
-  background: linear-gradient(180deg, rgba(99,102,241,0.06), rgba(6,182,212,0.03));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 6%, transparent), rgba(6,182,212,0.03));
   border-left: 3px solid;
   border-image: linear-gradient(180deg, var(--accent), var(--accent-cyan)) 1;
   border-radius: 0 12px 12px 0;
@@ -1118,22 +1101,10 @@ article.post .post-content hr,
 }
 .post-content blockquote::before { display: none; }
 
-/* —— 7. 表格：精致表头 + 柔和分隔 + 圆角描边 —— */
-.post-content table {
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-  font-size: 0.92rem;
-}
-.post-content th {
-  background: linear-gradient(180deg, rgba(99,102,241,0.10), rgba(99,102,241,0.06));
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
-  padding: 0.8rem 1.1rem;
-  border-bottom: 1px solid rgba(99,102,241,0.18);
-}
-.post-content td { padding: 0.78rem 1.1rem; border-bottom: 1px solid var(--border-light); }
+/* —— 7. 表格：精致层 ——
+   注：th/table 的这批 `.post-content xxx`(0,1,1) 精修声明会被文件前部
+   `article.post .post-content xxx`(0,2,2) 基础规则整体覆盖（全站 .post-content
+   均在 article.post 内），属死规则，已删除以收敛覆盖战。仅保留真正生效的新增声明。*/
 .post-content tr:last-child td { border-bottom: none; }
 .post-content tbody tr { transition: background 0.15s; }
 
@@ -1147,27 +1118,14 @@ article.post .post-content hr,
   border: 1px solid var(--border-light);
 }
 
-/* —— 9. 分隔线：纯净单线，去菱形点缀 —— */
-.post-content hr {
-  position: relative;
-  margin: 3.2rem 0;
-  background: linear-gradient(90deg, transparent, var(--hairline) 30%, var(--hairline) 70%, transparent);
-}
-.post-content hr::after {
-  content: none;
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 7px; height: 7px;
-  transform: translate(-50%,-50%) rotate(45deg);
-  background: var(--accent);
-  box-shadow: 0 0 0 4px var(--bg-primary), 0 2px 10px var(--accent-glow);
-}
+/* —— 9. 分隔线：见文件末尾"全局隐藏正文分隔线"权威规则（此处旧的菱形点缀/单线定义已移除，
+   原 hr::after 早已 content:none 为死代码）—— */
 
 /* —— 10. 标题分割线下的标题区 + 标签精修 —— */
 .post-header h1, .post-header .post-title { letter-spacing: -0.025em; }
 .post-header .post-tags span {
-  background: linear-gradient(180deg, rgba(99,102,241,0.10), rgba(99,102,241,0.05));
-  border: 1px solid rgba(99,102,241,0.18);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--accent) 5%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
   transition: all 0.2s;
 }
 .post-header .post-tags span:hover {
@@ -1178,7 +1136,7 @@ article.post .post-content hr,
 }
 
 /* —— 11. 选中高亮色（精致细节）—— */
-.post-content ::selection { background: rgba(99,102,241,0.18); }
+.post-content ::selection { background: color-mix(in srgb, var(--accent) 18%, transparent); }
 
 /* —— 12. 列表标记精修 —— */
 .post-content ul > li::marker { color: var(--accent); }
@@ -1236,16 +1194,9 @@ html { scroll-behavior: smooth; }
   vertical-align: top;
   line-height: 1.6;
 }
-/* 窄屏（手机）：宽表改为横向滚动，不压字（桌面端仍用上面的 auto 自适应）*/
-@media (max-width: 768px) {
-  .post-content table {
-    display: block;
-    width: max-content;
-    min-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-}
+/* 旧的窄屏 `table{display:block;overflow-x:auto}` 横滚 remnant 已移除：
+   渲染后所有表格均被 JS 包进 .table-copy-scroll，横向滚动由该容器独家负责
+   （见本文件末尾 v3 段与 post_styles.html 的移动端规则）。 */
 /* 表格滚动条更精致 */
 .post-content table::-webkit-scrollbar { height: 6px; }
 .post-content table::-webkit-scrollbar-thumb {
@@ -1255,7 +1206,7 @@ html { scroll-behavior: smooth; }
 /* —— B. 减少线条：去掉密集横线，改"斑马底 + 极淡分隔" —— */
 .post-content td { border-bottom: none; }              /* 去掉每行下横线 */
 .post-content tbody tr:nth-child(even) td {
-  background: rgba(99,102,241,0.035);                  /* 斑马底替代横线 */
+  background: color-mix(in srgb, var(--accent) 3.5%, transparent);                  /* 斑马底替代横线 */
 }
 .post-content tbody tr:nth-child(odd) td { background: transparent; }
 .post-content th {
@@ -1270,8 +1221,7 @@ html { scroll-behavior: smooth; }
 /* h2 下方横线已全站移除 */
 .post-content h2::after { content: none; background: none; }
 /* h3 保持干净无竖条 */
-/* 分隔线整体更淡 */
-.post-content hr { background: linear-gradient(90deg, transparent, var(--hairline) 30%, var(--hairline) 70%, transparent); }
+/* （原此处的 hr 渐变背景已删：会被文件末尾"全局隐藏分隔线"的 background:none 覆盖，属死规则）*/
 /* 卡片/区块统一极淡描边（替代原 --border-color 偏重的灰线） */
 .post-bottom-section,
 .related-post-card,

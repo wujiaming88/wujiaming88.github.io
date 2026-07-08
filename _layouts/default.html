@@ -95,28 +95,8 @@
 
     <!-- JavaScript -->
     <script>
-        // 图片懒加载
-        document.addEventListener('DOMContentLoaded', () => {
-            const lazyImages = document.querySelectorAll('img.lazyload');
-
-            if ('IntersectionObserver' in window) {
-                const imageObserver = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const image = entry.target;
-                            image.src = image.dataset.src;
-                            image.classList.remove('lazyload');
-                            image.classList.add('lazyloaded');
-                            imageObserver.unobserve(image);
-                        }
-                    });
-                });
-
-                lazyImages.forEach(image => {
-                    imageObserver.observe(image);
-                });
-            }
-        });
+        // 图片懒加载：全站图片已统一使用原生 loading="lazy"（img.lazyload/data-src 方案已废弃，
+        // 站内 0 处使用），原先监听 img.lazyload 的 IntersectionObserver 为死代码，已移除。
 
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -195,8 +175,16 @@
                     li.classList.remove('open');
                     var t = li.querySelector('.nav-submenu-toggle');
                     if (t) t.setAttribute('aria-expanded', 'false');
+                    setDropdownExpanded(li, false);
                 });
             }
+        }
+
+        // 同步父级 .nav-link[aria-haspopup] 的 aria-expanded，让屏幕阅读器如实反映下拉状态
+        function setDropdownExpanded(li, isOpen) {
+            if (!li) return;
+            var trigger = li.querySelector(':scope > .nav-link[aria-haspopup="true"]');
+            if (trigger) trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         }
 
         // 子菜单：移动端点击 + 号展开手风琴；桌面端 hover 由 CSS 处理，桌面 + 号被隐藏
@@ -208,6 +196,7 @@
                 if (!li) return;
                 var isOpen = li.classList.toggle('open');
                 btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                setDropdownExpanded(li, isOpen);
             });
         });
 
@@ -217,7 +206,10 @@
                 // 桌面 hover 已经能展开；这里仅用于点击外部关闭后强制重展开
                 if (window.matchMedia('(min-width: 769px)').matches) {
                     var li = link.closest('.nav-has-dropdown');
-                    if (li) li.classList.toggle('clicked-open');
+                    if (li) {
+                        var isOpen = li.classList.toggle('clicked-open');
+                        setDropdownExpanded(li, isOpen);
+                    }
                 }
             });
         });
@@ -227,6 +219,7 @@
             if (!e.target.closest('.navbar')) {
                 document.querySelectorAll('.nav-has-dropdown.clicked-open').forEach(function(li) {
                     li.classList.remove('clicked-open');
+                    setDropdownExpanded(li, false);
                 });
             }
         });

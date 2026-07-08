@@ -82,14 +82,14 @@ body.home-page .container {
     font-weight: 500;
     background: var(--tag-bg);
     color: var(--accent);
-    border: 1px solid rgba(99,102,241,0.15);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
     cursor: pointer;
     transition: all 0.2s ease;
     user-select: none;
 }
 
 .tag-pill:hover {
-    background: rgba(99,102,241,0.15);
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
     border-color: var(--accent);
     transform: translateY(-1px);
 }
@@ -121,7 +121,7 @@ body.home-page .container {
 
 .search-box:focus-within {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .search-icon { font-size: 1rem; margin-right: 10px; opacity: 0.5; }
@@ -212,7 +212,7 @@ body.home-page .container {
 
 .featured-card:hover {
     border-color: var(--accent);
-    box-shadow: 0 8px 30px rgba(99,102,241,0.12);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--accent) 12%, transparent);
     transform: translateY(-3px);
 }
 
@@ -337,7 +337,7 @@ body.home-page .container {
     background: linear-gradient(135deg, var(--accent), var(--accent-light));
     border-color: transparent;
     color: #fff;
-    box-shadow: 0 4px 12px rgba(99,102,241,0.25);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
 /* 文章网格：Bento 马赛克布局——首卡放大，打破均匀框格的死板感 */
@@ -519,6 +519,15 @@ body.home-page .container {
     padding: 2px 8px;
     border-radius: 6px;
     border: 1px solid var(--border-light);
+}
+
+/* 首页归档入口（首页整篇渲染供分类筛选，不分页；真正的分页归档在 /articles/） */
+.home-archive-link {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
 }
 
 /* 分页 */
