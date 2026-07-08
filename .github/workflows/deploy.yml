@@ -30,8 +30,8 @@ jobs:
         env:
           JEKYLL_ENV: production
 
-      - name: Index with Pagefind
-        run: npx pagefind --site _site
+      # 搜索：站内检索已由 Pagefind 换成前端 Fuse.js（数据源 /search-index.json，
+      # 由 Jekyll 在上一步构建期直接生成，无需额外索引步骤）。原 `npx pagefind` 已移除。
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,0 +1,45 @@
+---
+# 构建期生成的站内搜索索引（Fuse.js 前端全文检索的唯一数据源）。
+# 每篇文章一条精简记录：title / url / date / series / tags / excerpt / categories。
+# 只放标题+标签+系列+摘要，不放正文，确保体积维持在几十 KB。
+# 日期字段为干净 ISO / 展示串（修复旧版把 📅emoji meta 整块塞进 date 的 bug）。
+layout: null
+sitemap: false
+permalink: /search-index.json
+---
+{%- comment -%}
+  series slug → 中文系列名映射（与首页筛选条、weekly-category.html 保持一致）。
+  bucket/文件名启发式判定 slug 交给 weekly-category.html；none → deep（深度文章）。
+{%- endcomment -%}
+[
+{%- for post in site.posts -%}
+{%- capture sb %}{% include weekly-category.html post=post %}{% endcapture -%}
+{%- assign sb = sb | strip -%}
+{%- if sb == "none" -%}{%- assign sb = "deep" -%}{%- endif -%}
+{%- case sb -%}
+  {%- when 'deep' -%}{%- assign series_label = '深度文章' -%}
+  {%- when 'dynamic' -%}{%- assign series_label = 'AI 动态周报' -%}
+  {%- when 'agent' -%}{%- assign series_label = 'AI Agent 周报' -%}
+  {%- when 'investment' -%}{%- assign series_label = 'AI 投资周报' -%}
+  {%- when 'startup' -%}{%- assign series_label = 'AI 创业周报' -%}
+  {%- when 'agent-infra' -%}{%- assign series_label = 'AI Agent 基础设施周报' -%}
+  {%- when 'guanggu' -%}{%- assign series_label = '武汉光谷周报' -%}
+  {%- else -%}{%- assign series_label = sb -%}
+{%- endcase -%}
+{%- comment -%} 优先 front-matter excerpt；缺失或自动摘要为空（首块是图/HTML）时回退到正文剥标签摘要 {%- endcomment -%}
+{%- assign raw_excerpt = post.excerpt | default: '' | strip_html | normalize_whitespace | strip -%}
+{%- if raw_excerpt == '' -%}{%- assign raw_excerpt = post.content | strip_html | normalize_whitespace | strip -%}{%- endif -%}
+{%- assign clean_excerpt = raw_excerpt | truncate: 120 -%}
+  {
+    "title": {{ post.title | jsonify }},
+    "url": {{ post.url | relative_url | jsonify }},
+    "date": {{ post.date | date: "%Y-%m-%d" | jsonify }},
+    "dateDisplay": {{ post.date | date: "%Y.%m.%d" | jsonify }},
+    "series": {{ series_label | jsonify }},
+    "seriesSlug": {{ sb | jsonify }},
+    "tags": {{ post.tags | jsonify }},
+    "categories": {{ post.categories | jsonify }},
+    "excerpt": {{ clean_excerpt | jsonify }}
+  }{%- unless forloop.last -%},{%- endunless -%}
+{%- endfor -%}
+]

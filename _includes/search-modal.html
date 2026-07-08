@@ -1,4 +1,6 @@
-<!-- Pagefind 搜索 Modal -->
+<!-- 站内搜索 Modal（Fuse.js 前端检索，数据源 /search-index.json）
+     引擎已由 Pagefind 换成 Fuse.js：CJK 召回可预测，摘要/日期/系列徽章干净。
+     Fuse.js 本地内置于 assets/js/fuse.min.js（不依赖运行时 CDN，离线/GH-Pages 均可用）。 -->
 <div class="search-modal" id="searchModal">
   <div class="search-modal-overlay" onclick="closeSearchModal()"></div>
   <div class="search-modal-container" role="dialog" aria-modal="true" aria-label="站内搜索">
@@ -8,7 +10,7 @@
         type="text"
         id="searchModalInput"
         class="search-modal-input"
-        placeholder="搜索文章标题和内容..."
+        placeholder="搜索文章标题、标签、系列…"
         autocomplete="off"
         aria-label="搜索文章标题和内容"
       >
@@ -16,10 +18,7 @@
     </div>
 
     <div class="search-modal-results" id="searchModalResults">
-      <div class="search-modal-hint">
-        <div class="search-hint-main">💡 输入关键词搜索文章</div>
-        <div class="search-hint-sub">支持中文分词，搜索标题、内容、标签</div>
-      </div>
+      <!-- 空状态：发现面板（由 showDiscovery() 在 JS 中注入，初始占位保持无障碍） -->
     </div>
 
     <div class="search-modal-footer">
@@ -30,6 +29,48 @@
     </div>
   </div>
 </div>
+
+{%- comment -%}
+  发现面板的服务端数据：6 条周报系列 + 最新文章 + 热门标签。
+  以 Liquid 在构建期直接算好，写进 window.__searchDiscovery，JS 首帧即可渲染，无需再请求。
+{%- endcomment -%}
+{%- comment -%} 热门标签：按文章数排序取前 12（Liquid 无法直接按 hash 值排序，借 "count:::name" 串排序） {%- endcomment -%}
+{%- assign tag_pairs = "" -%}
+{%- for t in site.tags -%}
+  {%- assign cnt = t[1].size | prepend: "0000" | slice: -4, 4 -%}
+  {%- assign tag_pairs = tag_pairs | append: cnt | append: ":::" | append: t[0] | append: "|||" -%}
+{%- endfor -%}
+{%- assign tag_sorted = tag_pairs | split: "|||" | sort | reverse -%}
+<script>
+window.__searchDiscovery = {
+  series: [
+    { slug: "dynamic",     label: "AI 动态周报",           desc: "全球 AI 大事高信噪比综述" },
+    { slug: "agent",       label: "AI Agent 周报",         desc: "Agent 框架 · 协议 · 编码 Agent" },
+    { slug: "investment",  label: "AI 投资周报",           desc: "融资 · 估值 · 资本流向" },
+    { slug: "startup",     label: "AI 创业公司周报",       desc: "新公司 · Demo Day · 早期轮次" },
+    { slug: "agent-infra", label: "AI Agent 基础设施周报", desc: "Agent 运行时与云平台" },
+    { slug: "guanggu",     label: "武汉光谷资讯周报",       desc: "本地产业 · 投融资 · 政策" }
+  ],
+  weeklyBase: {{ '/weekly/' | relative_url | jsonify }},
+  tagsBase: {{ '/tags/' | relative_url | jsonify }},
+  recent: [
+    {%- for post in site.posts limit:5 -%}
+    { title: {{ post.title | jsonify }}, url: {{ post.url | relative_url | jsonify }}, date: {{ post.date | date: "%Y.%m.%d" | jsonify }} }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ],
+  popularTags: [
+    {%- for pair in tag_sorted limit:12 -%}
+    {%- assign parts = pair | split: ":::" -%}
+    {%- assign tname = parts[1] -%}
+    {%- assign tcount = parts[0] | times: 1 -%}
+    {%- if tname and tname != "" -%}
+    { name: {{ tname | jsonify }}, slug: {{ tname | slugify | jsonify }}, count: {{ tcount }} }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endif -%}
+    {%- endfor -%}
+  ],
+  indexUrl: {{ '/search-index.json' | relative_url | jsonify }}
+};
+</script>
 
 <style>
 /* ============================================
@@ -150,27 +191,6 @@
   max-height: calc(70vh - 140px);
 }
 
-/* 搜索提示 */
-.search-modal-hint {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 2rem;
-  text-align: center;
-}
-
-.search-hint-main {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.search-hint-sub {
-  font-size: 0.85rem;
-  color: var(--text-tertiary);
-}
-
 /* Loading 状态 */
 .search-modal-loading {
   display: flex;
@@ -199,6 +219,23 @@
   font-size: 0.9rem;
 }
 
+/* ── 结果分组标题（周报系列 / 深度文章） ── */
+.search-group-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.search-group-head .search-group-count {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
 /* 搜索结果项 */
 .search-result-item {
   display: block;
@@ -223,27 +260,77 @@
   transform: scale(1.01);
 }
 
-.search-result-item.highlighted .search-result-title {
+.search-result-item.highlighted .search-result-title,
+.search-result-item.highlighted .search-result-title mark {
   color: #fff;
+  background: transparent;
 }
 
 .search-result-item.highlighted .search-result-meta,
-.search-result-item.highlighted .search-result-excerpt {
-  color: rgba(255, 255, 255, 0.85);
+.search-result-item.highlighted .search-result-excerpt,
+.search-result-item.highlighted .search-result-excerpt mark {
+  color: rgba(255, 255, 255, 0.9);
+  background: transparent;
+}
+
+.search-result-item.highlighted .search-result-badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.search-result-item.highlighted .search-result-tag {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* 结果卡片：标题行 = 标题 + 系列徽章 */
+.search-result-titlerow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
 }
 
 .search-result-title {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-heading);
-  margin-bottom: 6px;
   line-height: 1.4;
+  flex: 1;
+  min-width: 60%;
+}
+
+.search-result-title mark {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--accent);
+  padding: 0 1px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+/* 系列 / 分类徽章 */
+.search-result-badge {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--tag-bg);
+  color: var(--tag-color);
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.search-result-badge.is-deep {
+  background: color-mix(in srgb, var(--accent-cyan, #06b6d4) 14%, transparent);
+  color: var(--accent-cyan, #06b6d4);
 }
 
 .search-result-meta {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-tertiary);
   margin-bottom: 6px;
+  font-family: var(--font-mono);
 }
 
 .search-result-excerpt {
@@ -254,6 +341,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-bottom: 8px;
 }
 
 .search-result-excerpt mark {
@@ -264,7 +352,21 @@
   font-weight: 600;
 }
 
-/* 空状态 */
+.search-result-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.search-result-tag {
+  font-size: 0.7rem;
+  color: var(--tag-color);
+  background: var(--tag-bg);
+  padding: 1px 7px;
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+/* 空状态（无结果） */
 .search-modal-empty {
   display: flex;
   flex-direction: column;
@@ -289,6 +391,118 @@
 .search-empty-hint {
   font-size: 0.85rem;
   color: var(--text-tertiary);
+}
+
+/* ── 发现面板（空状态即发现） ── */
+.search-discovery {
+  padding: 6px 8px 12px;
+}
+.search-disc-section {
+  margin-bottom: 18px;
+}
+.search-disc-section:last-child { margin-bottom: 4px; }
+.search-disc-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin: 0 6px 10px;
+}
+/* 周报系列卡片 */
+.search-disc-series {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.search-disc-series-card {
+  display: block;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--bg-card);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+.search-disc-series-card:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  transform: translateY(-1px);
+}
+.search-disc-series-name {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.search-disc-series-desc {
+  font-size: 0.74rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+/* 最新文章 */
+.search-disc-recent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.search-disc-recent-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm, 8px);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s ease;
+}
+.search-disc-recent-item:hover { background: var(--bg-tertiary); }
+.search-disc-recent-item:hover .search-disc-recent-title { color: var(--accent); }
+.search-disc-recent-date {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.search-disc-recent-title {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+  transition: color 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 热门标签 */
+.search-disc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 6px;
+}
+.search-disc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.search-disc-tag:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.search-disc-tag .search-disc-tag-num {
+  font-size: 0.68rem;
+  opacity: 0.7;
 }
 
 /* Footer */
@@ -334,6 +548,8 @@
     max-height: calc(80vh - 120px);
   }
 
+  .search-disc-series { grid-template-columns: 1fr; }
+
   .search-modal-footer {
     flex-wrap: wrap;
     gap: 8px;
@@ -346,18 +562,44 @@
 }
 </style>
 
+<script src="{{ '/assets/js/fuse.min.js' | relative_url }}" defer></script>
 <script>
 (function() {
   'use strict';
 
-  let pagefind = null;
-  let searchInput = null;
-  let searchResults = null;
-  let searchModal = null;
-  let currentResults = [];
-  let highlightedIndex = -1;
-  let debounceTimer = null;
-  let lastFocusedBeforeOpen = null;   // 打开前的焦点元素，关闭时还原
+  var fuse = null;              // Fuse 实例（首次打开时构建）
+  var indexData = null;         // 原始 search-index.json 数据（缓存）
+  var indexLoading = null;      // 加载中的 Promise，避免并发重复 fetch
+  var searchInput = null;
+  var searchResults = null;
+  var searchModal = null;
+  var currentItems = [];        // 当前渲染的结果（扁平顺序，与 DOM 中 .search-result-item 一一对应）
+  var highlightedIndex = -1;
+  var debounceTimer = null;
+  var lastFocusedBeforeOpen = null;   // 打开前的焦点元素，关闭时还原
+
+  // ── Fuse 配置（CJK 调优）──
+  // 中文没有空格分词，Pagefind 的分词器召回呈双峰（0 或 90+）。改用 Fuse Bitap：
+  //  · ignoreLocation:true  —— 中文查询在字段任意位置命中都算，不惩罚位置（关键）
+  //  · threshold:0.3        —— 允许轻微模糊但不发散；子串精确命中得分≈0，稳定进结果
+  //  · minMatchCharLength:2 —— 2 字起匹配，过滤单字噪声（"上下文/模型/强化学习" 均 ≥2 字）
+  //  · 权重 title > tags > series > excerpt —— 标题命中最相关，摘要兜底
+  var FUSE_OPTIONS = {
+    includeScore: true,
+    includeMatches: true,
+    ignoreLocation: true,
+    threshold: 0.3,
+    minMatchCharLength: 2,
+    useExtendedSearch: false,
+    keys: [
+      { name: 'title',   weight: 0.5 },
+      { name: 'tags',    weight: 0.25 },
+      { name: 'series',  weight: 0.15 },
+      { name: 'excerpt', weight: 0.1 }
+    ]
+  };
+
+  var MAX_RESULTS = 20;
 
   // 返回 modal 内当前可聚焦的元素（用于焦点陷阱）
   function getFocusable() {
@@ -369,25 +611,30 @@
     );
   }
 
-  // 初始化 Pagefind
-  async function initPagefind() {
-    if (pagefind) return;
-
-    try {
-      pagefind = await import('/pagefind/pagefind.js');
-      await pagefind.options({
-        excerptLength: 15,
-        highlightParam: 'highlight'
+  // 首次打开时拉取索引并构建 Fuse（缓存，仅一次网络请求）
+  function loadIndex() {
+    if (indexData) return Promise.resolve(indexData);
+    if (indexLoading) return indexLoading;
+    var url = (window.__searchDiscovery && window.__searchDiscovery.indexUrl) || '/search-index.json';
+    indexLoading = fetch(url)
+      .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(data) {
+        indexData = data;
+        if (typeof Fuse !== 'undefined') {
+          fuse = new Fuse(data, FUSE_OPTIONS);
+        }
+        return data;
+      })
+      .catch(function(e) {
+        indexLoading = null; // 允许重试
+        throw e;
       });
-    } catch (e) {
-      console.error('Failed to load Pagefind:', e);
-    }
+    return indexLoading;
   }
 
   // 打开搜索 Modal
   function openSearchModal() {
     if (!searchModal) return;
-    // 记录触发前的焦点，便于关闭后还原
     lastFocusedBeforeOpen = document.activeElement;
     searchModal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -397,10 +644,13 @@
       searchInput.select();
     }
 
-    // 延迟加载 Pagefind（首次打开时）
-    if (!pagefind) {
-      initPagefind();
+    // 空状态：立即显示发现面板（用服务端注入的数据，无需等索引）
+    if (!searchInput || !searchInput.value.trim()) {
+      showDiscovery();
     }
+
+    // 预热索引（首次打开时后台加载，用户开始输入前基本就绪）
+    loadIndex().catch(function(){ /* 出错时在 performSearch 里再提示 */ });
   }
 
   // 关闭搜索 Modal
@@ -413,168 +663,243 @@
       searchInput.value = '';
     }
 
-    showHint();
-    currentResults = [];
+    showDiscovery();
+    currentItems = [];
     highlightedIndex = -1;
 
-    // 还原焦点到打开前的元素（无障碍：焦点不遗失在被隐藏的 modal 内）
     if (lastFocusedBeforeOpen && typeof lastFocusedBeforeOpen.focus === 'function') {
       lastFocusedBeforeOpen.focus();
     }
     lastFocusedBeforeOpen = null;
   }
 
-  // 显示提示
-  function showHint() {
+  // HTML 转义
+  function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.textContent = text == null ? '' : String(text);
+    return div.innerHTML;
+  }
+
+  // ── 空状态：发现面板 ──
+  function showDiscovery() {
     if (!searchResults) return;
-    searchResults.innerHTML = `
-      <div class="search-modal-hint">
-        <div class="search-hint-main">💡 输入关键词搜索文章</div>
-        <div class="search-hint-sub">支持中文分词，搜索标题、内容、标签</div>
-      </div>
-    `;
+    currentItems = [];
+    highlightedIndex = -1;
+    var d = window.__searchDiscovery;
+    if (!d) {
+      searchResults.innerHTML = '<div class="search-modal-empty"><div class="search-empty-icon">🔍</div>'
+        + '<div class="search-empty-text">输入关键词搜索文章</div></div>';
+      return;
+    }
+
+    var html = '<div class="search-discovery">';
+
+    // 周报系列
+    html += '<div class="search-disc-section"><div class="search-disc-label">周报系列</div>'
+          + '<div class="search-disc-series">';
+    d.series.forEach(function(s) {
+      html += '<a class="search-disc-series-card" href="' + escapeHtml(d.weeklyBase + s.slug + '/') + '">'
+            + '<div class="search-disc-series-name">' + escapeHtml(s.label) + '</div>'
+            + '<div class="search-disc-series-desc">' + escapeHtml(s.desc) + '</div></a>';
+    });
+    html += '</div></div>';
+
+    // 最新文章
+    if (d.recent && d.recent.length) {
+      html += '<div class="search-disc-section"><div class="search-disc-label">最新文章</div>'
+            + '<div class="search-disc-recent">';
+      d.recent.forEach(function(p) {
+        html += '<a class="search-disc-recent-item" href="' + escapeHtml(p.url) + '">'
+              + '<span class="search-disc-recent-date">' + escapeHtml(p.date) + '</span>'
+              + '<span class="search-disc-recent-title">' + escapeHtml(p.title) + '</span></a>';
+      });
+      html += '</div></div>';
+    }
+
+    // 热门标签
+    if (d.popularTags && d.popularTags.length) {
+      html += '<div class="search-disc-section"><div class="search-disc-label">热门标签</div>'
+            + '<div class="search-disc-tags">';
+      d.popularTags.forEach(function(t) {
+        html += '<a class="search-disc-tag" href="' + escapeHtml(d.tagsBase + '#tag-' + t.slug) + '">'
+              + '#' + escapeHtml(t.name)
+              + '<span class="search-disc-tag-num">' + escapeHtml(t.count) + '</span></a>';
+      });
+      html += '</div></div>';
+    }
+
+    html += '</div>';
+    searchResults.innerHTML = html;
   }
 
   // 显示 Loading
   function showLoading() {
     if (!searchResults) return;
-    searchResults.innerHTML = `
-      <div class="search-modal-loading">
-        <div class="search-loading-spinner"></div>
-        <div class="search-loading-text">搜索中...</div>
-      </div>
-    `;
+    searchResults.innerHTML = '<div class="search-modal-loading">'
+      + '<div class="search-loading-spinner"></div>'
+      + '<div class="search-loading-text">搜索中...</div></div>';
   }
 
-  // 显示空状态
+  // 显示空结果
   function showEmpty(query) {
     if (!searchResults) return;
-    searchResults.innerHTML = `
-      <div class="search-modal-empty">
-        <div class="search-empty-icon">🔍</div>
-        <div class="search-empty-text">未找到"${escapeHtml(query)}"相关的文章</div>
-        <div class="search-empty-hint">试试其他关键词</div>
-      </div>
-    `;
+    searchResults.innerHTML = '<div class="search-modal-empty">'
+      + '<div class="search-empty-icon">🔍</div>'
+      + '<div class="search-empty-text">未找到"' + escapeHtml(query) + '"相关的文章</div>'
+      + '<div class="search-empty-hint">换个关键词，或看看下面的系列与标签</div></div>';
   }
 
   // 执行搜索
-  async function performSearch(query) {
+  function performSearch(query) {
     if (!query || !query.trim()) {
-      showHint();
-      currentResults = [];
-      highlightedIndex = -1;
+      showDiscovery();
       return;
     }
-
     query = query.trim();
 
-    if (!pagefind) {
+    if (!fuse) {
       showLoading();
-      await initPagefind();
-    }
-
-    if (!pagefind) {
-      searchResults.innerHTML = `
-        <div class="search-modal-empty">
-          <div class="search-empty-icon">⚠️</div>
-          <div class="search-empty-text">搜索功能加载失败</div>
-          <div class="search-empty-hint">请刷新页面重试</div>
-        </div>
-      `;
+      loadIndex().then(function() {
+        // 索引就绪后重跑当前输入（避免用陈旧 query）
+        if (searchInput) performSearch(searchInput.value);
+      }).catch(function() {
+        searchResults.innerHTML = '<div class="search-modal-empty">'
+          + '<div class="search-empty-icon">⚠️</div>'
+          + '<div class="search-empty-text">搜索索引加载失败</div>'
+          + '<div class="search-empty-hint">请刷新页面重试</div></div>';
+      });
       return;
     }
 
-    showLoading();
-
-    try {
-      const search = await pagefind.search(query);
-
-      if (!search || !search.results || search.results.length === 0) {
-        showEmpty(query);
-        currentResults = [];
-        highlightedIndex = -1;
-        return;
-      }
-
-      // 获取前 10 条结果的详细数据
-      const results = await Promise.all(
-        search.results.slice(0, 10).map(r => r.data())
-      );
-
-      currentResults = results;
-      highlightedIndex = -1;
-      renderResults(results);
-
-    } catch (e) {
-      console.error('Search error:', e);
-      searchResults.innerHTML = `
-        <div class="search-modal-empty">
-          <div class="search-empty-icon">⚠️</div>
-          <div class="search-empty-text">搜索出错</div>
-          <div class="search-empty-hint">${escapeHtml(e.message)}</div>
-        </div>
-      `;
+    var raw = fuse.search(query, { limit: MAX_RESULTS });
+    if (!raw.length) {
+      showEmpty(query);
+      return;
     }
+    renderResults(raw, query);
   }
 
-  // 渲染搜索结果
-  function renderResults(results) {
+  // ── 按内容类型分组渲染：周报系列（按 series） vs 深度文章 ──
+  function renderResults(raw, query) {
     if (!searchResults) return;
 
-    let html = '';
-    results.forEach((result, index) => {
-      const title = result.meta?.title || result.url?.split('/').pop() || '无标题';
-      const date = result.meta?.date || '';
-      const category = result.meta?.category || '';
-      const excerpt = result.excerpt || '';
-      const url = result.url || '#';
-
-      html += `
-        <a href="${url}" class="search-result-item${index === 0 ? ' highlighted' : ''}" data-index="${index}">
-          <div class="search-result-title">${title}</div>
-          ${date || category ? `<div class="search-result-meta">${date}${date && category ? ' · ' : ''}${category}</div>` : ''}
-          ${excerpt ? `<div class="search-result-excerpt">${excerpt}</div>` : ''}
-        </a>
-      `;
+    // 收集每条结果命中的字段，供高亮
+    var flat = raw.map(function(r) {
+      return { item: r.item, matches: r.matches || [] };
     });
+
+    // 分组：深度文章单列一组，其余按周报系列各成一组
+    var deep = [];
+    var weeklyGroups = {}; // seriesLabel -> [entries]
+    var weeklyOrder = [];
+    flat.forEach(function(e) {
+      if (e.item.seriesSlug === 'deep') {
+        deep.push(e);
+      } else {
+        var key = e.item.series;
+        if (!weeklyGroups[key]) { weeklyGroups[key] = []; weeklyOrder.push(key); }
+        weeklyGroups[key].push(e);
+      }
+    });
+
+    var html = '';
+    currentItems = [];  // 重新建立扁平顺序（用于键盘导航）
+
+    function renderGroup(label, entries) {
+      if (!entries.length) return;
+      html += '<div class="search-group-head">' + escapeHtml(label)
+            + ' <span class="search-group-count">' + entries.length + '</span></div>';
+      entries.forEach(function(e) {
+        var idx = currentItems.length;
+        currentItems.push(e.item);
+        html += renderCard(e, query, idx);
+      });
+    }
+
+    // 深度文章优先展示，再列各周报系列
+    renderGroup('深度文章', deep);
+    weeklyOrder.forEach(function(k) { renderGroup(k, weeklyGroups[k]); });
 
     searchResults.innerHTML = html;
-    highlightedIndex = 0; // 自动高亮第一条
+    highlightedIndex = 0;
+    updateHighlight(false);
 
-    // 绑定点击事件
-    searchResults.querySelectorAll('.search-result-item').forEach(item => {
-      item.addEventListener('click', (e) => {
-        closeSearchModal();
-      });
+    searchResults.querySelectorAll('.search-result-item').forEach(function(item) {
+      item.addEventListener('click', function() { closeSearchModal(); });
     });
+  }
+
+  function renderCard(entry, query, index) {
+    var it = entry.item;
+    var isDeep = it.seriesSlug === 'deep';
+    var titleHtml = highlight(it.title, entry.matches, 'title', query);
+    var excerptHtml = highlight(it.excerpt || '', entry.matches, 'excerpt', query);
+    var badgeClass = 'search-result-badge' + (isDeep ? ' is-deep' : '');
+
+    var html = '<a href="' + escapeHtml(it.url) + '" class="search-result-item" data-index="' + index + '">';
+    html += '<div class="search-result-titlerow">';
+    html += '<div class="search-result-title">' + titleHtml + '</div>';
+    html += '<span class="' + badgeClass + '">' + escapeHtml(it.series) + '</span>';
+    html += '</div>';
+    html += '<div class="search-result-meta">' + escapeHtml(it.dateDisplay || it.date || '') + '</div>';
+    if (it.excerpt) {
+      html += '<div class="search-result-excerpt">' + excerptHtml + '</div>';
+    }
+    if (it.tags && it.tags.length) {
+      html += '<div class="search-result-tags">';
+      it.tags.slice(0, 4).forEach(function(t) {
+        html += '<span class="search-result-tag">#' + escapeHtml(t) + '</span>';
+      });
+      html += '</div>';
+    }
+    html += '</a>';
+    return html;
+  }
+
+  // 高亮命中片段：优先用 Fuse matches 的索引区间；无该字段命中时退回原文转义。
+  function highlight(text, matches, key, query) {
+    text = text == null ? '' : String(text);
+    var m = null;
+    for (var i = 0; i < matches.length; i++) {
+      if (matches[i].key === key && matches[i].indices && matches[i].indices.length) { m = matches[i]; break; }
+    }
+    if (!m) return escapeHtml(text);
+
+    // 仅高亮长度 >=2 的区间（Fuse 会给出零散单字区间，过滤掉噪声）
+    var ranges = m.indices.filter(function(r) { return r[1] - r[0] + 1 >= Math.min(2, query.length); })
+                          .sort(function(a, b) { return a[0] - b[0]; });
+    if (!ranges.length) return escapeHtml(text);
+
+    var out = '';
+    var cursor = 0;
+    ranges.forEach(function(r) {
+      var start = r[0], end = r[1] + 1;
+      if (start < cursor) return; // 跳过重叠
+      out += escapeHtml(text.slice(cursor, start));
+      out += '<mark>' + escapeHtml(text.slice(start, end)) + '</mark>';
+      cursor = end;
+    });
+    out += escapeHtml(text.slice(cursor));
+    return out;
   }
 
   // 更新高亮
-  function updateHighlight() {
-    const items = searchResults.querySelectorAll('.search-result-item');
-    items.forEach((item, index) => {
+  function updateHighlight(doScroll) {
+    var items = searchResults.querySelectorAll('.search-result-item');
+    items.forEach(function(item, index) {
       if (index === highlightedIndex) {
         item.classList.add('highlighted');
-        item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        if (doScroll !== false) item.scrollIntoView({ block: 'nearest' });
       } else {
         item.classList.remove('highlighted');
       }
     });
   }
 
-  // HTML 转义
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
   // 键盘导航
   function handleKeyDown(e) {
     if (!searchModal.classList.contains('active')) return;
-
-    const items = searchResults.querySelectorAll('.search-result-item');
+    var items = searchResults.querySelectorAll('.search-result-item');
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -584,7 +909,7 @@
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (items.length === 0) return;
-      highlightedIndex = Math.max(highlightedIndex - 1, -1);
+      highlightedIndex = Math.max(highlightedIndex - 1, 0);
       updateHighlight();
     } else if (e.key === 'Enter') {
       e.preventDefault();
@@ -601,7 +926,7 @@
 
   // ⌘K / Ctrl+K 快捷键
   function handleGlobalKeyDown(e) {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
       e.preventDefault();
       if (searchModal.classList.contains('active')) {
         closeSearchModal();
@@ -622,12 +947,14 @@
       return;
     }
 
+    // 首帧就把发现面板放进空状态容器
+    showDiscovery();
+
     // 搜索输入事件（防抖）
     searchInput.addEventListener('input', function(e) {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        performSearch(e.target.value);
-      }, 300);
+      var val = e.target.value;
+      debounceTimer = setTimeout(function() { performSearch(val); }, 250);
     });
 
     // 键盘导航
