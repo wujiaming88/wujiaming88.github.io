@@ -10,11 +10,12 @@ layout: default
 
 <!-- 左侧固定目录 -->
 {% unless page.toc == false %}
-<nav class="post-toc" id="post-toc">
-  <div class="toc-header" onclick="toggleToc()">
-    <h3>📑 目录</h3>
-    <span class="toc-toggle" id="toc-toggle">▼</span>
-  </div>
+<nav class="post-toc" id="post-toc" aria-label="目录">
+  <button type="button" class="toc-header" id="toc-toggle" onclick="toggleToc()"
+          aria-expanded="true" aria-controls="toc-body" aria-label="折叠目录">
+    <span class="toc-title">本页内容</span>
+    <span class="toc-chevron" aria-hidden="true"></span>
+  </button>
   <div class="toc-progress"><div class="toc-progress-bar" id="toc-progress-bar"></div></div>
   <div class="toc-body" id="toc-body"></div>
 </nav>
@@ -314,14 +315,13 @@ window.shareData = {
         }
     }
 
+    // 移动端默认折叠（保留展开/折叠交互）
     if (window.innerWidth <= 768) {
         var tb = document.getElementById('toc-body');
         var tt = document.getElementById('toc-toggle');
         if (tb && tt) {
-            tb.classList.add('collapsed');
-            tb.classList.add('mobile-collapsed');
-            tt.classList.add('collapsed');
-            tt.textContent = '▶ 点击展开';
+            tb.classList.add('collapsed', 'mobile-collapsed');
+            tt.setAttribute('aria-expanded', 'false');
         }
     }
 
@@ -360,30 +360,15 @@ window.shareData = {
     });
 })();
 
+// 折叠/展开目录：仅切换 class + aria-expanded，视觉过渡交给 CSS
 function toggleToc() {
     var tocBody = document.getElementById('toc-body');
     var tocToggle = document.getElementById('toc-toggle');
-    if (tocBody.classList.contains('collapsed')) {
-        tocBody.classList.remove('collapsed');
-        tocBody.classList.remove('mobile-collapsed');
-        tocToggle.classList.remove('collapsed');
-        tocToggle.textContent = '▼';
-        tocBody.style.maxHeight = 'calc(100vh - 200px)';
-        tocBody.style.opacity = '1';
-        tocBody.style.padding = '8px 0';
-    } else {
-        tocBody.classList.add('collapsed');
-        tocToggle.classList.add('collapsed');
-        tocBody.style.maxHeight = '0';
-        tocBody.style.opacity = '0';
-        tocBody.style.padding = '0';
-        if (window.innerWidth <= 768) {
-            tocBody.classList.add('mobile-collapsed');
-            tocToggle.textContent = '▶ 点击展开';
-        } else {
-            tocToggle.textContent = '▶';
-        }
-    }
+    if (!tocBody || !tocToggle) return;
+    var collapsed = tocBody.classList.toggle('collapsed');
+    tocBody.classList.toggle('mobile-collapsed', collapsed && window.innerWidth <= 768);
+    tocToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    tocToggle.setAttribute('aria-label', collapsed ? '展开目录' : '折叠目录');
 }
 </script>
 

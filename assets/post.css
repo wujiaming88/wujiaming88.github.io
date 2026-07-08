@@ -604,28 +604,173 @@ article.post .post-content figcaption,
   padding: 1rem;
 }
 
-/* ==================== */
-/* 文章目录 - 桌面端侧栏 */
-/* ==================== */
+/* =====================================================================
+   文章目录 (TOC) — 精致文档式侧栏
+   ---------------------------------------------------------------------
+   设计要点：
+   · 层次靠「导轨(guide rail) + 缩进 + 字重/字色」三重区分，而非单纯字号
+   · 桌面端固定于正文左侧；<1199px 由 JS 内联到封面之后并可折叠
+   · active/hover 用 --accent + color-mix 柔和底色，明暗双主题均取 token
+   · 折叠仅靠 .collapsed class 过渡；chevron 为纯 CSS，无 emoji
+   ===================================================================== */
 .post-toc {
   position: fixed;
   top: 80px;
   left: 20px;
-  width: 220px;
+  width: 232px;
   max-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
   background: transparent;
-  border: none;
-  border-radius: 0;
-  overflow: hidden;
-  box-shadow: none;
-  transition: all 0.3s ease;
   z-index: 100;
 }
 
-.post-toc:hover {
-  box-shadow: none;
+/* 头部：真实 <button>，可访问、可折叠 */
+.toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--sp-1) var(--sp-2) var(--sp-2);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-light);
+  cursor: pointer;
+  color: var(--text-tertiary);
+  font-family: inherit;
+  text-align: left;
+  transition: color var(--dur-fast, 0.15s) var(--ease, ease);
 }
 
+.toc-header:hover { color: var(--text-secondary); }
+.toc-header:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs, 4px);
+}
+
+.toc-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* 纯 CSS chevron：展开指向下，折叠指向右 */
+.toc-chevron {
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transform-origin: center;
+  transition: transform var(--dur, 0.25s) var(--ease, ease);
+  margin-right: 3px;
+}
+
+.toc-header[aria-expanded="false"] .toc-chevron { transform: rotate(-45deg); }
+
+/* 进度条：细，作为导轨顶部的一段 accent */
+.toc-progress {
+  height: 2px;
+  background: var(--border-light);
+  border-radius: var(--radius-pill, 999px);
+  margin: var(--sp-2) 0 var(--sp-1);
+}
+
+.toc-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width 0.15s ease;
+}
+
+/* 目录主体：左侧导轨 + 可滚动 */
+.toc-body {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  opacity: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+  transition: max-height var(--dur-slow, 0.4s) var(--ease, ease),
+              opacity var(--dur, 0.25s) var(--ease, ease);
+}
+
+.toc-body::-webkit-scrollbar { width: 3px; }
+.toc-body::-webkit-scrollbar-track { background: transparent; }
+.toc-body::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-pill, 999px);
+}
+
+/* 折叠态（桌面折叠 & 移动端默认折叠共用） */
+.toc-body.collapsed,
+.toc-body.mobile-collapsed {
+  max-height: 0 !important;
+  opacity: 0;
+}
+
+.toc-body ul { list-style: none; margin: 0; padding: 0; }
+
+/* 导轨：最外层 ul 的一条细竖线，所有 active 指示条都贴在这条线上 */
+.toc-body > ul {
+  border-left: 1.5px solid var(--border-color);
+  padding: var(--sp-1) 0;
+}
+
+/* 链接基线：所有层级共用，active 指示条(-1px)恰好盖住导轨 */
+.toc-body a {
+  display: block;
+  margin-left: -1.5px;
+  border-left: 2px solid transparent;
+  text-decoration: none;
+  line-height: 1.5;
+  transition: color var(--dur-fast, 0.15s) var(--ease, ease),
+              background var(--dur-fast, 0.15s) var(--ease, ease),
+              border-color var(--dur-fast, 0.15s) var(--ease, ease);
+}
+
+.toc-body a:hover {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+/* 层级区分：缩进 + 字色 + 字重（3 级封顶） */
+/* H2 — 主层级：字色最深、字重稍高 */
+.toc-body > ul > li > a {
+  padding: 6px var(--sp-2) 6px var(--sp-4);
+  color: var(--text-primary);
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+/* H3 — 次层级：更浅、缩进一档 */
+.toc-body > ul > li > ul > li > a {
+  padding: 5px var(--sp-2) 5px var(--sp-6);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+/* H4 — 三级：最小、最淡、再缩进 */
+.toc-body > ul > li > ul > li > ul > li > a {
+  padding: 4px var(--sp-2) 4px var(--sp-8);
+  color: var(--text-tertiary);
+  font-size: 0.76rem;
+  font-weight: 400;
+}
+
+/* “你在这里”：accent 竖条 + 主色文字 + 柔和底色 */
+.toc-body a.toc-active {
+  color: var(--accent);
+  font-weight: 600;
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* ---- <1199px：JS 内联到封面之后，卡片化呈现 ---- */
 @media (max-width: 1199px) {
   .post-toc {
     position: relative;
@@ -635,6 +780,7 @@ article.post .post-content figcaption,
     max-width: 800px;
     max-height: none;
     margin: 0 auto 2rem;
+    padding: var(--sp-3) var(--sp-4);
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
@@ -644,144 +790,10 @@ article.post .post-content figcaption,
 
 @media (max-width: 768px) {
   .post-toc {
-    margin: 1.5rem 0 1.5rem 0;
+    margin: 1.5rem 0;
+    padding: var(--sp-3);
     border-radius: var(--radius-md);
   }
-
-  .toc-body.mobile-collapsed {
-    max-height: 0 !important;
-    opacity: 0;
-    padding: 0;
-  }
-}
-
-.toc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4px 10px;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.2s ease;
-  position: sticky;
-  top: 0;
-  background: var(--bg-primary);
-  z-index: 1;
-  border-bottom: 1px solid var(--border-light);
-  margin-bottom: 4px;
-}
-
-.toc-header:hover { opacity: 0.8; }
-
-.toc-header h3 {
-  margin: 0;
-  font-size: 0.72rem;
-  color: var(--text-tertiary);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: none;
-  padding: 0;
-}
-
-.toc-toggle {
-  color: var(--text-tertiary);
-  font-size: 0.68rem;
-  transition: transform 0.3s ease;
-  white-space: nowrap;
-}
-
-.toc-progress {
-  height: 2px;
-  background: var(--border-light);
-  position: sticky;
-  top: 35px;
-  z-index: 1;
-}
-
-.toc-progress-bar {
-  height: 100%;
-  background: var(--accent);
-  width: 0%;
-  transition: width 0.15s ease;
-  border-radius: 1px;
-}
-
-.toc-body {
-  padding: 6px 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: calc(100vh - 180px);
-  opacity: 1;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(203,213,225,0.3) transparent;
-  transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
-}
-
-.toc-body::-webkit-scrollbar { width: 2px; }
-.toc-body::-webkit-scrollbar-track { background: transparent; }
-.toc-body::-webkit-scrollbar-thumb { background: rgba(203,213,225,0.3); border-radius: 2px; }
-
-.toc-body.collapsed {
-  max-height: 0 !important;
-  opacity: 0;
-  padding: 0;
-}
-
-.toc-body ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.toc-body a {
-  display: block;
-  text-decoration: none;
-  transition: all 0.15s ease;
-  line-height: 1.4;
-  border-left: 2px solid transparent;
-}
-
-/* H2 级目录 */
-.toc-body > ul > li > a {
-  padding: 5px 8px 5px 12px;
-  color: var(--text-secondary);
-  font-weight: 500;
-  font-size: 0.78rem;
-  margin: 0;
-}
-
-.toc-body > ul > li > a:hover {
-  color: var(--accent);
-  border-left-color: var(--accent);
-}
-
-/* H3 级目录 */
-.toc-body > ul > li > ul > li > a {
-  padding: 3px 8px 3px 24px;
-  color: var(--text-tertiary);
-  font-size: 0.73rem;
-  font-weight: 400;
-  margin: 0;
-}
-
-.toc-body > ul > li > ul > li > a:hover {
-  color: var(--accent);
-  border-left-color: color-mix(in srgb, var(--accent) 40%, transparent);
-}
-
-/* H4 级目录 */
-.toc-body > ul > li > ul > li > ul > li > a {
-  padding: 2px 8px 2px 36px;
-  color: var(--text-tertiary);
-  font-size: 0.7rem;
-  margin: 0;
-}
-
-.toc-body a.toc-active {
-  color: var(--accent) !important;
-  border-left-color: var(--accent) !important;
-  font-weight: 600 !important;
 }
 
 /* ==================== */
@@ -1149,20 +1161,7 @@ article.post .post-content figcaption,
 .related-post-card { box-shadow: var(--shadow-soft); }
 .related-post-card:hover { box-shadow: var(--shadow-float); transform: translateY(-3px); }
 
-/* —— 14. TOC 精修：active 项左侧高亮条 —— */
-.toc-body a.toc-active {
-  position: relative;
-  font-weight: 600;
-}
-.toc-body a.toc-active::before {
-  content: '';
-  position: absolute;
-  left: -10px; top: 50%;
-  transform: translateY(-50%);
-  width: 3px; height: 1em;
-  border-radius: 2px;
-  background: var(--accent);
-}
+/* —— 14. TOC active 指示条统一在上方「文章目录」区块定义（导轨左边框），此处不再重复 —— */
 
 /* 全站平滑滚动 */
 html { scroll-behavior: smooth; }
