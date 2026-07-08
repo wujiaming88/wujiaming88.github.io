@@ -61,19 +61,6 @@ body.home-page .container {
     margin: 0 auto;
 }
 
-/* 顶部细分隔：一条渐隐横线 + 中央小菱点，呼应站内分隔线语言 */
-.hero-content::before {
-    content: "";
-    display: block;
-    width: 64px;
-    height: 1px;
-    margin: 0 auto 22px;
-    background: linear-gradient(90deg,
-        transparent,
-        color-mix(in srgb, var(--accent) 55%, transparent),
-        transparent);
-}
-
 /* 眉标 / kicker：英文小字 + 字距，建立“刊物名”层次 */
 .hero-title {
     font-family: 'Space Grotesk', var(--font-sans);
@@ -602,8 +589,6 @@ body.home-page .container {
     .hero-section {
         padding: 40px 4px 28px;
     }
-
-    .hero-content::before { margin-bottom: 16px; }
 
     .hero-title {
         font-size: 1.85rem;
