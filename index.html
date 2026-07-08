@@ -1,13 +1,13 @@
 ---
 layout: default
-title: W.ai - 深度技术研究博客
+title: W.ai · 独立 AI 产业研究周刊
 ---
 
 <!-- Hero 区 -->
 <div class="hero-section">
     <div class="hero-content">
-        <h1 class="hero-title">深度技术研究</h1>
-        <p class="hero-subtitle">探索 AI 前沿 · 记录工程实践</p>
+        <h1 class="hero-title">每周，把全球 AI 产业读薄</h1>
+        <p class="hero-subtitle">独立 AI 产业研究周刊 · 不只告诉你发生了什么，更告诉你它意味着什么</p>
         
         <!-- 搜索框 -->
         <div class="search-wrapper">
@@ -29,6 +29,7 @@ title: W.ai - 深度技术研究博客
         </div>
     </div>
 </div>
+
 
 <!-- 精选文章：优先 featured:true，否则取最新 -->
 {% assign featured_post = nil %}
@@ -70,25 +71,45 @@ title: W.ai - 深度技术研究博客
         <span class="more" id="postCount">{{ site.posts.size }} 篇</span>
     </div>
 
-    <!-- 分类筛选条 -->
-    {% assign cat_string = "" %}
+    <!-- 内容类型 / 系列筛选条
+         说明：全站 74/112 篇 category 都是 [AI]，按 category.first 筛选近乎失效。
+         改为按「内容类型 / 周报系列」筛选——系列 slug 由 weekly-category.html 依据
+         front-matter `bucket:` 或文件名路径判定（none = 深度文章）。
+         下方仅渲染「本页实际存在」的系列 chip，避免出现空筛选。 -->
+    {% assign series_string = "" %}
     {% for post in site.posts %}
-      {% if post.categories.size > 0 %}
-        {% assign cat_string = cat_string | append: post.categories.first | downcase | append: "|" %}
-      {% endif %}
+      {% capture sb %}{% include weekly-category.html post=post %}{% endcapture %}
+      {% assign sb = sb | strip %}
+      {% if sb == "none" %}{% assign sb = "deep" %}{% endif %}
+      {% assign series_string = series_string | append: sb | append: "|" %}
     {% endfor %}
-    {% assign cat_list = cat_string | split: "|" | uniq | sort %}
+    {% assign present = series_string | split: "|" | uniq %}
+    {% comment %} 固定展示顺序 + 中文标签映射 {% endcomment %}
+    {% assign order = "deep,dynamic,agent,investment,startup,agent-infra,guanggu" | split: "," %}
     <div class="filter-bar" id="filterBar">
-        <button class="filter-chip active" data-cat="all" onclick="filterPosts(this,'all')">全部</button>
-        {% for c in cat_list %}
-        {% case c %}{% when 'ai' %}{% assign label = 'AI' %}{% when 'openclaw' %}{% assign label = 'OpenClaw' %}{% when 'mcp' %}{% assign label = 'MCP' %}{% else %}{% assign label = c | capitalize %}{% endcase %}
-        <button class="filter-chip" data-cat="{{ c }}" onclick="filterPosts(this,'{{ c }}')">{{ label }}</button>
+        <button class="filter-chip active" data-series="all" onclick="filterPosts(this,'all')">全部</button>
+        {% for s in order %}
+        {% if present contains s %}
+        {% case s %}
+          {% when 'deep' %}{% assign label = '深度文章' %}
+          {% when 'dynamic' %}{% assign label = 'AI 动态周报' %}
+          {% when 'agent' %}{% assign label = 'AI Agent 周报' %}
+          {% when 'investment' %}{% assign label = 'AI 投资周报' %}
+          {% when 'startup' %}{% assign label = 'AI 创业周报' %}
+          {% when 'agent-infra' %}{% assign label = 'AI Agent 基础设施周报' %}
+          {% when 'guanggu' %}{% assign label = '武汉光谷周报' %}
+          {% else %}{% assign label = s %}
+        {% endcase %}
+        <button class="filter-chip" data-series="{{ s }}" onclick="filterPosts(this,'{{ s }}')">{{ label }}</button>
+        {% endif %}
         {% endfor %}
     </div>
 
     <div class="post-grid" id="postList">
         {% for post in site.posts %}
-        <article class="post-card" data-url="{{ post.url | relative_url }}" data-category="{% if post.categories.size > 0 %}{{ post.categories.first | downcase }}{% endif %}">
+        {% capture card_series %}{% include weekly-category.html post=post %}{% endcapture %}
+        {% assign card_series = card_series | strip %}{% if card_series == "none" %}{% assign card_series = "deep" %}{% endif %}
+        <article class="post-card" data-url="{{ post.url | relative_url }}" data-series="{{ card_series }}">
             <a href="{{ post.url | relative_url }}" class="post-card-link">
                 <div class="post-card-img">
                     {% if post.header.overlay_image %}
@@ -135,19 +156,19 @@ title: W.ai - 深度技术研究博客
 
 
 <script>
-function filterPosts(btn, cat) {
+function filterPosts(btn, series) {
     document.querySelectorAll('#filterBar .filter-chip').forEach(function(c){ c.classList.remove('active'); });
     btn.classList.add('active');
     var cards = document.querySelectorAll('#postList .post-card');
     var shown = 0;
     cards.forEach(function(card){
-        var match = (cat === 'all') || (card.getAttribute('data-category') === cat);
+        var match = (series === 'all') || (card.getAttribute('data-series') === series);
         card.classList.toggle('is-hidden', !match);
         if (match) shown++;
     });
     var titleEl = document.getElementById('postListTitle');
     var countEl = document.getElementById('postCount');
-    if (titleEl) titleEl.textContent = (cat === 'all') ? '最新文章' : btn.textContent + ' 文章';
+    if (titleEl) titleEl.textContent = (series === 'all') ? '最新文章' : btn.textContent;
     if (countEl) countEl.textContent = shown + ' 篇';
 }
 </script>

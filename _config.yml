@@ -1,7 +1,7 @@
 ---
 # 站点配置
 title: W.ai
-description: W.ai的深度技术研究博客 | AI技术、深度学习、工程实践
+description: W.ai · 独立 AI 产业研究周刊｜每周把全球 AI 产业读薄
 lang: zh-CN
 timezone: Asia/Shanghai # 与博客作者时区一致,避免UTC时差导致当日文章被当成future post而不生成
 future: true # 允许生成发布日期晚于构建时刻的文章,根治"未来时间被Jekyll静默跳过导致404"(写完即发模式,无需定时占位)

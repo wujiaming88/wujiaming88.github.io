@@ -1,4 +1,5 @@
 ---
+bucket: agent-infra
 layout: single
 title: "全球 AI Agent 基础设施研究周报 · 第 2 期（2026-06-18 ~ 06-24）"
 date: 2026-06-25 10:15:00 +0800

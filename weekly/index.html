@@ -2,7 +2,71 @@
 layout: list
 permalink: /weekly/
 title: 全部周报
-description: AI 动态、Agent、投资与创业公司——所有周报合集
+description: 独立 AI 产业研究周刊——AI 动态、Agent、投资、创业、基础设施与光谷本地六条主线
 list_kind: weekly_all
 sitemap: true
 ---
+
+<div class="series-guide">
+  <div class="series-guide-head">
+    <span class="sg-kicker">从这里开始 · Start Here</span>
+    <p class="sg-lead">W.ai 是一份<strong>独立 AI 产业研究周刊</strong>：下面每条主线固定更新，各看一个切面。深度文章则是对周报里关键议题的展开拆解。挑一条你最关心的主线订阅即可。</p>
+  </div>
+  <div class="series-cards">
+    <a href="{{ '/weekly/dynamic/' | relative_url }}" class="series-card">
+      <h3>AI 动态周报</h3>
+      <p>一周全球 AI 大事：模型发布、政策、行业风向的高信噪比综述。</p>
+      <span class="series-card-go">查看 →</span>
+    </a>
+    <a href="{{ '/weekly/agent/' | relative_url }}" class="series-card">
+      <h3>AI Agent 周报</h3>
+      <p>Agent 框架、编码 Agent 与 Agent 协议的每周观察与解读。</p>
+      <span class="series-card-go">查看 →</span>
+    </a>
+    <a href="{{ '/weekly/investment/' | relative_url }}" class="series-card">
+      <h3>AI 投资周报</h3>
+      <p>融资轮次、估值、IPO 与资本流向——钱在往哪里走。</p>
+      <span class="series-card-go">查看 →</span>
+    </a>
+    <a href="{{ '/weekly/startup/' | relative_url }}" class="series-card">
+      <h3>AI 创业公司周报</h3>
+      <p>新公司、Demo Day、新品发布与早期轮次的一线追踪。</p>
+      <span class="series-card-go">查看 →</span>
+    </a>
+    <a href="{{ '/weekly/agent-infra/' | relative_url }}" class="series-card">
+      <h3>AI Agent 基础设施周报</h3>
+      <p>Agent 运行时与云平台：AgentCore / Vertex / Foundry 的基础设施动态。</p>
+      <span class="series-card-go">查看 →</span>
+    </a>
+    <a href="{{ '/weekly/guanggu/' | relative_url }}" class="series-card">
+      <h3>武汉光谷资讯周报</h3>
+      <p>本地视角：光谷投融资、产业政策、科技创新与营商环境。</p>
+      <span class="series-card-go">查看 →</span>
+    </a>
+  </div>
+</div>
+
+<style>
+.series-guide { margin: 0 0 2.5rem; }
+.series-guide-head { text-align: center; margin-bottom: 1.5rem; }
+.sg-kicker {
+  display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+.sg-lead { max-width: 640px; margin: 0 auto; color: var(--text-secondary); font-size: 0.98rem; line-height: 1.75; }
+.series-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+}
+.series-card {
+  display: flex; flex-direction: column; text-decoration: none; color: inherit;
+  border: 1px solid var(--border-color); border-radius: var(--radius-lg, 16px);
+  background: var(--bg-card); padding: 18px 20px;
+  transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s ease, border-color .22s ease;
+}
+.series-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: var(--shadow-md, 0 8px 28px rgba(0,0,0,.08)); }
+.series-card h3 { font-size: 1.08rem; font-weight: 700; color: var(--text-heading); margin: 0 0 6px; border: none; padding: 0; }
+.series-card p { font-size: 0.86rem; line-height: 1.6; color: var(--text-secondary); margin: 0 0 12px; flex: 1; }
+.series-card-go { font-size: 0.82rem; font-weight: 600; color: var(--accent); }
+@media (max-width: 860px) { .series-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .series-cards { grid-template-columns: 1fr; } }
+</style>

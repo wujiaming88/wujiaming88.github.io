@@ -12,8 +12,16 @@
     {% capture wb %}{% include weekly-category.html post=post %}{% endcapture %}
     {% assign wb = wb | strip %}
 {%- endcomment -%}
+{%- comment -%}
+  优先级：文章 front-matter 显式 `bucket:` > 文件名路径启发式。
+  · 新增系列（agent-infra / guanggu）一律靠显式 `bucket:` 打标——精确控制成员，
+    避免像「光谷全景图谱」这类非周报深度文（filename 含 guanggu）被误扫进周报系列。
+  · 老 4 系列（agent / investment / startup / dynamic）沿用文件名启发式，未打 bucket 也能归位。
+{%- endcomment -%}
+{%- assign fm_bucket = include.post.bucket | default: "" | strip -%}
 {%- assign p = include.post.path | downcase -%}
-{%- if p contains "agent-weekly" -%}agent
+{%- if fm_bucket != "" -%}{{ fm_bucket }}
+{%- elsif p contains "agent-weekly" -%}agent
 {%- elsif p contains "investment-weekly" or p contains "-investment" -%}investment
 {%- elsif p contains "startup-weekly" or p contains "-startup" -%}startup
 {%- elsif p contains "weekly" -%}dynamic

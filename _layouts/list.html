@@ -8,6 +8,12 @@ layout: default
         {% if page.description %}<p class="list-desc">{{ page.description }}</p>{% endif %}
     </header>
 
+    {%- comment -%} 页面正文（如「从这里开始」系列导览卡），有则渲染在 feed 之上 {%- endcomment -%}
+    {%- assign body = content | strip -%}
+    {%- if body != "" -%}
+    <div class="list-intro">{{ content }}</div>
+    {%- endif -%}
+
     {%- assign filtered = "" | split: "" -%}
     {%- for post in site.posts -%}
         {%- capture wb -%}{%- include weekly-category.html post=post -%}{%- endcapture -%}
@@ -82,7 +88,7 @@ layout: default
 .feed-thumb { flex: 0 0 200px; position: relative; overflow: hidden; background: var(--bg-tertiary); }
 .feed-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
 .feed-item:hover .feed-thumb img { transform: scale(1.05); }
-.feed-thumb-ph { width: 100%; height: 100%; min-height: 132px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--accent), var(--accent-light, var(--accent)), var(--accent-cyan, var(--accent))); }
+.feed-thumb-ph { width: 100%; height: 100%; min-height: 132px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--accent) 88%, #000 4%); }
 .feed-thumb-ph span { color: #fff; font-weight: 700; font-size: 1.05rem; opacity: .92; letter-spacing: 1px; }
 .feed-body { flex: 1; padding: 18px 22px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .feed-meta { display: flex; align-items: center; gap: 7px; font-size: 0.76rem; color: var(--text-tertiary); }
