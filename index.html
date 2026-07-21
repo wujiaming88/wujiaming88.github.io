@@ -24,17 +24,96 @@ title: W.ai - 深度技术研究博客
     </div>
 </div>
 
+{% assign recent_weekly_cutoff = site.time | date: '%s' | minus: 604800 %}
+{% assign recent_weekly_count = 0 %}
+{% assign non_weekly_count = 0 %}
+{% for post in site.posts %}
+  {% capture bucket_probe %}{% include weekly-category.html post=post %}{% endcapture %}
+  {% assign bucket_probe = bucket_probe | strip %}
+  {% if bucket_probe == "none" %}
+    {% assign non_weekly_count = non_weekly_count | plus: 1 %}
+  {% else %}
+    {% assign post_ts = post.date | date: '%s' | plus: 0 %}
+    {% if post_ts >= recent_weekly_cutoff %}
+      {% assign recent_weekly_count = recent_weekly_count | plus: 1 %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
 
-<!-- 精选文章：优先 featured:true，否则取最新 -->
+{% if recent_weekly_count > 0 %}
+<!-- 最近一周周报：只展示 7 天内发布的周报，旧周报进入 /weekly/ 归档 -->
+<div class="content-section weekly-section">
+    <div class="section-title weekly-section-title">
+        <span>
+            最近一周周报
+            <small class="section-subtitle">Weekly Briefings</small>
+        </span>
+        <a href="{{ '/weekly/' | relative_url }}" class="more section-link">全部周报 →</a>
+    </div>
+
+    <div class="weekly-board">
+        {% assign weekly_render_index = 0 %}
+        {% for post in site.posts %}
+        {% capture weekly_bucket %}{% include weekly-category.html post=post %}{% endcapture %}
+        {% assign weekly_bucket = weekly_bucket | strip %}
+        {% assign post_ts = post.date | date: '%s' | plus: 0 %}
+        {% if weekly_bucket != "none" and post_ts >= recent_weekly_cutoff %}
+        {% assign weekly_render_index = weekly_render_index | plus: 1 %}
+        {% case weekly_bucket %}
+          {% when 'dynamic' %}{% assign weekly_label = 'AI 动态' %}
+          {% when 'agent' %}{% assign weekly_label = 'AI Agent' %}
+          {% when 'investment' %}{% assign weekly_label = 'AI 投资' %}
+          {% when 'startup' %}{% assign weekly_label = 'AI 创业' %}
+          {% when 'industry' %}{% assign weekly_label = 'AI+产业' %}
+          {% when 'agent-infra' %}{% assign weekly_label = 'Agent 基建' %}
+          {% when 'guanggu' %}{% assign weekly_label = '武汉光谷' %}
+          {% else %}{% assign weekly_label = '周报' %}
+        {% endcase %}
+        <article class="weekly-card{% if weekly_render_index == 1 %} weekly-card-featured{% endif %}">
+            <a href="{{ post.url | relative_url }}" class="weekly-card-link">
+                <div class="weekly-card-img">
+                    {% if post.header.overlay_image %}
+                    <img src="{{ post.header.overlay_image }}" alt="{{ post.title }}" width="520" height="300" loading="lazy">
+                    {% else %}
+                    <div class="weekly-card-img-placeholder"></div>
+                    {% endif %}
+                    <span class="weekly-pill">{{ weekly_label }}</span>
+                </div>
+                <div class="weekly-card-body">
+                    <div class="weekly-card-meta">
+                        <time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%Y.%m.%d' }}</time>
+                        <span>· 最近一周</span>
+                    </div>
+                    <h3 class="weekly-card-title">{{ post.title }}</h3>
+                    <p class="weekly-card-excerpt">{{ post.excerpt | strip_html | truncate: 130 }}</p>
+                </div>
+            </a>
+        </article>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- 精选文章：只从非周报文章中选择，避免和周报区重复 -->
 {% assign featured_post = nil %}
 {% for post in site.posts %}
-  {% if post.featured == true %}
+  {% capture featured_bucket %}{% include weekly-category.html post=post %}{% endcapture %}
+  {% assign featured_bucket = featured_bucket | strip %}
+  {% if featured_bucket == "none" and post.featured == true %}
     {% assign featured_post = post %}
     {% break %}
   {% endif %}
 {% endfor %}
 {% unless featured_post %}
-  {% assign featured_post = site.posts.first %}
+  {% for post in site.posts %}
+    {% capture fallback_bucket %}{% include weekly-category.html post=post %}{% endcapture %}
+    {% assign fallback_bucket = fallback_bucket | strip %}
+    {% if fallback_bucket == "none" %}
+      {% assign featured_post = post %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
 {% endunless %}
 {% if featured_post %}
 <div class="content-section">
@@ -58,40 +137,36 @@ title: W.ai - 深度技术研究博客
 </div>
 {% endif %}
 
-<!-- 最新文章 -->
-<div class="content-section">
+<!-- 最新深度文章：排除所有周报，保持原有 Bento 卡片布局 -->
+<div class="content-section latest-deep-section">
     <div class="section-title">
-        <span><span id="postListTitle">最新文章</span></span>
-        <span class="more" id="postCount">{{ site.posts.size }} 篇</span>
+        <span><span id="postListTitle">最新深度文章</span></span>
+        <span class="more" id="postCount">{{ non_weekly_count }} 篇</span>
     </div>
 
-    <!-- 内容类型 / 系列筛选条
-         说明：全站 74/112 篇 category 都是 [AI]，按 category.first 筛选近乎失效。
-         改为按「内容类型 / 周报系列」筛选——系列 slug 由 weekly-category.html 依据
-         front-matter `bucket:` 或文件名路径判定（none = 深度文章）。
-         下方仅渲染「本页实际存在」的系列 chip，避免出现空筛选。 -->
-    {% assign series_string = "" %}
+    <!-- 非周报文章筛选条：周报已上移到独立区，这里只按深度文章主题筛选 -->
+    {% assign topic_string = "" %}
     {% for post in site.posts %}
-      {% capture sb %}{% include weekly-category.html post=post %}{% endcapture %}
-      {% assign sb = sb | strip %}
-      {% if sb == "none" %}{% assign sb = "deep" %}{% endif %}
-      {% assign series_string = series_string | append: sb | append: "|" %}
+      {% capture weekly_bucket %}{% include weekly-category.html post=post %}{% endcapture %}
+      {% assign weekly_bucket = weekly_bucket | strip %}
+      {% if weekly_bucket == "none" %}
+        {% capture topic_bucket %}{% include post-category.html post=post %}{% endcapture %}
+        {% assign topic_bucket = topic_bucket | strip %}
+        {% assign topic_string = topic_string | append: topic_bucket | append: "|" %}
+      {% endif %}
     {% endfor %}
-    {% assign present = series_string | split: "|" | uniq %}
-    {% comment %} 固定展示顺序 + 中文标签映射 {% endcomment %}
-    {% assign order = "deep,dynamic,agent,investment,startup,agent-infra,guanggu" | split: "," %}
+    {% assign present = topic_string | split: "|" | uniq %}
+    {% assign order = "agent,openclaw,llm,business,other" | split: "," %}
     <div class="filter-bar" id="filterBar">
-        <button class="filter-chip active" data-series="all" onclick="filterPosts(this,'all')">全部</button>
+        <button class="filter-chip active" data-series="all" onclick="filterPosts(this,'all')">全部深度</button>
         {% for s in order %}
         {% if present contains s %}
         {% case s %}
-          {% when 'deep' %}{% assign label = '深度文章' %}
-          {% when 'dynamic' %}{% assign label = 'AI 动态周报' %}
-          {% when 'agent' %}{% assign label = 'AI Agent 周报' %}
-          {% when 'investment' %}{% assign label = 'AI 投资周报' %}
-          {% when 'startup' %}{% assign label = 'AI 创业周报' %}
-          {% when 'agent-infra' %}{% assign label = 'AI Agent 基础设施周报' %}
-          {% when 'guanggu' %}{% assign label = '武汉光谷周报' %}
+          {% when 'agent' %}{% assign label = 'Agent' %}
+          {% when 'openclaw' %}{% assign label = 'OpenClaw' %}
+          {% when 'llm' %}{% assign label = 'LLM / 研究' %}
+          {% when 'business' %}{% assign label = '商业 / 资本' %}
+          {% when 'other' %}{% assign label = '其他' %}
           {% else %}{% assign label = s %}
         {% endcase %}
         <button class="filter-chip" data-series="{{ s }}" onclick="filterPosts(this,'{{ s }}')">{{ label }}</button>
@@ -101,8 +176,11 @@ title: W.ai - 深度技术研究博客
 
     <div class="post-grid" id="postList">
         {% for post in site.posts %}
-        {% capture card_series %}{% include weekly-category.html post=post %}{% endcapture %}
-        {% assign card_series = card_series | strip %}{% if card_series == "none" %}{% assign card_series = "deep" %}{% endif %}
+        {% capture weekly_bucket %}{% include weekly-category.html post=post %}{% endcapture %}
+        {% assign weekly_bucket = weekly_bucket | strip %}
+        {% if weekly_bucket == "none" %}
+        {% capture card_series %}{% include post-category.html post=post %}{% endcapture %}
+        {% assign card_series = card_series | strip %}
         <article class="post-card" data-url="{{ post.url | relative_url }}" data-series="{{ card_series }}">
             <a href="{{ post.url | relative_url }}" class="post-card-link">
                 <div class="post-card-img">
@@ -136,13 +214,11 @@ title: W.ai - 深度技术研究博客
                 </div>
             </a>
         </article>
+        {% endif %}
         {% endfor %}
     </div>
 
-    <!-- 说明：首页故意整篇渲染 site.posts（含全部封面图，均 loading="lazy" 延迟加载），
-         因为上方分类筛选条 filterPosts() 依赖所有卡片在 DOM 中就地隐藏/显示。
-         因此这里不再渲染会误导用户的 paginator 分页导航（点进 /page/2/ 只会重复整份列表）。
-         需要真正的分页归档请见 /articles/。 -->
+    <!-- 说明：首页深度文章仍整篇渲染供分类筛选；周报已独立展示最近 7 天，完整周报归档见 /weekly/。 -->
     <div class="home-archive-link">
         <a href="{{ '/articles/' | relative_url }}" class="page-btn">查看全部文章归档 →</a>
     </div>
@@ -162,11 +238,9 @@ function filterPosts(btn, series) {
     });
     var titleEl = document.getElementById('postListTitle');
     var countEl = document.getElementById('postCount');
-    if (titleEl) titleEl.textContent = (series === 'all') ? '最新文章' : btn.textContent;
+    if (titleEl) titleEl.textContent = (series === 'all') ? '最新深度文章' : btn.textContent;
     if (countEl) countEl.textContent = shown + ' 篇';
 }
 </script>
-
-
 
 

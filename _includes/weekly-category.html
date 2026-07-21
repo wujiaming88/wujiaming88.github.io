@@ -3,6 +3,7 @@
     - agent       → 含 "agent-weekly"
     - investment  → 含 "investment-weekly" 或 "investment"
     - startup     → 含 "startup-weekly" 或 "startup"
+    - industry    → 含 "industry-weekly"
     - dynamic     → 其它周报（global-ai-weekly / global-ai-tech-news-weekly）
 
   Output: bucket slug，无前后空白。
@@ -24,6 +25,7 @@
 {%- elsif p contains "agent-weekly" -%}agent
 {%- elsif p contains "investment-weekly" or p contains "-investment" -%}investment
 {%- elsif p contains "startup-weekly" or p contains "-startup" -%}startup
+{%- elsif p contains "industry-weekly" -%}industry
 {%- elsif p contains "weekly" -%}dynamic
 {%- else -%}none
 {%- endif -%}
