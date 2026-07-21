@@ -234,13 +234,13 @@ body.home-page .container {
 
 .weekly-board {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 18px;
-    margin-bottom: 34px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+    margin-bottom: 28px;
 }
 
 .weekly-card {
-    grid-column: span 3;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
@@ -250,7 +250,7 @@ body.home-page .container {
 }
 
 .weekly-card-featured {
-    grid-column: span 6;
+    grid-column: auto;
 }
 
 .weekly-card:hover {
@@ -269,13 +269,13 @@ body.home-page .container {
 
 .weekly-card-img {
     position: relative;
-    height: 150px;
+    height: 132px;
     overflow: hidden;
     background: var(--bg-tertiary);
 }
 
 .weekly-card-featured .weekly-card-img {
-    height: 240px;
+    height: 132px;
 }
 
 .weekly-card-img img {
@@ -318,11 +318,11 @@ body.home-page .container {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 14px 15px 16px;
+    padding: 12px 14px 14px;
 }
 
 .weekly-card-featured .weekly-card-body {
-    padding: 20px 22px 22px;
+    padding: 12px 14px 14px;
 }
 
 .weekly-card-meta {
@@ -336,7 +336,7 @@ body.home-page .container {
 
 .weekly-card-title {
     color: var(--text-heading);
-    font-size: 0.98rem;
+    font-size: 0.95rem;
     font-weight: 700;
     line-height: 1.42;
     margin: 0 0 8px;
@@ -349,8 +349,8 @@ body.home-page .container {
 }
 
 .weekly-card-featured .weekly-card-title {
-    font-size: 1.32rem;
-    -webkit-line-clamp: 3;
+    font-size: 0.95rem;
+    -webkit-line-clamp: 2;
 }
 
 .weekly-card:hover .weekly-card-title {
@@ -369,8 +369,8 @@ body.home-page .container {
 }
 
 .weekly-card-featured .weekly-card-excerpt {
-    font-size: 0.92rem;
-    -webkit-line-clamp: 3;
+    font-size: 0.84rem;
+    -webkit-line-clamp: 2;
 }
 
 /* 精选文章卡片 - 横向大卡片 */
@@ -759,23 +759,13 @@ body.home-page .container {
 }
 
 @media (max-width: 1180px) {
-    .weekly-card,
-    .weekly-card-featured {
-        grid-column: span 4;
+    .weekly-board {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .weekly-card-img,
     .weekly-card-featured .weekly-card-img {
-        height: 190px;
-    }
-
-    .weekly-card-featured .weekly-card-title {
-        font-size: 1.08rem;
-        -webkit-line-clamp: 2;
-    }
-
-    .weekly-card-featured .weekly-card-excerpt {
-        font-size: 0.84rem;
-        -webkit-line-clamp: 2;
+        height: 126px;
     }
 }
 
@@ -785,14 +775,9 @@ body.home-page .container {
         gap: 14px;
     }
 
-    .weekly-card,
-    .weekly-card-featured {
-        grid-column: span 1;
-    }
-
     .weekly-card-img,
     .weekly-card-featured .weekly-card-img {
-        height: 170px;
+        height: 118px;
     }
 }
 
@@ -826,20 +811,51 @@ body.home-page .container {
 
     .weekly-board {
         grid-template-columns: 1fr;
-        margin-bottom: 28px;
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .weekly-card-link {
+        display: grid;
+        grid-template-columns: 118px minmax(0, 1fr);
+        min-height: 104px;
     }
 
     .weekly-card-img,
     .weekly-card-featured .weekly-card-img {
-        height: 150px;
+        height: 100%;
+        min-height: 104px;
     }
 
+    .weekly-card-body,
     .weekly-card-featured .weekly-card-body {
-        padding: 14px 15px 16px;
+        padding: 10px 12px;
     }
 
+    .weekly-card-title,
     .weekly-card-featured .weekly-card-title {
-        font-size: 0.98rem;
+        font-size: 0.9rem;
+        line-height: 1.35;
+        margin-bottom: 0;
+        -webkit-line-clamp: 2;
+    }
+
+    .weekly-card-excerpt,
+    .weekly-card-featured .weekly-card-excerpt {
+        display: none;
+    }
+
+    .weekly-card-meta {
+        font-size: 0.72rem;
+        margin-bottom: 5px;
+    }
+
+    .weekly-pill {
+        left: 8px;
+        bottom: 8px;
+        max-width: calc(100% - 16px);
+        padding: 4px 8px;
+        font-size: 0.68rem;
     }
 
     .post-grid {
