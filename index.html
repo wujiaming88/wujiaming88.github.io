@@ -59,6 +59,8 @@ title: W.ai - 深度技术研究博客
         {% assign post_ts = post.date | date: '%s' | plus: 0 %}
         {% if weekly_bucket != "none" and post_ts >= recent_weekly_cutoff %}
         {% assign weekly_render_index = weekly_render_index | plus: 1 %}
+        {% if weekly_render_index == 2 %}<div class="weekly-side-list">{% endif %}
+        {% if weekly_render_index == 5 %}</div><div class="weekly-strip">{% endif %}
         {% case weekly_bucket %}
           {% when 'dynamic' %}{% assign weekly_label = 'AI 动态' %}
           {% when 'agent' %}{% assign weekly_label = 'AI Agent' %}
@@ -69,7 +71,7 @@ title: W.ai - 深度技术研究博客
           {% when 'guanggu' %}{% assign weekly_label = '武汉光谷' %}
           {% else %}{% assign weekly_label = '周报' %}
         {% endcase %}
-        <article class="weekly-card{% if weekly_render_index == 1 %} weekly-card-featured{% endif %}">
+        <article class="weekly-card{% if weekly_render_index == 1 %} weekly-card-lead{% elsif weekly_render_index < 5 %} weekly-card-row{% else %} weekly-card-mini{% endif %}">
             <a href="{{ post.url | relative_url }}" class="weekly-card-link">
                 <div class="weekly-card-img">
                     {% if post.header.overlay_image %}
@@ -91,6 +93,7 @@ title: W.ai - 深度技术研究博客
         </article>
         {% endif %}
         {% endfor %}
+        {% if weekly_render_index >= 5 %}</div>{% elsif weekly_render_index >= 2 %}</div>{% endif %}
     </div>
 </div>
 {% endif %}
@@ -242,5 +245,4 @@ function filterPosts(btn, series) {
     if (countEl) countEl.textContent = shown + ' 篇';
 }
 </script>
-
 
