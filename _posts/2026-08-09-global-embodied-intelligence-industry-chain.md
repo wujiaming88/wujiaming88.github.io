@@ -1,5 +1,4 @@
 ---
-bucket: agent-infra
 layout: single
 title: "全球具身智能产业链全景：从物理供应链到机器人智能系统"
 date: 2026-08-09 23:30:00 +0800
