@@ -1,5 +1,6 @@
 ---
 layout: single
+bucket: embodied
 title: "具身智能机会雷达周报 · 第 1 期（2026-08-04 ~ 2026-08-10）"
 date: 2026-08-11 12:00:00 +0800
 categories: [AI]

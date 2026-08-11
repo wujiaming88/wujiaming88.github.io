@@ -68,6 +68,7 @@ title: W.ai - 深度技术研究博客
           {% when 'startup' %}{% assign weekly_label = 'AI 创业' %}
           {% when 'industry' %}{% assign weekly_label = 'AI+产业' %}
           {% when 'agent-infra' %}{% assign weekly_label = 'Agent 基建' %}
+          {% when 'embodied' %}{% assign weekly_label = '具身智能' %}
           {% when 'guanggu' %}{% assign weekly_label = '武汉光谷' %}
           {% else %}{% assign weekly_label = '周报' %}
         {% endcase %}
@@ -245,4 +246,3 @@ function filterPosts(btn, series) {
     if (countEl) countEl.textContent = shown + ' 篇';
 }
 </script>
-
