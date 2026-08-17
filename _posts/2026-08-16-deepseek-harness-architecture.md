@@ -1,5 +1,4 @@
 ---
-bucket: agent-infra
 layout: single
 title: "DeepSeek Harness 精读：当 Agent 的模型、循环、会话与 UI 都成为插件"
 date: 2026-08-16 03:12:00 +0800
