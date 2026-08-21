@@ -2,6 +2,7 @@
 layout: single
 title: "全球 AI+产业结合研究周报 · 第 7 期（2026-08-14 ~ 2026-08-20）"
 date: 2026-08-21 10:00:00 +0800
+permalink: /ai-industry-weekly/2026-08-21/
 categories: [AI]
 tags: [AI产业, 工业智能, 企业AI, AI4S, 医疗AI, 数字政府, AI政策]
 header:
