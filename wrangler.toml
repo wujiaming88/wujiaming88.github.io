@@ -1,8 +1,10 @@
 name = "wujiaming88"
 compatibility_date = "2026-08-25"
+main = "src/index.js"
 
 [assets]
 directory = "./_site"
+binding = "ASSETS"
 not_found_handling = "404-page"
 
 [observability]
