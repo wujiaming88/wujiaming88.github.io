@@ -10,23 +10,29 @@
  * 防刷：同一访客（IP+UA 指纹）对同一 path，30 分钟内只 +1 一次（KV TTL 去重锁）。
  *
  * 环境变量（在 Worker Settings → Variables 设置）：
- *   ALLOW_ORIGIN   允许的来源，默认 https://wujiaming88.github.io
+ *   ALLOW_ORIGINS  允许的来源，逗号分隔；默认允许 GitHub Pages 与 Cloudflare 博客域名
+ *   ALLOW_ORIGIN   旧版单来源变量，继续兼容
  *   ADMIN_TOKEN    /api/pv/all 导出接口的访问令牌（自己设一个随机串）
  *
  * KV 绑定：
  *   PAGEVIEWS      Namespace 绑定（在 Settings → Variables → KV Namespace Bindings 添加）
  */
 
-const DEFAULT_ORIGIN = "https://wujiaming88.github.io";
+const DEFAULT_ORIGINS = [
+  "https://wujiaming88.github.io",
+  "https://wujiaming88.garming-wu.workers.dev",
+];
 const DEDUP_TTL = 1800; // 30 分钟去重窗口（秒）
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const origin = env.ALLOW_ORIGIN || DEFAULT_ORIGIN;
+    const requestOrigin = request.headers.get("Origin") || "";
+    const origin = allowedOrigin(requestOrigin, env);
 
     // CORS 预检
     if (request.method === "OPTIONS") {
+      if (!origin) return json({ error: "origin not allowed" }, 403);
       return cors(new Response(null, { status: 204 }), origin);
     }
 
@@ -111,10 +117,24 @@ function json(obj, status = 200) {
   });
 }
 
+function allowedOrigin(requestOrigin, env) {
+  const configured = [env.ALLOW_ORIGINS, env.ALLOW_ORIGIN]
+    .filter(Boolean)
+    .flatMap((value) => value.split(","))
+    .map((value) => value.trim().replace(/\/$/, ""))
+    .filter(Boolean);
+  const allowlist = new Set([...DEFAULT_ORIGINS, ...configured]);
+
+  // 非浏览器调用通常没有 Origin；返回规范主站域名即可。
+  if (!requestOrigin) return DEFAULT_ORIGINS[0];
+  return allowlist.has(requestOrigin.replace(/\/$/, "")) ? requestOrigin : "";
+}
+
 function cors(res, origin) {
-  res.headers.set("Access-Control-Allow-Origin", origin);
+  if (origin) res.headers.set("Access-Control-Allow-Origin", origin);
   res.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  res.headers.append("Vary", "Origin");
   res.headers.set("Cache-Control", "no-store");
   return res;
 }

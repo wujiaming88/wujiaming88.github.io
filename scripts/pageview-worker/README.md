@@ -24,8 +24,9 @@
 1. **KV Namespace Bindings → Add**
    - Variable name 必须填：`PAGEVIEWS`
    - Namespace 选第二步建的 `blog-pageviews`
-2. **Environment Variables → Add**（可选但推荐）
-   - `ALLOW_ORIGIN` = `https://wujiaming88.github.io`
+2. **Environment Variables → Add**（可选；代码已默认允许两个正式博客域名）
+   - `ALLOW_ORIGINS` = `https://wujiaming88.github.io,https://wujiaming88.garming-wu.workers.dev`
+   - 旧版 `ALLOW_ORIGIN` 仍兼容，但新配置优先使用支持逗号分隔的 `ALLOW_ORIGINS`
    - `ADMIN_TOKEN` = 自己设一个随机串（用于导出数据接口，别泄露）
 3. 保存后 **Deploy**。
 
