@@ -2,6 +2,10 @@ _site
 .sass-cache
 .jekyll-cache
 .jekyll-metadata
+.wrangler
+.bundle
+node_modules
+coverage
 vendor
 jekyll_server.log
 *.log
