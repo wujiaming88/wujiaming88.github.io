@@ -5,6 +5,9 @@ date: 2026-08-25 07:34:00 +0800
 categories: [AI]
 tags: [AI Agent, DeepSeek, Harness, Agent Self-Evolution]
 excerpt: "DeepSeek Harness 为什么把一切都设计成插件？从 Agent Harness 的组成、三种开发流派与时空可组合性，理解它为自进化预留的架构。"
+header:
+  overlay_image: /assets/images/posts/2026-08-25-deepseek-harness-translation-header.png
+  overlay_filter: 0.25
 toc: true
 toc_sticky: true
 ---
