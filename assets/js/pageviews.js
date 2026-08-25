@@ -7,13 +7,9 @@
 (function () {
   var el = document.getElementById("pv-count");
   if (!el) return;
-  var configuredApi = (document.body && document.body.getAttribute("data-pv-api")) || "";
-  // Cloudflare 镜像通过本站 Worker 同源代理，避免浏览器跨域预检；
-  // GitHub Pages 继续直连阅读量 Worker。
-  var api = location.hostname === "wujiaming88.garming-wu.workers.dev"
-    ? location.origin
-    : configuredApi;
+  var api = (document.body && document.body.getAttribute("data-pv-api")) || "";
   if (!api) return; // 未配置 Worker 地址：徽章保持隐藏，不报错
+  var isCloudflareMirror = location.hostname === "wujiaming88.garming-wu.workers.dev";
 
   var path = el.getAttribute("data-pv-path") || location.pathname;
 
@@ -27,13 +23,22 @@
     }
   }
 
-  fetch(api.replace(/\/$/, "") + "/api/pv", {
+  var options = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ path: path }),
     keepalive: true,
-  })
-    .then(function (r) { return r.ok ? r.json() : null; })
+  };
+
+  if (isCloudflareMirror) {
+    // PV Worker 当前只给 GitHub Pages 返回 CORS 读权限。镜像站使用 no-cors
+    // 简单请求继续写入计数，避免预检失败和控制台 CORS 报错；响应不可读，故隐藏徽章。
+    options.mode = "no-cors";
+  } else {
+    options.headers = { "Content-Type": "application/json" };
+  }
+
+  fetch(api.replace(/\/$/, "") + "/api/pv", options)
+    .then(function (r) { return isCloudflareMirror ? null : (r.ok ? r.json() : null); })
     .then(function (d) { render(d && typeof d.views === "number" ? d.views : null); })
     .catch(function () { render(null); });
 })();
