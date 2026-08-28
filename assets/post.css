@@ -13,7 +13,7 @@ article.post {
 /* 文章头部 */
 /* ==================== */
 article.post .post-header {
-  margin-bottom: var(--sp-7);   /* 2.5rem */
+  margin-bottom: 3.25rem;
   text-align: center;
   padding: var(--sp-8) 0 0;     /* 3rem */
   border-bottom: none;
@@ -22,12 +22,12 @@ article.post .post-header {
 
 article.post .post-header h1,
 article.post .post-header .post-title {
-  font-size: 2.1rem;
+  font-size: clamp(2.375rem, 4.2vw, 3rem);
   font-weight: 800;
   color: var(--text-heading);
   line-height: 1.25;
   letter-spacing: -0.03em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.35rem;
   word-wrap: break-word;
   overflow-wrap: break-word;
   border: none;
@@ -86,7 +86,7 @@ article.post .post-header .post-tags span {
 }
 
 .post-cover:hover img {
-  transform: scale(1.02);
+  transform: scale(1.01);
 }
 
 .post-cover::after {
@@ -362,7 +362,7 @@ article.post .post-content img,
   border-radius: var(--radius-lg);
   margin: 2rem auto;
   display: block;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
 article.post .post-content figure { margin: 1.5rem 0; }
@@ -548,9 +548,9 @@ article.post .post-content figcaption,
 }
 
 .related-post-card:hover {
-  border-color: var(--accent);
+  border-color: color-mix(in srgb, var(--text-secondary) 32%, var(--border-color));
   transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 7px color-mix(in srgb, var(--text-heading) 6%, transparent);
 }
 
 .related-post-image {
@@ -581,7 +581,7 @@ article.post .post-content figcaption,
   overflow: hidden;
 }
 
-.related-post-card:hover .related-post-title { color: var(--accent); }
+.related-post-card:hover .related-post-title { color: var(--text-heading); }
 
 .related-post-meta,
 .related-post-date {
@@ -590,8 +590,9 @@ article.post .post-content figcaption,
 }
 
 .related-post-category {
-  background: var(--tag-bg);
-  color: var(--tag-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--hairline);
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
   font-size: 0.72rem;
@@ -802,7 +803,7 @@ article.post .post-content figcaption,
 @media (max-width: 768px) {
   article.post .post-header h1,
   article.post .post-header .post-title {
-    font-size: 1.5rem;
+    font-size: clamp(1.625rem, 7vw, 1.875rem);
   }
 
   article.post .post-content,
@@ -858,7 +859,7 @@ article.post .post-content figcaption,
 
   article.post .post-header h1,
   article.post .post-header .post-title {
-    font-size: 1.35rem;
+    font-size: 1.625rem;
   }
 }
 
@@ -1123,12 +1124,12 @@ article.post .post-content figcaption,
 
 /* —— 8. 图片/封面：柔和分层阴影 + 描边 —— */
 .post-content img {
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--text-heading) 6%, transparent);
   border: 1px solid var(--border-light);
 }
 .post-cover {
-  box-shadow: var(--shadow-float);
-  border: 1px solid var(--border-light);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--text-heading) 7%, transparent);
+  border: 1px solid var(--hairline);
 }
 
 /* —— 9. 分隔线：见文件末尾"全局隐藏正文分隔线"权威规则（此处旧的菱形点缀/单线定义已移除，
@@ -1158,8 +1159,11 @@ article.post .post-content figcaption,
 
 /* —— 13. 卡片类区块统一柔和阴影 —— */
 .post-bottom-section,
-.related-post-card { box-shadow: var(--shadow-soft); }
-.related-post-card:hover { box-shadow: var(--shadow-float); transform: translateY(-3px); }
+.related-post-card { box-shadow: 0 1px 2px color-mix(in srgb, var(--text-heading) 4%, transparent); }
+.related-post-card:hover {
+  box-shadow: 0 2px 7px color-mix(in srgb, var(--text-heading) 6%, transparent);
+  transform: translateY(-2px);
+}
 
 /* —— 14. TOC active 指示条统一在上方「文章目录」区块定义（导轨左边框），此处不再重复 —— */
 
@@ -1230,9 +1234,7 @@ html { scroll-behavior: smooth; }
 .related-posts { border-color: var(--hairline) !important; }
 
 /* —— C. 少用徽章：正文头部只留"阅读时长"，难度/阅读量徽章弱化 —— */
-/* 难度徽章默认隐藏（标准模版里不在正文头堆徽章；如需可单篇开启） */
-.meta-badges--header .meta-badge--diff { display: none; }
-/* 头部徽章整体更轻：去边框、降存在感，像元信息而非标签 */
+/* 头部元信息整体更轻：保留难度/时长/阅读量，但呈现为文本而非标签 */
 .meta-badges--header .meta-badge {
   background: transparent;
   border: none;

@@ -27,19 +27,16 @@ layout: default
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
     <div class="post-meta">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        📅 {{ page.date | date: '%Y年%m月%d日' }}
+        {{ page.date | date: '%Y年%m月%d日' }}
       </time>
       {% if page.author %}
-        <span>•</span>
         <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <span class="p-author h-card" itemprop="name">👤 {{ page.author }}</span>
+          <span class="p-author h-card" itemprop="name">{{ page.author }}</span>
         </span>
       {% endif %}
       {% if page.categories %}
-        <span>•</span>
-        <span>📂 {{ page.categories | join: ', ' }}</span>
+        <span>{{ page.categories | join: ', ' }}</span>
       {% endif %}
-      <span>•</span>
       {% include post-meta-badges.html post=page style="header" %}
     </div>
   </header>
@@ -62,9 +59,9 @@ layout: default
   <!-- 文章标签（移至正文末尾，避免首屏拥挤）-->
   {% if page.tags %}
   <div class="post-tags post-bottom-section" style="display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center;">
-    <span style="font-size: 0.85rem; color: var(--text-muted, #888); margin-right: 0.3rem;">🏷️ 标签：</span>
+    <span style="font-size: 0.85rem; color: var(--text-muted, #888); margin-right: 0.3rem;">标签：</span>
     {% for tag in page.tags %}
-    <span style="background: var(--tag-bg); color: var(--tag-color); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem;">#{{ tag }}</span>
+    <span style="background: var(--bg-tertiary); color: var(--text-secondary); border: 1px solid var(--hairline); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem;">#{{ tag }}</span>
     {% endfor %}
   </div>
   {% endif %}
