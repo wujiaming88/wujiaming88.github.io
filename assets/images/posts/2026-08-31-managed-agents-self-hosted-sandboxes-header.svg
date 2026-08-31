@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Managed Agents 控制平面与自托管执行平面示意图</title>
+  <desc id="desc">暖色版画风格插画。左侧是 Anthropic 托管的编排控制平面，中间是工作队列，右侧是企业边界内的自托管沙箱、文件、工具和内部服务。</desc>
+  <defs>
+    <pattern id="paper" width="34" height="34" patternUnits="userSpaceOnUse">
+      <rect width="34" height="34" fill="#f4e7cc"/>
+      <path d="M0 8h34M0 25h34" stroke="#5e4a35" stroke-opacity=".035"/>
+      <circle cx="7" cy="17" r="1" fill="#5e4a35" fill-opacity=".06"/>
+    </pattern>
+    <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(24)">
+      <path d="M0 0v14" stroke="#f4e7cc" stroke-opacity=".24" stroke-width="3"/>
+    </pattern>
+    <filter id="rough" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0l10 5-10 5z" fill="#b84b34"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#paper)"/>
+  <circle cx="132" cy="98" r="58" fill="#d39a2f" opacity=".82"/>
+  <path d="M0 742c236-49 370 31 552 8 197-26 325-117 543-77 192 35 336 113 505 45v182H0z" fill="#5c704a"/>
+  <path d="M0 807c190-55 363 31 558 11 222-23 355-91 584-58 196 29 310 61 458 27v113H0z" fill="#27332d" opacity=".92"/>
+
+  <!-- left control plane -->
+  <g filter="url(#rough)">
+    <path d="M92 232l420-44 70 58v413l-70 55-420-37z" fill="#b84b34" stroke="#292f2a" stroke-width="12"/>
+    <path d="M92 232l420-44v489L92 677z" fill="url(#hatch)" opacity=".72"/>
+    <path d="M142 284h312v301H142z" fill="#f4e7cc" stroke="#292f2a" stroke-width="10"/>
+    <path d="M184 338h217M184 396h217M184 454h140M184 512h184" fill="none" stroke="#292f2a" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="491" cy="294" r="35" fill="#d39a2f" stroke="#292f2a" stroke-width="9"/>
+    <path d="M471 294l15 15 28-36" fill="none" stroke="#292f2a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M205 631h194" stroke="#f4e7cc" stroke-width="15" stroke-linecap="round" opacity=".9"/>
+  </g>
+
+  <!-- queue bridge -->
+  <g filter="url(#rough)">
+    <path d="M565 437h393" fill="none" stroke="#292f2a" stroke-width="18" stroke-linecap="round"/>
+    <path d="M583 417h356" fill="none" stroke="#d39a2f" stroke-width="10" stroke-dasharray="20 18" marker-end="url(#arrow)"/>
+    <g transform="translate(655 342)">
+      <path d="M0 0h122v82H0z" fill="#f4e7cc" stroke="#292f2a" stroke-width="8"/>
+      <path d="M5 6l56 43 56-43" fill="none" stroke="#b84b34" stroke-width="8"/>
+    </g>
+    <g transform="translate(806 473) rotate(-5)">
+      <path d="M0 0h108v72H0z" fill="#f4e7cc" stroke="#292f2a" stroke-width="8"/>
+      <path d="M5 6l49 38 49-38" fill="none" stroke="#b84b34" stroke-width="8"/>
+    </g>
+    <circle cx="762" cy="437" r="63" fill="none" stroke="#5c704a" stroke-width="13" stroke-dasharray="14 12"/>
+  </g>
+
+  <!-- enterprise boundary -->
+  <g filter="url(#rough)">
+    <path d="M985 151h496v569H985z" fill="#5c704a" stroke="#292f2a" stroke-width="14"/>
+    <path d="M1019 193h428v486h-428z" fill="#f4e7cc" stroke="#292f2a" stroke-width="10"/>
+    <path d="M1044 193v-57h78v57M1162 193v-57h78v57M1280 193v-57h78v57M1397 193v-57h50v57" fill="#5c704a" stroke="#292f2a" stroke-width="10"/>
+    <path d="M1062 590h334v89h-334z" fill="#27332d"/>
+    <!-- server racks -->
+    <g fill="#b84b34" stroke="#292f2a" stroke-width="8">
+      <path d="M1070 255h103v224h-103z"/><path d="M1292 255h103v224h-103z"/>
+    </g>
+    <g stroke="#f4e7cc" stroke-width="8" stroke-linecap="round">
+      <path d="M1091 296h60M1091 345h60M1091 394h60M1313 296h60M1313 345h60M1313 394h60"/>
+    </g>
+    <g fill="#d39a2f" stroke="#292f2a" stroke-width="7">
+      <circle cx="1101" cy="447" r="12"/><circle cx="1323" cy="447" r="12"/>
+    </g>
+    <!-- robot worker -->
+    <circle cx="1232" cy="342" r="60" fill="#d39a2f" stroke="#292f2a" stroke-width="10"/>
+    <rect x="1181" y="400" width="102" height="128" rx="22" fill="#b84b34" stroke="#292f2a" stroke-width="10"/>
+    <circle cx="1211" cy="334" r="9" fill="#292f2a"/><circle cx="1253" cy="334" r="9" fill="#292f2a"/>
+    <path d="M1207 365h50M1181 433l-71 52M1283 433l72 52M1205 528l-35 62M1259 528l35 62" fill="none" stroke="#292f2a" stroke-width="13" stroke-linecap="round"/>
+    <path d="M1232 282v-31" stroke="#292f2a" stroke-width="10"/><circle cx="1232" cy="242" r="12" fill="#d39a2f" stroke="#292f2a" stroke-width="7"/>
+    <!-- internal service database -->
+    <ellipse cx="1110" cy="616" rx="47" ry="17" fill="#d39a2f" stroke="#292f2a" stroke-width="7"/>
+    <path d="M1063 616v36c0 10 21 17 47 17s47-7 47-17v-36" fill="#d39a2f" stroke="#292f2a" stroke-width="7"/>
+    <!-- file icon -->
+    <path d="M1325 596h54l32 32v42h-86z" fill="#f4e7cc" stroke="#292f2a" stroke-width="7"/>
+    <path d="M1379 596v32h32" fill="none" stroke="#292f2a" stroke-width="7"/>
+  </g>
+
+  <!-- boundary labels as abstract glyph bars, no text -->
+  <g fill="#27332d" opacity=".85">
+    <rect x="132" y="103" width="290" height="16" rx="8"/>
+    <rect x="1070" y="83" width="325" height="16" rx="8"/>
+  </g>
+  <g fill="#b84b34">
+    <circle cx="109" cy="111" r="15"/><circle cx="1045" cy="91" r="15"/>
+  </g>
+</svg>
