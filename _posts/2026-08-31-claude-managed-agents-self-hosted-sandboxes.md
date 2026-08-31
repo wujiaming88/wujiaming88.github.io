@@ -1,6 +1,5 @@
 ---
 layout: single
-bucket: agent-infra
 title: "Claude Managed Agents：把 Agent 编排交给平台，把执行边界留在自己手里"
 date: 2026-08-31 11:41:00 +0800
 categories: [AI]
