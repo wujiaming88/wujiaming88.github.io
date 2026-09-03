@@ -147,7 +147,7 @@ Agent eval 不再只是离线报表，而在变成生产 trace 的可追溯分�
 
 Agent eval 还需区分 attempt、logical turn、retry、cancel、zombie 与 final outcome；只记录 HTTP 200/500 会遗漏 JSON-RPC error、policy deny 和 async completion。OTel 给出互操作方向，但并未替开发者定义数据最小化与执行阻断。
 
-[LangSmith](https://smith.langchain.com/)、[Helicone](https://github.com/Helicone/helicone/releases)、[AgentOps](https://github.com/agentops-ai/agentops/releases)、[Braintrust](https://www.braintrust.dev/)、[Arize Phoenix](https://github.com/Arize-ai/phoenix/releases)与 [Coze Loop](https://github.com/coze-dev/coze-loop)本期未核到窗口内强 release。Google、Microsoft、AWS 已把 observability/evaluation、identity 与 runtime 放进统一 managed control plane，但本周也未核到更强的平台 release。
+[LangSmith](https://smith.langchain.com/)、[Helicone](https://github.com/Helicone/helicone/releases)、[AgentOps](https://github.com/agentops-ai/agentops/releases)、[Braintrust](https://www.braintrust.dev/)、[Arize Phoenix](https://github.com/Arize-ai/phoenix/releases)与 Coze Loop 本期未核到窗口内强 release。Google、Microsoft、AWS 已把 observability/evaluation、identity 与 runtime 放进统一 managed control plane，但本周也未核到更强的平台 release。
 
 ## 七、七家平台：同一能力图，不同默认哲学
 
