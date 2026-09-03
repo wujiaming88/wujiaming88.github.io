@@ -25,6 +25,39 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
+      - name: Validate post front matter and header images
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path.cwd()
+          failures = []
+          for post in sorted((root / "_posts").glob("*.md")):
+              raw = post.read_bytes()
+              if not raw.startswith(b"---\n"):
+                  failures.append(f"{post}: front matter must start at byte zero")
+                  continue
+              text = raw.decode("utf-8", errors="replace")
+              end = text.find("\n---\n", 4)
+              if end == -1:
+                  failures.append(f"{post}: closing front matter delimiter missing")
+                  continue
+              front = text[4:end]
+              match = re.search(r'^\s*overlay_image:\s*["\']?([^"\'\s#]+)', front, re.M)
+              if not match:
+                  failures.append(f"{post}: header.overlay_image missing")
+                  continue
+              overlay = match.group(1)
+              image = root / overlay.lstrip("/")
+              if not image.is_file() or image.stat().st_size == 0:
+                  failures.append(f"{post}: missing or empty overlay image {overlay}")
+
+          if failures:
+              raise SystemExit("\n".join(failures))
+          print("All post front matter and header images are valid.")
+          PY
+
       - name: Build Jekyll
         run: bundle exec jekyll build
         env:
