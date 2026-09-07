@@ -8,11 +8,6 @@ header:
   overlay_filter: 0.35
 ---
 
-# 全球 AI Agent 周报：竞争转向长时、可恢复、可授权与可采购
-
-![全球 AI Agent 周报头图：多 Agent 协作、恢复、权限与企业控制面](/assets/images/posts/2026-09-07-global-ai-agent-weekly.png)
-
-
 > **观察窗口：** 2026-08-31 00:00—2026-09-06 24:00（Asia/Shanghai）  
 > **证据口径：** A=官方 release/spec/docs；B=厂商 benchmark、经营披露或项目自测；C=可靠媒体、官方社媒、合作方或近似快照；D=preprint/未双源线索。partial、strict、binary 以及不同 harness、预算和 scaffold 不混比；stars 不是用户数，ARR 不是客户 ROI。
 
