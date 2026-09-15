@@ -70,7 +70,8 @@ OpenAI 于 2026 年 9 月 10 日推出公开 beta 的 Agents API，开放 Codex 
 
 *图 2｜控制面与执行面边界示意图。根据 [OpenAI Architecture](https://developers.openai.com/api/docs/guides/agents-api/architecture)与 [Claude 自托管沙箱指南](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes)整理，2026-09-15。自托管改变工具执行位置，不意味着所有数据留在本地。*
 
-<span class="legacy-anchor" id="执行环境的选择"></span>
+### 执行环境的选择
+{: #执行环境的选择}
 
 OpenAI 提供三种环境模式：`none` 没有自己的 Linux 工作区，但可以调用远程 MCP 和应用 function tools，工具驱动的任务未必需要完整沙箱；`openai_hosted` 由 OpenAI 准备 Linux 环境，支持预装 packages、初始文件、setup commands、skills 和 plugins；`self_hosted` 则由应用管理环境与 executor，适用于私网、定制镜像和特殊计算资源。
 
@@ -81,6 +82,9 @@ Claude Managed Agents 提供 `cloud` 与 `self_hosted` 两种环境，可使用�
 <span class="legacy-anchor" id="codex-不只对应编码"></span>
 
 两项服务都支持持续会话、上下文压缩和追加输入以继续或引导工作，Claude 还明确提供中断与临时错误重调度。这些能力减少运行系统的维护负担，并不取消应用对任务成败的责任。OpenAI 虽然使用 Codex harness，官方示例却不限于编码，还覆盖事故调查、Slack 工作助手、数据分析、GitHub 问题调查与文档审阅：复用的是持续运用工具、文件和代码的能力。<a href="#ref-o1">[O1]</a><a href="#ref-o2">[O2]</a>
+
+### 工具调用与多 Agent 协作
+{: #工具调用与多-agent-协作}
 
 <span class="legacy-anchor" id="能力工具效率与多-agent"></span>
 
@@ -142,6 +146,9 @@ Claude coordinator 只能委派**一层**，roster 最多 **20 种 Agent**，最
 
 ## 权限与恢复的边界
 
+### 授权、凭据与数据合规
+{: #授权凭据与数据合规}
+
 <span class="legacy-anchor" id="安全权限不随托管消失"></span>
 
 托管工具执行，不等于替应用决定业务授权。Claude 的权限策略有 `always_allow`、`always_ask` 和 `auto`；内置 agent toolset 默认允许，MCP 默认询问。`auto` 是平台自动判断，可能直接放行，并非人工审批。**Custom tools 不受这些策略治理，授权与审批仍由应用实现**；OpenAI function tools 同样由应用处理。<a href="#ref-o9">[O9]</a><a href="#ref-a6">[A6]</a>
@@ -155,6 +162,9 @@ Claude 除 MCP Vault 外，还在云环境变量中提供 opaque placeholder：�
 <span class="legacy-anchor" id="自托管不改变-zdr-资格"></span>
 
 数据合规须落实到具体产品端点与合同。OpenAI Agents API 当前仅支持美国 data residency、不支持 ZDR，自托管不会改变这项资格；Claude Managed Agents 同样不支持 ZDR，也不适用 HIPAA BAA 覆盖。基础模型 API 的资格不能直接推到托管服务，工具在内网运行也不代表内容不会进入厂商控制面。<a href="#ref-o2">[O2]</a><a href="#ref-a1">[A1]</a>
+
+### 故障恢复与交付
+{: #故障恢复与交付}
 
 <span class="legacy-anchor" id="恢复会话沙箱与业务结果"></span>
 
