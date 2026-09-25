@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Jev 工程：别再拿 LLM 去做每一个决定"
-date: 2026-09-25 14:20:00 +0800
+date: 2026-09-25 14:30:00 +0800
 categories: [AI]
 tags: [AI Agent, Jev, TypeSafe, System One, 决策模型, Model Routing, Harness Engineering, Guardrail, 翻译]
 header:
@@ -1018,7 +1018,7 @@ turns judgment into controlled action
 
 - **原文标题**：Jev Engineering: Stop Using LLMs for Every Decision
 - **作者**：rari（X: [@0xwhrrari](https://x.com/0xwhrrari)，Substack: [whrrari.substack.com](https://whrrari.substack.com/)）；文中引用的发布者推文来自 Diogo Almeida（[@CompleteSkeptic](https://x.com/CompleteSkeptic)）与 TypeSafe AI（[@typesafeai](https://x.com/typesafeai)）
-- **原文链接**：<https://x.com/0xwhrrari/status/2102020016539324501>（长文实体：<https://x.com/i/article/2101963175180582912>）
+- **原文链接**：<https://x.com/0xwhrrari/status/2102020016539324501>（长文实体：<https://x.com/0xwhrrari/article/2102020016539324501>）
 - **发布/最后修改**：2026-09-21（UTC）
 - **抓取日期**：2026-09-25（Asia/Shanghai）
 - 本文为中文翻译，**版权归原作者**。译文保留原文的代码块、字段名、命令与 JSON 原样不译；原文的 3 张正文配图与 1 张头图原样保留（英文信息图），原文中嵌入的两条推文按可读的静态引述方式落地。
