@@ -13,7 +13,7 @@ toc: true
 toc_sticky: true
 ---
 
-*本文译自 rari（[@0xwhrrari](https://x.com/0xwhrrari)）的长文《Jev Engineering: Stop Using LLMs for Every Decision》，原文链接与版权声明见文末。代码块、字段名、命令与 JSON 保持原文不译。*
+*本文译自 rari（[@0xwhrrari](https://x.com/0xwhrrari)）的长文《Jev Engineering: Stop Using LLMs for Every Decision》，[原文链接在此](https://x.com/0xwhrrari/article/2102020016539324501)（完整出处与版权声明见文末）。代码块、字段名、命令与 JSON 保持原文不译。*
 
 ![原文头图：JEV ENGINEERING —— 模型与循环之间的快速判断层](/assets/images/posts/2026-09-25-jev-engineering-original-cover.jpg)
 
