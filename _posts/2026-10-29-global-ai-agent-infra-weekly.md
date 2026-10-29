@@ -134,48 +134,19 @@ Google 的动作是 10 月 26 日的意图匹配开关。Microsoft Foundry 在�
 | 腾讯云 | 上下文超时清空（10 月，未标日） | 记忆库（9 月背景） | MCP Apps（9 月背景） | AgentPortal（10-19，窗外） | Claw 云盘（窗外） | 无条目 | 窗内无日期条目 |
 | Databricks | 未取得 | 无条目 | ai_enrich 外部 MCP（Beta，10 月档） | 外部 Agent 默认 OAuth GA（10 月档） | 未取得 | MCP 越狱筛查（Beta，10 月档） | 数据平台补 Agent 安全 |
 
-## 对比表
+## 本周 vs 上周
 
-| 模块 | 产品/厂商 | 版本或日期 | 变化 | 是否破坏性 |
-|---|---|---|---|---|
-| Harness | OpenClaw | 2026.10.7（10-25） | replay-safe 会话恢复，保留恢复溯源与未完成工具结果 | 否 |
-| Harness | OpenClaw | 2026.10.8（10-28） | 被 kill 的 run 释放恢复 fence；沙箱子进程不能跑宿主 CLI | 否 |
-| Harness | OpenClaw | 2026.9.34 / 9.35（10-24 / 10-27） | extended-stable（LTS 等价）轨道，安全修复下放 | 否 |
-| Harness | OpenClaw | 2026.10.10-beta.4（10-27） | 定时跟进保留 operator 权限；hooks.token 不下放子进程 | 否 |
-| Harness | Anthropic Claude Agent SDK / Claude Code | TS v0.3.307–312、Py v0.2.171–174、v2.1.307–312 | safety_event 遥测；按缓存寿命拆 token | 否 |
-| Harness | Dify | 1.18.0 | Agent run protocol v2；本地 sandbox token 必填 | 是 |
-| Harness | Microsoft Agent Framework | python-1.23.0 / dotnet-1.26.0 | MCP 2.x、参数更名、AG-UI scope 显式化 | 是 |
-| Harness | Google ADK | v2.13.0（10-22） | 默认 OTel GenAI v2，移除 call_llm span；Mongo 会话/记忆 | 是 |
-| Harness | LangGraph / langchain-core | 1.2.17–1.2.18 / 1.7.0 | 快照频率默认 1000→100；流式工具参数事件变化 | 是（core） |
-| Harness | pydantic-ai | v2.60–v2.63 | PostgresSpendStore 共享预算；护栏关闭 fail-open | 否 |
-| Runtime | a2a-python | 1.3.0 | 超时释放挂起的中断任务 | 否 |
-| Runtime | AWS AgentCore Runtime | 10 月档 | FUSE 挂载 | 否 |
-| Sandbox | E2B | 2.59.0（10-23） | dnsServers 闭合 DNS 出站 | 否 |
-| Sandbox | E2B | 2.60.0（10-26） | 按 Should-Retry 头重试，发送后网络错误不重试 | 行为变化 |
-| Sandbox | E2B | 2.61.0（10-27） | Sandbox.create 幂等键 | 否 |
-| Sandbox | Browserbase | 10-22 / 10-27 | 1Password 人批填充；Authenticated Fetch | 否 |
-| Sandbox | Claude Code | v2.1.309 | 修复沙箱外 shell 启动文件、symlink 绕过 denyWrite、改写 --mcp-config | 否 |
-| Sandbox | agent-browser | v0.39.3 / v0.40.0 | 项目配置信任边界；存储恢复不暴露 token | 是（配置） |
-| Sandbox | AWS AgentCore | 10-23 | Web Search 域名过滤与用户位置 | 否 |
-| Gateway | AWS AgentCore Gateway | 10-22 | InvokeModel 方言翻译、有序 fallback、默认熔断 | 否 |
-| Gateway | MCP TS SDK | v2.4.0（10-24） | Skills over MCP（SEP-2640）；-32020；scopeForRefresh | 否 |
-| Gateway | MCP Registry | v1.8.2–v1.8.6 | 生产容量与诊断 | 否 |
-| Gateway | Composio | core 0.27.0（10-22） | session hooks，blocked 结果 | 是（proxyExecute） |
-| Gateway | Arcade | 1.12.0 Preview | 响应凭证脱敏；拒绝内网出站 | 否 |
-| Gateway | mcp-gateway-registry | 1.34.0 | Entra 组恢复；证书链处理 | 否 |
-| Identity | Google 语义治理 | 10-26 | sgpUserIntentMatching 开关 | 否 |
-| Identity | Claude apps gateway | 窗内 | oidc.user_id_claim | 否 |
-| Identity | Databricks | 10 月档 | 外部 Agent 默认 OAuth GA | 否 |
-| Memory | OpenViking | v0.5.2 → v0.5.2.1 | 隐私自动识别上线 4 天后关闭；Working Memory 默认关 | 行为回滚 |
-| Memory | Cognee | v1.6.6rc1 | history purge 失败即失败；删 dataset 连带清理 | 行为变化 |
-| Memory | Zep | 10 月 | HIPAA 默认关 Graph Assistant；边类型层级 | 否 |
-| Observability | Langfuse | v4.68.0–v4.71.0 | AI Gateway；Skills 追踪与版本 | 否 |
-| Observability | Phoenix | 20.25 / evals 3.9.3 | issue-to-PR factory；排除被入侵 litellm 1.107.0 | 否 |
-| Observability | AgentCore SDK | 1.25.0（10-24） | 评估已有 session；RecommendationClient | 否 |
-| Platform | 火山方舟 | 10-22 | Responses API 兼容 apply_patch、namespace/defer_loading | 否 |
-| Platform | OpenAI API | 10-24 | Enterprise Key Management；英国数据驻留 | 否 |
-| Platform | Anthropic | 10-22 | Google Cloud 托管 | 否 |
-| Platform | 阿里云百炼 | 10-26 摘要 | 上新 11 款 MCP 服务 | 否 |
+| 主线 | 上周（第18期） | 本周 | 走向 |
+|---|---|---|---|
+| 恢复与重试 | 会话能否可靠中断与恢复；LangGraph 修 resume，OpenClaw 仅本机观测 | OpenClaw 2026.10.7、2026.10.8 replay-safe 恢复；E2B 2.60.0/2.61.0 重试与幂等 | 升温 |
+| 网关 | Foundry Tool Search/A2A，Arcade 工具推荐 | AWS Gateway 收进模型流量；Composio session hooks；MCP TS SDK v2.4.0 Skills over MCP | 新出现 |
+| 凭证 | 浏览器 fail-closed | agent-browser 连续第二周 fail-closed；Browserbase 与 1Password；Arcade 转向自托管安全基线 | 延续 |
+| 升级成本 | MAF 持久化兼容警告 | Dify 1.18.0、MAF python-1.23.0 三项 BREAKING、ADK v2.13.0；OpenClaw 开出 LTS 轨 | 升温 |
+| 记忆 | OpenViking v0.5.1 上下文数据库；AWS 记忆 TTL | OpenViking v0.5.2/0.5.2.1 隐私识别上线即回滚；删除语义收紧 | 延续 |
+| 可观测 | AWS 失败分析 | Claude Code safety_event（Anthropic 一手 releases 首次取得）；ADK 默认 OTel GenAI v2 | 新出现 |
+| 平台 | Foundry Routines/Tool Search/A2A | Foundry 静默；Google 意图匹配开关；方舟 API 兼容公告 | 降温 |
+
+上一期 TOP5 是 Foundry Routines/Tool Search/A2A、AWS 失败分析与 TTL、OpenViking 上下文数据库、Arcade 工具推荐、浏览器 fail-closed；本期只有 AWS 和浏览器安全两条线延续进前列，重心从"平台收编调度与评测"转到"恢复、重试与策略执行点"。升温的是 OpenClaw 与 E2B 这条恢复链，降温的是 OpenAI Agents SDK（本周无版本）、Microsoft Foundry 与 Daytona（GitHub 主仓已归档）。
 
 ## 对你意味着什么
 
@@ -190,15 +161,6 @@ Google 的动作是 10 月 26 日的意图匹配开关。Microsoft Foundry 在�
 - **做记忆层的团队**：OpenViking 的回滚说明，"自动改写记忆内容"需要先在影子模式验证。删除接口应当失败即失败，并能报告删了什么。
 - **安全团队**：本周 eMudhra/emSign 根证书撤信、litellm 1.107.0 被入侵分别被多个项目独立处理，建议把这两项加入依赖与证书基线检查。
 
-## 周环比
-
-对比第 18 期（10-22）：
-
-- **延续**：OpenClaw 从本机观测变成公开 release，恢复主题延续并深化；AWS AgentCore 从失败分析、记忆 TTL、私有 CA 推进到 Gateway 模型流量；LangGraph 从 resume 修复推进到快照频率与线程优先级；Microsoft Agent Framework 从持久化兼容警告推进到三项 BREAKING；OpenViking 从 v0.5.1 到 v0.5.2/0.5.2.1；agent-browser 连续第二周 fail-closed；E2B 从生命周期参数推进到重试与幂等；Arcade 从工具推荐转向自托管安全基线。
-- **新出现**：Anthropic 一手 releases（上期未取得）；Composio session hooks；MCP Skills over MCP；Dify 1.18.0；Google ADK 2.13.0（上期空窗）；Browserbase 与 1Password；Google 意图匹配开关；方舟 API 兼容公告；OpenClaw LTS 轨。
-- **降温**：OpenAI Agents SDK 本周无版本；Microsoft Foundry 在 Routines 等 GA 之后静默；Daytona 本周无动态，GitHub 主仓已归档；supermemory、Graphiti 本周无窗内版本。
-
-上一期 TOP5 是 Foundry Routines/Tool Search/A2A、AWS 失败分析与 TTL、OpenViking 上下文数据库、Arcade 工具推荐、浏览器 fail-closed。本期只有 AWS 和浏览器安全两条线延续进前列，重心从"平台收编调度与评测"转到"恢复、重试与策略执行点"。
 ## 来源
 
 - OpenClaw releases：[v2026.10.8](https://github.com/openclaw/openclaw/releases/tag/v2026.10.8)、[v2026.10.7](https://github.com/openclaw/openclaw/releases/tag/v2026.10.7)、[v2026.9.35](https://github.com/openclaw/openclaw/releases/tag/v2026.9.35)、[v2026.9.34](https://github.com/openclaw/openclaw/releases/tag/v2026.9.34)、[v2026.10.10-beta.4](https://github.com/openclaw/openclaw/releases/tag/v2026.10.10-beta.4)
