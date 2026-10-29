@@ -11,157 +11,126 @@ tags:
   - MCP
   - Agent Memory
 bucket: agent-infra
+excerpt: "窗口 2026-10-22 ~ 10-28｜第 19 期：恢复和重试时，已发生的副作用不再发生第二次；策略执行点下沉到工具网关。"
 header:
   overlay_image: /assets/images/posts/2026-10-29-agent-infra-cover.png
   overlay_filter: 0.35
 toc: true
 toc_sticky: true
+toc_label: "本期目录"
 ---
-2026-10-29 发布｜覆盖 2026-10-22 ~ 2026-10-28｜第 19 期
+**本周主线：Agent 基础设施的门槛从"会话能否恢复"推进到"恢复和重试时，已经发生过的副作用不会再发生一次"。**
 
-上一期的关键词是"会话能否可靠中断与恢复"。这一周，问题往前推了一步：**恢复和重试的时候，已经发生过的副作用会不会再发生一次**。OpenClaw 连续两个版本把 replay-safe 会话恢复放在头条，E2B 把"要不要重试"交给服务端声明并给沙箱创建加上幂等键，AWS AgentCore Gateway 给模型流量加了有序 fallback 和默认熔断。与此同时，Dify、Microsoft Agent Framework、Google ADK、OpenViking 在同一周发出需要迁移的破坏性变更，升级本身成了运维成本的一部分。
-
-第二条线是**策略执行点往工具网关和 SDK 契约里下沉**。Composio 的 session hooks 能在工具执行前、以及结果回到 Agent 之前把调用拦下；Claude Code 把安全事件写进遥测；Google 把语义治理里的意图匹配做成可审计开关；agent-browser 第二周继续 fail-closed，这次收紧的是项目配置的信任边界。
-
-本期按软件栈的八个层次整理窗口内可核的版本、PR 与官方公告，再给出云厂能力矩阵、五个信号最强的变化、与上一期的对比，以及对自建与采购团队的编辑建议。事实以官方 release、文档与公告为准；厂商自述数字保留其口径；月级归档、窗口外条目与未取得正文的材料单独标注，不当作本周事件。
+上一期解决的是会话能否可靠中断与恢复。本周 OpenClaw 把 replay-safe 会话恢复放上头条，E2B 让服务端声明能否重试并给沙箱创建加幂等键，AWS AgentCore Gateway 给模型流量加了有序 fallback 和默认熔断。第二条线是策略执行点正下沉到工具网关和 SDK 契约；代价是 Dify、Microsoft Agent Framework、Google ADK、OpenViking 同周发出需要迁移的变更，升级本身成了运维成本。
 
 ## 本周 TOP 5
 
-### 1. OpenClaw：replay-safe 会话恢复成为头条，同时开出 LTS 轨
+### 1. OpenClaw：replay-safe 会话恢复，并开出 LTS 轨
 
-[2026.10.7](https://github.com/openclaw/openclaw/releases/tag/v2026.10.7)（10 月 25 日）的第一条 Highlight 是 Replay-safe session recovery：被中断的会话会保留恢复溯源（recovery provenance）和未完成的工具结果；已停止的会话在接收下一条消息前，先清掉终态恢复留下的残留；大批量子会话的完成结果被控制在请求方上下文之内。这一组改动涉及 #153728、#168764、#172068、#177716 等 9 个 PR。同版还处理了数据库与 worker 连续性（维护被拒时保留 peer readers/borrowers，不兼容的保留 agent 数据库被隔离），以及备份恢复的可中断续做。
-
-三天后的 [2026.10.8](https://github.com/openclaw/openclaw/releases/tag/v2026.10.8)（10 月 28 日）接着处理"恢复之后还能不能继续收消息"：被 kill 的 run 会释放 restart-recovery fence，中断的子会话和刚被接受的子会话在重启后恢复，回复运行时无法发布时入站消息不再无限重试。更新后的 Doctor 普通失败改为重启 Gateway 而不是停机，孤儿维护 worker 不再阻塞所有 CLI/Gateway 启动。安全加固方面，沙箱内派生的子进程不能再运行宿主 CLI 后端（#178742），secret egress proxy 拒绝不受信的 eMudhra 证书链（#179249）。
-
-另一条结构性变化是发布节奏。[2026.9.34](https://github.com/openclaw/openclaw/releases/tag/v2026.9.34)（10 月 24 日）与 [2026.9.35](https://github.com/openclaw/openclaw/releases/tag/v2026.9.35)（10 月 27 日）被官方定义为 gateway-only extended-stable release，原文称其为 "our current equivalent to LTS"：基于 9 月底的代码线，只叠加关键安全、可靠性修复与新模型支持。9.35 里有不少运维者会在意的条目，比如 `test -v` 这类 exec 操作数在 allowlist 模式下需要审批（#180880），`openclaw mcp list/show` 与日志对凭证脱敏（#183193 等），Claude CLI 输出达上限时快速失败，不再卡 15 分钟。
-
-为什么排第一：上一期 OpenClaw 的 CHANGELOG 没有发布日，只能作为本机观测；本期公开 release 完整计入窗口，证据等级是 A。更重要的是，"恢复不重放"和"主线 + LTS 双轨"两件事合在一起，回答的是同一个采购问题：一个自托管 Harness 能不能被长期持有，而不是每周追着升级。
+- **事实**：[2026.10.7](https://github.com/openclaw/openclaw/releases/tag/v2026.10.7)（10 月 25 日）头条为 Replay-safe session recovery：中断的会话保留恢复溯源（recovery provenance）与未完成的工具结果，已停止的会话在接收下一条消息前先清掉终态恢复残留（涉及 #153728、#168764、#172068、#177716 等 9 个 PR）。[2026.10.8](https://github.com/openclaw/openclaw/releases/tag/v2026.10.8)（10 月 28 日）让被 kill 的 run 释放 restart-recovery fence，回复运行时无法发布时入站消息不再无限重试；沙箱内子进程不能再运行宿主 CLI 后端（#178742）。[2026.9.34](https://github.com/openclaw/openclaw/releases/tag/v2026.9.34) / [2026.9.35](https://github.com/openclaw/openclaw/releases/tag/v2026.9.35)（10 月 24 / 27 日）被官方定义为 gateway-only extended-stable，原文称 "our current equivalent to LTS"，只叠加关键安全、可靠性修复与新模型支持。
+- **为什么重要**："恢复不重放"加"主线 + LTS 双轨"，回答同一个采购问题：自托管 Harness 能否被长期持有，而不必每周追升级。
+- **证据级**：A（上期 CHANGELOG 无发布日只能作本机观测，本期公开 release 完整计入窗口）。
 
 ### 2. AWS AgentCore Gateway：模型流量进入 Agent 网关
 
-AWS What's New 在 10 月 22 日 16:00（北京时间）发布了 [AgentCore Gateway 的 InvokeModel 与模型 fallback](https://aws.amazon.com/about-aws/whats-new/2026/10/agentcore-gateway-invokemodel-fallback/)。Gateway 原本面向工具（MCP 目标、Lambda、OpenAPI）；这次它开始接收模型调用：InvokeModel 请求可以和 OpenAI、Anthropic 方言双向翻译，流式响应会重新分帧；用 `matchModels` 选目标后按有序 fallback 链切换，每个目标可以设首字节超时，熔断默认开启。
-
-同月的 [AgentCore release notes](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/release-notes.html) 还列出 CLI v1.0（含 identity 命令）、Step Functions 到 MCP 的连接器、Runtime 的 FUSE 挂载。这几条是月级归档，没有逐条标日，本文只写"10 月"，不算作本周确定事件。窗口内能精确定日的另一条是 Web Search 工具的域名过滤与用户位置参数（10 月 23 日）。SDK 侧，[bedrock-agentcore-sdk-python v1.25.0](https://github.com/aws/bedrock-agentcore-sdk-python/releases/tag/v1.25.0)（10 月 24 日）支持对已有 session 做评估，并加入 RecommendationClient。
-
-为什么重要：多模型容灾和成本路由过去写在应用代码里，现在可以在控制面配置；工具和模型共用同一个策略点、计量点和审计点。上一期 AWS 的重点是失败分析、记忆 TTL 和私有 CA，这一期它把"流量"收进来，Agent 网关的边界因此明显变大。
+- **事实**：10 月 22 日 16:00（北京时间）发布 [InvokeModel 与模型 fallback](https://aws.amazon.com/about-aws/whats-new/2026/10/agentcore-gateway-invokemodel-fallback/)。原本面向工具（MCP 目标、Lambda、OpenAPI）的 Gateway 开始接收模型调用：InvokeModel 与 OpenAI、Anthropic 方言双向翻译，流式响应重新分帧；`matchModels` 选目标后按有序 fallback 链切换，每个目标可设首字节超时，熔断默认开启。
+- **为什么重要**：多模型容灾与成本路由从应用代码移到控制面，工具与模型共用同一个策略点、计量点和审计点。上期 AWS 的重点是失败分析、记忆 TTL 与私有 CA，本期它把"流量"收进网关。
+- **证据级**：A。
 
 ### 3. E2B：重试与幂等写进沙箱协议
 
-E2B SDK 一周三个版本，方向一致。2.59.0（10 月 23 日）新增 `dnsServers`，可以把沙箱的 DNS 出站闭合到指定解析器；2.60.0（10 月 26 日）改为按服务端返回的 `Should-Retry` 头决定是否重试，请求已经发出后遇到的网络错误不再自动重试；[2.61.0](https://github.com/e2b-dev/E2B/releases/tag/e2b%402.61.0)（10 月 27 日）给 `Sandbox.create` 加上 `Idempotency-Key`。
-
-这三条拼起来是一套完整的契约：客户端不再自行猜测"失败了没有"，服务端告诉它能不能重来；就算重来，同一个键也不会创建出第二个沙箱。过去这类重复创建、重复计费、重复副作用通常靠应用层兜底，现在由基础设施承担。
-
-为什么进 TOP5：它和 OpenClaw 的 replay-safe 恢复正好构成链条的两端。Harness 记录哪些工具调用已经完成，下游执行环境保证同一请求只生效一次，"只执行一次"才有可能端到端成立。
+- **事实**：2.59.0（10 月 23 日）新增 `dnsServers` 闭合 DNS 出站；2.60.0（10 月 26 日）按服务端 `Should-Retry` 头决定是否重试，请求发出后的网络错误不再自动重试；[2.61.0](https://github.com/e2b-dev/E2B/releases/tag/e2b%402.61.0)（10 月 27 日）给 `Sandbox.create` 加 `Idempotency-Key`。
+- **为什么重要**：客户端不再猜"失败了没有"，重来也不会创建第二个沙箱；重复创建、重复计费、重复副作用从应用层兜底变为基础设施承担。它与 OpenClaw 构成链条两端：Harness 记录哪些调用已完成，执行环境保证同一请求只生效一次。
+- **证据级**：A。
 
 ### 4. Composio session hooks：工具网关成为策略执行点
 
-Composio core 0.27.0（10 月 22 日）引入 session hooks，可以在两个位置拦截：工具执行之前，以及工具结果到达 Agent 之前。条件可以用自然语言写，被拦下的调用返回 `resultType: 'blocked'`。这也带来一处行为变化：`proxyExecute` 的权限闸和返回结构跟着改了，依赖旧返回值的代码需要检查。
-
-同一周，Arcade 1.12.0 Preview 让工具响应自动脱敏本次调用使用的凭证，并拒绝解析到内网地址的出站主机；Claude Code 新增 `claude_code.safety_event` 遥测事件；pydantic-ai 关闭了 `InputGuardrail` 的 fail-open 行为。
-
-为什么重要：工具治理过去主要是"连接器有没有权限"，现在开始按调用内容和结果内容裁决。结果侧的拦截点尤其关键，因为提示注入和凭证回显往往出现在工具返回的数据里，而不是调用参数里。
+- **事实**：core 0.27.0（10 月 22 日）可在工具执行前、以及结果到达 Agent 前拦截，条件可用自然语言写，被拦调用返回 `resultType: 'blocked'`；`proxyExecute` 的权限闸与返回结构随之变化，依赖旧返回值的代码需检查。
+- **为什么重要**：工具治理从"连接器有没有权限"转向按调用与结果内容裁决。结果侧拦截尤其关键，因为提示注入和凭证回显往往出现在工具返回的数据里。
+- **证据级**：A。
 
 ### 5. MCP TypeScript SDK v2.4.0：Skills over MCP 落地
 
-[MCP TS SDK v2.4.0](https://github.com/modelcontextprotocol/typescript-sdk/releases/tag/v2.4.0)（10 月 24 日）实现 SEP-2640：技能以 MCP 资源的形式发布，客户端会校验大小、摘要和 SKILL.md 的 frontmatter；在 2026-07-28 版规范下，资源还带 `ttlMs`、`cacheScope` 等缓存字段。同一版本里，`x-mcp-header` 的数字参数按规范返回 -32020 错误码，并为 Entra 加入 `scopeForRefresh`，处理刷新时的 AADSTS90009 问题。
+- **事实**：[v2.4.0](https://github.com/modelcontextprotocol/typescript-sdk/releases/tag/v2.4.0)（10 月 24 日）实现 SEP-2640：技能以 MCP 资源发布，客户端校验大小、摘要与 SKILL.md frontmatter；在 2026-07-28 版规范下资源带 `ttlMs`、`cacheScope` 缓存字段。规范本身本周无新版。
+- **为什么重要**：工具与技能首次走同一条协议通道，技能供应链有了协议级完整性校验；内部技能库可以像 MCP server 一样被注册、缓存和审计。
+- **证据级**：A。
 
-[MCP Registry](https://github.com/modelcontextprotocol/registry/releases) 在 v1.8.2 到 v1.8.6 之间集中做生产容量与诊断。规范本身本周没有新版本，最新仍是 `2026-07-28`。
+## 恢复与重试：副作用只发生一次成为新门槛
 
-为什么重要：工具和技能的分发第一次走同一条协议通道，技能供应链也第一次有了协议级的完整性校验。对维护内部技能库的团队，这意味着技能可以像 MCP server 一样被注册、缓存和审计，不必各家 Harness 各搞一套格式。
+**结论：Runtime 竞争的焦点从"能否恢复"转向"恢复和重试时副作用是否只发生一次"。** 这要求运行时记录每个工具调用的完成状态，也要求下游提供幂等语义——OpenClaw 与 E2B 本周从两端补上了这条链（见 TOP5 第 1、3 条）。
 
-**次强观察**（未进 TOP5）：OpenViking v0.5.2 上线 Session 隐私自动识别，4 天后的 v0.5.2.1 因误判暂时关闭（记忆层的反例）；Dify 1.18.0 的 Agent run protocol v2 不向后兼容；Google 语义治理的意图匹配开关（10 月 26 日）；Browserbase 与 1Password 的人批填充（10 月 22 日）；4 个独立项目在同一周适配 Microsoft Entra。
+其他证据指向同一方向：[a2a-python 1.3.0](https://github.com/a2aproject/a2a-python/releases/tag/v1.3.0) 让挂起的中断任务超时后被释放；Dify 1.18.0 由上层协调嵌套 workflow 的暂停、恢复与停止；OpenClaw [2026.10.10-beta.4](https://github.com/openclaw/openclaw/releases/tag/v2026.10.10-beta.4)（10 月 27 日）让同会话内的定时跟进保留已认证 operator 的权限，同时保留撤销边界（#176422）。
 
-## 控制层：恢复语义与升级成本
+会话状态也在离开框架自带的 checkpoint：AgentCore Runtime 支持 FUSE 挂载（10 月月级归档，未标日），ADK 加入 `MongoDbSessionService`，OpenViking 加入 durable content write task。状态落到文件系统与通用数据库后，备份、迁移和审计可以复用企业已有工具。
 
-Harness 层本周的共同主题是两件事：中断之后能不能安全地重放，以及升级本身要付出多少迁移成本。
+**它改变了什么**：上一期修的是 resume 本身的缺陷，这一期修的是 resume 的副作用。评估 Harness 时，"工具调用完成状态是否一等记录"应成为必问项。
 
-OpenClaw 已在 TOP5 展开。另外值得记一笔的是 [2026.10.10-beta.4](https://github.com/openclaw/openclaw/releases/tag/v2026.10.10-beta.4)（10 月 27 日）：同一会话内的显式定时跟进（包括 one-shot `next_check` 重新挂载）会保留已认证 operator 的权限，同时保留角色、会话、取消、目标和工具策略的撤销边界（#176422）；通过环境变量引用的 `hooks.token` 不再进入 agent host-exec 与 CLI 子进程的环境（#179199）。前者解决"定时任务一醒来就没权限"，后者防止钩子令牌被子进程顺手带走。
+## 网关合流：工具、模型与技能共用一个策略点
 
-Anthropic 本周第一次有完整一手数据。Claude Agent SDK TypeScript v0.3.307 到 v0.3.312、Python v0.2.171 到 v0.2.174、Claude Code v2.1.307 到 v2.1.312 都在窗口内。值得关注的是两类字段：一是遥测里的 `claude_code.safety_event`，二是成本归因——SDK 按 5 分钟与 1 小时两档缓存寿命拆分 token 统计。平台侧，[Claude release notes](https://docs.claude.com/en/release-notes/overview) 记录 10 月 22 日在 Google Cloud 上的托管可用。
+**结论：工具与技能的分发在合流到 MCP，工具调用与模型调用的流量在合流到同一个网关；谁掌握网关，谁就掌握策略、计量与审计点。**
 
-LangGraph [1.2.18](https://github.com/langchain-ai/langgraph/releases/tag/1.2.18) 一类的版本把 DeltaChannel 快照频率的默认值从 1000 调到 100：读取更快，存储更多，长线程的成本曲线会变。[langchain-core 1.7.0](https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.7.0) 修改了流式工具参数事件，依赖旧事件结构的前端需要检查。LangSmith 本周没有取到独立条目。
+三个方向同时逼近这个位置：AWS 从模型流量（TOP5 第 2 条），Composio 与 Arcade 从工具策略——Arcade 1.12.0 Preview 让工具响应自动脱敏本次调用的凭证，并拒绝解析到内网地址的出站主机；MCP 从技能分发（TOP5 第 5 条），[Registry](https://github.com/modelcontextprotocol/registry/releases) v1.8.2–v1.8.6 集中做生产容量。开源侧 [mcp-gateway-registry 1.34.0](https://github.com/agentic-community/mcp-gateway-registry/releases/tag/1.34.0) 补上 Entra 组恢复与证书链处理。
 
-Google [ADK v2.13.0](https://github.com/google/adk-python/releases/tag/v2.13.0)（版本自注 10 月 22 日）是上期空窗后的大版本：默认遥测切到 OTel GenAI 语义约定 v2（`otel_semconv_1_44`）并移除 `call_llm` span，这是破坏性变化；同时加入 `MongoDbSessionService`、实验性的 `MongoDbMemoryService`、`delete_memory`、OpenSandbox 与 Gemini 3.x 的 computer use schema。官方称部分路径"最高快 8 倍"，属于厂商自述，未复核。
+**它改变了什么**：MCP 本周的变化在分发层而非规范层（规范仍停在 `2026-07-28`，A2A 规范同样无新版）。网关的选型分量因此上升，它不再只是连接器目录。
 
-Microsoft Agent Framework [python-1.23.0](https://github.com/microsoft/agent-framework/releases/tag/python-1.23.0) 有三项 BREAKING，包括 MCP 迁移到 2.x、`unsafe_extra_run_args` 更名、AG-UI 授权 scope 显式化；dotnet-1.26.0 补上 toolbox 的 OAuth consent。Semantic Kernel 最新版本在 10 月 6 日，AutoGen 最新仍在 2025 年 9 月，两者本周都没有动静。
+## 凭证：Agent 可以使用，但看不到
 
-OpenAI Agents SDK 本周空窗：Python 最新 v0.24.0 是 10 月 15 日，JS 最新 v0.21.0 是 10 月 21 日，都在窗口外。平台侧 [OpenAI changelog](https://platform.openai.com/docs/changelog) 10 月 24 日上线 Enterprise Key Management 与英国数据驻留，这是企业采购条件，不改变 Harness 语义。
+**结论：执行环境与身份层的差异化正从"隔离有多强"转向"凭证最小暴露"——Agent 用凭证完成动作，但凭证不进入模型上下文和子进程环境。**
 
-动态池里，[Dify 1.18.0](https://github.com/langgenius/dify/releases/tag/1.18.0) 的 Agent run protocol v2 不向后兼容，嵌套 workflow 的暂停、恢复、停止由上层协调，本地 sandbox 的认证 token 改为必填；CrewAI 1.15.29 到 1.15.32 修复了私有记忆泄漏；pydantic-ai v2.60 到 v2.63 加入 `PostgresSpendStore` 做跨进程共享预算。
+- **四种具体机制**：[Browserbase](https://www.browserbase.com/changelog) 与 1Password 集成（10 月 22 日），人工批准后由扩展填充，密码不经过模型；10 月 27 日的 Authenticated Fetch 复用 Context 内 cookie 但不回写。Arcade 响应脱敏。OpenClaw beta.4 让环境变量引用的 `hooks.token` 不再进入子进程环境（#179199）。[agent-browser](https://github.com/vercel-labs/agent-browser/releases) v0.40.0 修复存储恢复时向页面脚本暴露 token，v0.39.3 禁止自动发现的项目配置设置可执行路径、浏览器参数和插件——连续第二周 fail-closed。
+- **本地沙箱的边界清单**：[Claude Code v2.1.309](https://github.com/anthropics/claude-code/releases/tag/v2.1.309) 修复沙箱外执行 shell 启动文件、symlink 绕过 `denyWrite`、沙箱内改写 `--mcp-config` 三处，都属于"边界之外仍有可写入口"。
+- **Entra 成为事实兼容目标**：Claude apps gateway 加入 `oidc.user_id_claim`（可取 `oid`），MCP TS SDK 加入 `scopeForRefresh` 处理 AADSTS90009，mcp-gateway-registry 恢复 Entra 组，MAF dotnet 补 toolbox OAuth consent；但 Entra 官方 what's new 本周无 Agent ID 条目。
 
-控制层小结：上一期修的是 resume 本身的缺陷，这一期修的是 resume 的副作用与升级的代价。选型时，"有没有 LTS 轨"和"破坏性变更是否带迁移说明"值得放进评估表。
+Google 10 月 26 日在 [Gemini Enterprise Agent Platform](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes) 为语义治理加入 `sgpUserIntentMatching` 开关，日志报告所用匹配模式，"按用户意图放行"由此变成可审计的配置项。
 
-## 运行层：恢复不重放成为新门槛
+**它改变了什么**：凭证安全从"存在哪里"变成"走哪条路径"。自建本地沙箱的团队可以直接把上述机制和 Claude Code 的三处修复当检查清单。
 
-Runtime 的竞争正在从"会话能否恢复"推进到"恢复和重试时副作用是否只发生一次"。这要求运行时记录的不只是对话历史，还有**每个工具调用的完成状态**；也要求下游的沙箱创建和外部 API 提供幂等语义。本周 OpenClaw 与 E2B 从两端补上了这条链；Dify 1.18.0 协调嵌套 workflow 的暂停、恢复和停止；[a2a-python 1.3.0](https://github.com/a2aproject/a2a-python/releases/tag/v1.3.0) 让挂起的中断任务在超时后被释放，避免资源长期占用。
+## 升级成本：权限显式化带来集中的破坏性变更
 
-会话状态的存储面也在外延：AgentCore Runtime 支持 FUSE 挂载（10 月档），ADK 加入 `MongoDbSessionService`，OpenViking 加入 durable content write task。状态不再只放在框架自带的 checkpoint 里，而是落到文件系统和通用数据库，这让备份、迁移和审计可以复用企业已有工具。
+**结论：本周破坏性变更的主要来源是权限与契约显式化——原本默认放行的东西，现在要调用方显式声明。**
 
-托管 runtime 的大厂本周比较安静：Google Agent Engine、Microsoft Foundry Hosted Agents 没有窗内条目；国内的百炼、方舟、腾讯 ADP 也没有窗内 runtime 条目。腾讯 ADP 的上下文超时清空与群聊共享出现在 10 月的公告里，但没有标日，只作背景。Modal 与 trueforge 有常规版本，Daytona 的 GitHub 主仓已在 10 月 3 日归档，官网 changelog 最新一条是 10 月 16 日，本周无动态。
+| 项目 | 版本 | 需迁移的变化 |
+|---|---|---|
+| [Dify](https://github.com/langgenius/dify/releases/tag/1.18.0) | 1.18.0 | Agent run protocol v2 不向后兼容；本地 sandbox 认证 token 必填 |
+| [Microsoft Agent Framework](https://github.com/microsoft/agent-framework/releases/tag/python-1.23.0) | python-1.23.0 | 三项 BREAKING：MCP 2.x、`unsafe_extra_run_args` 更名、AG-UI 授权 scope 显式化 |
+| [Google ADK](https://github.com/google/adk-python/releases/tag/v2.13.0) | v2.13.0（版本自注 10 月 22 日） | 默认遥测切到 OTel GenAI v2（`otel_semconv_1_44`），移除 `call_llm` span |
+| [langchain-core](https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.7.0) | 1.7.0 | 流式工具参数事件结构变化 |
+| Composio | core 0.27.0 | `proxyExecute` 权限闸与返回结构 |
 
-## 执行环境层：可安全重试，凭证不可见
+非破坏但改变成本曲线的：[LangGraph 1.2.18](https://github.com/langchain-ai/langgraph/releases/tag/1.2.18) 一类版本把 DeltaChannel 快照频率默认值从 1000 调到 100，读取更快、存储更多。ADK 2.13.0 官方称部分路径"最高快 8 倍"，属厂商自述，未复核。
 
-执行环境层的差异化正在从"隔离有多强"转向两项协议能力：**能不能安全地重试**，以及**Agent 能不能用凭证却看不到凭证**。
+**它改变了什么**：选型评估表里，"有没有 LTS 轨"（OpenClaw 已开）和"破坏性变更是否带迁移说明"应与功能并列。
 
-E2B 的重试与幂等已在 TOP5 展开。浏览器这边，[Browserbase changelog](https://www.browserbase.com/changelog) 记录了两条：10 月 22 日与 1Password 集成，人工批准后由扩展直接填充凭证，密码不经过模型；10 月 27 日的 Authenticated Fetch 可以复用浏览器 Context 里的 cookie 发请求，但不回写。[agent-browser](https://github.com/vercel-labs/agent-browser/releases) v0.40.0 修复了存储恢复时把 token 暴露给页面脚本的问题；v0.39.3 禁止自动发现的项目配置设置可执行路径、浏览器参数和插件，MCP 参数也不能覆盖服务端访问设置。这是它连续第二周走 fail-closed。
+## 记忆：从召回效果转向删除与隐私
 
-本地沙箱的漏洞面在本周被具体化。[Claude Code v2.1.309](https://github.com/anthropics/claude-code/releases/tag/v2.1.309) 一次修了三处：沙箱外执行 shell 启动文件、symlink 绕过 `denyWrite`、沙箱内命令能改写 `--mcp-config`。三处都属于"沙箱边界之外还有可写入口"的类别，自建本地沙箱的团队可以拿来当检查清单。
+**结论：记忆层的成熟度标志正在变成能否可靠地不存、少存、删干净，并说清楚删了什么。**
 
-[browser-use 0.13.14](https://github.com/browser-use/browser-use/releases/tag/0.13.14) 继续常规加固；microsoft/playwright-mcp 本周无版本。云厂一侧，AWS 的 Web Search 工具在 10 月 23 日加了域名过滤与用户位置；Microsoft 的 Browser automation GA 在 10 月 19 日，属于窗口外。OpenAI 10 月 26 日发布的 `gpt-6.1-terra` 官方描述含 "precise computer use"，这是模型层能力，不是执行环境本身的变化。
+最强证据是一个反例：[OpenViking v0.5.2](https://github.com/volcengine/OpenViking/releases/tag/v0.5.2) 上线 Session 隐私自动识别并改写会话中的敏感值，4 天后的 v0.5.2.1 因误判暂时关闭新值识别，且不清理已产生的记录；同期 Working Memory 改为默认关闭。自动改写一旦误判，污染的是数据本身。
 
-## 工具层：网关同时管工具、模型与技能
+删除语义同时收紧：[Cognee v1.6.6rc1](https://github.com/topoteretes/cognee/releases/tag/v1.6.6rc1) 规定 history purge 不成功则整体失败，删 dataset 时连带清理检索与会话历史；ADK 2.13.0 加入 `delete_memory`；CrewAI 1.15.29–1.15.32 修复私有记忆泄漏；[Zep](https://help.getzep.com/changelog) 让 HIPAA 账户默认关闭 Graph Assistant，并推出边类型层级（closed beta）。
 
-MCP 本周的变化发生在分发层而不是规范层：TS SDK 实现 Skills over MCP，Registry 做生产容量，规范仍停在 `2026-07-28`。A2A 规范本周同样没有新版本，只有 Python SDK 补了中断任务的回收。
+## 可观测：安全事件与成本进入同一条 trace
 
-工具网关的定位更清楚了。Composio 的 session hooks 让网关可以按内容裁决，Arcade 的响应脱敏让网关负责"凭证不回流"，AWS 让网关同时承载模型流量。[agentic-community/mcp-gateway-registry 1.34.0](https://github.com/agentic-community/mcp-gateway-registry/releases/tag/1.34.0) 则在开源侧补上 Entra 组恢复（OBO 到 Graph）和证书链处理。
+**结论：可观测层正把"拦截了什么、为什么"与"花了多少、花在哪"放进同一条 trace，观测与控制在合并。**
 
-把这三条放在一起看：**"工具"与"技能"的分发通道在合流到 MCP，"工具调用"与"模型调用"的流量在合流到同一个网关**。谁掌握网关，谁就掌握策略执行点、成本计量点和审计点。AWS 从模型流量、Composio 和 Arcade 从工具策略、MCP 从技能分发，三个方向都在逼近同一个位置。
+- **安全事件进遥测**：Claude Code 新增 `claude_code.safety_event`；Databricks MCP 调用越狱筛查（Beta，10 月月级归档）；pydantic-ai 关闭 `InputGuardrail` 的 fail-open。
+- **成本归因细化**：Claude Agent SDK 按 5 分钟与 1 小时两档缓存寿命拆分 token 统计；pydantic-ai 加入 `PostgresSpendStore` 做跨进程共享预算。
+- **观测平台向网关扩张**：[Langfuse](https://github.com/langfuse/langfuse/releases) v4.68.0–v4.71.0 加入 AI Gateway 与 Skills 追踪和版本管理；评测转向回放真实会话（[AgentCore SDK v1.25.0](https://github.com/aws/bedrock-agentcore-sdk-python/releases/tag/v1.25.0) 评估已有 session，Langfuse `runBatchEvaluation` MCP 工具）。
+- **供应链**：[Phoenix](https://github.com/Arize-ai/phoenix/releases) evals 3.9.3 排除被入侵的 litellm 1.107.0。
 
-Nango 与 Pipedream Connect 本周没有取到可核内容：Nango 两个托管版本标签没有说明，changelog 重定向后 404；Pipedream 的 releases 最新停在 2025 年 11 月，changelog 同样 404。
+**它改变了什么**：ADK 默认 OTel GenAI v2 说明规范已进入框架默认值，依赖旧 span 的仪表盘会失效；观测供应商的选择也会反过来约束网关与策略引擎的选择。
 
-## 权限层：凭证最小暴露与 Entra 兼容
+## 平台格局：一家动结构，一家动策略，国内动兼容
 
-本周身份层的实际进展不在"给 Agent 发身份"，而在两件更具体的事。
+**结论：AWS 是本周唯一有窗内精确日期、并改变控制面结构的云厂；Google 动在策略层；国内云厂以协议兼容换接入量。**
 
-第一是**凭证使用路径的最小暴露**，本周至少出现四种具体机制：Browserbase 的 1Password 人批填充、Arcade 的响应脱敏、OpenClaw 的 `hooks.token` 不下放子进程、agent-browser 的存储恢复绑定 origin。它们的共同点是 Agent 可以使用凭证完成动作，但凭证本身不进入模型上下文，也不进入子进程环境。
-
-第二是**企业 IdP 的 token 语义兼容**。Claude apps gateway 加入 `oidc.user_id_claim`（可取 `oid`），MCP TS SDK 加入 `scopeForRefresh` 处理 AADSTS90009，mcp-gateway-registry 恢复 Entra 组，MAF dotnet 补 toolbox OAuth consent。四个互不相关的项目在同一周适配 Entra，说明它已经是生态事实上的兼容目标；但 Entra 官方的 what's new 本周没有 Agent ID 条目，最新内容停在 6 月。
-
-Google 在 10 月 26 日的 [Gemini Enterprise Agent Platform release notes](https://docs.cloud.google.com/gemini-enterprise-agent-platform/release-notes) 里，为语义治理加入 `sgpUserIntentMatching` 开关，日志会报告所用的匹配模式。这把"按用户意图放行"从黑箱变成了可审计的配置项。
-
-权限显式化也是本周破坏性升级的主要来源：MAF 的 AG-UI scope、Composio 的 proxy 权限闸与 `blocked` 结果、Dify 本地 sandbox 的认证 token 必填，都要求调用方显式声明原本默认放行的东西。AWS AgentCore Identity 只有 CLI v1.0 的 identity 命令（10 月档）；阿里云与火山的身份条目本次未取得。
-
-## 记忆层：从召回效果转向删除与隐私
-
-记忆层本周的主题从"召回准不准"切到了"能不能删干净、会不会存错"。
-
-最有价值的是一个反例。[OpenViking v0.5.2](https://github.com/volcengine/OpenViking/releases/tag/v0.5.2) 上线 Session 隐私自动识别，自动识别并改写会话里的敏感值；4 天后的 v0.5.2.1 因误判暂时关闭新值识别，而且不清理已经产生的记录。自动改写记忆内容一旦误判，污染的是数据本身，回收很难。同期 OpenViking 把 Working Memory 改为默认关闭。
-
-删除语义在多处被收紧。[Cognee v1.6.6rc1](https://github.com/topoteretes/cognee/releases/tag/v1.6.6rc1) 规定 history purge 不成功则整个操作失败，删除 dataset 时连带清理检索与会话历史；ADK 2.13.0 加入 `delete_memory`；CrewAI 修复私有记忆泄漏。[Zep](https://help.getzep.com/changelog) 让 HIPAA 账户的 Graph Assistant 默认关闭，并推出边类型层级（closed beta），记忆 schema 开始类型化。
-
-Mem0、supermemory、Letta、Crawl4AI、Graphiti 本周没有窗内版本；Firecrawl 有 10 个镜像标签但没有说明，且 Atom 只返回最近 10 条，可能有遗漏。
-
-记忆基础设施的成熟度标志正在变成：能不能可靠地不存、少存、删干净，并且说清楚删了什么。
-
-## 可观测层：安全事件与成本进同一条 trace
-
-可观测层本周有五个方向的信号。
-
-一是**安全事件进入遥测**：Claude Code 的 `claude_code.safety_event`，Databricks 的 MCP 调用越狱筛查（Beta，10 月档），pydantic-ai 关闭 `InputGuardrail` 的 fail-open。二是**OTel GenAI v2 从规范进入框架默认值**：ADK 2.13.0 默认 `otel_semconv_1_44` 并移除 `call_llm` span，依赖旧 span 的仪表盘会失效。三是**观测平台向网关与技能注册扩张**：[Langfuse](https://github.com/langfuse/langfuse/releases) v4.68.0 到 v4.71.0 加入 AI Gateway 以及 Skills 的追踪与版本管理，[Phoenix](https://github.com/Arize-ai/phoenix/releases) 20.25 做了 issue-to-PR factory。四是**评测转向回放已有 session**：AgentCore SDK 1.25.0 与 Langfuse 的 `runBatchEvaluation` MCP 工具都支持对真实会话做评测。五是**供应链**：Phoenix evals 3.9.3 排除被入侵的 litellm 1.107.0，并要求 certifi 2026.10.18。
-
-可观测层正在把"被拦截了什么、为什么"与"花了多少、花在哪"放进同一条 trace。Langfuse 做网关，AWS 在网关里做评测和熔断，观测与控制正在合并。对企业来说，观测供应商的选择会反过来约束网关和策略引擎的选择。Helicone、AgentOps、Coze Loop 本周无动态，LangSmith 未取得独立条目。
-
-## 平台层：一家动结构，多家动策略，国内动兼容
-
-AWS 是本周唯一有窗内精确日期、并且改变控制面结构的云厂（见 TOP5 第 2 条）。Google 的动作在策略层，即 10 月 26 日的意图匹配开关。Microsoft Foundry 本周静默：devblog RSS 没有窗内条目，Foundry what's new 页面 404；上一期它刚发完 Routines、Tool Search 与 A2A。[Databricks](https://docs.databricks.com/aws/en/release-notes/product/) 10 月的月档条目补的是身份与 MCP 安全：外部 Agent 默认 OAuth 应用 GA、OAuth 自定义声明按用户过滤、`ai_enrich` 接外部 MCP 做 grounding（Beta）、MCP 调用越狱筛查（Beta）。
-
-国内方面，火山方舟在 10 月 22 日更新了 [API 兼容性公告](https://ark.volcengine.com/region:cn-beijing/docs/api-schema-upgrade-notice)，Responses API 兼容 `apply_patch`、`namespace`/`defer_loading`，以及 Anthropic 的错误格式，并提供原生 web_search 工具。这是用协议细节兼容外部 Harness 来换接入量。阿里云百炼与腾讯 ADP 窗口内没有可核的功能条目，主要动作在窗外：10 月 13 日的 Agent Studio 手册、10 月 19 日的 ADP 4.2.1、10 月 21 日的轨迹评测。阿里云 10 月 26 日的周报称上新 11 款 MCP 服务，本次只读到摘要，证据级 B。
+Google 的动作是 10 月 26 日的意图匹配开关。Microsoft Foundry 在上期发完 Routines、Tool Search 与 A2A 后本周静默。[Databricks](https://docs.databricks.com/aws/en/release-notes/product/) 10 月条目（月级归档）补的是身份与 MCP 安全：外部 Agent 默认 OAuth 应用 GA、`ai_enrich` 接外部 MCP 做 grounding（Beta）。火山方舟 10 月 22 日的 [API 兼容性公告](https://ark.volcengine.com/region:cn-beijing/docs/api-schema-upgrade-notice) 让 Responses API 兼容 `apply_patch`、`namespace`/`defer_loading` 与 Anthropic 错误格式，并提供原生 web_search。阿里云 10 月 26 日周报称上新 11 款 MCP 服务（仅读到摘要，证据级 B）。
 
 ![2026-10-29 AI Agent 基础设施模块×厂商状态热力矩阵：AWS、Google、Anthropic 与 OpenClaw 覆盖面最广，Microsoft 与国内云厂多为空白或背景](/assets/images/posts/2026-10-29-agent-infra-fig1-matrix.png)
 
 *图 1：八个模块 × 十个厂商/项目的本周状态。2=窗内有可核动态，1=月档未标日、窗外背景或限述，0=本周无动态，-1=本次未取得。数据来源：本期研究母稿的状态矩阵（官方 release notes、GitHub releases、厂商公告，读取截至 2026-10-28）。*
 
-### 云厂能力矩阵
+## 云厂能力矩阵
 
 | 平台 | Runtime / Session | Memory | Gateway / Tools | Identity | Sandbox / Browser | Observability / Eval | 本周强信号 |
 |---|---|---|---|---|---|---|---|
@@ -238,15 +207,6 @@ AWS 是本周唯一有窗内精确日期、并且改变控制面结构的云厂�
 - **降温**：OpenAI Agents SDK 本周无版本；Microsoft Foundry 在 Routines 等 GA 之后静默；Daytona 本周无动态，GitHub 主仓已归档；supermemory、Graphiti 本周无窗内版本。
 
 上一期 TOP5 是 Foundry Routines/Tool Search/A2A、AWS 失败分析与 TTL、OpenViking 上下文数据库、Arcade 工具推荐、浏览器 fail-closed。本期只有 AWS 和浏览器安全两条线延续进前列，重心从"平台收编调度与评测"转到"恢复、重试与策略执行点"。
-
-## 覆盖与局限
-
-- 八个模块全部覆盖，63 个固定对象行均给出状态；GitHub 一手扫描 62 个仓库，窗内条目 157 条。
-- AWS（Gateway 除外）、Databricks、腾讯 ADP 的 10 月条目为月级归档，未计为确定的本周事件。
-- 阿里云百炼、腾讯 ADP 窗内无可核功能条目；Google Agent Gateway 与部分国内身份条目本次未取得。
-- Nango、Pipedream Connect、LangSmith、Firecrawl 未取得可核正文；发布源只返回最近 10 条，高频仓库可能有遗漏。
-- 厂商性能数字（如 ADK"最高快 8 倍"）保留原口径，未独立复核。
-
 ## 来源
 
 - OpenClaw releases：[v2026.10.8](https://github.com/openclaw/openclaw/releases/tag/v2026.10.8)、[v2026.10.7](https://github.com/openclaw/openclaw/releases/tag/v2026.10.7)、[v2026.9.35](https://github.com/openclaw/openclaw/releases/tag/v2026.9.35)、[v2026.9.34](https://github.com/openclaw/openclaw/releases/tag/v2026.9.34)、[v2026.10.10-beta.4](https://github.com/openclaw/openclaw/releases/tag/v2026.10.10-beta.4)
