@@ -27,33 +27,25 @@ toc_label: "本期目录"
 
 ### 1. OpenClaw：replay-safe 会话恢复，并开出 LTS 轨
 
-- **事实**：[2026.10.7](https://github.com/openclaw/openclaw/releases/tag/v2026.10.7)（10 月 25 日）头条为 Replay-safe session recovery：中断的会话保留恢复溯源（recovery provenance）与未完成的工具结果，已停止的会话在接收下一条消息前先清掉终态恢复残留（涉及 #153728、#168764、#172068、#177716 等 9 个 PR）。[2026.10.8](https://github.com/openclaw/openclaw/releases/tag/v2026.10.8)（10 月 28 日）让被 kill 的 run 释放 restart-recovery fence，回复运行时无法发布时入站消息不再无限重试；沙箱内子进程不能再运行宿主 CLI 后端（#178742）。[2026.9.34](https://github.com/openclaw/openclaw/releases/tag/v2026.9.34) / [2026.9.35](https://github.com/openclaw/openclaw/releases/tag/v2026.9.35)（10 月 24 / 27 日）被官方定义为 gateway-only extended-stable，原文称 "our current equivalent to LTS"，只叠加关键安全、可靠性修复与新模型支持。
-- **为什么重要**："恢复不重放"加"主线 + LTS 双轨"，回答同一个采购问题：自托管 Harness 能否被长期持有，而不必每周追升级。
-- **证据级**：A（上期 CHANGELOG 无发布日只能作本机观测，本期公开 release 完整计入窗口）。
+OpenClaw 本周同时回答了自托管 Harness 的两个持有成本问题：恢复会不会重放，升级要不要每周追。[2026.10.7](https://github.com/openclaw/openclaw/releases/tag/v2026.10.7)（10 月 25 日）把 Replay-safe session recovery 放在头条，中断的会话保留恢复溯源（recovery provenance）与未完成的工具结果，已停止的会话在接收下一条消息前先清掉终态恢复残留，涉及 #153728、#168764、#172068、#177716 等 9 个 PR；三天后的 [2026.10.8](https://github.com/openclaw/openclaw/releases/tag/v2026.10.8)（10 月 28 日）接着让被 kill 的 run 释放 restart-recovery fence，回复运行时无法发布时入站消息不再无限重试，并禁止沙箱内子进程运行宿主 CLI 后端（#178742）。
+
+与此并行，[2026.9.34](https://github.com/openclaw/openclaw/releases/tag/v2026.9.34) 与 [2026.9.35](https://github.com/openclaw/openclaw/releases/tag/v2026.9.35)（10 月 24 / 27 日）被官方定义为 gateway-only extended-stable，原文称 "our current equivalent to LTS"，只叠加关键安全、可靠性修复与新模型支持。上一期它的 CHANGELOG 没有发布日，只能作本机观测；这一期公开 release 让"可长期持有"第一次有了版本轨道作依据。
 
 ### 2. AWS AgentCore Gateway：模型流量进入 Agent 网关
 
-- **事实**：10 月 22 日 16:00（北京时间）发布 [InvokeModel 与模型 fallback](https://aws.amazon.com/about-aws/whats-new/2026/10/agentcore-gateway-invokemodel-fallback/)。原本面向工具（MCP 目标、Lambda、OpenAPI）的 Gateway 开始接收模型调用：InvokeModel 与 OpenAI、Anthropic 方言双向翻译，流式响应重新分帧；`matchModels` 选目标后按有序 fallback 链切换，每个目标可设首字节超时，熔断默认开启。
-- **为什么重要**：多模型容灾与成本路由从应用代码移到控制面，工具与模型共用同一个策略点、计量点和审计点。上期 AWS 的重点是失败分析、记忆 TTL 与私有 CA，本期它把"流量"收进网关。
-- **证据级**：A。
+10 月 22 日 16:00（北京时间），AWS 让 AgentCore Gateway 从工具网关变成工具与模型共用的网关。原本面向 MCP 目标、Lambda、OpenAPI 的 Gateway 现在接收 [InvokeModel 调用并支持模型 fallback](https://aws.amazon.com/about-aws/whats-new/2026/10/agentcore-gateway-invokemodel-fallback/)：请求可与 OpenAI、Anthropic 方言双向翻译，流式响应重新分帧，`matchModels` 选定目标后按有序 fallback 链切换，每个目标可设首字节超时，熔断默认开启。上期 AWS 的重点还是失败分析、记忆 TTL 与私有 CA；这一次，多模型容灾与成本路由从应用代码移进了控制面，策略、计量与审计落到同一个点上。
 
 ### 3. E2B：重试与幂等写进沙箱协议
 
-- **事实**：2.59.0（10 月 23 日）新增 `dnsServers` 闭合 DNS 出站；2.60.0（10 月 26 日）按服务端 `Should-Retry` 头决定是否重试，请求发出后的网络错误不再自动重试；[2.61.0](https://github.com/e2b-dev/E2B/releases/tag/e2b%402.61.0)（10 月 27 日）给 `Sandbox.create` 加 `Idempotency-Key`。
-- **为什么重要**：客户端不再猜"失败了没有"，重来也不会创建第二个沙箱；重复创建、重复计费、重复副作用从应用层兜底变为基础设施承担。它与 OpenClaw 构成链条两端：Harness 记录哪些调用已完成，执行环境保证同一请求只生效一次。
-- **证据级**：A。
+E2B 一周三个版本，拼出一份完整的"只生效一次"契约。2.59.0（10 月 23 日）先用 `dnsServers` 把 DNS 出站闭合到指定解析器；2.60.0（10 月 26 日）改为由服务端返回的 `Should-Retry` 头决定是否重试，请求发出后遇到的网络错误不再自动重试；[2.61.0](https://github.com/e2b-dev/E2B/releases/tag/e2b%402.61.0)（10 月 27 日）再给 `Sandbox.create` 加上 `Idempotency-Key`，重来也不会创建第二个沙箱。它和第 1 条正好是同一条链的两端：OpenClaw 记录哪些工具调用已经完成，E2B 保证同一请求只生效一次，重复创建、重复计费和重复副作用从应用层兜底变成了基础设施的责任。
 
 ### 4. Composio session hooks：工具网关成为策略执行点
 
-- **事实**：core 0.27.0（10 月 22 日）可在工具执行前、以及结果到达 Agent 前拦截，条件可用自然语言写，被拦调用返回 `resultType: 'blocked'`；`proxyExecute` 的权限闸与返回结构随之变化，依赖旧返回值的代码需检查。
-- **为什么重要**：工具治理从"连接器有没有权限"转向按调用与结果内容裁决。结果侧拦截尤其关键，因为提示注入和凭证回显往往出现在工具返回的数据里。
-- **证据级**：A。
+如果说 AWS 把模型流量收进网关，Composio 则让网关开始按内容裁决。core 0.27.0（10 月 22 日）的 session hooks 可以在工具执行前、以及工具结果到达 Agent 前拦截，条件用自然语言写，被拦下的调用返回 `resultType: 'blocked'`；代价是 `proxyExecute` 的权限闸与返回结构随之改变，依赖旧返回值的代码需要检查。结果侧这一拦截点最容易被忽略，而提示注入和凭证回显恰恰常出现在工具返回的数据里——工具治理由此从"连接器有没有权限"走向"这次调用和这份结果能不能放行"。
 
 ### 5. MCP TypeScript SDK v2.4.0：Skills over MCP 落地
 
-- **事实**：[v2.4.0](https://github.com/modelcontextprotocol/typescript-sdk/releases/tag/v2.4.0)（10 月 24 日）实现 SEP-2640：技能以 MCP 资源发布，客户端校验大小、摘要与 SKILL.md frontmatter；在 2026-07-28 版规范下资源带 `ttlMs`、`cacheScope` 缓存字段。规范本身本周无新版。
-- **为什么重要**：工具与技能首次走同一条协议通道，技能供应链有了协议级完整性校验；内部技能库可以像 MCP server 一样被注册、缓存和审计。
-- **证据级**：A。
+规范本身本周没有新版，变化发生在分发层。[MCP TS SDK v2.4.0](https://github.com/modelcontextprotocol/typescript-sdk/releases/tag/v2.4.0)（10 月 24 日）实现 SEP-2640，技能以 MCP 资源的形式发布，客户端校验大小、摘要与 SKILL.md 的 frontmatter，在 2026-07-28 版规范下资源还带 `ttlMs`、`cacheScope` 缓存字段。工具与技能从此走同一条协议通道，技能供应链有了协议级的完整性校验，内部技能库可以像 MCP server 一样被注册、缓存和审计，不必各家 Harness 各搞一套格式。
 
 ## 恢复与重试：副作用只发生一次成为新门槛
 
@@ -124,7 +116,7 @@ Google 10 月 26 日在 [Gemini Enterprise Agent Platform](https://docs.cloud.go
 
 **结论：AWS 是本周唯一有窗内精确日期、并改变控制面结构的云厂；Google 动在策略层；国内云厂以协议兼容换接入量。**
 
-Google 的动作是 10 月 26 日的意图匹配开关。Microsoft Foundry 在上期发完 Routines、Tool Search 与 A2A 后本周静默。[Databricks](https://docs.databricks.com/aws/en/release-notes/product/) 10 月条目（月级归档）补的是身份与 MCP 安全：外部 Agent 默认 OAuth 应用 GA、`ai_enrich` 接外部 MCP 做 grounding（Beta）。火山方舟 10 月 22 日的 [API 兼容性公告](https://ark.volcengine.com/region:cn-beijing/docs/api-schema-upgrade-notice) 让 Responses API 兼容 `apply_patch`、`namespace`/`defer_loading` 与 Anthropic 错误格式，并提供原生 web_search。阿里云 10 月 26 日周报称上新 11 款 MCP 服务（仅读到摘要，证据级 B）。
+Google 的动作是 10 月 26 日的意图匹配开关。Microsoft Foundry 在上期发完 Routines、Tool Search 与 A2A 后本周静默。[Databricks](https://docs.databricks.com/aws/en/release-notes/product/) 10 月条目（月级归档）补的是身份与 MCP 安全：外部 Agent 默认 OAuth 应用 GA、`ai_enrich` 接外部 MCP 做 grounding（Beta）。火山方舟 10 月 22 日的 [API 兼容性公告](https://ark.volcengine.com/region:cn-beijing/docs/api-schema-upgrade-notice) 让 Responses API 兼容 `apply_patch`、`namespace`/`defer_loading` 与 Anthropic 错误格式，并提供原生 web_search。阿里云 10 月 26 日周报称上新 11 款 MCP 服务（仅读到摘要）。
 
 ![2026-10-29 AI Agent 基础设施模块×厂商状态热力矩阵：AWS、Google、Anthropic 与 OpenClaw 覆盖面最广，Microsoft 与国内云厂多为空白或背景](/assets/images/posts/2026-10-29-agent-infra-fig1-matrix.png)
 
@@ -137,53 +129,53 @@ Google 的动作是 10 月 26 日的意图匹配开关。Microsoft Foundry 在�
 | AWS | Runtime FUSE 挂载（10 月档） | Memory TTL（10 月档，上期已报） | InvokeModel 方言翻译 + 有序 fallback + 熔断（10-22） | CLI v1.0 identity 命令（10 月档） | Web Search 域名过滤（10-23） | SDK 1.25.0 评估已有 session（10-24） | Gateway 吞并模型流量 |
 | Google | Agent Engine 无条目 | ADK MongoDbMemoryService（实验） | Agent Gateway 未取得 | 意图匹配开关（10-26） | ADK OpenSandbox、computer use schema | ADK 默认 OTel GenAI v2 | 策略层治理 |
 | Microsoft | Hosted Agents 无条目 | 无条目 | MAF MCP 2.x、toolbox OAuth consent | Entra 官方无窗内条目 | Browser automation GA（10-19 窗外） | 无条目 | 本周静默 |
-| 阿里云 | Managed Agent（10-13，窗外） | 手册背景 | 11 款 MCP 服务（10-26 摘要，B） | 未取得 | 手册背景 | 轨迹评测（10-21，窗外） | 窗内无可核条目 |
+| 阿里云 | Managed Agent（10-13，窗外） | 手册背景 | 11 款 MCP 服务（10-26，仅读到摘要） | 未取得 | 手册背景 | 轨迹评测（10-21，窗外） | 窗内无可核条目 |
 | 火山/字节 | 无条目 | OpenViking v0.5.2/0.5.2.1 | Responses API 兼容（10-22） | 未取得 | 原生 web_search | Coze Loop 无条目 | 协议兼容外部 Harness |
 | 腾讯云 | 上下文超时清空（10 月，未标日） | 记忆库（9 月背景） | MCP Apps（9 月背景） | AgentPortal（10-19，窗外） | Claw 云盘（窗外） | 无条目 | 窗内无日期条目 |
 | Databricks | 未取得 | 无条目 | ai_enrich 外部 MCP（Beta，10 月档） | 外部 Agent 默认 OAuth GA（10 月档） | 未取得 | MCP 越狱筛查（Beta，10 月档） | 数据平台补 Agent 安全 |
 
 ## 对比表
 
-| 模块 | 产品/厂商 | 版本或日期 | 变化 | 是否破坏性 | 证据级 |
-|---|---|---|---|---|---|
-| Harness | OpenClaw | 2026.10.7（10-25） | replay-safe 会话恢复，保留恢复溯源与未完成工具结果 | 否 | A |
-| Harness | OpenClaw | 2026.10.8（10-28） | 被 kill 的 run 释放恢复 fence；沙箱子进程不能跑宿主 CLI | 否 | A |
-| Harness | OpenClaw | 2026.9.34 / 9.35（10-24 / 10-27） | extended-stable（LTS 等价）轨道，安全修复下放 | 否 | A |
-| Harness | OpenClaw | 2026.10.10-beta.4（10-27） | 定时跟进保留 operator 权限；hooks.token 不下放子进程 | 否 | A |
-| Harness | Anthropic Claude Agent SDK / Claude Code | TS v0.3.307–312、Py v0.2.171–174、v2.1.307–312 | safety_event 遥测；按缓存寿命拆 token | 否 | A |
-| Harness | Dify | 1.18.0 | Agent run protocol v2；本地 sandbox token 必填 | 是 | A |
-| Harness | Microsoft Agent Framework | python-1.23.0 / dotnet-1.26.0 | MCP 2.x、参数更名、AG-UI scope 显式化 | 是 | A |
-| Harness | Google ADK | v2.13.0（10-22） | 默认 OTel GenAI v2，移除 call_llm span；Mongo 会话/记忆 | 是 | A |
-| Harness | LangGraph / langchain-core | 1.2.17–1.2.18 / 1.7.0 | 快照频率默认 1000→100；流式工具参数事件变化 | 是（core） | A |
-| Harness | pydantic-ai | v2.60–v2.63 | PostgresSpendStore 共享预算；护栏关闭 fail-open | 否 | A |
-| Runtime | a2a-python | 1.3.0 | 超时释放挂起的中断任务 | 否 | A |
-| Runtime | AWS AgentCore Runtime | 10 月档 | FUSE 挂载 | 否 | A（日期限述） |
-| Sandbox | E2B | 2.59.0（10-23） | dnsServers 闭合 DNS 出站 | 否 | A |
-| Sandbox | E2B | 2.60.0（10-26） | 按 Should-Retry 头重试，发送后网络错误不重试 | 行为变化 | A |
-| Sandbox | E2B | 2.61.0（10-27） | Sandbox.create 幂等键 | 否 | A |
-| Sandbox | Browserbase | 10-22 / 10-27 | 1Password 人批填充；Authenticated Fetch | 否 | A |
-| Sandbox | Claude Code | v2.1.309 | 修复沙箱外 shell 启动文件、symlink 绕过 denyWrite、改写 --mcp-config | 否 | A |
-| Sandbox | agent-browser | v0.39.3 / v0.40.0 | 项目配置信任边界；存储恢复不暴露 token | 是（配置） | A |
-| Sandbox | AWS AgentCore | 10-23 | Web Search 域名过滤与用户位置 | 否 | A |
-| Gateway | AWS AgentCore Gateway | 10-22 | InvokeModel 方言翻译、有序 fallback、默认熔断 | 否 | A |
-| Gateway | MCP TS SDK | v2.4.0（10-24） | Skills over MCP（SEP-2640）；-32020；scopeForRefresh | 否 | A |
-| Gateway | MCP Registry | v1.8.2–v1.8.6 | 生产容量与诊断 | 否 | A |
-| Gateway | Composio | core 0.27.0（10-22） | session hooks，blocked 结果 | 是（proxyExecute） | A |
-| Gateway | Arcade | 1.12.0 Preview | 响应凭证脱敏；拒绝内网出站 | 否 | A |
-| Gateway | mcp-gateway-registry | 1.34.0 | Entra 组恢复；证书链处理 | 否 | A |
-| Identity | Google 语义治理 | 10-26 | sgpUserIntentMatching 开关 | 否 | A |
-| Identity | Claude apps gateway | 窗内 | oidc.user_id_claim | 否 | A |
-| Identity | Databricks | 10 月档 | 外部 Agent 默认 OAuth GA | 否 | A（日期限述） |
-| Memory | OpenViking | v0.5.2 → v0.5.2.1 | 隐私自动识别上线 4 天后关闭；Working Memory 默认关 | 行为回滚 | A |
-| Memory | Cognee | v1.6.6rc1 | history purge 失败即失败；删 dataset 连带清理 | 行为变化 | A |
-| Memory | Zep | 10 月 | HIPAA 默认关 Graph Assistant；边类型层级 | 否 | A |
-| Observability | Langfuse | v4.68.0–v4.71.0 | AI Gateway；Skills 追踪与版本 | 否 | A |
-| Observability | Phoenix | 20.25 / evals 3.9.3 | issue-to-PR factory；排除被入侵 litellm 1.107.0 | 否 | A |
-| Observability | AgentCore SDK | 1.25.0（10-24） | 评估已有 session；RecommendationClient | 否 | A |
-| Platform | 火山方舟 | 10-22 | Responses API 兼容 apply_patch、namespace/defer_loading | 否 | A |
-| Platform | OpenAI API | 10-24 | Enterprise Key Management；英国数据驻留 | 否 | A |
-| Platform | Anthropic | 10-22 | Google Cloud 托管 | 否 | A |
-| Platform | 阿里云百炼 | 10-26 摘要 | 上新 11 款 MCP 服务 | 否 | B |
+| 模块 | 产品/厂商 | 版本或日期 | 变化 | 是否破坏性 |
+|---|---|---|---|---|
+| Harness | OpenClaw | 2026.10.7（10-25） | replay-safe 会话恢复，保留恢复溯源与未完成工具结果 | 否 |
+| Harness | OpenClaw | 2026.10.8（10-28） | 被 kill 的 run 释放恢复 fence；沙箱子进程不能跑宿主 CLI | 否 |
+| Harness | OpenClaw | 2026.9.34 / 9.35（10-24 / 10-27） | extended-stable（LTS 等价）轨道，安全修复下放 | 否 |
+| Harness | OpenClaw | 2026.10.10-beta.4（10-27） | 定时跟进保留 operator 权限；hooks.token 不下放子进程 | 否 |
+| Harness | Anthropic Claude Agent SDK / Claude Code | TS v0.3.307–312、Py v0.2.171–174、v2.1.307–312 | safety_event 遥测；按缓存寿命拆 token | 否 |
+| Harness | Dify | 1.18.0 | Agent run protocol v2；本地 sandbox token 必填 | 是 |
+| Harness | Microsoft Agent Framework | python-1.23.0 / dotnet-1.26.0 | MCP 2.x、参数更名、AG-UI scope 显式化 | 是 |
+| Harness | Google ADK | v2.13.0（10-22） | 默认 OTel GenAI v2，移除 call_llm span；Mongo 会话/记忆 | 是 |
+| Harness | LangGraph / langchain-core | 1.2.17–1.2.18 / 1.7.0 | 快照频率默认 1000→100；流式工具参数事件变化 | 是（core） |
+| Harness | pydantic-ai | v2.60–v2.63 | PostgresSpendStore 共享预算；护栏关闭 fail-open | 否 |
+| Runtime | a2a-python | 1.3.0 | 超时释放挂起的中断任务 | 否 |
+| Runtime | AWS AgentCore Runtime | 10 月档 | FUSE 挂载 | 否 |
+| Sandbox | E2B | 2.59.0（10-23） | dnsServers 闭合 DNS 出站 | 否 |
+| Sandbox | E2B | 2.60.0（10-26） | 按 Should-Retry 头重试，发送后网络错误不重试 | 行为变化 |
+| Sandbox | E2B | 2.61.0（10-27） | Sandbox.create 幂等键 | 否 |
+| Sandbox | Browserbase | 10-22 / 10-27 | 1Password 人批填充；Authenticated Fetch | 否 |
+| Sandbox | Claude Code | v2.1.309 | 修复沙箱外 shell 启动文件、symlink 绕过 denyWrite、改写 --mcp-config | 否 |
+| Sandbox | agent-browser | v0.39.3 / v0.40.0 | 项目配置信任边界；存储恢复不暴露 token | 是（配置） |
+| Sandbox | AWS AgentCore | 10-23 | Web Search 域名过滤与用户位置 | 否 |
+| Gateway | AWS AgentCore Gateway | 10-22 | InvokeModel 方言翻译、有序 fallback、默认熔断 | 否 |
+| Gateway | MCP TS SDK | v2.4.0（10-24） | Skills over MCP（SEP-2640）；-32020；scopeForRefresh | 否 |
+| Gateway | MCP Registry | v1.8.2–v1.8.6 | 生产容量与诊断 | 否 |
+| Gateway | Composio | core 0.27.0（10-22） | session hooks，blocked 结果 | 是（proxyExecute） |
+| Gateway | Arcade | 1.12.0 Preview | 响应凭证脱敏；拒绝内网出站 | 否 |
+| Gateway | mcp-gateway-registry | 1.34.0 | Entra 组恢复；证书链处理 | 否 |
+| Identity | Google 语义治理 | 10-26 | sgpUserIntentMatching 开关 | 否 |
+| Identity | Claude apps gateway | 窗内 | oidc.user_id_claim | 否 |
+| Identity | Databricks | 10 月档 | 外部 Agent 默认 OAuth GA | 否 |
+| Memory | OpenViking | v0.5.2 → v0.5.2.1 | 隐私自动识别上线 4 天后关闭；Working Memory 默认关 | 行为回滚 |
+| Memory | Cognee | v1.6.6rc1 | history purge 失败即失败；删 dataset 连带清理 | 行为变化 |
+| Memory | Zep | 10 月 | HIPAA 默认关 Graph Assistant；边类型层级 | 否 |
+| Observability | Langfuse | v4.68.0–v4.71.0 | AI Gateway；Skills 追踪与版本 | 否 |
+| Observability | Phoenix | 20.25 / evals 3.9.3 | issue-to-PR factory；排除被入侵 litellm 1.107.0 | 否 |
+| Observability | AgentCore SDK | 1.25.0（10-24） | 评估已有 session；RecommendationClient | 否 |
+| Platform | 火山方舟 | 10-22 | Responses API 兼容 apply_patch、namespace/defer_loading | 否 |
+| Platform | OpenAI API | 10-24 | Enterprise Key Management；英国数据驻留 | 否 |
+| Platform | Anthropic | 10-22 | Google Cloud 托管 | 否 |
+| Platform | 阿里云百炼 | 10-26 摘要 | 上新 11 款 MCP 服务 | 否 |
 
 ## 对你意味着什么
 
